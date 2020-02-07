@@ -1,7 +1,12 @@
 import "./reactIndex";
-import { World } from "ecsy";
+import world from "./world";
+import { Tile, Layer } from "./components/TileMap";
+import TileMap from "./systems/TileMap";
 
-const world = new World();
+world
+  .registerComponent(Layer)
+  .registerComponent(Tile)
+  .registerSystem(TileMap);
 
 const prevTime = performance.now();
 
