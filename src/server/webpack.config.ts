@@ -15,7 +15,10 @@ const config = {
     ]
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".tsx", ".ts", ".js"],
+    alias: {
+      types: path.resolve(__dirname, "..", "types")
+    }
   },
   devtool:
     process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",

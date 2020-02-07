@@ -4,7 +4,12 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "strict": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types", "types"],
+    "paths": {
+      "types/*": ["src/types/*"]
+    }
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"]
 }
