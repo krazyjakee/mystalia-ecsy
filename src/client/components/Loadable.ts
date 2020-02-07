@@ -1,8 +1,8 @@
 import { Component } from "ecsy";
-import { Vector } from "types/Grid";
 
-export class Drawable extends Component {
-  resourcePath?: string;
+export class Loadable extends Component {
+  imagePath?: string;
+  dataPath?: string;
   loaded: boolean = false;
 
   constructor() {

@@ -29,6 +29,7 @@ const config = {
   },
   plugins: [
     new CopyWebpackPlugin([
+      "assets/**/*",
       {
         from: "node_modules/normalize.css/normalize.css",
         to: "css/normalize.css"

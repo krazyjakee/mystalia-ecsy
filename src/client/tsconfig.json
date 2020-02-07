@@ -4,6 +4,6 @@
     "module": "esNext",
     "jsx": "react",
     "lib": ["ES6", "DOM"],
-    "target": "ES5"
+    "target": "ES6"
   }
 }
