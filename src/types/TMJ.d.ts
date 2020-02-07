@@ -1,9 +1,11 @@
+import { ObjectTileTypeString } from "./TileMap/ObjectTileStore";
+
 interface Attributes {
   height: number;
   name: string;
   properties: Property[];
   rotation: number;
-  type: string;
+  type: ObjectTileTypeString;
   visible: boolean;
   width: number;
   x: number;

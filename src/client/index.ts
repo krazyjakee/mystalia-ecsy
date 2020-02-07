@@ -1,14 +1,13 @@
 import "./reactIndex";
 import world from "./world";
-import { Tile, Layer } from "./components/TileMap";
-import TileMap from "./systems/TileMap";
+import { TileMap as TileMapComponent } from "./components/TileMap";
+import TileMap from "./systems/TileMap/TileMapLoader";
 import Loader from "./systems/Loader";
 import { Loadable } from "./components/Loadable";
 import { Drawable } from "./components/Drawable";
 
 world
-  .registerComponent(Layer)
-  .registerComponent(Tile)
+  .registerComponent(TileMapComponent)
   .registerComponent(Loadable)
   .registerComponent(Drawable)
   .registerSystem(Loader)
