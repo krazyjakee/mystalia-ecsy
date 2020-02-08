@@ -2,14 +2,22 @@ import { System, Not, Entity } from "ecsy";
 import Loadable from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import TileMap from "../../components/TileMap";
-import { drawImage, drawToShadowCanvas } from "../../utilities/drawing";
+import {
+  drawImage,
+  drawToShadowCanvas,
+  drawableToDrawableProperties
+} from "../../utilities/drawing";
 import { TMJ } from "types/tmj";
 import { createDrawableTile } from "../../utilities/TileMap/drawTile";
+import Player from "../../components/Player";
 
 export default class TileMapDrawer extends System {
   static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap]
+    },
+    player: {
+      components: [Not(Loadable), Drawable, Player]
     }
   };
 
@@ -56,6 +64,12 @@ export default class TileMapDrawer extends System {
             ...objectTile,
             offset
           });
+        });
+
+        // @ts-ignore
+        this.queries.player.results.forEach((playerEntity: Entity) => {
+          const playerDrawable = playerEntity.getComponent(Drawable);
+          drawImage(drawableToDrawableProperties(playerDrawable));
         });
 
         drawImage({
