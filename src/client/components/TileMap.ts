@@ -1,30 +1,30 @@
 import { Component } from "ecsy";
 import { ObjectTileStore } from "../utilities/TileMap/ObjectTileStore";
-import { TileSet } from "types/tmj";
 import * as EasyStarJs from "easystarjs";
-
-export type TileMapTile = {
-  image?: CanvasImageSource;
-  sourceX: number;
-  sourceY: number;
-  sourceWidth: number;
-  sourceHeight: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
+import { DrawableProperties } from "types/drawable";
+import { TileSetStore } from "types/TileMap/TileSetStore";
 
 export class TileMap extends Component {
-  tiles: TileMapTile[] = [];
-  tileSets: TileSet[] = [];
+  tiles: DrawableProperties[] = [];
+  tileSetStore: TileSetStore = {};
+  objectLayerIndex: number = 0;
   objectTileStore?: ObjectTileStore;
+  canvasCache: HTMLCanvasElement[] = [];
   width: number = 0;
   height: number = 0;
-  name: string = "first";
+  name: string = "";
   aStar = new EasyStarJs.js();
 
   constructor() {
     super();
+  }
+
+  reset() {
+    this.tiles = [];
+    this.tileSetStore = {};
+    this.objectTileStore = undefined;
+    this.width = 0;
+    this.height = 0;
+    this.name = "";
   }
 }

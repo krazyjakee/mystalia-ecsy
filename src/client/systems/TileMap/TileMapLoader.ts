@@ -37,10 +37,13 @@ export default class TileMap extends System {
       // Save tileset data and download assets
       const { tilesets } = data;
       tilesets.sort((a, b) => b.firstgid - a.firstgid);
-      tileMap.tileSets = tilesets.map(tileset => {
-        tileset.image = `/assets/tilesets/${tileset.image}`;
-        loadImage(tileset.image);
-        return tileset;
+      tilesets.forEach(async tileset => {
+        const tileSetImage = await loadImage(
+          `/assets/tilesets/${tileset.image}`
+        );
+        if (tileSetImage) {
+          tileMap.tileSetStore[tileset.image] = tileSetImage;
+        }
       });
 
       tileMap.name =

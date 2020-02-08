@@ -8,4 +8,10 @@ export class Loadable extends Component {
   constructor() {
     super();
   }
+
+  reset() {
+    this.imagePath = undefined;
+    this.dataPath = undefined;
+    this.loading = false;
+  }
 }

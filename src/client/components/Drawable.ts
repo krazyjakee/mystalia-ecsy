@@ -17,4 +17,18 @@ export class Drawable extends Component {
   constructor() {
     super();
   }
+
+  reset() {
+    this.image = undefined;
+    this.data = undefined;
+    this.sourceX = 0;
+    this.sourceY = 0;
+    this.sourceWidth = 0;
+    this.sourceHeight = 0;
+    this.x = 0;
+    this.y = 0;
+    this.width = 0;
+    this.height = 0;
+    this.offset = { x: 0, y: 0 };
+  }
 }

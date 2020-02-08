@@ -1,7 +1,8 @@
 import "./reactIndex";
 import world from "./world";
 import { TileMap as TileMapComponent } from "./components/TileMap";
-import TileMap from "./systems/TileMap/TileMapLoader";
+import TileMapLoader from "./systems/TileMap/TileMapLoader";
+import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
 import { Loadable } from "./components/Loadable";
 import { Drawable } from "./components/Drawable";
@@ -11,7 +12,8 @@ world
   .registerComponent(Loadable)
   .registerComponent(Drawable)
   .registerSystem(Loader)
-  .registerSystem(TileMap);
+  .registerSystem(TileMapLoader)
+  .registerSystem(TileMapDrawer);
 
 import "./entities/TileMap";
 
