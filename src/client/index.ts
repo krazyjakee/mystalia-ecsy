@@ -10,6 +10,8 @@ import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
 import PlayerSystem from "./systems/Player";
 import KeyboardInputSystem from "./systems/KeyboardInput";
+import context2d from "./canvas";
+import "./entities";
 
 world
   .registerComponent(TileMapComponent)
@@ -22,10 +24,6 @@ world
   .registerSystem(TileMapDrawer)
   .registerSystem(PlayerSystem)
   .registerSystem(KeyboardInputSystem);
-
-import "./entities/TileMap";
-import "./entities/Player";
-import context2d from "./canvas";
 
 const resizeCanvas = () => {
   context2d.canvas.width = window.innerWidth;

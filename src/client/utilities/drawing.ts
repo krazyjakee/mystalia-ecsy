@@ -1,5 +1,6 @@
 import { DrawableProperties } from "types/drawable";
 import context2d from "../canvas";
+import Drawable from "../components/Drawable";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -54,4 +55,33 @@ export const drawToShadowCanvas = (
   }
 
   return shadowContext;
+};
+
+export const drawableToDrawableProperties = (drawable: Drawable) => {
+  const {
+    image = null,
+    sourceWidth,
+    sourceHeight,
+    sourceX,
+    sourceY,
+    x,
+    y,
+    width,
+    height,
+    offset
+  } = drawable;
+
+  const drawableProperties: DrawableProperties = {
+    image,
+    sourceWidth,
+    sourceHeight,
+    sourceX,
+    sourceY,
+    x,
+    y,
+    width,
+    height,
+    offset
+  };
+  return drawableProperties;
 };

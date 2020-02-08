@@ -1,16 +1,22 @@
 import { System, Entity, Not } from "ecsy";
-import Loadable from "../components/Loadable";
 import Drawable from "../components/Drawable";
 import KeyboardInput from "../components/KeyboardInput";
 import TileMap from "../components/TileMap";
+import { drawableToDrawableProperties } from "../utilities/drawing";
+import PlayerComponent from "../components/Player";
+import Loadable from "../components/Loadable";
 
 export default class Player extends System {
   static queries = {
     player: {
-      components: [Not(Loadable), Player, Drawable, KeyboardInput]
+      components: [Not(Loadable), PlayerComponent, Drawable, KeyboardInput],
+      listen: {
+        added: true,
+        removed: true
+      }
     },
     tileMap: {
-      component: [Not(Loadable), TileMap]
+      components: [TileMap]
     }
   };
 
@@ -20,8 +26,21 @@ export default class Player extends System {
     const tileMap = tileMapEntity.getComponent(TileMap);
 
     // @ts-ignore
-    const playerEntity = this.queries.player.results[0] as Entity;
+    this.queries.player.added.forEach((playerEntity: Entity) => {
+      const playerDrawable = playerEntity.getComponent(Drawable);
 
-    // TODO: Inject the player sprite into the tilemap object layer
+      tileMap.objectLayerDrawables.push({
+        name: "player",
+        ...drawableToDrawableProperties(playerDrawable)
+      });
+    });
+
+    // @ts-ignore
+    this.queries.player.removed.forEach((playerEntity: Entity) => {
+      const index = tileMap.objectLayerDrawables.findIndex(
+        drawable => drawable.name === "player"
+      );
+      tileMap.objectLayerDrawables.splice(index, 1);
+    });
   }
 }

@@ -7,6 +7,7 @@ import { TileSetStore } from "types/TileMap/TileSetStore";
 export default class TileMap extends Component {
   loaded: boolean = false;
   tiles: DrawableProperties[] = [];
+  objectLayerDrawables: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
   objectLayerIndex: number = 0;
   objectTileStore?: ObjectTileStore;
@@ -22,6 +23,7 @@ export default class TileMap extends Component {
 
   reset() {
     this.tiles = [];
+    this.objectLayerDrawables = [];
     this.tileSetStore = {};
     this.objectTileStore = undefined;
     this.width = 0;

@@ -1,6 +1,7 @@
 import { Vector } from "./Grid";
 
 export type DrawableProperties = {
+  name?: string;
   image: CanvasImageSource | HTMLImageElement | null;
   sourceX: number;
   sourceY: number;

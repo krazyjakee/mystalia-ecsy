@@ -7,6 +7,11 @@ import KeyboardInput from "../components/KeyboardInput";
 world
   .createEntity()
   .addComponent(Loadable, { imagePath: "/assets/characters/1.png" })
-  .addComponent(Drawable)
+  .addComponent(Drawable, {
+    width: 24,
+    height: 32,
+    sourceWidth: 24,
+    sourceHeight: 32
+  })
   .addComponent(KeyboardInput)
   .addComponent(Player);

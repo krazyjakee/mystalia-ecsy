@@ -22,7 +22,14 @@ export default class TileMapDrawer extends System {
       }
 
       const drawable = tileMapEntity.getComponent(Drawable);
-      const { canvasCache, tiles, objectLayerIndex, width, height } = tileMap;
+      const {
+        canvasCache,
+        tiles,
+        objectLayerIndex,
+        objectLayerDrawables,
+        width,
+        height
+      } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;
 
@@ -42,6 +49,13 @@ export default class TileMapDrawer extends System {
         drawImage({
           ...baseCanvasProperties,
           image: canvasCache[0]
+        });
+
+        objectLayerDrawables.forEach(objectTile => {
+          drawImage({
+            ...objectTile,
+            offset
+          });
         });
 
         drawImage({

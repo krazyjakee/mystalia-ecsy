@@ -2,7 +2,7 @@ import { Component } from "ecsy";
 import { Vector } from "types/Grid";
 
 export default class Drawable extends Component {
-  image?: CanvasImageSource;
+  image?: CanvasImageSource | HTMLImageElement | null;
   data?: any;
   sourceX: number = 0;
   sourceY: number = 0;
