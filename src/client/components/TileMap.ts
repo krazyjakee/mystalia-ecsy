@@ -5,6 +5,7 @@ import { DrawableProperties } from "types/drawable";
 import { TileSetStore } from "types/TileMap/TileSetStore";
 
 export class TileMap extends Component {
+  loaded: boolean = false;
   tiles: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
   objectLayerIndex: number = 0;

@@ -16,8 +16,12 @@ export default class TileMapDrawer extends System {
   execute() {
     // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
-      const drawable = tileMapEntity.getComponent(Drawable);
       const tileMap = tileMapEntity.getComponent(TileMap);
+      if (!tileMap.loaded) {
+        return;
+      }
+
+      const drawable = tileMapEntity.getComponent(Drawable);
       const { canvasCache, tiles, objectLayerIndex, width, height } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;

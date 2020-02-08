@@ -16,6 +16,10 @@ world
   .registerSystem(TileMapDrawer);
 
 import "./entities/TileMap";
+import context2d from "./canvas";
+
+context2d.canvas.width = window.innerWidth;
+context2d.canvas.height = window.innerHeight;
 
 const prevTime = performance.now();
 
@@ -23,7 +27,6 @@ function update(time: number) {
   const dt = time - prevTime;
 
   world.execute(dt, time);
-
   requestAnimationFrame(update);
 }
 

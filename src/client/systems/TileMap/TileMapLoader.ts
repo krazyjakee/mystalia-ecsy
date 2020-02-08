@@ -18,7 +18,7 @@ export default class TileMap extends System {
 
   execute() {
     // @ts-ignore
-    this.queries.loadedTileMaps.added.forEach((tileMapEntity: Entity) => {
+    this.queries.loadedTileMaps.added.forEach(async (tileMapEntity: Entity) => {
       const drawable = tileMapEntity.getComponent(Drawable);
       const data: TMJ = drawable.data;
       const tileMap = tileMapEntity.getComponent(TileMapComponent);
@@ -34,27 +34,33 @@ export default class TileMap extends System {
       tileMap.objectTileStore = new ObjectTileStore(data.width, data.height);
       data.layers.forEach(layer => tileMap.objectTileStore?.add(layer));
 
+      // Set the map name
+      tileMap.name =
+        data.properties.find(property => property.name === "name")?.value ||
+        "first";
+
+      // Setup the astar pathfinding grid
+      const aStarGridData = tileMap.objectTileStore.getBlockGrid();
+      if (aStarGridData) {
+        tileMap.aStar.setGrid(aStarGridData);
+        tileMap.aStar.setAcceptableTiles([0]);
+      }
+
       // Save tileset data and download assets
       const { tilesets } = data;
       tilesets.sort((a, b) => b.firstgid - a.firstgid);
-      tilesets.forEach(async tileset => {
+      for (let i = 0; i < tilesets.length; i += 1) {
+        const tileset = tilesets[i];
         const tileSetImage = await loadImage(
           `/assets/tilesets/${tileset.image}`
         );
         if (tileSetImage) {
           tileMap.tileSetStore[tileset.image] = tileSetImage;
         }
-      });
-
-      tileMap.name =
-        data.properties.find(property => property.name === "name")?.value ||
-        "first";
-
-      const aStarGridData = tileMap.objectTileStore.getBlockGrid();
-      if (aStarGridData) {
-        tileMap.aStar.setGrid(aStarGridData);
-        tileMap.aStar.setAcceptableTiles([0]);
       }
+
+      // Everything is good to go!
+      tileMap.loaded = true;
     });
   }
 }
