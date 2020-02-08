@@ -1,21 +1,30 @@
 import "./reactIndex";
 import world from "./world";
-import { TileMap as TileMapComponent } from "./components/TileMap";
+import TileMapComponent from "./components/TileMap";
+import Loadable from "./components/Loadable";
+import Drawable from "./components/Drawable";
+import PlayerComponent from "./components/Player";
+import KeyboardInputComponent from "./components/KeyboardInput";
 import TileMapLoader from "./systems/TileMap/TileMapLoader";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
-import { Loadable } from "./components/Loadable";
-import { Drawable } from "./components/Drawable";
+import PlayerSystem from "./systems/Player";
+import KeyboardInputSystem from "./systems/KeyboardInput";
 
 world
   .registerComponent(TileMapComponent)
   .registerComponent(Loadable)
   .registerComponent(Drawable)
+  .registerComponent(PlayerComponent)
+  .registerComponent(KeyboardInputComponent)
   .registerSystem(Loader)
   .registerSystem(TileMapLoader)
-  .registerSystem(TileMapDrawer);
+  .registerSystem(TileMapDrawer)
+  .registerSystem(PlayerSystem)
+  .registerSystem(KeyboardInputSystem);
 
 import "./entities/TileMap";
+import "./entities/Player";
 import context2d from "./canvas";
 
 const resizeCanvas = () => {

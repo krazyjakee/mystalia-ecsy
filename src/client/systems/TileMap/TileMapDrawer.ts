@@ -1,7 +1,7 @@
 import { System, Not, Entity } from "ecsy";
-import { Loadable } from "../../components/Loadable";
-import { Drawable } from "../../components/Drawable";
-import { TileMap } from "../../components/TileMap";
+import Loadable from "../../components/Loadable";
+import Drawable from "../../components/Drawable";
+import TileMap from "../../components/TileMap";
 import { drawImage, drawToShadowCanvas } from "../../utilities/drawing";
 import { TMJ } from "types/tmj";
 import { createDrawableTile } from "../../utilities/TileMap/drawTile";

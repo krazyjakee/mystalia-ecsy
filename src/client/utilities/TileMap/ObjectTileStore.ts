@@ -1,8 +1,7 @@
 import {
   ObjectTileStoreType,
   ObjectTile,
-  ObjectTileType,
-  ObjectTileTypeString
+  ObjectTileType
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId } from "./calculations";
 import { Property, Attributes, Layer } from "types/tmj";

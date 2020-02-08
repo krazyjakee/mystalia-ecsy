@@ -1,7 +1,6 @@
 import { System, Entity } from "ecsy";
-import { ResultQuery } from "types/ecsy";
-import { Loadable } from "../components/Loadable";
-import { Drawable } from "../components/Drawable";
+import Loadable from "../components/Loadable";
+import Drawable from "../components/Drawable";
 import { loadImage, loadData } from "../utilities/assets";
 
 export default class Loader extends System {

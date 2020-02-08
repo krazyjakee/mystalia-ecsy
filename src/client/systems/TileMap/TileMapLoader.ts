@@ -1,7 +1,7 @@
 import { System, Entity, Not } from "ecsy";
-import { TileMap as TileMapComponent } from "../../components/TileMap";
-import { Loadable } from "../../components/Loadable";
-import { Drawable } from "../../components/Drawable";
+import TileMapComponent from "../../components/TileMap";
+import Loadable from "../../components/Loadable";
+import Drawable from "../../components/Drawable";
 import { Layer, TMJ } from "types/TMJ";
 import { ObjectTileStore } from "../../utilities/TileMap/ObjectTileStore";
 import { loadImage } from "../../utilities/assets";

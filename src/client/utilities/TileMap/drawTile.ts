@@ -1,7 +1,7 @@
 import { tileIdToVector } from "./calculations";
 import { DrawableProperties } from "types/drawable";
-import { TileMap } from "src/client/components/TileMap";
-import { Drawable } from "src/client/components/Drawable";
+import TileMap from "src/client/components/TileMap";
+import Drawable from "src/client/components/Drawable";
 import { TMJ } from "types/tmj";
 
 export const createDrawableTile = (

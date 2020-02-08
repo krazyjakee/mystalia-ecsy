@@ -1,7 +1,7 @@
 import world from "../world";
-import { Loadable } from "../components/Loadable";
-import { Drawable } from "../components/Drawable";
-import { TileMap } from "../components/TileMap";
+import Loadable from "../components/Loadable";
+import Drawable from "../components/Drawable";
+import TileMap from "../components/TileMap";
 
 world
   .createEntity()
