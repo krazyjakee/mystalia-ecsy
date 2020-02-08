@@ -14,7 +14,10 @@ export const createDrawableTile = (
   const tileset = tilesets.find(tileset => tileset.firstgid < sourceTileId);
 
   if (tileset) {
-    const sourceVector = tileIdToVector(sourceTileId - tileset.firstgid, width);
+    const sourceVector = tileIdToVector(
+      sourceTileId - tileset.firstgid,
+      tileset.imagewidth / 32
+    );
 
     const destinationVector = tileIdToVector(destinationTileId, width);
 

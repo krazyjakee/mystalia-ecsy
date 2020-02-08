@@ -18,8 +18,13 @@ world
 import "./entities/TileMap";
 import context2d from "./canvas";
 
-context2d.canvas.width = window.innerWidth;
-context2d.canvas.height = window.innerHeight;
+const resizeCanvas = () => {
+  context2d.canvas.width = window.innerWidth;
+  context2d.canvas.height = window.innerHeight;
+};
+
+window.onresize = () => resizeCanvas();
+resizeCanvas();
 
 const prevTime = performance.now();
 
