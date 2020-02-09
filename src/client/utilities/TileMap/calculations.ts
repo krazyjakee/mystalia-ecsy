@@ -19,7 +19,7 @@ export const tileIdToVector = (number: number, columns: number): Vector => {
   };
 };
 
-export const vectorToTileId = (x: number, y: number, columns: number) => {
+export const vectorToTileId = ({ x, y }: Vector, columns: number) => {
   const column = Math.floor(x / 32);
   const row = Math.floor(y / 32);
   return row * columns + column;

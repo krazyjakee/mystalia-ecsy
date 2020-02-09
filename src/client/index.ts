@@ -10,6 +10,8 @@ import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
 import PlayerMoverSystem from "./systems/Player/PlayerMover";
 import KeyboardInputSystem from "./systems/KeyboardInput";
+import PlayerMouseInput from "./systems/Player/PlayerMouseInput";
+import PlayerKeyboardInput from "./systems/Player/playerKeyboardInput";
 import context2d from "./canvas";
 import "./entities";
 
@@ -23,6 +25,8 @@ world
   .registerSystem(TileMapLoader)
   .registerSystem(TileMapDrawer)
   .registerSystem(PlayerMoverSystem)
+  .registerSystem(PlayerMouseInput)
+  .registerSystem(PlayerKeyboardInput)
   .registerSystem(KeyboardInputSystem);
 
 const resizeCanvas = () => {

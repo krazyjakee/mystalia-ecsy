@@ -27,11 +27,9 @@ export default class PlayerMover extends System {
       // @ts-ignore
       this.queries.player.results.forEach((playerEntity: Entity) => {
         const player = playerEntity.getComponent(PlayerComponent);
-        const keyboardInput = playerEntity.getComponent(KeyboardInput);
         const drawable = playerEntity.getComponent(Drawable);
 
-        const { direction } = keyboardInput;
-        const { currentTile, walking, tileQueue } = player;
+        const { direction, currentTile, walking, tileQueue } = player;
 
         if (!direction && !walking) {
           drawable.sourceX = 24;
@@ -76,7 +74,7 @@ export default class PlayerMover extends System {
           const tileObject = objectTileStore.get(currentTile);
           if (tileObject && tileObject.type === "door" && tileObject.value) {
             player.tileQueue = [];
-            keyboardInput.direction = undefined;
+            player.direction = undefined;
             // TODO: Change map logic here
           } else {
             if (direction || tileQueue.length) {
@@ -86,7 +84,7 @@ export default class PlayerMover extends System {
                 drawable,
                 columns,
                 rows,
-                direction
+                player.direction
               );
             } else {
               tileMap.targetTile = null;

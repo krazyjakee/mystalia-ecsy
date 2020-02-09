@@ -19,30 +19,10 @@ export default class KeyboardInput extends System {
         return;
       }
 
-      const compassKeys: Array<Direction> = ["n", "e", "s", "w"];
-      const movementKeys: { [key in Direction]: string[] } = {
-        n: ["w", "up"],
-        e: ["d", "right"],
-        s: ["s", "down"],
-        w: ["a", "left"]
-      };
+      keyboard.bound = true;
 
-      compassKeys.forEach(compassKey => {
-        movementKeys[compassKey].forEach(key => {
-          keyboardJS.bind(
-            key,
-            () => {
-              keyboard.direction = compassKey;
-            },
-            () => {
-              keyboard.direction = undefined;
-            }
-          );
-        });
-      });
-
-      const otherKeys = ["~"];
-      otherKeys.forEach(key => {
+      const keys = ["a", "s", "w", "d", "~"];
+      keys.forEach(key => {
         keyboardJS.bind(
           key,
           () => {
