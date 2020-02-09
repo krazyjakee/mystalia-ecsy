@@ -96,3 +96,10 @@ export const fadeOverlay = (fade: Fade, fadeIn: boolean = true) => {
     fade.alpha -= 0.05;
   }
 };
+
+export const waitForNextFrame = () =>
+  new Promise(accept => {
+    requestAnimationFrame(() => {
+      accept();
+    });
+  });

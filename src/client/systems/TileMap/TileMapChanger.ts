@@ -2,7 +2,7 @@ import { System, Entity, Not } from "ecsy";
 import { Unloadable, Loadable } from "../../components/Loadable";
 import Fade from "../../components/Fade";
 import TileMap from "../../components/TileMap";
-import { fadeOverlay } from "../../utilities/drawing";
+import { fadeOverlay, waitForNextFrame } from "../../utilities/drawing";
 import loadTileMap, {
   getMapChangePosition
 } from "../../utilities/TileMap/loadTileMap";
@@ -51,12 +51,15 @@ export default class TileMapChanger extends System {
           return;
         }
 
+        loadable.loading = true;
+
         const drawable = tileMapEntity.getComponent(Drawable);
         const tileMap = tileMapEntity.getComponent(TileMap);
 
         if (loadable.dataPath) {
           loadable.loading = true;
-          if (drawable.data && playerEntity) {
+          // Do we have data from a previous map?
+          if (drawable.data) {
             const playerComponent = playerEntity.getComponent(Player);
             const playerDrawable = playerEntity.getComponent(Drawable);
             const tileId = getMapChangePosition(
@@ -83,17 +86,19 @@ export default class TileMapChanger extends System {
             const mapOffset = setOffset(
               centeredVector.x,
               centeredVector.y,
-              { x: 0, y: 0 },
+              drawable.offset,
               tileMap.width,
               tileMap.height
             );
             drawable.offset = mapOffset;
           } else {
-            tileMap.reset();
             await loadTileMap(loadable.dataPath, drawable, tileMap);
           }
 
+          // Everything is good to go!
+          loadable.loading = false;
           tileMapEntity.addComponent(Fade, { alpha: 0 });
+          await waitForNextFrame();
         }
       }
     );

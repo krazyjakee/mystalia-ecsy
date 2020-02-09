@@ -52,6 +52,7 @@ const prevTime = performance.now();
 function update(time: number) {
   const dt = time - prevTime;
 
+  context2d.clearRect(0, 0, context2d.canvas.width, context2d.canvas.height);
   world.execute(dt, time);
   requestAnimationFrame(update);
 }

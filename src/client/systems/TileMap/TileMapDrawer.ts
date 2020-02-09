@@ -22,9 +22,6 @@ export default class TileMapDrawer extends System {
     // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
-      if (!tileMap.loaded) {
-        return;
-      }
 
       const drawable = tileMapEntity.getComponent(Drawable);
       const {

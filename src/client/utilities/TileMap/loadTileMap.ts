@@ -56,9 +56,6 @@ export default async (
       tileMap.tileSetStore[tileset.image] = tileSetImage;
     }
   }
-
-  // Everything is good to go!
-  tileMap.loaded = true;
 };
 
 export const getMapChangePosition = (
