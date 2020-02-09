@@ -1,9 +1,7 @@
 import { System, Entity } from "ecsy";
 import MouseInputComponent from "../components/MouseInput";
-import * as keyboardJS from "keyboardjs";
-import { Direction, Vector } from "types/Grid";
 
-export default class KeyboardInput extends System {
+export default class MouseInput extends System {
   static queries = {
     mouseEnabledEntities: {
       components: [MouseInputComponent]
@@ -12,7 +10,7 @@ export default class KeyboardInput extends System {
 
   execute() {
     // @ts-ignore
-    this.queries.keyboardEnabledEntities.results.forEach((resource: Entity) => {
+    this.queries.mouseEnabledEntities.results.forEach((resource: Entity) => {
       const mouse = resource.getComponent(MouseInputComponent);
 
       if (mouse.bound) {

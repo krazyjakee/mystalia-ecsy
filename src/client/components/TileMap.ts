@@ -25,12 +25,18 @@ export default class TileMap extends Component {
   }
 
   reset() {
+    this.loaded = false;
     this.tiles = [];
     this.objectLayerDrawables = [];
+    this.objectLayerIndex = 0;
     this.tileSetStore = {};
     this.objectTileStore = new ObjectTileStore(0, 0);
     this.width = 0;
     this.height = 0;
     this.name = "";
+    this.targetTile = null;
+    this.canvasCache = [];
+    this.properties = {};
+    this.aStar = new EasyStarJs.js();
   }
 }

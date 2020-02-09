@@ -1,12 +1,12 @@
 import { System, Not, Entity } from "ecsy";
-import Loadable from "../../components/Loadable";
+import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import TileMap from "../../components/TileMap";
 import { drawableToDrawableProperties } from "../../utilities/drawing";
 import Player from "../../components/Player";
 import { DrawableProperties } from "types/drawable";
 
-export default class TileMapDrawer extends System {
+export default class TileMapObjectDrawer extends System {
   static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap]

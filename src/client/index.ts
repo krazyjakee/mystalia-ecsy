@@ -1,33 +1,43 @@
 import "./reactIndex";
 import world from "./world";
 import TileMapComponent from "./components/TileMap";
-import Loadable from "./components/Loadable";
+import { Loadable, Unloadable, SimpleLoadable } from "./components/Loadable";
 import Drawable from "./components/Drawable";
 import PlayerComponent from "./components/Player";
 import KeyboardInputComponent from "./components/KeyboardInput";
-import TileMapLoader from "./systems/TileMap/TileMapLoader";
+import MouseInputComponent from "./components/MouseInput";
+import TileMapChanger from "./systems/TileMap/TileMapChanger";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
 import PlayerMoverSystem from "./systems/Player/PlayerMover";
 import KeyboardInputSystem from "./systems/KeyboardInput";
+import MouseInput from "./systems/MouseInput";
 import PlayerMouseInput from "./systems/Player/PlayerMouseInput";
 import PlayerKeyboardInput from "./systems/Player/playerKeyboardInput";
+import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import context2d from "./canvas";
 import "./entities";
+import { Enabled } from "./components/Tags";
 
 world
+  .registerComponent(Enabled)
   .registerComponent(TileMapComponent)
   .registerComponent(Loadable)
+  .registerComponent(Unloadable)
+  .registerComponent(SimpleLoadable)
   .registerComponent(Drawable)
   .registerComponent(PlayerComponent)
   .registerComponent(KeyboardInputComponent)
+  .registerComponent(MouseInputComponent)
   .registerSystem(Loader)
-  .registerSystem(TileMapLoader)
-  .registerSystem(TileMapDrawer)
+  .registerSystem(KeyboardInputSystem)
+  .registerSystem(MouseInput)
   .registerSystem(PlayerMoverSystem)
   .registerSystem(PlayerMouseInput)
   .registerSystem(PlayerKeyboardInput)
-  .registerSystem(KeyboardInputSystem);
+  .registerSystem(TileMapDrawer)
+  .registerSystem(TileMapObjectDrawer)
+  .registerSystem(TileMapChanger);
 
 const resizeCanvas = () => {
   context2d.canvas.width = window.innerWidth;

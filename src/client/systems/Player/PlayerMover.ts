@@ -2,7 +2,7 @@ import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
 import KeyboardInput from "../../components/KeyboardInput";
 import PlayerComponent from "../../components/Player";
-import Loadable from "../../components/Loadable";
+import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToVector } from "../../utilities/TileMap/calculations";
 import { setNewCurrentTile } from "../../utilities/Player/playerMovement";
@@ -75,7 +75,10 @@ export default class PlayerMover extends System {
           if (tileObject && tileObject.type === "door" && tileObject.value) {
             player.tileQueue = [];
             player.direction = undefined;
-            // TODO: Change map logic here
+            player.walking = false;
+            tileMapEntity.addComponent(Unloadable, {
+              dataPath: `/assets/maps/${tileObject.value.map}.json`
+            });
           } else {
             if (direction || tileQueue.length) {
               setNewCurrentTile(

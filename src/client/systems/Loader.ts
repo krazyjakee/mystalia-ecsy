@@ -1,12 +1,12 @@
 import { System, Entity } from "ecsy";
-import Loadable from "../components/Loadable";
+import { Loadable, SimpleLoadable } from "../components/Loadable";
 import Drawable from "../components/Drawable";
 import { loadImage, loadData } from "../utilities/assets";
 
 export default class Loader extends System {
   static queries = {
     unLoadedResources: {
-      components: [Loadable, Drawable]
+      components: [SimpleLoadable, Loadable, Drawable]
     }
   };
 
@@ -32,6 +32,7 @@ export default class Loader extends System {
         }
 
         resource.removeComponent(Loadable);
+        resource.removeComponent(SimpleLoadable);
       }
     });
   }

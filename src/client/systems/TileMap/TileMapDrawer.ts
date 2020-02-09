@@ -1,15 +1,12 @@
 import { System, Not, Entity } from "ecsy";
-import Loadable from "../../components/Loadable";
+import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import TileMap from "../../components/TileMap";
-import {
-  drawImage,
-  drawToShadowCanvas,
-  drawableToDrawableProperties
-} from "../../utilities/drawing";
+import { drawImage, drawToShadowCanvas } from "../../utilities/drawing";
 import { TMJ } from "types/tmj";
 import { createDrawableTile } from "../../utilities/TileMap/drawTile";
 import Player from "../../components/Player";
+import { scroll } from "../../utilities/TileMap/moveMap";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -36,12 +33,15 @@ export default class TileMapDrawer extends System {
         objectLayerIndex,
         objectLayerDrawables,
         width,
-        height
+        height,
+        targetTile
       } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;
 
       if (canvasCache.length) {
+        scroll(width, height, drawable, targetTile);
+
         const baseCanvasProperties = {
           sourceX: 0 - offset.x,
           sourceY: 0 - offset.y,
@@ -51,7 +51,7 @@ export default class TileMapDrawer extends System {
           y: 0,
           width: window.innerWidth,
           height: window.innerHeight,
-          offset
+          offset: { x: 0, y: 0 }
         };
 
         drawImage({
@@ -64,12 +64,6 @@ export default class TileMapDrawer extends System {
             ...objectTile,
             offset
           });
-        });
-
-        // @ts-ignore
-        this.queries.player.results.forEach((playerEntity: Entity) => {
-          const playerDrawable = playerEntity.getComponent(Drawable);
-          drawImage(drawableToDrawableProperties(playerDrawable));
         });
 
         drawImage({

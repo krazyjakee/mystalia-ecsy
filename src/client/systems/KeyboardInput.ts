@@ -1,7 +1,5 @@
 import { System, Entity } from "ecsy";
 import KeyboardInputComponent from "../components/KeyboardInput";
-import * as keyboardJS from "keyboardjs";
-import { Direction } from "types/Grid";
 
 export default class KeyboardInput extends System {
   static queries = {
@@ -21,18 +19,24 @@ export default class KeyboardInput extends System {
 
       keyboard.bound = true;
 
-      const keys = ["a", "s", "w", "d", "~"];
-      keys.forEach(key => {
-        keyboardJS.bind(
-          key,
-          () => {
+      document.addEventListener(
+        "keydown",
+        e => {
+          const key = e.key;
+          if (!keyboard.pressedKeys.includes(key)) {
             keyboard.pressedKeys.push(key);
-          },
-          () => {
-            keyboard.pressedKeys.splice(keyboard.pressedKeys.indexOf(key), 1);
           }
-        );
-      });
+        },
+        false
+      );
+      document.addEventListener(
+        "keyup",
+        e => {
+          const key = e.key;
+          keyboard.pressedKeys.splice(keyboard.pressedKeys.indexOf(key), 1);
+        },
+        false
+      );
     });
   }
 }

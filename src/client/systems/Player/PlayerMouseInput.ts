@@ -2,7 +2,7 @@ import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
 import MouseInput from "../../components/MouseInput";
 import PlayerComponent from "../../components/Player";
-import Loadable from "../../components/Loadable";
+import { Loadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import {
   tileIdToVector,
@@ -40,7 +40,12 @@ export default class PlayerMouseInput extends System {
           return;
         }
 
-        const clickedTile = vectorToTileId(mouseInput.clickedPosition, columns);
+        const offsetClickedPosition = {
+          x: mouseInput.clickedPosition.x - tileMapDrawable.offset.x,
+          y: mouseInput.clickedPosition.y - tileMapDrawable.offset.y
+        };
+
+        const clickedTile = vectorToTileId(offsetClickedPosition, columns);
         const playerTile = tileIdToVector(player.currentTile, columns);
         const destinationTile = tileIdToVector(clickedTile, columns);
 
@@ -68,6 +73,7 @@ export default class PlayerMouseInput extends System {
           }
         );
         tileMap.aStar.calculate();
+        mouseInput.clickedPosition = undefined;
       });
     });
   }

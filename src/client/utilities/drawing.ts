@@ -1,6 +1,7 @@
 import { DrawableProperties } from "types/drawable";
 import context2d from "../canvas";
 import Drawable from "../components/Drawable";
+import Fade from "../components/Fade";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -84,4 +85,14 @@ export const drawableToDrawableProperties = (drawable: Drawable) => {
     offset
   };
   return drawableProperties;
+};
+
+export const fadeOverlay = (fade: Fade, fadeIn: boolean = true) => {
+  context2d.fillStyle = `rgba(0,0,0,${1 - fade.alpha})`;
+  context2d.fillRect(0, 0, context2d.canvas.width, context2d.canvas.height);
+  if (fadeIn) {
+    fade.alpha += 0.05;
+  } else {
+    fade.alpha -= 0.05;
+  }
 };

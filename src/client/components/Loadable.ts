@@ -1,6 +1,6 @@
 import { Component } from "ecsy";
 
-export default class Loadable extends Component {
+export class Loadable extends Component {
   imagePath?: string;
   dataPath?: string;
   loading: boolean = false;
@@ -11,3 +11,14 @@ export default class Loadable extends Component {
     this.loading = false;
   }
 }
+
+export class Unloadable extends Component {
+  imagePath?: string;
+  dataPath?: string;
+  reset() {
+    this.imagePath = undefined;
+    this.dataPath = undefined;
+  }
+}
+
+export class SimpleLoadable extends Component {}

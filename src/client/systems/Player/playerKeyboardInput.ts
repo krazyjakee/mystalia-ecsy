@@ -1,7 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import KeyboardInput from "../../components/KeyboardInput";
 import PlayerComponent from "../../components/Player";
-import Loadable from "../../components/Loadable";
+import { Loadable } from "../../components/Loadable";
 import { Direction } from "types/Grid";
 
 export default class PlayerKeyboardInput extends System {
