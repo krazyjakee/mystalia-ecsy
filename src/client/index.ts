@@ -8,7 +8,7 @@ import KeyboardInputComponent from "./components/KeyboardInput";
 import TileMapLoader from "./systems/TileMap/TileMapLoader";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
-import PlayerSystem from "./systems/Player";
+import PlayerMoverSystem from "./systems/Player/PlayerMover";
 import KeyboardInputSystem from "./systems/KeyboardInput";
 import context2d from "./canvas";
 import "./entities";
@@ -22,7 +22,7 @@ world
   .registerSystem(Loader)
   .registerSystem(TileMapLoader)
   .registerSystem(TileMapDrawer)
-  .registerSystem(PlayerSystem)
+  .registerSystem(PlayerMoverSystem)
   .registerSystem(KeyboardInputSystem);
 
 const resizeCanvas = () => {

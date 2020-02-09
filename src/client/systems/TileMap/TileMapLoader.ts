@@ -5,6 +5,7 @@ import Drawable from "../../components/Drawable";
 import { Layer, TMJ } from "types/TMJ";
 import { ObjectTileStore } from "../../utilities/TileMap/ObjectTileStore";
 import { loadImage } from "../../utilities/assets";
+import { TileMapProperties } from "types/TileMap/standard";
 
 export default class TileMap extends System {
   static queries = {
@@ -38,6 +39,13 @@ export default class TileMap extends System {
       tileMap.name =
         data.properties.find(property => property.name === "name")?.value ||
         "first";
+
+      // Set the map properties
+      const properties: TileMapProperties = {};
+      data.properties.forEach(
+        property => properties[property.name] === property.value
+      );
+      tileMap.properties = properties;
 
       // Setup the astar pathfinding grid
       const aStarGridData = tileMap.objectTileStore.getBlockGrid();
