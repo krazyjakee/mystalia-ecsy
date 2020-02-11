@@ -75,7 +75,7 @@ export default class TileMapChanger extends System {
             await loadTileMap(loadable.dataPath, drawable, tileMap);
 
             const tileVector = tileIdToVector(tileId, drawable.data.width);
-            playerDrawable.x = tileVector.x;
+            playerDrawable.x = tileVector.x + 4;
             playerDrawable.y = tileVector.y;
             playerComponent.currentTile = tileId;
 

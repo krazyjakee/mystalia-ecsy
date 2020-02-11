@@ -75,7 +75,7 @@
                         {
                          "name":"tile",
                          "type":"int",
-                         "value":756
+                         "value": 707
                         }],
                  "rotation":0,
                  "type":"door",

@@ -54,10 +54,10 @@ export default class PlayerMover extends System {
         const { objectTileStore } = tileMap;
         const currentTileVector = tileIdToVector(currentTile, columns);
 
-        if (drawable.x < currentTileVector.x) {
+        if (drawable.x - 4 < currentTileVector.x) {
           drawable.x += 4;
         }
-        if (drawable.x > currentTileVector.x) {
+        if (drawable.x - 4 > currentTileVector.x) {
           drawable.x -= 4;
         }
         if (drawable.y > currentTileVector.y) {
@@ -68,7 +68,7 @@ export default class PlayerMover extends System {
         }
 
         if (
-          drawable.x === currentTileVector.x &&
+          drawable.x - 4 === currentTileVector.x &&
           drawable.y === currentTileVector.y
         ) {
           const tileObject = objectTileStore.get(currentTile);

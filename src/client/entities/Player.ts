@@ -13,7 +13,8 @@ world
     width: 24,
     height: 32,
     sourceWidth: 24,
-    sourceHeight: 32
+    sourceHeight: 32,
+    x: 4
   })
   .addComponent(KeyboardInput)
   .addComponent(MouseInput)
