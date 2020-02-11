@@ -23,7 +23,7 @@ export const setNewCurrentTile = (
   if (isEdge) {
     const nextMap = tileMap.properties[compass];
     if (nextMap) {
-      // TODO: Change map logic here
+      return nextMap;
     }
   } else if (tileType !== "block") {
     player.currentTile = nextTile;

@@ -62,6 +62,7 @@ export default class TileMapChanger extends System {
           if (drawable.data) {
             const playerComponent = playerEntity.getComponent(Player);
             const playerDrawable = playerEntity.getComponent(Drawable);
+
             const tileId = getMapChangePosition(
               playerComponent,
               drawable.data.width,
@@ -90,7 +91,7 @@ export default class TileMapChanger extends System {
               tileMap.width,
               tileMap.height
             );
-            console.log(mapOffset);
+
             drawable.offset = mapOffset;
             tileMap.targetTile = tileId;
           } else {

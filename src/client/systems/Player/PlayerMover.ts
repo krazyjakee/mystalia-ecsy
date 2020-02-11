@@ -81,7 +81,7 @@ export default class PlayerMover extends System {
             });
           } else {
             if (direction || tileQueue.length) {
-              setNewCurrentTile(
+              const nextMap = setNewCurrentTile(
                 tileMap,
                 player,
                 drawable,
@@ -89,6 +89,12 @@ export default class PlayerMover extends System {
                 rows,
                 player.direction
               );
+
+              if (nextMap) {
+                tileMapEntity.addComponent(Unloadable, {
+                  dataPath: `/assets/maps/${nextMap}.json`
+                });
+              }
             } else {
               tileMap.targetTile = null;
               player.walking = false;

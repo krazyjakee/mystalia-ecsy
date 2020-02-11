@@ -35,7 +35,7 @@ export default async (
   // Set the map properties
   const properties: TileMapProperties = {};
   data.properties.forEach(
-    property => properties[property.name] === property.value
+    property => (properties[property.name] = property.value)
   );
   tileMap.properties = properties;
 
@@ -64,7 +64,7 @@ export const getMapChangePosition = (
   rows: number,
   objectTileStore: ObjectTileStore
 ) => {
-  const direction = player.direction;
+  const direction = player.direction || player.previousDirection;
   const currentTile = player.currentTile;
   const objectTile = objectTileStore.get(currentTile);
 

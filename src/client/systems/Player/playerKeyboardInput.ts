@@ -38,6 +38,8 @@ export default class PlayerKeyboardInput extends System {
 
       if (!directionPressed) {
         player.direction = undefined;
+      } else {
+        player.previousDirection = player.direction;
       }
     });
   }
