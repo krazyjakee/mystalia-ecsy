@@ -31,7 +31,7 @@ export const createDrawableTile = (
       y: destinationVector.y,
       width: 32,
       height: 32,
-      offset: drawable.offset
+      offset: { x: 0, y: 0 }
     };
 
     return tile;

@@ -60,15 +60,15 @@ export const setOffset = (
   mapWidth: number,
   mapHeight: number
 ) => {
-  const [newOffset, boundary] = detectMapBoundary(
-    x,
-    y,
+  const [newOffset] = detectMapBoundary(
+    0 - x,
+    0 - y,
     currentOffset,
     mapWidth,
     mapHeight
   );
 
-  return { x: boundary.x ? 0 : newOffset.x, y: boundary.y ? 0 : newOffset.y };
+  return newOffset;
 };
 
 const detectMapBoundary = (

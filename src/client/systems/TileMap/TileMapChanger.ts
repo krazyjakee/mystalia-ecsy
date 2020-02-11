@@ -86,11 +86,13 @@ export default class TileMapChanger extends System {
             const mapOffset = setOffset(
               centeredVector.x,
               centeredVector.y,
-              drawable.offset,
+              { x: 0, y: 0 },
               tileMap.width,
               tileMap.height
             );
+            console.log(mapOffset);
             drawable.offset = mapOffset;
+            tileMap.targetTile = tileId;
           } else {
             await loadTileMap(loadable.dataPath, drawable, tileMap);
           }
@@ -98,7 +100,6 @@ export default class TileMapChanger extends System {
           // Everything is good to go!
           loadable.loading = false;
           tileMapEntity.addComponent(Fade, { alpha: 0 });
-          await waitForNextFrame();
         }
       }
     );
