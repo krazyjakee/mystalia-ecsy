@@ -18,6 +18,7 @@ import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import context2d from "./canvas";
 import "./entities";
 import { Enabled } from "./components/Tags";
+import client from "./colyseus";
 
 world
   .registerComponent(Enabled)
@@ -46,6 +47,8 @@ const resizeCanvas = () => {
 
 window.onresize = () => resizeCanvas();
 resizeCanvas();
+
+client.joinOrCreate("first");
 
 let prevTime = performance.now();
 
