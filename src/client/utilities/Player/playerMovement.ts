@@ -1,19 +1,19 @@
 import TileMap from "../../components/TileMap";
 import Drawable from "../../components/Drawable";
-import Player from "src/client/components/Player";
+import Movement from "src/client/components/Movement";
 import { Direction } from "types/Grid";
 import { tileIdToVector } from "../TileMap/calculations";
 
 export const setNewCurrentTile = (
   tileMap: TileMap,
-  player: Player,
+  playerMovement: Movement,
   playerDrawable: Drawable,
   mapColumns: number,
   mapRows: number,
   currentDirection?: Direction
 ) => {
   const { nextTile, spriteOffset, isEdge, compass } = getNextTileData(
-    player,
+    playerMovement,
     mapRows,
     mapColumns,
     currentDirection
@@ -26,16 +26,16 @@ export const setNewCurrentTile = (
       return nextMap;
     }
   } else if (tileType !== "block") {
-    player.currentTile = nextTile;
+    playerMovement.currentTile = nextTile;
     tileMap.targetTile = nextTile;
-    player.walking = true;
+    playerMovement.walking = true;
   }
 
   playerDrawable.sourceY = spriteOffset;
 };
 
 const getNextTileData = (
-  player: Player,
+  player: Movement,
   mapRows: number,
   mapColumns: number,
   currentDirection?: Direction
@@ -117,7 +117,7 @@ export const isSideTile = (
   return resultArray;
 };
 
-export const getTileFromQueue = (player: Player, columns: number) => {
+export const getTileFromQueue = (player: Movement, columns: number) => {
   const nextTile = player.tileQueue.shift();
   if (nextTile) {
     return directionFromTile(player.currentTile, nextTile, columns);

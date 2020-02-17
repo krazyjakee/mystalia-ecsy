@@ -1,11 +1,6 @@
 import "./reactIndex";
 import world from "./world";
-import TileMapComponent from "./components/TileMap";
-import { Loadable, Unloadable, SimpleLoadable } from "./components/Loadable";
-import Drawable from "./components/Drawable";
-import PlayerComponent from "./components/Player";
-import KeyboardInputComponent from "./components/KeyboardInput";
-import MouseInputComponent from "./components/MouseInput";
+
 import TileMapChanger from "./systems/TileMap/TileMapChanger";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
@@ -15,21 +10,14 @@ import MouseInput from "./systems/MouseInput";
 import PlayerMouseInput from "./systems/Player/PlayerMouseInput";
 import PlayerKeyboardInput from "./systems/Player/playerKeyboardInput";
 import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
+import Networking from "./systems/Networking";
+
 import context2d from "./canvas";
 import "./entities";
-import { Enabled } from "./components/Tags";
-import client from "./colyseus";
+import CreateLocalPlayer from "./entities/LocalPlayer";
 
 world
-  .registerComponent(Enabled)
-  .registerComponent(TileMapComponent)
-  .registerComponent(Loadable)
-  .registerComponent(Unloadable)
-  .registerComponent(SimpleLoadable)
-  .registerComponent(Drawable)
-  .registerComponent(PlayerComponent)
-  .registerComponent(KeyboardInputComponent)
-  .registerComponent(MouseInputComponent)
+  .registerSystem(Networking)
   .registerSystem(Loader)
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInput)
@@ -40,6 +28,8 @@ world
   .registerSystem(TileMapObjectDrawer)
   .registerSystem(TileMapChanger);
 
+CreateLocalPlayer();
+
 const resizeCanvas = () => {
   context2d.canvas.width = window.innerWidth;
   context2d.canvas.height = window.innerHeight;
@@ -47,8 +37,6 @@ const resizeCanvas = () => {
 
 window.onresize = () => resizeCanvas();
 resizeCanvas();
-
-client.joinOrCreate("first");
 
 let prevTime = performance.now();
 

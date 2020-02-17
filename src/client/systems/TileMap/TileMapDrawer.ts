@@ -5,7 +5,7 @@ import TileMap from "../../components/TileMap";
 import { drawImage, drawToShadowCanvas } from "../../utilities/drawing";
 import { TMJ } from "types/tmj";
 import { createDrawableTile } from "../../utilities/TileMap/drawTile";
-import Player from "../../components/Player";
+import Movement from "../../components/Movement";
 import { scroll } from "../../utilities/TileMap/moveMap";
 
 export default class TileMapDrawer extends System {
@@ -14,7 +14,7 @@ export default class TileMapDrawer extends System {
       components: [Not(Loadable), Drawable, TileMap]
     },
     player: {
-      components: [Not(Loadable), Drawable, Player]
+      components: [Not(Loadable), Drawable, Movement]
     }
   };
 

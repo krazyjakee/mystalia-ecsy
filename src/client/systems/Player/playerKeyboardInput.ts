@@ -1,20 +1,21 @@
 import { System, Entity, Not } from "ecsy";
 import KeyboardInput from "../../components/KeyboardInput";
-import PlayerComponent from "../../components/Player";
+import Movement from "../../components/Movement";
 import { Loadable } from "../../components/Loadable";
+import { SendData } from "../../components/Tags";
 import { Direction } from "types/Grid";
 
 export default class PlayerKeyboardInput extends System {
   static queries = {
     player: {
-      components: [Not(Loadable), PlayerComponent, KeyboardInput]
+      components: [Not(Loadable), Movement, KeyboardInput]
     }
   };
 
   execute() {
     // @ts-ignore
     this.queries.player.results.forEach((playerEntity: Entity) => {
-      const player = playerEntity.getComponent(PlayerComponent);
+      const movement = playerEntity.getComponent(Movement);
       const keyboardInput = playerEntity.getComponent(KeyboardInput);
 
       const compassKeys: Array<Direction> = ["n", "e", "s", "w"];
@@ -30,16 +31,17 @@ export default class PlayerKeyboardInput extends System {
       compassKeys.forEach(compassKey => {
         movementKeys[compassKey].forEach(key => {
           if (keyboardInput.pressedKeys.includes(key)) {
-            player.direction = compassKey;
+            movement.direction = compassKey;
             directionPressed = true;
           }
         });
       });
 
       if (!directionPressed) {
-        player.direction = undefined;
+        movement.direction = undefined;
       } else {
-        player.previousDirection = player.direction;
+        movement.previousDirection = movement.direction;
+        playerEntity.addComponent(SendData); // tell the networking system we need to send this entity's data
       }
     });
   }

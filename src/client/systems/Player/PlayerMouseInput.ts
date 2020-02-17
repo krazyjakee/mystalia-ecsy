@@ -1,9 +1,10 @@
 import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
 import MouseInput from "../../components/MouseInput";
-import PlayerComponent from "../../components/Player";
+import Movement from "../../components/Movement";
 import { Loadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
+import { SendData } from "../../components/Tags";
 import {
   tileIdToVector,
   vectorToTileId
@@ -19,7 +20,7 @@ export default class PlayerMouseInput extends System {
       components: [Not(Loadable), Drawable, TileMap]
     },
     player: {
-      components: [Not(Loadable), PlayerComponent, Drawable, MouseInput]
+      components: [Not(Loadable), Movement, Drawable, MouseInput]
     }
   };
 
@@ -32,7 +33,7 @@ export default class PlayerMouseInput extends System {
 
       // @ts-ignore
       this.queries.player.results.forEach((playerEntity: Entity) => {
-        const player = playerEntity.getComponent(PlayerComponent);
+        const player = playerEntity.getComponent(Movement);
         const mouseInput = playerEntity.getComponent(MouseInput);
         const drawable = playerEntity.getComponent(Drawable);
 
@@ -48,6 +49,7 @@ export default class PlayerMouseInput extends System {
         const clickedTile = vectorToTileId(offsetClickedPosition, columns);
         const playerTile = tileIdToVector(player.currentTile, columns);
         const destinationTile = tileIdToVector(clickedTile, columns);
+        player.targetTile = clickedTile;
 
         tileMap.aStar.findPath(
           playerTile.x / 32,
@@ -74,6 +76,7 @@ export default class PlayerMouseInput extends System {
         );
         tileMap.aStar.calculate();
         mouseInput.clickedPosition = undefined;
+        playerEntity.addComponent(SendData); // tell the network system we need to send this entity's data
       });
     });
   }

@@ -1,3 +1,7 @@
-import { Component } from "react";
+import { TagComponent } from "ecsy";
 
-export class Enabled extends Component {}
+export class Enabled extends TagComponent {}
+
+export class LocalPlayer extends TagComponent {}
+
+export class SendData extends TagComponent {}

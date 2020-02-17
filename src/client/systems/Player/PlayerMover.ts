@@ -1,7 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
 import KeyboardInput from "../../components/KeyboardInput";
-import PlayerComponent from "../../components/Player";
+import Movement from "../../components/Movement";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToVector } from "../../utilities/TileMap/calculations";
@@ -13,7 +13,7 @@ export default class PlayerMover extends System {
       components: [Not(Loadable), Drawable, TileMap]
     },
     player: {
-      components: [Not(Loadable), PlayerComponent, Drawable, KeyboardInput]
+      components: [Not(Loadable), Movement, Drawable, KeyboardInput]
     }
   };
 
@@ -26,10 +26,10 @@ export default class PlayerMover extends System {
 
       // @ts-ignore
       this.queries.player.results.forEach((playerEntity: Entity) => {
-        const player = playerEntity.getComponent(PlayerComponent);
+        const movement = playerEntity.getComponent(Movement);
         const drawable = playerEntity.getComponent(Drawable);
 
-        const { direction, currentTile, walking, tileQueue } = player;
+        const { direction, currentTile, walking, tileQueue } = movement;
 
         if (!direction && !walking) {
           drawable.sourceX = 24;
@@ -73,9 +73,9 @@ export default class PlayerMover extends System {
         ) {
           const tileObject = objectTileStore.get(currentTile);
           if (tileObject && tileObject.type === "door" && tileObject.value) {
-            player.tileQueue = [];
-            player.direction = undefined;
-            player.walking = false;
+            movement.tileQueue = [];
+            movement.direction = undefined;
+            movement.walking = false;
             tileMapEntity.addComponent(Unloadable, {
               dataPath: `/assets/maps/${tileObject.value.map}.json`
             });
@@ -83,11 +83,11 @@ export default class PlayerMover extends System {
             if (direction || tileQueue.length) {
               const nextMap = setNewCurrentTile(
                 tileMap,
-                player,
+                movement,
                 drawable,
                 columns,
                 rows,
-                player.direction
+                movement.direction
               );
 
               if (nextMap) {
@@ -97,7 +97,7 @@ export default class PlayerMover extends System {
               }
             } else {
               tileMap.targetTile = null;
-              player.walking = false;
+              movement.walking = false;
             }
           }
         }

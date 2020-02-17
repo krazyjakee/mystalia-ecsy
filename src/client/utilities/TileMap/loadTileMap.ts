@@ -5,7 +5,7 @@ import { ObjectTileStore } from "./ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { loadImage, loadData } from "../assets";
 import { Direction } from "types/Grid";
-import Player from "src/client/components/Player";
+import Movement from "src/client/components/Movement";
 
 export default async (
   dataPath: string,
@@ -59,7 +59,7 @@ export default async (
 };
 
 export const getMapChangePosition = (
-  player: Player,
+  player: Movement,
   columns: number,
   rows: number,
   objectTileStore: ObjectTileStore

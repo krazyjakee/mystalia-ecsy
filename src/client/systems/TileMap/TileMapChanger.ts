@@ -7,7 +7,8 @@ import loadTileMap, {
   getMapChangePosition
 } from "../../utilities/TileMap/loadTileMap";
 import Drawable from "../../components/Drawable";
-import Player from "../../components/Player";
+import Movement from "../../components/Movement";
+import { LocalPlayer } from "../../components/Tags";
 import {
   tileIdToVector,
   setOffset
@@ -16,7 +17,7 @@ import {
 export default class TileMapChanger extends System {
   static queries = {
     player: {
-      components: [Player]
+      components: [LocalPlayer, Movement]
     },
     newLoadingTileMaps: {
       components: [Loadable, TileMap, Drawable, Not(Fade)]
@@ -60,11 +61,11 @@ export default class TileMapChanger extends System {
           loadable.loading = true;
           // Do we have data from a previous map?
           if (drawable.data) {
-            const playerComponent = playerEntity.getComponent(Player);
+            const movement = playerEntity.getComponent(Movement);
             const playerDrawable = playerEntity.getComponent(Drawable);
 
             const tileId = getMapChangePosition(
-              playerComponent,
+              movement,
               drawable.data.width,
               drawable.data.height,
               tileMap.objectTileStore
@@ -77,7 +78,7 @@ export default class TileMapChanger extends System {
             const tileVector = tileIdToVector(tileId, drawable.data.width);
             playerDrawable.x = tileVector.x + 4;
             playerDrawable.y = tileVector.y;
-            playerComponent.currentTile = tileId;
+            movement.currentTile = tileId;
 
             const centeredVector = {
               x: tileVector.x - Math.round(window.innerWidth / 2),
