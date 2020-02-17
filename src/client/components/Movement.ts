@@ -5,7 +5,7 @@ export default class Movement extends Component {
   direction?: Direction;
   previousDirection?: Direction;
   currentTile: number = 0;
-  targetTile: number = 0;
+  targetTile: number = -1;
   walking: boolean = false;
   tileQueue: number[] = [];
 

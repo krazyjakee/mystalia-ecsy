@@ -3,7 +3,7 @@ import { Loadable, SimpleLoadable } from "../components/Loadable";
 import Drawable from "../components/Drawable";
 import Movement from "../components/Movement";
 
-export default function CreatePlayer() {
+export default function BaseCharacter() {
   return world
     .createEntity()
     .addComponent(SimpleLoadable)

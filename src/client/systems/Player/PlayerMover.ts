@@ -1,6 +1,5 @@
 import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
-import KeyboardInput from "../../components/KeyboardInput";
 import Movement from "../../components/Movement";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
@@ -13,7 +12,7 @@ export default class PlayerMover extends System {
       components: [Not(Loadable), Drawable, TileMap]
     },
     player: {
-      components: [Not(Loadable), Movement, Drawable, KeyboardInput]
+      components: [Not(Loadable), Movement, Drawable]
     }
   };
 

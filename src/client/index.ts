@@ -9,6 +9,7 @@ import KeyboardInputSystem from "./systems/KeyboardInput";
 import MouseInput from "./systems/MouseInput";
 import PlayerMouseInput from "./systems/Player/PlayerMouseInput";
 import PlayerKeyboardInput from "./systems/Player/playerKeyboardInput";
+import PlayerNetworkInput from "./systems/Player/PlayerNetworkInput";
 import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import Networking from "./systems/Networking";
 
@@ -24,6 +25,7 @@ world
   .registerSystem(PlayerMoverSystem)
   .registerSystem(PlayerMouseInput)
   .registerSystem(PlayerKeyboardInput)
+  .registerSystem(PlayerNetworkInput)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)
   .registerSystem(TileMapChanger);

@@ -1,6 +1,6 @@
-import RemotePlayer from "../components/RemotePlayer";
-import Player from "./Player";
+import { RemotePlayer } from "../components/Tags";
+import BaseCharacter from "./BaseCharacter";
 
 export default function CreateRemotePlayer() {
-  return Player().addComponent(RemotePlayer);
+  return BaseCharacter().addComponent(RemotePlayer);
 }

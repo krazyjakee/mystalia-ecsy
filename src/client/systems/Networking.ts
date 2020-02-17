@@ -1,8 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../colyseus";
 import { Client, Room } from "colyseus.js";
-import { SendData } from "../components/Tags";
-import RemotePlayer from "../components/RemotePlayer";
+import { SendData, RemotePlayer } from "../components/Tags";
 import Movement from "../components/Movement";
 import CreateRemotePlayer from "../entities/RemotePlayer";
 
@@ -56,10 +55,12 @@ export default class Networking extends System {
     // @ts-ignore
     this.queries.localEntities.results.forEach((entityToSend: Entity) => {
       const movement = entityToSend.getComponent(Movement);
-      this.room?.send({
-        type: "player:move",
-        destination: movement.targetTile
-      });
+      if (movement.targetTile >= 0) {
+        this.room?.send({
+          type: "player:move",
+          destination: movement.targetTile
+        });
+      }
       entityToSend.removeComponent(SendData); // now that we've sent the data we remove the component to avoid sending it again
     });
 
