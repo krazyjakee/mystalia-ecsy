@@ -7,8 +7,10 @@
     "sourceMap": true,
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types", "types"],
+    "experimentalDecorators": true,
     "paths": {
-      "types/*": ["src/types/*"]
+      "types/*": ["src/types/*"],
+      "serverState/*": ["src/server/components/*"]
     }
   },
   "include": ["src/**/*"]

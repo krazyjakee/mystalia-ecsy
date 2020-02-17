@@ -17,7 +17,8 @@ const config = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
     alias: {
-      types: path.resolve(__dirname, "..", "types")
+      types: path.resolve(__dirname, "..", "types"),
+      serverState: path.resolve(__dirname, "..", "server/components")
     }
   },
   devtool:

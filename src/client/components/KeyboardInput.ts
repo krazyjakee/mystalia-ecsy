@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { Direction } from "types/Grid";
 
 export default class KeyboardInput extends Component {
   pressedKeys: string[] = [];
