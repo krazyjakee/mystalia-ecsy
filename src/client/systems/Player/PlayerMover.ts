@@ -16,7 +16,7 @@ export default class PlayerMover extends System {
     }
   };
 
-  execute() {
+  execute(delta: number) {
     // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
@@ -28,26 +28,38 @@ export default class PlayerMover extends System {
         const movement = playerEntity.getComponent(Movement);
         const drawable = playerEntity.getComponent(Drawable);
 
-        const { direction, currentTile, walking, tileQueue } = movement;
+        const {
+          direction,
+          currentTile,
+          walking,
+          tileQueue,
+          timeSinceLastAnimation
+        } = movement;
 
         if (!direction && !walking) {
           drawable.sourceX = 24;
           return;
         }
 
-        switch (drawable.sourceX) {
-          case 0: {
-            drawable.sourceX = 24;
-            break;
+        if (timeSinceLastAnimation > 100) {
+          switch (drawable.sourceX) {
+            case 0: {
+              drawable.sourceX = 24;
+              break;
+            }
+            case 24: {
+              drawable.sourceX = 48;
+              break;
+            }
+            case 48: {
+              drawable.sourceX = 0;
+              break;
+            }
           }
-          case 24: {
-            drawable.sourceX = 48;
-            break;
-          }
-          case 48: {
-            drawable.sourceX = 0;
-            break;
-          }
+
+          movement.timeSinceLastAnimation = 0;
+        } else {
+          movement.timeSinceLastAnimation += delta;
         }
 
         const { objectTileStore } = tileMap;

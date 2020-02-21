@@ -8,6 +8,7 @@ export default class Movement extends Component {
   targetTile: number = -1;
   walking: boolean = false;
   tileQueue: number[] = [];
+  timeSinceLastAnimation: number = 0;
 
   reset() {
     this.direction = undefined;
