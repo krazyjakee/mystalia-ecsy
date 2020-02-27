@@ -13,10 +13,10 @@ import { Loadable } from "../../components/Loadable";
 
 const compassKeys: Array<Direction> = ["n", "e", "s", "w"];
 const movementKeys: { [key in Direction]: string[] } = {
-  n: ["w", "up"],
-  e: ["d", "right"],
-  s: ["s", "down"],
-  w: ["a", "left"]
+  n: ["w", "ArrowUp"],
+  e: ["d", "ArrowRight"],
+  s: ["s", "ArrowDown"],
+  w: ["a", "ArrowLeft"]
 };
 
 export default class KeyboardInputSystem extends System {
@@ -36,7 +36,7 @@ export default class KeyboardInputSystem extends System {
     document.addEventListener(
       "keydown",
       e => {
-        const key = e.key;
+        const key = e.code;
         if (!this.pressedKeys.includes(key)) {
           this.pressedKeys.push(key);
         }
@@ -46,7 +46,7 @@ export default class KeyboardInputSystem extends System {
     document.addEventListener(
       "keyup",
       e => {
-        const key = e.key;
+        const key = e.code;
         this.pressedKeys.splice(this.pressedKeys.indexOf(key), 1);
       },
       false

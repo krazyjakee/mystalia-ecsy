@@ -7,6 +7,9 @@ import { TMJ } from "types/tmj";
 import { createDrawableTile } from "../../utilities/TileMap/drawTile";
 import Movement from "../../components/Movement";
 import { scroll } from "../../utilities/TileMap/moveMap";
+import Position from "../../components/Position";
+import { LocalPlayer } from "../../components/Tags";
+import { addOffset } from "../../utilities/TileMap/calculations";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -14,7 +17,7 @@ export default class TileMapDrawer extends System {
       components: [Not(Loadable), Drawable, TileMap]
     },
     player: {
-      components: [Not(Loadable), Drawable, Movement]
+      components: [Not(Loadable), Drawable, Movement, Position, LocalPlayer]
     }
   };
 
@@ -56,10 +59,23 @@ export default class TileMapDrawer extends System {
           image: canvasCache[0]
         });
 
+        const localPlayer =
+          // @ts-ignore
+          (this.queries.player.results.length &&
+            // @ts-ignore
+            this.queries.player.results[0]) as Entity;
+        const position = localPlayer
+          ? localPlayer.getComponent(Position)
+          : undefined;
         objectLayerDrawables.forEach(objectTile => {
           drawImage({
             ...objectTile,
-            offset
+            offset: position
+              ? addOffset(offset, {
+                  x: position.value.x * 32,
+                  y: position.value.y * 32
+                })
+              : offset
           });
         });
 

@@ -20,8 +20,8 @@ world
   .registerSystem(Loader)
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInputSystem)
-  .registerSystem(MovementSystem)
   .registerSystem(PlayerNetworkInput)
+  .registerSystem(MovementSystem)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)
   .registerSystem(TileMapChanger);
