@@ -58,8 +58,8 @@ export default class MovementSystem extends System {
         if (!movement.direction) {
           const destinationTile = tileIdToVector(movement.targetTile, columns);
           tileMap.aStar.findPath(
-            position.value.x,
-            position.value.y,
+            Math.floor(position.value.x),
+            Math.floor(position.value.y),
             destinationTile.x,
             destinationTile.y,
             path => {
@@ -87,30 +87,34 @@ export default class MovementSystem extends System {
       }
 
       if (movement.direction) {
-        console.log(movement.direction);
-        const moveAmount = movement.speed * delta;
+        const moveAmount = movement.speed * (delta / 1000);
         const direction = compassToVector(movement.direction);
         const moveVector = {
           x: direction.x * moveAmount,
           y: direction.y * moveAmount
         };
-        const offset = {
-          x: (position.value.x + direction.x) % 1,
-          y: (position.value.y + direction.y) % 1
+        const currentVector = tileIdToVector(movement.currentTile, columns);
+        const distance = {
+          // calculate how far we are from the next tile
+          x:
+            (currentVector.x +
+              direction.x -
+              (position.value.x + moveVector.x)) *
+            direction.x,
+          y:
+            (currentVector.y +
+              direction.y -
+              (position.value.y + moveVector.y)) *
+            direction.y
         };
-        const distance = addOffset(offset, {
-          x: -Math.abs(moveVector.x),
-          y: -Math.abs(moveVector.y)
-        });
         if (distance.x <= 0 && distance.y <= 0) {
           // TODO: if the next in queue is the same direction we should continue moving otherwise this might create jerky movement
-          position.value = addOffset(position.value, direction);
+          position.value = addOffset(currentVector, direction);
           movement.currentTile = vectorToTileId(position.value, columns);
           movement.direction = undefined;
         } else {
           position.value = addOffset(position.value, moveVector);
         }
-        console.log(`x: ${position.value.x}, y: ${position.value.y}`);
       }
     });
   }

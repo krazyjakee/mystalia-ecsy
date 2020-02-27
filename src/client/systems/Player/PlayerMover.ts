@@ -4,7 +4,6 @@ import Movement from "../../components/Movement";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToVector } from "../../utilities/TileMap/calculations";
-import { setNewCurrentTile } from "../../utilities/Player/playerMovement";
 
 export default class PlayerMover extends System {
   static queries = {
@@ -59,21 +58,10 @@ export default class PlayerMover extends System {
         }
         */
 
+        /*
+        // TODO: handle map change
         const { objectTileStore } = tileMap;
         const currentTileVector = tileIdToVector(currentTile, columns);
-
-        if (drawable.x - 4 < currentTileVector.x) {
-          drawable.x += 4;
-        }
-        if (drawable.x - 4 > currentTileVector.x) {
-          drawable.x -= 4;
-        }
-        if (drawable.y > currentTileVector.y) {
-          drawable.y -= 4;
-        }
-        if (drawable.y < currentTileVector.y) {
-          drawable.y += 4;
-        }
 
         if (
           drawable.x - 4 === currentTileVector.x &&
@@ -107,7 +95,7 @@ export default class PlayerMover extends System {
               movement.walking = false;
             }
           }
-        }
+        }*/
       });
     });
   }
