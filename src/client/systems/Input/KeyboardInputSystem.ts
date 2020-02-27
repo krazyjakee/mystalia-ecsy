@@ -1,5 +1,5 @@
 import { System, Entity, Not } from "ecsy";
-import { KeyboardInput } from "../../components/Tags";
+import { KeyboardInput, SendData } from "../../components/Tags";
 import Movement from "../../components/Movement";
 import TileMap from "../../components/TileMap";
 import { Direction } from "types/Grid";
@@ -82,6 +82,8 @@ export default class KeyboardInputSystem extends System {
           tileMap.width
         );
       }
+
+      entity.addComponent(SendData);
     });
   }
 }

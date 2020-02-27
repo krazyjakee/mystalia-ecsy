@@ -1,5 +1,5 @@
 import { System, Entity, Not } from "ecsy";
-import { MouseInput } from "../../components/Tags";
+import { MouseInput, SendData } from "../../components/Tags";
 import { Vector } from "types/Grid";
 import Movement from "../../components/Movement";
 import TileMap from "../../components/TileMap";
@@ -75,6 +75,7 @@ export default class MouseInputSystem extends System {
         tileMapComponent.width
       );
       movement.targetTile = clickedTile;
+      entity.addComponent(SendData);
       this.clickedPosition = undefined;
     });
   }

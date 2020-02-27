@@ -4,7 +4,7 @@ import world from "./world";
 import TileMapChanger from "./systems/TileMap/TileMapChanger";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
-import PlayerNetworkInput from "./systems/Player/PlayerNetworkInput";
+import NetworkInputSystem from "./systems/Input/NetworkInputSystem";
 import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import Networking from "./systems/Networking";
 
@@ -20,7 +20,7 @@ world
   .registerSystem(Loader)
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInputSystem)
-  .registerSystem(PlayerNetworkInput)
+  .registerSystem(NetworkInputSystem)
   .registerSystem(MovementSystem)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)

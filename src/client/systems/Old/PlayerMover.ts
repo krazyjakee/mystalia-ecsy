@@ -59,7 +59,7 @@ export default class PlayerMover extends System {
         */
 
         /*
-        // TODO: handle map change
+        // TODO: handle map change in appropriate component
         const { objectTileStore } = tileMap;
         const currentTileVector = tileIdToVector(currentTile, columns);
 
