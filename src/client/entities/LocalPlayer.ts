@@ -1,6 +1,4 @@
-import KeyboardInput from "../components/KeyboardInput";
-import MouseInput from "../components/MouseInput";
-import { LocalPlayer } from "../components/Tags";
+import { LocalPlayer, KeyboardInput, MouseInput } from "../components/Tags";
 import BaseCharacter from "./BaseCharacter";
 
 export default function CreateLocalPlayer() {

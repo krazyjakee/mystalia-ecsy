@@ -1,4 +1,4 @@
-import { System, Entity, World } from "ecsy";
+import { System, Entity } from "ecsy";
 import client from "../colyseus";
 import { SendData, Remove } from "../components/Tags";
 import Movement from "../components/Movement";

@@ -7,12 +7,11 @@ import { tileIdToVector } from "../TileMap/calculations";
 export const setNewCurrentTile = (
   tileMap: TileMap,
   playerMovement: Movement,
-  playerDrawable: Drawable,
   mapColumns: number,
   mapRows: number,
   currentDirection?: Direction
 ) => {
-  const { nextTile, spriteOffset, isEdge, compass } = getNextTileData(
+  const { nextTile, isEdge, compass } = getNextTileData(
     playerMovement,
     mapRows,
     mapColumns,
@@ -30,8 +29,6 @@ export const setNewCurrentTile = (
     tileMap.targetTile = nextTile;
     playerMovement.walking = true;
   }
-
-  playerDrawable.sourceY = spriteOffset;
 };
 
 const getNextTileData = (
@@ -54,7 +51,6 @@ const getNextTileData = (
     case "e": {
       return {
         nextTile: player.currentTile + 1,
-        spriteOffset: 32,
         isEdge: edge.includes(direction),
         compass: "east"
       };
@@ -62,7 +58,6 @@ const getNextTileData = (
     case "w": {
       return {
         nextTile: player.currentTile - 1,
-        spriteOffset: 96,
         isEdge: edge.includes(direction),
         compass: "west"
       };
@@ -70,7 +65,6 @@ const getNextTileData = (
     case "n": {
       return {
         nextTile: player.currentTile - mapColumns,
-        spriteOffset: 0,
         isEdge: edge.includes(direction),
         compass: "north"
       };
@@ -78,7 +72,6 @@ const getNextTileData = (
     case "s": {
       return {
         nextTile: player.currentTile + mapColumns,
-        spriteOffset: 64,
         isEdge: edge.includes(direction),
         compass: "south"
       };
@@ -86,7 +79,6 @@ const getNextTileData = (
     default: {
       return {
         nextTile: player.currentTile,
-        spriteOffset: 64,
         isEdge: false,
         compass: "south"
       };

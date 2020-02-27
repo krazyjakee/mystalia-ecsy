@@ -4,11 +4,6 @@ import world from "./world";
 import TileMapChanger from "./systems/TileMap/TileMapChanger";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
-import PlayerMoverSystem from "./systems/Player/PlayerMover";
-import KeyboardInputSystem from "./systems/KeyboardInput";
-import MouseInput from "./systems/MouseInput";
-import PlayerMouseInput from "./systems/Player/PlayerMouseInput";
-import PlayerKeyboardInput from "./systems/Player/playerKeyboardInput";
 import PlayerNetworkInput from "./systems/Player/PlayerNetworkInput";
 import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import Networking from "./systems/Networking";
@@ -16,15 +11,16 @@ import Networking from "./systems/Networking";
 import context2d from "./canvas";
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
+import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
+import MouseInputSystem from "./systems/Input/MouseInputSystem";
+import MovementSystem from "./systems/MovementSystem";
 
 world
   .registerSystem(Networking)
   .registerSystem(Loader)
   .registerSystem(KeyboardInputSystem)
-  .registerSystem(MouseInput)
-  .registerSystem(PlayerMoverSystem)
-  .registerSystem(PlayerMouseInput)
-  .registerSystem(PlayerKeyboardInput)
+  .registerSystem(MouseInputSystem)
+  .registerSystem(MovementSystem)
   .registerSystem(PlayerNetworkInput)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)

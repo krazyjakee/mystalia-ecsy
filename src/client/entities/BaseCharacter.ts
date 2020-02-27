@@ -2,6 +2,7 @@ import world from "../world";
 import { Loadable, SimpleLoadable } from "../components/Loadable";
 import Drawable from "../components/Drawable";
 import Movement from "../components/Movement";
+import Position from "../components/Position";
 
 export default function BaseCharacter() {
   return world
@@ -15,5 +16,6 @@ export default function BaseCharacter() {
       sourceHeight: 32,
       x: 4
     })
-    .addComponent(Movement);
+    .addComponent(Movement)
+    .addComponent(Position);
 }

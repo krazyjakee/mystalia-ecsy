@@ -7,3 +7,7 @@ export class Move extends TagComponent {}
 export class LocalPlayer extends TagComponent {}
 
 export class SendData extends TagComponent {}
+
+export class KeyboardInput extends TagComponent {}
+
+export class MouseInput extends TagComponent {}

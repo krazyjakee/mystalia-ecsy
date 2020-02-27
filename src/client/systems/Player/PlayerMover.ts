@@ -28,14 +28,10 @@ export default class PlayerMover extends System {
         const movement = playerEntity.getComponent(Movement);
         const drawable = playerEntity.getComponent(Drawable);
 
-        const {
-          direction,
-          currentTile,
-          walking,
-          tileQueue,
-          timeSinceLastAnimation
-        } = movement;
+        const { direction, currentTile, walking, tileQueue } = movement;
 
+        /*
+        // TODO: animation component/system to handle this
         if (!direction && !walking) {
           drawable.sourceX = 24;
           return;
@@ -61,6 +57,7 @@ export default class PlayerMover extends System {
         } else {
           movement.timeSinceLastAnimation += delta;
         }
+        */
 
         const { objectTileStore } = tileMap;
         const currentTileVector = tileIdToVector(currentTile, columns);
@@ -95,7 +92,6 @@ export default class PlayerMover extends System {
               const nextMap = setNewCurrentTile(
                 tileMap,
                 movement,
-                drawable,
                 columns,
                 rows,
                 movement.direction
