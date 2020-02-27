@@ -8,8 +8,12 @@ import {
   addOffset,
   vectorToTileId
 } from "../utilities/TileMap/calculations";
-import { getTileFromQueue } from "../utilities/Player/playerMovement";
+import {
+  directionFromTile,
+  compassDirections
+} from "../utilities/Movement/movement";
 import Position from "../components/Position";
+import { Direction } from "types/Grid";
 
 export default class MovementSystem extends System {
   static queries = {
@@ -37,28 +41,53 @@ export default class MovementSystem extends System {
       const position = entity.getMutableComponent(Position);
 
       if (movement.targetTile >= 0) {
-        const destinationTile = tileIdToVector(movement.targetTile, columns);
-        movement.targetTile = -1;
-
-        tileMap.aStar.findPath(
-          position.value.x,
-          position.value.y,
-          destinationTile.x,
-          destinationTile.y,
-          path => {
-            if (path) {
-              movement.tileQueue = path.map(p => p.x + p.y * columns);
-            }
+        // do a simple check to see if our destination is within 1 tile
+        for (const direction of compassDirections) {
+          const vector = compassToVector(direction);
+          const tileInDirection = vectorToTileId(
+            addOffset(position.value, vector),
+            columns
+          ); // TODO: collision check this
+          if (tileInDirection === movement.targetTile) {
+            movement.direction = direction;
+            break;
           }
-        );
-        tileMap.aStar.calculate();
+        }
+
+        // if not we should use pathfinding
+        if (!movement.direction) {
+          const destinationTile = tileIdToVector(movement.targetTile, columns);
+          tileMap.aStar.findPath(
+            position.value.x,
+            position.value.y,
+            destinationTile.x,
+            destinationTile.y,
+            path => {
+              if (path) {
+                movement.tileQueue = path.map(p => p.x + p.y * columns);
+              }
+            }
+          );
+          tileMap.aStar.calculate();
+        }
+
+        movement.targetTile = -1;
       }
 
       if (!movement.direction && movement.tileQueue.length) {
-        movement.direction = getTileFromQueue(movement, columns);
+        while (!movement.direction && movement.tileQueue.length) {
+          const nextTile = movement.tileQueue.shift();
+          if (nextTile && nextTile !== movement.currentTile)
+            movement.direction = directionFromTile(
+              movement.currentTile,
+              nextTile,
+              columns
+            );
+        }
       }
 
       if (movement.direction) {
+        console.log(movement.direction);
         const moveAmount = movement.speed * delta;
         const direction = compassToVector(movement.direction);
         const moveVector = {

@@ -10,8 +10,8 @@ import {
   tileIdToVector
 } from "../../utilities/TileMap/calculations";
 import { Loadable } from "../../components/Loadable";
+import { compassDirections } from "../../utilities/Movement/movement";
 
-const compassKeys: Array<Direction> = ["n", "e", "s", "w"];
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["w", "ArrowUp"],
   e: ["d", "ArrowRight"],
@@ -65,7 +65,7 @@ export default class KeyboardInputSystem extends System {
       const movement = entity.getMutableComponent(Movement);
       let direction;
 
-      compassKeys.forEach(compassKey => {
+      compassDirections.forEach(compassKey => {
         movementKeys[compassKey].forEach(key => {
           if (this.pressedKeys.includes(key)) {
             direction = compassToVector(compassKey);

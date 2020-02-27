@@ -43,10 +43,6 @@ const getNextTileData = (
 
   let direction = currentDirection;
 
-  if (player.tileQueue.length) {
-    direction = getTileFromQueue(player, mapColumns);
-  }
-
   switch (direction) {
     case "e": {
       return {
@@ -109,14 +105,7 @@ export const isSideTile = (
   return resultArray;
 };
 
-export const getTileFromQueue = (player: Movement, columns: number) => {
-  const nextTile = player.tileQueue.shift();
-  if (nextTile) {
-    return directionFromTile(player.currentTile, nextTile, columns);
-  }
-};
-
-const directionFromTile = (
+export const directionFromTile = (
   from: number,
   to: number,
   columns: number
@@ -128,3 +117,5 @@ const directionFromTile = (
   }
   return fromVector.y > toVector.y ? "n" : "s";
 };
+
+export const compassDirections: Array<Direction> = ["n", "e", "s", "w"];
