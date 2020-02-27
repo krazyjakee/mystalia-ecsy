@@ -16,9 +16,9 @@ export default async (
   const data = result.data as TMJ;
   drawable.data = data;
 
-  // Handy map size in pixels
-  tileMap.width = data.width * 32;
-  tileMap.height = data.height * 32;
+  // Handy map size in tiles
+  tileMap.width = data.width;
+  tileMap.height = data.height;
 
   // Layers should be sorted by id so they are rendered in order
   data.layers.sort((a: Layer, b: Layer) => parseInt(a.id) - parseInt(b.id));

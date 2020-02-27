@@ -30,7 +30,7 @@ export const mapObjectToTileTypes = (
   const objectTileType: ObjectTileStoreType = {};
 
   const { width, height, x, y, type, name } = object;
-  const startTileId = vectorToTileId({ x, y }, tileMapColumns);
+  const startTileId = vectorToTileId({ x: x / 32, y: y / 32 }, tileMapColumns);
   const cols = Math.round(width / 32);
   const rows = Math.round(height / 32);
   const value = serializeProperties(object.properties);

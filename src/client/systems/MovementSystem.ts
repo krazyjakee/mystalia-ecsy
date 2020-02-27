@@ -42,14 +42,16 @@ export default class MovementSystem extends System {
 
       if (movement.targetTile >= 0) {
         // do a simple check to see if our destination is within 1 tile
+        // TODO: there's probably a more mathematical way to calculate the direction than looping through them all until we find the corresponding one
         for (const direction of compassDirections) {
           const vector = compassToVector(direction);
           const tileInDirection = vectorToTileId(
             addOffset(position.value, vector),
             columns
-          ); // TODO: collision check this
+          );
           if (tileInDirection === movement.targetTile) {
-            movement.direction = direction;
+            const obj = tileMap.objectTileStore.get(tileInDirection);
+            if (!obj || obj.type !== "block") movement.direction = direction; // collision check!
             break;
           }
         }
@@ -109,6 +111,11 @@ export default class MovementSystem extends System {
         };
         if (distance.x <= 0 && distance.y <= 0) {
           // TODO: if the next in queue is the same direction we should continue moving otherwise this might create jerky movement
+          position.value = {
+            // we have to do currentVector + direction instead of using distance otherwise floating point errors mess stuff up
+            x: direction.x ? currentVector.x + direction.x : position.value.x,
+            y: direction.y ? currentVector.y + direction.y : position.value.y
+          };
           position.value = addOffset(currentVector, direction);
           movement.currentTile = vectorToTileId(position.value, columns);
           movement.direction = undefined;

@@ -87,15 +87,15 @@ export default class TileMapDrawer extends System {
         // Below player
         canvasCache[0] = drawToShadowCanvas(
           tiles.slice(0, objectLayerIndex),
-          width,
-          height
+          width * 32,
+          height * 32
         ).canvas;
 
         // Above player
         canvasCache[1] = drawToShadowCanvas(
           tiles.slice(objectLayerIndex),
-          width,
-          height
+          width * 32,
+          height * 32
         ).canvas;
       } else {
         // Create a cached set of Sprites for each tile.
