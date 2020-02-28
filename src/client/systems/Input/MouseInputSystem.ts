@@ -74,9 +74,19 @@ export default class MouseInputSystem extends System {
         offsetClickedPosition,
         tileMapComponent.width
       );
+
+      const targetTileObject = tileMapComponent.objectTileStore.get(
+        clickedTile
+      );
+
+      this.clickedPosition = undefined;
+
+      if (targetTileObject && targetTileObject.type === "block") {
+        return;
+      }
+
       movement.targetTile = clickedTile;
       entity.addComponent(SendData);
-      this.clickedPosition = undefined;
     });
   }
 }

@@ -4,6 +4,8 @@ import Movement from "../../components/Movement";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToVector } from "../../utilities/TileMap/calculations";
+import SpriteSheetAnimation from "src/client/components/SpriteSheetAnimation";
+import { generateAnimationSteps } from "src/client/utilities/Animation/character";
 
 export default class PlayerMover extends System {
   static queries = {
@@ -26,37 +28,11 @@ export default class PlayerMover extends System {
       this.queries.player.results.forEach((playerEntity: Entity) => {
         const movement = playerEntity.getComponent(Movement);
         const drawable = playerEntity.getComponent(Drawable);
+        const animation = playerEntity.getComponent(SpriteSheetAnimation);
 
-        const { direction, currentTile, walking, tileQueue } = movement;
+        const { direction, currentTile, moving, tileQueue } = movement;
 
-        /*
-        // TODO: animation component/system to handle this
-        if (!direction && !walking) {
-          drawable.sourceX = 24;
-          return;
-        }
-
-        if (timeSinceLastAnimation > 100) {
-          switch (drawable.sourceX) {
-            case 0: {
-              drawable.sourceX = 24;
-              break;
-            }
-            case 24: {
-              drawable.sourceX = 48;
-              break;
-            }
-            case 48: {
-              drawable.sourceX = 0;
-              break;
-            }
-          }
-
-          movement.timeSinceLastAnimation = 0;
-        } else {
-          movement.timeSinceLastAnimation += delta;
-        }
-        */
+        tileMap.targetTile = movement.currentTile;
 
         /*
         // TODO: handle map change in appropriate component
@@ -71,7 +47,7 @@ export default class PlayerMover extends System {
           if (tileObject && tileObject.type === "door" && tileObject.value) {
             movement.tileQueue = [];
             movement.direction = undefined;
-            movement.walking = false;
+            movement.moving = false;
             tileMapEntity.addComponent(Unloadable, {
               dataPath: `/assets/maps/${tileObject.value.map}.json`
             });
@@ -92,7 +68,7 @@ export default class PlayerMover extends System {
               }
             } else {
               tileMap.targetTile = null;
-              movement.walking = false;
+              movement.moving = false;
             }
           }
         }*/

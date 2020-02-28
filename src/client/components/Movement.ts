@@ -6,7 +6,7 @@ export default class Movement extends Component {
   previousDirection?: Direction;
   currentTile: number = 0;
   targetTile: number = -1;
-  walking: boolean = false;
+  moving: boolean = false;
   tileQueue: number[] = [];
   speed: number = 8;
 
@@ -15,8 +15,8 @@ export default class Movement extends Component {
     this.previousDirection = undefined;
     this.currentTile = 0;
     this.targetTile = -1;
-    this.walking = false;
+    this.moving = false;
     this.tileQueue = [];
-    this.speed = 2;
+    this.speed = 8;
   }
 }

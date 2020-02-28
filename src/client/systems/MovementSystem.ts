@@ -79,12 +79,13 @@ export default class MovementSystem extends System {
       if (!movement.direction && movement.tileQueue.length) {
         while (!movement.direction && movement.tileQueue.length) {
           const nextTile = movement.tileQueue.shift();
-          if (nextTile && nextTile !== movement.currentTile)
+          if (nextTile && nextTile !== movement.currentTile) {
             movement.direction = directionFromTile(
               movement.currentTile,
               nextTile,
               columns
             );
+          }
         }
       }
 
@@ -119,6 +120,9 @@ export default class MovementSystem extends System {
           position.value = addOffset(currentVector, direction);
           movement.currentTile = vectorToTileId(position.value, columns);
           movement.direction = undefined;
+          if (!movement.tileQueue.length) {
+            movement.moving = false;
+          }
         } else {
           position.value = addOffset(position.value, moveVector);
         }

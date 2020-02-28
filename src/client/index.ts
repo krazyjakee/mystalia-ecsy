@@ -7,13 +7,15 @@ import Loader from "./systems/Loader";
 import NetworkInputSystem from "./systems/Input/NetworkInputSystem";
 import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import Networking from "./systems/Networking";
+import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
+import MouseInputSystem from "./systems/Input/MouseInputSystem";
+import MovementSystem from "./systems/MovementSystem";
+import Animation from "./systems/Animation";
 
 import context2d from "./canvas";
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
-import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
-import MouseInputSystem from "./systems/Input/MouseInputSystem";
-import MovementSystem from "./systems/MovementSystem";
+import PlayerAnimation from "./systems/Player/PlayerAnimation";
 
 world
   .registerSystem(Networking)
@@ -24,7 +26,9 @@ world
   .registerSystem(MovementSystem)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)
-  .registerSystem(TileMapChanger);
+  .registerSystem(TileMapChanger)
+  .registerSystem(Animation)
+  .registerSystem(PlayerAnimation);
 
 CreateLocalPlayer();
 

@@ -63,6 +63,10 @@ export default class KeyboardInputSystem extends System {
     // @ts-ignore
     this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
       const movement = entity.getMutableComponent(Movement);
+      if (movement.moving) {
+        return;
+      }
+
       let direction;
 
       compassDirections.forEach(compassKey => {
@@ -74,6 +78,7 @@ export default class KeyboardInputSystem extends System {
       });
 
       if (direction) {
+        movement.moving = true;
         movement.targetTile = vectorToTileId(
           addOffset(
             tileIdToVector(movement.currentTile, tileMap.width),

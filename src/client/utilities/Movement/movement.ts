@@ -27,7 +27,9 @@ export const setNewCurrentTile = (
   } else if (tileType !== "block") {
     playerMovement.currentTile = nextTile;
     tileMap.targetTile = nextTile;
-    playerMovement.walking = true;
+    playerMovement.moving = true;
+  } else {
+    playerMovement.moving = false;
   }
 };
 
