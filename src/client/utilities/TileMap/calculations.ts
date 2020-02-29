@@ -7,6 +7,13 @@ export const tileIdToVector = (number: number, columns: number): Vector => {
   };
 };
 
+export const tileIdToPixels = (number: number, columns: number): Vector => {
+  return {
+    x: (number % columns) * 32,
+    y: Math.floor(number / columns) * 32
+  };
+};
+
 export const vectorToTileId = ({ x, y }: Vector, columns: number) => {
   const column = Math.floor(x);
   const row = Math.floor(y);
@@ -48,6 +55,7 @@ export const setOffsetRelative = (
     mapWidth,
     mapHeight
   );
+
   const newOffset = addOffset(
     { x: boundary.x ? 0 : diff.x, y: boundary.y ? 0 : diff.y },
     currentOffset

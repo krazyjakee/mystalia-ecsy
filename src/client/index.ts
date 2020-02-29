@@ -16,6 +16,7 @@ import context2d from "./canvas";
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import PlayerAnimation from "./systems/Player/PlayerAnimation";
+import TileMapMover from "./systems/TileMap/TileMapMover";
 
 world
   .registerSystem(Networking)
@@ -27,6 +28,7 @@ world
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)
   .registerSystem(TileMapChanger)
+  .registerSystem(TileMapMover)
   .registerSystem(Animation)
   .registerSystem(PlayerAnimation);
 

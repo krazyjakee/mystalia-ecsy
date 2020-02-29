@@ -67,8 +67,8 @@ export default class MouseInputSystem extends System {
       if (!this.clickedPosition) return;
       const movement = entity.getMutableComponent(Movement);
       const offsetClickedPosition = {
-        x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x,
-        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y
+        x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,
+        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32
       };
       const clickedTile = vectorToTileId(
         offsetClickedPosition,

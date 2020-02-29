@@ -33,15 +33,12 @@ export default class TileMapDrawer extends System {
         objectLayerIndex,
         objectLayerDrawables,
         width,
-        height,
-        targetTile
+        height
       } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;
 
       if (canvasCache.length) {
-        scroll(width, height, drawable, targetTile);
-
         const baseCanvasProperties = {
           sourceX: 0 - offset.x,
           sourceY: 0 - offset.y,
