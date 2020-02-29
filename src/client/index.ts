@@ -17,6 +17,7 @@ import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import PlayerAnimation from "./systems/Player/PlayerAnimation";
 import TileMapMover from "./systems/TileMap/TileMapMover";
+import TileMapObjectListener from "./systems/TileMap/TileMapObjectListener";
 
 world
   .registerSystem(Networking)
@@ -24,11 +25,12 @@ world
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInputSystem)
   .registerSystem(NetworkInputSystem)
-  .registerSystem(MovementSystem)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapObjectDrawer)
   .registerSystem(TileMapChanger)
   .registerSystem(TileMapMover)
+  .registerSystem(TileMapObjectListener)
+  .registerSystem(MovementSystem)
   .registerSystem(Animation)
   .registerSystem(PlayerAnimation);
 

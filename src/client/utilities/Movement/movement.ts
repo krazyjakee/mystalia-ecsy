@@ -1,39 +1,8 @@
-import TileMap from "../../components/TileMap";
-import Drawable from "../../components/Drawable";
 import Movement from "src/client/components/Movement";
 import { Direction } from "types/Grid";
 import { tileIdToVector } from "../TileMap/calculations";
 
-export const setNewCurrentTile = (
-  tileMap: TileMap,
-  playerMovement: Movement,
-  mapColumns: number,
-  mapRows: number,
-  currentDirection?: Direction
-) => {
-  const { nextTile, isEdge, compass } = getNextTileData(
-    playerMovement,
-    mapRows,
-    mapColumns,
-    currentDirection
-  );
-  const tileType = tileMap.objectTileStore.getType(nextTile);
-
-  if (isEdge) {
-    const nextMap = tileMap.properties[compass];
-    if (nextMap) {
-      return nextMap;
-    }
-  } else if (tileType !== "block") {
-    playerMovement.currentTile = nextTile;
-    tileMap.targetTile = nextTile;
-    playerMovement.moving = true;
-  } else {
-    playerMovement.moving = false;
-  }
-};
-
-const getNextTileData = (
+export const getNextTileData = (
   player: Movement,
   mapRows: number,
   mapColumns: number,
@@ -48,35 +17,30 @@ const getNextTileData = (
   switch (direction) {
     case "e": {
       return {
-        nextTile: player.currentTile + 1,
         isEdge: edge.includes(direction),
         compass: "east"
       };
     }
     case "w": {
       return {
-        nextTile: player.currentTile - 1,
         isEdge: edge.includes(direction),
         compass: "west"
       };
     }
     case "n": {
       return {
-        nextTile: player.currentTile - mapColumns,
         isEdge: edge.includes(direction),
         compass: "north"
       };
     }
     case "s": {
       return {
-        nextTile: player.currentTile + mapColumns,
         isEdge: edge.includes(direction),
         compass: "south"
       };
     }
     default: {
       return {
-        nextTile: player.currentTile,
         isEdge: false,
         compass: "south"
       };

@@ -13,11 +13,12 @@ import {
   tileIdToVector,
   setOffset
 } from "../../utilities/TileMap/calculations";
+import Position from "../../components/Position";
 
 export default class TileMapChanger extends System {
   static queries = {
     player: {
-      components: [LocalPlayer, Movement]
+      components: [LocalPlayer, Movement, Position]
     },
     newLoadingTileMaps: {
       components: [Loadable, TileMap, Drawable, Not(Fade)]
@@ -63,6 +64,7 @@ export default class TileMapChanger extends System {
           if (drawable.data) {
             const movement = playerEntity.getComponent(Movement);
             const playerDrawable = playerEntity.getComponent(Drawable);
+            const playerPosition = playerEntity.getComponent(Position);
 
             const tileId = getMapChangePosition(
               movement,
@@ -76,8 +78,9 @@ export default class TileMapChanger extends System {
             await loadTileMap(loadable.dataPath, drawable, tileMap);
 
             const tileVector = tileIdToVector(tileId, drawable.data.width);
-            playerDrawable.x = tileVector.x + 4;
+            playerDrawable.x = tileVector.x;
             playerDrawable.y = tileVector.y;
+            playerPosition.value = tileVector;
             movement.currentTile = tileId;
 
             const centeredVector = {
