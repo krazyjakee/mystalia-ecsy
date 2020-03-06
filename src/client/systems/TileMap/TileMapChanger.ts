@@ -14,6 +14,7 @@ import {
   setOffset
 } from "../../utilities/TileMap/calculations";
 import Position from "../../components/Position";
+import NetworkRoom from "../../components/NetworkRoom";
 
 export default class TileMapChanger extends System {
   static queries = {
@@ -34,6 +35,9 @@ export default class TileMapChanger extends System {
     },
     unloadingTileMaps: {
       components: [TileMap, Unloadable, Fade]
+    },
+    networkRoom: {
+      components: [NetworkRoom]
     }
   };
 
@@ -63,7 +67,6 @@ export default class TileMapChanger extends System {
           // Do we have data from a previous map?
           if (drawable.data) {
             const movement = playerEntity.getComponent(Movement);
-            const playerDrawable = playerEntity.getComponent(Drawable);
             const playerPosition = playerEntity.getComponent(Position);
 
             const tileId = getMapChangePosition(
@@ -78,8 +81,6 @@ export default class TileMapChanger extends System {
             await loadTileMap(loadable.dataPath, drawable, tileMap);
 
             const tileVector = tileIdToVector(tileId, drawable.data.width);
-            playerDrawable.x = tileVector.x;
-            playerDrawable.y = tileVector.y;
             playerPosition.value = tileVector;
             movement.currentTile = tileId;
 
@@ -101,6 +102,14 @@ export default class TileMapChanger extends System {
           } else {
             await loadTileMap(loadable.dataPath, drawable, tileMap);
           }
+
+          // @ts-ignore
+          this.queries.networkRoom.results.forEach(
+            (networkRoom: NetworkRoom) => {
+              networkRoom.room?.leave();
+              networkRoom.room = undefined;
+            }
+          );
 
           // Everything is good to go!
           loadable.loading = false;

@@ -5,7 +5,6 @@ import TileMapChanger from "./systems/TileMap/TileMapChanger";
 import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
 import Loader from "./systems/Loader";
 import NetworkInputSystem from "./systems/Input/NetworkInputSystem";
-import TileMapObjectDrawer from "./systems/TileMap/TileMapObjectDrawer";
 import Networking from "./systems/Networking";
 import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
 import MouseInputSystem from "./systems/Input/MouseInputSystem";
@@ -26,7 +25,6 @@ world
   .registerSystem(MouseInputSystem)
   .registerSystem(NetworkInputSystem)
   .registerSystem(TileMapDrawer)
-  .registerSystem(TileMapObjectDrawer)
   .registerSystem(TileMapChanger)
   .registerSystem(TileMapMover)
   .registerSystem(TileMapObjectListener)

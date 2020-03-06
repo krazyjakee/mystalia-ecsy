@@ -9,7 +9,6 @@ export default class TileMap extends Component {
   properties: TileMapProperties = {};
   tiles: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
-  objectLayerDrawables: DrawableProperties[] = [];
   objectLayerIndex: number = 0;
   objectTileStore: ObjectTileStore = new ObjectTileStore(0, 0);
   canvasCache: HTMLCanvasElement[] = [];
@@ -25,7 +24,6 @@ export default class TileMap extends Component {
 
   reset() {
     this.tiles = [];
-    this.objectLayerDrawables = [];
     this.objectLayerIndex = 0;
     this.tileSetStore = {};
     this.objectTileStore = new ObjectTileStore(0, 0);

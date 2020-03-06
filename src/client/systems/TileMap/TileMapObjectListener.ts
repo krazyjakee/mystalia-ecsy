@@ -3,16 +3,16 @@ import Drawable from "../../components/Drawable";
 import Movement from "../../components/Movement";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
-import { tileIdToVector } from "../../utilities/TileMap/calculations";
 import { getNextTileData } from "../../utilities/Movement/movement";
+import { LocalPlayer } from "../../components/Tags";
 
 export default class TileMapObjectListener extends System {
   static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap]
     },
-    player: {
-      components: [Not(Loadable), Movement, Drawable]
+    localPlayer: {
+      components: [Not(Loadable), Movement, Drawable, LocalPlayer]
     }
   };
 
@@ -24,7 +24,7 @@ export default class TileMapObjectListener extends System {
       const { width: columns, height: rows } = tileMapDrawable.data;
 
       // @ts-ignore
-      this.queries.player.results.forEach((playerEntity: Entity) => {
+      this.queries.localPlayer.results.forEach((playerEntity: Entity) => {
         const movement = playerEntity.getComponent(Movement);
 
         const { direction, currentTile, tileQueue } = movement;

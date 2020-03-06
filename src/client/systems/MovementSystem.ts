@@ -13,7 +13,6 @@ import {
   compassDirections
 } from "../utilities/Movement/movement";
 import Position from "../components/Position";
-import { Direction } from "types/Grid";
 
 export default class MovementSystem extends System {
   static queries = {

@@ -2,13 +2,15 @@ import { System, Not, Entity } from "ecsy";
 import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import TileMap from "../../components/TileMap";
-import { drawImage, drawToShadowCanvas } from "../../utilities/drawing";
+import {
+  drawImage,
+  drawToShadowCanvas,
+  drawableToDrawableProperties
+} from "../../utilities/drawing";
 import { TMJ } from "types/tmj";
 import { createDrawableTile } from "../../utilities/TileMap/drawTile";
 import Movement from "../../components/Movement";
-import { scroll } from "../../utilities/TileMap/moveMap";
 import Position from "../../components/Position";
-import { LocalPlayer } from "../../components/Tags";
 import { addOffset } from "../../utilities/TileMap/calculations";
 
 export default class TileMapDrawer extends System {
@@ -16,8 +18,8 @@ export default class TileMapDrawer extends System {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap]
     },
-    player: {
-      components: [Not(Loadable), Drawable, Movement, Position, LocalPlayer]
+    players: {
+      components: [Not(Loadable), Drawable, Movement, Position]
     }
   };
 
@@ -27,14 +29,7 @@ export default class TileMapDrawer extends System {
       const tileMap = tileMapEntity.getComponent(TileMap);
 
       const drawable = tileMapEntity.getComponent(Drawable);
-      const {
-        canvasCache,
-        tiles,
-        objectLayerIndex,
-        objectLayerDrawables,
-        width,
-        height
-      } = tileMap;
+      const { canvasCache, tiles, objectLayerIndex, width, height } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;
 
@@ -56,17 +51,12 @@ export default class TileMapDrawer extends System {
           image: canvasCache[0]
         });
 
-        const localPlayer =
-          // @ts-ignore
-          (this.queries.player.results.length &&
-            // @ts-ignore
-            this.queries.player.results[0]) as Entity;
-        const position = localPlayer
-          ? localPlayer.getComponent(Position)
-          : undefined;
-        objectLayerDrawables.forEach(objectTile => {
+        // @ts-ignore
+        this.queries.players.results.forEach(player => {
+          const position = player ? player.getComponent(Position) : undefined;
+          const playerDrawable = player.getComponent(Drawable);
           drawImage({
-            ...objectTile,
+            ...drawableToDrawableProperties(playerDrawable),
             offset: position
               ? addOffset(offset, {
                   x: position.value.x * 32,
