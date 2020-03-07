@@ -13,10 +13,10 @@ import { Loadable } from "../../components/Loadable";
 import { compassDirections } from "../../utilities/Movement/movement";
 
 const movementKeys: { [key in Direction]: string[] } = {
-  n: ["w", "ArrowUp"],
-  e: ["d", "ArrowRight"],
-  s: ["s", "ArrowDown"],
-  w: ["a", "ArrowLeft"]
+  n: ["KeyW", "ArrowUp"],
+  e: ["KeyD", "ArrowRight"],
+  s: ["KeyS", "ArrowDown"],
+  w: ["KeyA", "ArrowLeft"]
 };
 
 export default class KeyboardInputSystem extends System {
