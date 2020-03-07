@@ -50,9 +50,11 @@ export default class TileMapObjectListener extends System {
 
             if (isEdge) {
               const nextMap = tileMap.properties[compass];
-              tileMapEntity.addComponent(Unloadable, {
-                dataPath: `/assets/maps/${nextMap}.json`
-              });
+              if (nextMap) {
+                tileMapEntity.addComponent(Unloadable, {
+                  dataPath: `/assets/maps/${nextMap}.json`
+                });
+              }
             }
           } else {
             tileMap.targetTile = null;

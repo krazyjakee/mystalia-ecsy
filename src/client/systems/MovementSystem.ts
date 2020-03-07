@@ -39,7 +39,7 @@ export default class MovementSystem extends System {
       const movement = entity.getMutableComponent(Movement);
       const position = entity.getMutableComponent(Position);
 
-      if (movement.targetTile >= 0) {
+      if (movement.targetTile !== undefined) {
         // do a simple check to see if our destination is within 1 tile
         // TODO: there's probably a more mathematical way to calculate the direction than looping through them all until we find the corresponding one
         for (const direction of compassDirections) {
@@ -54,7 +54,9 @@ export default class MovementSystem extends System {
             break;
           }
         }
+      }
 
+      if (movement.targetTile !== undefined && movement.targetTile >= 0) {
         // if not we should use pathfinding
         if (!movement.direction) {
           const destinationTile = tileIdToVector(movement.targetTile, columns);
@@ -72,7 +74,7 @@ export default class MovementSystem extends System {
           tileMap.aStar.calculate();
         }
 
-        movement.targetTile = -1;
+        movement.targetTile = undefined;
       }
 
       if (!movement.direction && movement.tileQueue.length) {
