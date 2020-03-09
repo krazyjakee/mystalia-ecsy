@@ -1,6 +1,6 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../colyseus";
-import { SendData, Remove } from "../components/Tags";
+import { SendData, Remove, LocalPlayer } from "../components/Tags";
 import Movement from "../components/Movement";
 import CreateRemotePlayer from "../entities/RemotePlayer";
 import NetworkRoom, { RoomState } from "../components/NetworkRoom";
@@ -15,7 +15,7 @@ export default class Networking extends System {
     networkRoom: {
       components: [NetworkRoom]
     },
-    localEntities: {
+    localEntitiesToSend: {
       components: [SendData, Movement]
     },
     remoteEntities: {
@@ -23,6 +23,9 @@ export default class Networking extends System {
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)]
+    },
+    localEntities: {
+      components: [LocalPlayer, Movement]
     }
   };
 
@@ -47,6 +50,17 @@ export default class Networking extends System {
         networkRoom.room = room as RoomState;
         networkRoom.joining = false;
         const myKey = room.sessionId;
+
+        // @ts-ignore
+        this.queries.localEntities.results.forEach((localEntity: Entity) => {
+          const movement = localEntity.getComponent(Movement);
+          if (movement.currentTile >= 0) {
+            networkRoom.room?.send({
+              command: "move",
+              targetTile: movement.currentTile
+            });
+          }
+        });
 
         networkRoom.room.state.players.onAdd = (player, key) => {
           if (myKey !== key) {
@@ -80,12 +94,12 @@ export default class Networking extends System {
     }
 
     // @ts-ignore
-    this.queries.localEntities.results.forEach((entityToSend: Entity) => {
+    this.queries.localEntitiesToSend.results.forEach((entityToSend: Entity) => {
       const movement = entityToSend.getComponent(Movement);
-      if (movement.currentTile >= 0) {
+      if (movement.targetTile !== undefined && movement.targetTile >= 0) {
         networkRoom.room?.send({
           command: "move",
-          targetTile: movement.currentTile
+          targetTile: movement.targetTile
         });
       }
       entityToSend.removeComponent(SendData);

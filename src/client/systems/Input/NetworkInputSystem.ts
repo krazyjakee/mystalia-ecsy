@@ -29,7 +29,7 @@ export default class PlayerNetworkInput extends System {
             Movement
           );
           if (change.field === "targetTile") {
-            newPlayerMovementComponent.tileQueue.push(change.value);
+            newPlayerMovementComponent.targetTile = change.value;
           }
         });
       };

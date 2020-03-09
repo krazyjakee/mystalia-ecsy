@@ -19,11 +19,11 @@ import TileMapMover from "./systems/TileMap/TileMapMover";
 import TileMapObjectListener from "./systems/TileMap/TileMapObjectListener";
 
 world
-  .registerSystem(Networking)
   .registerSystem(Loader)
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInputSystem)
   .registerSystem(NetworkInputSystem)
+  .registerSystem(Networking)
   .registerSystem(TileMapDrawer)
   .registerSystem(TileMapChanger)
   .registerSystem(TileMapMover)

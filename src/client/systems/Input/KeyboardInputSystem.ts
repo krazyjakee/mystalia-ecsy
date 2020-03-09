@@ -86,9 +86,8 @@ export default class KeyboardInputSystem extends System {
           ),
           tileMap.width
         );
+        entity.addComponent(SendData);
       }
-
-      entity.addComponent(SendData);
     });
   }
 }
