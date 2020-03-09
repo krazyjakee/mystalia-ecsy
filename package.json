@@ -44,5 +44,8 @@
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
     "webpack-dev-middleware": "^3.7.0"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }
