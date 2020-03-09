@@ -7,7 +7,7 @@ import { monitor } from "@colyseus/monitor";
 import { getMapProperties } from "./utilities/tmjTools";
 import MapRoom from "./rooms/map";
 
-const port = 8080;
+const port = parseInt(process.env.PORT || "8080");
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
