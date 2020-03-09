@@ -52,17 +52,15 @@ export default class TileMapDrawer extends System {
         });
 
         // @ts-ignore
-        this.queries.players.results.forEach(player => {
-          const position = player ? player.getComponent(Position) : undefined;
+        this.queries.players.results.forEach((player: Entity) => {
+          const position = player.getComponent(Position);
           const playerDrawable = player.getComponent(Drawable);
           drawImage({
             ...drawableToDrawableProperties(playerDrawable),
-            offset: position
-              ? addOffset(offset, {
-                  x: position.value.x * 32,
-                  y: position.value.y * 32
-                })
-              : offset
+            offset: addOffset(offset, {
+              x: position.value.x * 32,
+              y: position.value.y * 32
+            })
           });
         });
 
