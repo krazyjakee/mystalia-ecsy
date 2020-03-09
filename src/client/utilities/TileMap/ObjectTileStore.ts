@@ -4,7 +4,7 @@ import {
   ObjectTileType
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId } from "./calculations";
-import { Property, Attributes, Layer } from "types/tmj";
+import { Property, Attributes, Layer } from "types/TMJ";
 
 const serializeProperties = (properties?: Property[]): ObjectTileType => {
   let property: ObjectTileType = null;

@@ -4,7 +4,7 @@ import Movement from "../../components/Movement";
 import { Loadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToPixels } from "../../utilities/TileMap/calculations";
-import { TMJ } from "types/tmj";
+import { TMJ } from "types/TMJ";
 import { LocalPlayer } from "../../components/Tags";
 import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";

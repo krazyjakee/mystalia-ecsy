@@ -7,7 +7,7 @@ import {
   drawToShadowCanvas,
   drawableToDrawableProperties
 } from "../../../utilities/drawing";
-import { TMJ } from "types/tmj";
+import { TMJ } from "types/TMJ";
 import createDrawableTile from "./createDrawableTile";
 import Movement from "../../../components/Movement";
 import Position from "../../../components/Position";

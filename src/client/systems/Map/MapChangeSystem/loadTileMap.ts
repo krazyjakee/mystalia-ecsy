@@ -1,6 +1,6 @@
 import Drawable from "../../../components/Drawable";
 import TileMap from "../../../components/TileMap";
-import { TMJ, Layer } from "types/tmj";
+import { TMJ, Layer } from "types/TMJ";
 import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { loadImage, loadData } from "../../../utilities/assets";
