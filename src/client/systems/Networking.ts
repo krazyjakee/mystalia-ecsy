@@ -19,13 +19,16 @@ export default class Networking extends System {
       components: [SendData, Movement]
     },
     remoteEntities: {
-      components: [RemotePlayer]
+      components: [RemotePlayer, Not(Remove)]
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)]
     },
     localEntities: {
       components: [LocalPlayer, Movement]
+    },
+    expiredRemotePlayers: {
+      components: [RemotePlayer, Remove]
     }
   };
 
@@ -65,6 +68,16 @@ export default class Networking extends System {
         networkRoom.room.state.players.onAdd = (player, key) => {
           if (myKey !== key) {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
+            player.onChange = function(changes) {
+              changes.forEach(change => {
+                const newPlayerMovementComponent = newRemotePlayer.getComponent(
+                  Movement
+                );
+                if (change.field === "targetTile") {
+                  newPlayerMovementComponent.targetTile = change.value;
+                }
+              });
+            };
             if (player.targetTile) {
               const position = newRemotePlayer.getMutableComponent(Position);
               const movement = newRemotePlayer.getMutableComponent(Movement);
@@ -104,5 +117,12 @@ export default class Networking extends System {
       }
       entityToSend.removeComponent(SendData);
     });
+
+    // @ts-ignore
+    this.queries.expiredRemotePlayers.results.forEach(
+      (remotePlayer: Entity) => {
+        remotePlayer.remove();
+      }
+    );
   }
 }
