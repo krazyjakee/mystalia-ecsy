@@ -93,7 +93,10 @@ export default class TileMapChanger extends System {
 
           // @ts-ignore
           this.queries.networkRoom.results.forEach(
-            (networkRoom: NetworkRoom) => {
+            (networkRoomEntity: Entity) => {
+              const networkRoom = networkRoomEntity.getMutableComponent(
+                NetworkRoom
+              );
               networkRoom.room?.leave();
               networkRoom.room = undefined;
             }
