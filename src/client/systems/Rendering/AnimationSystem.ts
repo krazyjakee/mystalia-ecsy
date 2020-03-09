@@ -1,8 +1,8 @@
 import { System, Entity } from "ecsy";
-import Drawable from "../components/Drawable";
-import SpriteSheetAnimation from "../components/SpriteSheetAnimation";
+import Drawable from "../../components/Drawable";
+import SpriteSheetAnimation from "../../components/SpriteSheetAnimation";
 
-export default class Animation extends System {
+export default class AnimationSystem extends System {
   static queries = {
     animated: {
       components: [Drawable, SpriteSheetAnimation]

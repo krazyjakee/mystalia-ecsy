@@ -10,12 +10,12 @@ import { Loadable } from "../components/Loadable";
 import Position from "../components/Position";
 import {
   tileIdToVector,
-  vectorToTileId,
-  addOffset,
-  compassToVector
+  vectorToTileId
 } from "../utilities/TileMap/calculations";
+import addOffset from "../utilities/Vector/addOffset";
+import compassToVector from "../utilities/Compass/compassToVector";
 
-export default class Networking extends System {
+export default class NetworkingSystem extends System {
   static queries = {
     networkRoom: {
       components: [NetworkRoom]

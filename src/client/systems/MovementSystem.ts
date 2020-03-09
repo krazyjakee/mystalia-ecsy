@@ -4,14 +4,12 @@ import TileMap from "../components/TileMap";
 import { Loadable } from "../components/Loadable";
 import {
   tileIdToVector,
-  compassToVector,
-  addOffset,
   vectorToTileId
 } from "../utilities/TileMap/calculations";
-import {
-  directionFromTile,
-  compassDirections
-} from "../utilities/Movement/movement";
+import directionFromTile from "../utilities/TileMap/directionFromTile";
+import { compassDirections } from "../utilities/Compass/compassDirections";
+import compassToVector from "../utilities/Compass/compassToVector";
+import addOffset from "../utilities/Vector/addOffset";
 import Position from "../components/Position";
 import { SendData } from "../components/Tags";
 

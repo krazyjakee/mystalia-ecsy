@@ -1,16 +1,15 @@
-import { tileIdToVector } from "./calculations";
+import { tileIdToVector } from "../../../utilities/TileMap/calculations";
 import { DrawableProperties } from "types/drawable";
-import TileMap from "src/client/components/TileMap";
-import Drawable from "src/client/components/Drawable";
 import { TMJ } from "types/tmj";
+import { TileSetStore } from "types/TileMap/TileSetStore";
 
-export const createDrawableTile = (
+export default (
   sourceTileId: number,
   destinationTileId: number,
-  tileMap: TileMap,
-  drawable: Drawable
+  tileSetStore: TileSetStore,
+  data: TMJ
 ) => {
-  const { tilesets, width } = drawable.data as TMJ;
+  const { tilesets, width } = data;
   const tileset = tilesets.find(tileset => tileset.firstgid < sourceTileId);
 
   if (tileset) {
@@ -22,7 +21,7 @@ export const createDrawableTile = (
     const destinationVector = tileIdToVector(destinationTileId, width);
 
     const tile: DrawableProperties = {
-      image: tileMap.tileSetStore[tileset.image],
+      image: tileSetStore[tileset.image],
       sourceHeight: 32,
       sourceWidth: 32,
       sourceX: sourceVector.x * 32,

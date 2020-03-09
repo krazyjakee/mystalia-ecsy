@@ -1,17 +1,17 @@
 import { System, Not, Entity } from "ecsy";
-import { Loadable } from "../../components/Loadable";
-import Drawable from "../../components/Drawable";
-import TileMap from "../../components/TileMap";
+import { Loadable } from "../../../components/Loadable";
+import Drawable from "../../../components/Drawable";
+import TileMap from "../../../components/TileMap";
 import {
   drawImage,
   drawToShadowCanvas,
   drawableToDrawableProperties
-} from "../../utilities/drawing";
+} from "../../../utilities/drawing";
 import { TMJ } from "types/tmj";
-import { createDrawableTile } from "../../utilities/TileMap/drawTile";
-import Movement from "../../components/Movement";
-import Position from "../../components/Position";
-import { addOffset } from "../../utilities/TileMap/calculations";
+import createDrawableTile from "./createDrawableTile";
+import Movement from "../../../components/Movement";
+import Position from "../../../components/Position";
+import addOffset from "../../../utilities/Vector/addOffset";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -91,8 +91,8 @@ export default class TileMapDrawer extends System {
               const newTile = createDrawableTile(
                 tile,
                 index,
-                tileMap,
-                drawable
+                tileMap.tileSetStore,
+                drawable.data
               );
               if (newTile) {
                 tileMap.tiles.push(newTile);

@@ -1,34 +1,36 @@
 import "./reactIndex";
 import world from "./world";
+import context2d from "./canvas";
 
-import TileMapChanger from "./systems/TileMap/TileMapChanger";
-import TileMapDrawer from "./systems/TileMap/TileMapDrawer";
-import Loader from "./systems/Loader";
-import Networking from "./systems/Networking";
+import MapChangeSystem from "./systems/Map/MapChangeSystem";
+import RenderingSystem from "./systems/Rendering/RenderingSystem";
+import LoadingSystem from "./systems/LoadingSystem";
+import NetworkingSystem from "./systems/NetworkingSystem";
 import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
 import MouseInputSystem from "./systems/Input/MouseInputSystem";
 import MovementSystem from "./systems/MovementSystem";
-import Animation from "./systems/Animation";
+import AnimationSystem from "./systems/Rendering/AnimationSystem";
+import PlayerAnimationSystem from "./systems/Rendering/PlayerAnimationSystem";
+import ScrollingSystem from "./systems/Rendering/ScrollingSystem";
+import MapEventSystem from "./systems/Map/MapEventSystem";
+import FadeSystem from "./systems/Rendering/FadeSystem";
 
-import context2d from "./canvas";
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
-import PlayerAnimation from "./systems/Player/PlayerAnimation";
-import TileMapMover from "./systems/TileMap/TileMapMover";
-import TileMapObjectListener from "./systems/TileMap/TileMapObjectListener";
 
 world
-  .registerSystem(Loader)
+  .registerSystem(LoadingSystem)
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInputSystem)
-  .registerSystem(Networking)
-  .registerSystem(TileMapChanger)
-  .registerSystem(TileMapMover)
-  .registerSystem(TileMapObjectListener)
+  .registerSystem(NetworkingSystem)
+  .registerSystem(MapChangeSystem)
+  .registerSystem(ScrollingSystem)
+  .registerSystem(MapEventSystem)
   .registerSystem(MovementSystem)
-  .registerSystem(Animation)
-  .registerSystem(PlayerAnimation)
-  .registerSystem(TileMapDrawer);
+  .registerSystem(AnimationSystem)
+  .registerSystem(PlayerAnimationSystem)
+  .registerSystem(RenderingSystem)
+  .registerSystem(FadeSystem);
 
 CreateLocalPlayer();
 

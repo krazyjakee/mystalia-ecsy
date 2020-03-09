@@ -1,21 +1,17 @@
 import { System, Entity, Not } from "ecsy";
-import { Unloadable, Loadable } from "../../components/Loadable";
-import Fade from "../../components/Fade";
-import TileMap from "../../components/TileMap";
-import { fadeOverlay } from "../../utilities/drawing";
-import loadTileMap, {
-  getMapChangePosition
-} from "../../utilities/TileMap/loadTileMap";
-import Drawable from "../../components/Drawable";
-import Movement from "../../components/Movement";
-import { LocalPlayer, Remove } from "../../components/Tags";
-import {
-  tileIdToVector,
-  setOffset
-} from "../../utilities/TileMap/calculations";
-import Position from "../../components/Position";
-import NetworkRoom from "../../components/NetworkRoom";
-import RemotePlayer from "../../components/RemotePlayer";
+import { Loadable } from "../../../components/Loadable";
+import Fade from "../../../components/Fade";
+import TileMap from "../../../components/TileMap";
+import loadTileMap from "./loadTileMap";
+import getMapChangePosition from "./getMapChangePosition";
+import Drawable from "../../../components/Drawable";
+import Movement from "../../../components/Movement";
+import { LocalPlayer, Remove } from "../../../components/Tags";
+import { tileIdToVector } from "../../../utilities/TileMap/calculations";
+import setOffset from "../../../utilities/Vector/setOffset";
+import Position from "../../../components/Position";
+import NetworkRoom from "../../../components/NetworkRoom";
+import RemotePlayer from "../../../components/RemotePlayer";
 
 export default class TileMapChanger extends System {
   static queries = {
@@ -24,18 +20,6 @@ export default class TileMapChanger extends System {
     },
     newLoadingTileMaps: {
       components: [Loadable, TileMap, Drawable, Not(Fade)]
-    },
-    loadingTileMaps: {
-      components: [Loadable, TileMap, Fade]
-    },
-    newUnloadingTileMaps: {
-      components: [TileMap, Unloadable, Not(Fade)],
-      listen: {
-        added: true
-      }
-    },
-    unloadingTileMaps: {
-      components: [TileMap, Unloadable, Fade]
     },
     networkRoom: {
       components: [NetworkRoom]
@@ -126,38 +110,5 @@ export default class TileMapChanger extends System {
         }
       }
     );
-
-    // @ts-ignore
-    this.queries.loadingTileMaps.results.forEach(
-      async (tileMapEntity: Entity) => {
-        const fade = tileMapEntity.getComponent(Fade);
-
-        fadeOverlay(fade);
-        if (fade.alpha > 1) {
-          tileMapEntity.removeComponent(Loadable);
-          tileMapEntity.removeComponent(Fade);
-        }
-      }
-    );
-
-    // @ts-ignore
-    this.queries.newUnloadingTileMaps.added.forEach((tileMapEntity: Entity) => {
-      tileMapEntity.addComponent(Fade);
-    });
-
-    // @ts-ignore
-    this.queries.unloadingTileMaps.results.forEach((tileMapEntity: Entity) => {
-      const fade = tileMapEntity.getComponent(Fade);
-
-      fadeOverlay(fade, false);
-      if (fade.alpha <= 0) {
-        const unloadable = tileMapEntity.getComponent(Unloadable);
-        tileMapEntity.addComponent(Loadable, {
-          dataPath: unloadable.dataPath
-        });
-        tileMapEntity.removeComponent(Unloadable);
-        tileMapEntity.removeComponent(Fade);
-      }
-    });
   }
 }

@@ -1,18 +1,17 @@
 import { System, Entity, Not } from "ecsy";
-import Drawable from "../../components/Drawable";
-import Movement from "../../components/Movement";
-import { Loadable, Unloadable } from "../../components/Loadable";
-import TileMap from "../../components/TileMap";
-import { getNextTileData } from "../../utilities/Movement/movement";
-import { LocalPlayer } from "../../components/Tags";
+import Movement from "../../../components/Movement";
+import { Loadable, Unloadable } from "../../../components/Loadable";
+import TileMap from "../../../components/TileMap";
+import getNextTileData from "./getNextTileData";
+import { LocalPlayer } from "../../../components/Tags";
 
 export default class TileMapObjectListener extends System {
   static queries = {
     loadedTileMaps: {
-      components: [Not(Loadable), Drawable, TileMap]
+      components: [Not(Loadable), TileMap]
     },
     localPlayer: {
-      components: [Not(Loadable), Movement, Drawable, LocalPlayer]
+      components: [Not(Loadable), Movement, LocalPlayer]
     }
   };
 
@@ -20,8 +19,7 @@ export default class TileMapObjectListener extends System {
     // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
-      const tileMapDrawable = tileMapEntity.getComponent(Drawable);
-      const { width: columns, height: rows } = tileMapDrawable.data;
+      const { width: columns, height: rows } = tileMap;
 
       // @ts-ignore
       this.queries.localPlayer.results.forEach((playerEntity: Entity) => {
@@ -41,7 +39,7 @@ export default class TileMapObjectListener extends System {
         } else {
           if (direction || tileQueue.length) {
             const { isEdge, compass } = getNextTileData(
-              movement,
+              movement.currentTile,
               rows,
               columns,
               direction

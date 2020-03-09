@@ -1,11 +1,9 @@
-import Drawable from "../../components/Drawable";
-import TileMap from "../../components/TileMap";
+import Drawable from "../../../components/Drawable";
+import TileMap from "../../../components/TileMap";
 import { TMJ, Layer } from "types/tmj";
-import { ObjectTileStore } from "./ObjectTileStore";
+import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
-import { loadImage, loadData } from "../assets";
-import { Direction } from "types/Grid";
-import Movement from "src/client/components/Movement";
+import { loadImage, loadData } from "../../../utilities/assets";
 
 export default async (
   dataPath: string,
@@ -58,46 +56,6 @@ export default async (
     const tileSetImage = await loadImage(`/assets/tilesets/${tileset.image}`);
     if (tileSetImage) {
       tileMap.tileSetStore[tileset.image] = tileSetImage;
-    }
-  }
-};
-
-export const getMapChangePosition = (
-  player: Movement,
-  columns: number,
-  rows: number,
-  objectTileStore: ObjectTileStore
-) => {
-  const direction = player.direction || player.previousDirection;
-  const currentTile = player.currentTile;
-  const objectTile = objectTileStore.get(currentTile);
-
-  if (objectTile) {
-    switch (objectTile.type) {
-      case "door": {
-        if (objectTile.value) {
-          return objectTile.value.tile;
-        }
-        break;
-      }
-    }
-  }
-
-  switch (direction) {
-    case "n": {
-      return currentTile + columns * (rows - 1);
-    }
-    case "s": {
-      return currentTile - columns * (rows - 1);
-    }
-    case "e": {
-      return currentTile - columns + 1;
-    }
-    case "w": {
-      return currentTile + columns - 1;
-    }
-    default: {
-      return 0;
     }
   }
 };

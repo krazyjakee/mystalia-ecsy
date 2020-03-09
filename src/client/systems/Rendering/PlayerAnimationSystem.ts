@@ -4,7 +4,7 @@ import { Loadable } from "../../components/Loadable";
 import SpriteSheetAnimation from "../../components/SpriteSheetAnimation";
 import { generateAnimationSteps } from "../../utilities/Animation/character";
 
-export default class PlayerAnimation extends System {
+export default class PlayerAnimationSystem extends System {
   static queries = {
     player: {
       components: [Not(Loadable), Movement, SpriteSheetAnimation]

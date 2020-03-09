@@ -6,9 +6,7 @@ import {
 import { vectorToTileId } from "./calculations";
 import { Property, Attributes, Layer } from "types/tmj";
 
-export const serializeProperties = (
-  properties?: Property[]
-): ObjectTileType => {
+const serializeProperties = (properties?: Property[]): ObjectTileType => {
   let property: ObjectTileType = null;
   if (properties) {
     // @ts-ignore Need somewhere to start building the object
@@ -23,7 +21,7 @@ export const serializeProperties = (
   return property;
 };
 
-export const mapObjectToTileTypes = (
+const mapObjectToTileTypes = (
   object: Attributes,
   tileMapColumns: number
 ): ObjectTileStoreType => {
