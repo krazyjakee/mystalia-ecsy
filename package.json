@@ -23,7 +23,8 @@
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-jss": "^10.0.4"
+    "react-jss": "^10.0.4",
+    "ts-node": "^8.2.0"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^5.0.0",
@@ -37,7 +38,6 @@
     "html-webpack-plugin": "^3.2.0",
     "prettier": "^1.17.1",
     "ts-loader": "^6.0.1",
-    "ts-node": "^8.2.0",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1",
