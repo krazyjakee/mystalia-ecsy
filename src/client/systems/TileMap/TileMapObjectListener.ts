@@ -35,7 +35,6 @@ export default class TileMapObjectListener extends System {
         if (tileObject && tileObject.type === "door" && tileObject.value) {
           movement.tileQueue = [];
           movement.direction = undefined;
-          movement.moving = false;
           tileMapEntity.addComponent(Unloadable, {
             dataPath: `/assets/maps/${tileObject.value.map}.json`
           });
@@ -58,7 +57,6 @@ export default class TileMapObjectListener extends System {
             }
           } else {
             tileMap.targetTile = null;
-            movement.moving = false;
           }
         }
       });

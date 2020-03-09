@@ -1,6 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import { KeyboardInput } from "../../components/Tags";
 import Movement from "../../components/Movement";
+import Position from "../../components/Position";
 import TileMap from "../../components/TileMap";
 import { Direction } from "types/Grid";
 import {
@@ -25,7 +26,7 @@ export default class KeyboardInputSystem extends System {
 
   static queries = {
     keyboardEnabledEntities: {
-      components: [KeyboardInput, Movement]
+      components: [KeyboardInput, Movement, Position]
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)]
@@ -63,9 +64,6 @@ export default class KeyboardInputSystem extends System {
     // @ts-ignore
     this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
       const movement = entity.getMutableComponent(Movement);
-      if (movement.moving) {
-        return;
-      }
 
       let direction;
 
@@ -78,10 +76,13 @@ export default class KeyboardInputSystem extends System {
       });
 
       if (direction) {
-        movement.moving = true;
+        const position = entity.getComponent(Position);
         movement.targetTile = vectorToTileId(
           addOffset(
-            tileIdToVector(movement.currentTile, tileMap.width),
+            {
+              x: Math.round(position.value.x),
+              y: Math.round(position.value.y)
+            },
             direction
           ),
           tileMap.width

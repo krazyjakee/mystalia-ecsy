@@ -22,13 +22,13 @@ world
   .registerSystem(KeyboardInputSystem)
   .registerSystem(MouseInputSystem)
   .registerSystem(Networking)
-  .registerSystem(TileMapDrawer)
   .registerSystem(TileMapChanger)
   .registerSystem(TileMapMover)
   .registerSystem(TileMapObjectListener)
   .registerSystem(MovementSystem)
   .registerSystem(Animation)
-  .registerSystem(PlayerAnimation);
+  .registerSystem(PlayerAnimation)
+  .registerSystem(TileMapDrawer);
 
 CreateLocalPlayer();
 

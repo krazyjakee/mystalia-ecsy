@@ -85,7 +85,6 @@ export default class MouseInputSystem extends System {
         return;
       }
 
-      movement.direction = undefined;
       movement.targetTile = clickedTile;
     });
   }

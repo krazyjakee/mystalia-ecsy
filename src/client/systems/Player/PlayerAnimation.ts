@@ -17,9 +17,9 @@ export default class PlayerAnimation extends System {
       const movement = playerEntity.getComponent(Movement);
       const animation = playerEntity.getComponent(SpriteSheetAnimation);
 
-      const { direction, moving } = movement;
+      const { direction } = movement;
 
-      if (!direction && !moving) {
+      if (!direction) {
         animation.playing = false;
       } else {
         animation.playing = true;
