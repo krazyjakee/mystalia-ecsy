@@ -44,6 +44,7 @@ while ((file = dir.readSync()) !== null) {
   }
 }
 dir.closeSync();
+console.log("Done");
 
 gameServer.listen(port);
 console.log(
