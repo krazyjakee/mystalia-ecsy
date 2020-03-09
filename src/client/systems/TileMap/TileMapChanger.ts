@@ -2,19 +2,20 @@ import { System, Entity, Not } from "ecsy";
 import { Unloadable, Loadable } from "../../components/Loadable";
 import Fade from "../../components/Fade";
 import TileMap from "../../components/TileMap";
-import { fadeOverlay, waitForNextFrame } from "../../utilities/drawing";
+import { fadeOverlay } from "../../utilities/drawing";
 import loadTileMap, {
   getMapChangePosition
 } from "../../utilities/TileMap/loadTileMap";
 import Drawable from "../../components/Drawable";
 import Movement from "../../components/Movement";
-import { LocalPlayer } from "../../components/Tags";
+import { LocalPlayer, Remove } from "../../components/Tags";
 import {
   tileIdToVector,
   setOffset
 } from "../../utilities/TileMap/calculations";
 import Position from "../../components/Position";
 import NetworkRoom from "../../components/NetworkRoom";
+import RemotePlayer from "../../components/RemotePlayer";
 
 export default class TileMapChanger extends System {
   static queries = {
@@ -38,6 +39,9 @@ export default class TileMapChanger extends System {
     },
     networkRoom: {
       components: [NetworkRoom]
+    },
+    remotePlayers: {
+      components: [RemotePlayer]
     }
   };
 
@@ -110,6 +114,11 @@ export default class TileMapChanger extends System {
               networkRoom.room = undefined;
             }
           );
+
+          // @ts-ignore
+          this.queries.remotePlayers.results.forEach((remotePlayer: Entity) => {
+            remotePlayer.addComponent(Remove);
+          });
 
           // Everything is good to go!
           loadable.loading = false;
