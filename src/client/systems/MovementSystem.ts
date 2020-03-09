@@ -13,6 +13,7 @@ import {
   compassDirections
 } from "../utilities/Movement/movement";
 import Position from "../components/Position";
+import { SendData } from "../components/Tags";
 
 export default class MovementSystem extends System {
   static queries = {
@@ -50,7 +51,11 @@ export default class MovementSystem extends System {
           );
           if (tileInDirection === movement.targetTile) {
             const obj = tileMap.objectTileStore.get(tileInDirection);
-            if (!obj || obj.type !== "block") movement.direction = direction; // collision check!
+            if (!obj || obj.type !== "block") {
+              // collision check!
+              movement.direction = direction;
+              entity.addComponent(SendData);
+            }
             break;
           }
         }
@@ -86,6 +91,7 @@ export default class MovementSystem extends System {
               nextTile,
               columns
             );
+            entity.addComponent(SendData);
           }
         }
       }

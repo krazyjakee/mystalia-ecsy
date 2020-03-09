@@ -8,7 +8,12 @@ import RemotePlayer from "../components/RemotePlayer";
 import TileMap from "../components/TileMap";
 import { Loadable } from "../components/Loadable";
 import Position from "../components/Position";
-import { tileIdToVector } from "../utilities/TileMap/calculations";
+import {
+  tileIdToVector,
+  vectorToTileId,
+  addOffset,
+  compassToVector
+} from "../utilities/TileMap/calculations";
 
 export default class Networking extends System {
   static queries = {
@@ -16,7 +21,7 @@ export default class Networking extends System {
       components: [NetworkRoom]
     },
     localEntitiesToSend: {
-      components: [SendData, Movement]
+      components: [SendData, Movement, LocalPlayer]
     },
     remoteEntities: {
       components: [RemotePlayer, Not(Remove)]
@@ -70,11 +75,31 @@ export default class Networking extends System {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
             player.onChange = function(changes) {
               changes.forEach(change => {
-                const newPlayerMovementComponent = newRemotePlayer.getComponent(
-                  Movement
-                );
+                const newMovement = newRemotePlayer.getComponent(Movement);
+                const newPosition = newRemotePlayer.getComponent(Position);
                 if (change.field === "targetTile") {
-                  newPlayerMovementComponent.targetTile = change.value;
+                  newMovement.targetTile = change.value;
+                  const currentVector = tileIdToVector(
+                    newMovement.currentTile,
+                    width
+                  );
+                  if (newMovement.targetTile !== undefined) {
+                    const targetVector = tileIdToVector(
+                      newMovement.targetTile,
+                      width
+                    );
+                    if (
+                      targetVector.x - currentVector.x >= 2 ||
+                      targetVector.y - currentVector.y >= 2
+                    ) {
+                      // if the new position is too far from the current one we should teleport
+                      newMovement.currentTile = newMovement.targetTile;
+                      newPosition.value = tileIdToVector(
+                        newMovement.targetTile,
+                        width
+                      );
+                    }
+                  }
                 }
               });
             };
@@ -109,10 +134,16 @@ export default class Networking extends System {
     // @ts-ignore
     this.queries.localEntitiesToSend.results.forEach((entityToSend: Entity) => {
       const movement = entityToSend.getComponent(Movement);
-      if (movement.targetTile !== undefined && movement.targetTile >= 0) {
+      if (movement.direction) {
         networkRoom.room?.send({
           command: "move",
-          targetTile: movement.targetTile
+          targetTile: vectorToTileId(
+            addOffset(
+              tileIdToVector(movement.currentTile, width),
+              compassToVector(movement.direction)
+            ),
+            width
+          )
         });
       }
       entityToSend.removeComponent(SendData);
