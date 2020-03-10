@@ -7,7 +7,10 @@ import getMapChangePosition from "./getMapChangePosition";
 import Drawable from "../../../components/Drawable";
 import Movement from "../../../components/Movement";
 import { LocalPlayer, Remove } from "../../../components/Tags";
-import { tileIdToVector } from "../../../utilities/TileMap/calculations";
+import {
+  tileIdToVector,
+  tileIdToPixels
+} from "../../../utilities/TileMap/calculations";
 import setOffset from "../../../utilities/Vector/setOffset";
 import Position from "../../../components/Position";
 import NetworkRoom from "../../../components/NetworkRoom";
@@ -68,21 +71,22 @@ export default class TileMapChanger extends System {
             drawable.reset();
             await loadTileMap(loadable.dataPath, drawable, tileMap);
 
+            const tilePixels = tileIdToPixels(tileId, drawable.data.width);
             const tileVector = tileIdToVector(tileId, drawable.data.width);
             playerPosition.value = tileVector;
             movement.currentTile = tileId;
 
             const centeredVector = {
-              x: tileVector.x - Math.round(window.innerWidth / 2),
-              y: tileVector.y - Math.round(window.innerHeight / 2)
+              x: tilePixels.x - Math.round(window.innerWidth / 2),
+              y: tilePixels.y - Math.round(window.innerHeight / 2)
             };
 
             const mapOffset = setOffset(
               centeredVector.x,
               centeredVector.y,
               { x: 0, y: 0 },
-              tileMap.width,
-              tileMap.height
+              drawable.width,
+              drawable.height
             );
 
             drawable.offset = mapOffset;

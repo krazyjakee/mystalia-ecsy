@@ -48,7 +48,9 @@ export default class NetworkingSystem extends System {
     const { name, width } = tileMap;
 
     // @ts-ignore
-    const networkRoom = this.queries.networkRoom.results[0] as NetworkRoom;
+    const networkRoomEntity = this.queries.networkRoom.results[0] as Entity;
+
+    const networkRoom = networkRoomEntity.getMutableComponent(NetworkRoom);
 
     if (networkRoom.joining) return;
 
