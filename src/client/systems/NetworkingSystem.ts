@@ -78,26 +78,27 @@ export default class NetworkingSystem extends System {
             player.onChange = function(changes) {
               changes.forEach(change => {
                 const newMovement = newRemotePlayer.getComponent(Movement);
-                const newPosition = newRemotePlayer.getComponent(Position);
+                // const newPosition = newRemotePlayer.getComponent(Position);
                 if (change.field === "targetTile") {
-                  newMovement.targetTile = change.value;
-                  if (newMovement.targetTile !== undefined) {
-                    const targetVector = tileIdToVector(
-                      newMovement.targetTile,
-                      width
-                    );
-                    if (
-                      Math.abs(targetVector.x - newPosition.value.x) >= 5 ||
-                      Math.abs(targetVector.y - newPosition.value.y) >= 5
-                    ) {
-                      // if the new position is too far from the current one we should teleport
-                      newMovement.currentTile = newMovement.targetTile;
-                      newPosition.value = tileIdToVector(
-                        newMovement.targetTile,
-                        width
-                      );
-                    }
-                  }
+                  // TODO: Is this a better solution?
+                  newMovement.tileQueue.push(change.value);
+                  // if (newMovement.targetTile !== undefined) {
+                  //   const targetVector = tileIdToVector(
+                  //     newMovement.targetTile,
+                  //     width
+                  //   );
+                  //   if (
+                  //     Math.abs(targetVector.x - newPosition.value.x) >= 5 ||
+                  //     Math.abs(targetVector.y - newPosition.value.y) >= 5
+                  //   ) {
+                  //     // if the new position is too far from the current one we should teleport
+                  //     newMovement.currentTile = newMovement.targetTile;
+                  //     newPosition.value = tileIdToVector(
+                  //       newMovement.targetTile,
+                  //       width
+                  //     );
+                  //   }
+                  // }
                 }
               });
             };
@@ -133,7 +134,7 @@ export default class NetworkingSystem extends System {
     this.queries.localEntitiesToSend.results.forEach((entityToSend: Entity) => {
       const movement = entityToSend.getComponent(Movement);
       if (movement.direction) {
-        networkRoom.room?.send({
+        const packet = {
           command: "move",
           targetTile: vectorToTileId(
             addOffset(
@@ -142,7 +143,10 @@ export default class NetworkingSystem extends System {
             ),
             width
           )
-        });
+        };
+        console.log(packet);
+
+        networkRoom.room?.send(packet);
       }
       entityToSend.removeComponent(SendData);
     });
