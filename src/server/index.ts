@@ -1,9 +1,12 @@
+require("dotenv").config();
+
 import * as express from "express";
 import * as path from "path";
 import * as http from "http";
 import * as fs from "fs";
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
+import socialRoutes from "@colyseus/social/express";
 import { getMapProperties } from "./utilities/tmjTools";
 import MapRoom from "./rooms/map";
 
@@ -26,6 +29,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.static(path.resolve(__dirname, "..", "..", "public")));
 
 app.use("/colyseus", monitor());
+app.use("/", socialRoutes);
 
 const server = http.createServer(app);
 const gameServer = new Server({
