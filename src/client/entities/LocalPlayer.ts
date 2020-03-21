@@ -2,8 +2,9 @@ import { LocalPlayer, KeyboardInput, MouseInput } from "../components/Tags";
 import BaseCharacter from "./BaseCharacter";
 import { generateAnimationSteps } from "../utilities/Animation/character";
 import SpriteSheetAnimation from "../components/SpriteSheetAnimation";
+import User from "types/User";
 
-export default function CreateLocalPlayer() {
+export default function CreateLocalPlayer(user: User) {
   return BaseCharacter()
     .addComponent(SpriteSheetAnimation, {
       speed: 10,
@@ -11,5 +12,5 @@ export default function CreateLocalPlayer() {
     })
     .addComponent(KeyboardInput)
     .addComponent(MouseInput)
-    .addComponent(LocalPlayer);
+    .addComponent(LocalPlayer, { user });
 }

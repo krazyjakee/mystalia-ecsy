@@ -4,6 +4,7 @@
     "module": "esNext",
     "jsx": "react",
     "lib": ["ES6", "DOM"],
-    "target": "ES6"
+    "target": "ES6",
+    "allowSyntheticDefaultImports": true
   }
 }

@@ -15,8 +15,6 @@ import {
 import addOffset from "../utilities/Vector/addOffset";
 import compassToVector from "../utilities/Compass/compassToVector";
 
-client.auth.login();
-
 export default class NetworkingSystem extends System {
   static queries = {
     networkRoom: {
@@ -146,7 +144,6 @@ export default class NetworkingSystem extends System {
             width
           )
         };
-        console.log(packet);
 
         networkRoom.room?.send(packet);
       }

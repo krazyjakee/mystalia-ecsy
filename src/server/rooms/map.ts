@@ -1,5 +1,5 @@
 import { Room, Client } from "colyseus";
-import { User, verifyToken } from "@colyseus/social";
+import { User, verifyToken, IUser } from "@colyseus/social";
 import MapState from "../components/map";
 import Player from "../components/player";
 
@@ -17,9 +17,10 @@ export default class MapRoom extends Room<MapState> {
     this.setState(new MapState());
   }
 
-  onJoin(client: Client, options: any, user: any) {
+  onJoin(client: Client, options: any, user: IUser) {
     console.log(user);
-    console.log(`${user.username} joined ${this.roomName}`);
+    const userId = user.isAnonymous ? user.devices[0].id : user.username;
+    console.log(`${userId} joined ${this.roomName}`);
     this.state.players[client.sessionId] = new Player();
   }
 
