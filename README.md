@@ -4,6 +4,8 @@
 
 - Clone repo
 - `npm i` to install dependencies
+- Install and run [MongoDB](https://docs.mongodb.com/manual/administration/install-community/)
+- Rename the file `.env.example` to `.env` in the root directory
 
 ## Getting started
 

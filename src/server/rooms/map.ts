@@ -28,7 +28,7 @@ export default class MapRoom extends Room<MapState> {
   onMessage(client: Client, message: any) {
     const player = this.state.players[client.sessionId];
 
-    if (message.command === "move") {
+    if (message.command === "move" && message.targetTile) {
       player.targetTile = message.targetTile;
     }
   }

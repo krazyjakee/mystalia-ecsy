@@ -8,9 +8,8 @@ import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 import socialRoutes from "@colyseus/social/express";
 import { getMapProperties } from "./utilities/tmjTools";
+import healthCheck from "./utilities/healthChecks";
 import MapRoom from "./rooms/map";
-import { hooks } from "@colyseus/social";
-import { PlayerDBState } from "./components/player";
 
 const port = parseInt(process.env.PORT || "8080");
 const app = express();
@@ -31,11 +30,6 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.static(path.resolve(__dirname, "..", "..", "public")));
 
 app.use("/colyseus", monitor());
-
-hooks.beforeAuthenticate((_, $setOnInsert) => {
-  $setOnInsert.metadata = PlayerDBState;
-});
-
 app.use("/", socialRoutes);
 
 const server = http.createServer(app);
@@ -55,9 +49,11 @@ while ((file = dir.readSync()) !== null) {
   }
 }
 dir.closeSync();
-console.log("Done");
+console.log("Maps loaded");
 
-gameServer.listen(port);
-console.log(
-  `Server listening on port ${port} in ${process.env.NODE_ENV} mode!`
-);
+healthCheck(() => {
+  gameServer.listen(port);
+  console.log(
+    `Server listening on port ${port} in ${process.env.NODE_ENV} mode!`
+  );
+});
