@@ -4,7 +4,7 @@ import Drawable from "../components/Drawable";
 import Movement from "../components/Movement";
 import Position from "../components/Position";
 
-export default function BaseCharacter() {
+export default function BaseCharacter(currentTile?: number) {
   return world
     .createEntity()
     .addComponent(SimpleLoadable)
@@ -16,6 +16,6 @@ export default function BaseCharacter() {
       sourceHeight: 32,
       x: 4
     })
-    .addComponent(Movement)
+    .addComponent(Movement, { currentTile })
     .addComponent(Position);
 }

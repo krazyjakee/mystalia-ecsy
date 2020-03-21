@@ -8,6 +8,7 @@
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types", "types"],
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "types/*": ["src/types/*"],
       "serverState/*": ["src/server/components/*"]

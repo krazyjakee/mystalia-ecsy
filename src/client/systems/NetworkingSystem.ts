@@ -1,6 +1,6 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../colyseus";
-import { SendData, Remove, LocalPlayer } from "../components/Tags";
+import { SendData, Remove } from "../components/Tags";
 import Movement from "../components/Movement";
 import CreateRemotePlayer from "../entities/RemotePlayer";
 import NetworkRoom, { RoomState } from "../components/NetworkRoom";
@@ -14,6 +14,7 @@ import {
 } from "../utilities/TileMap/calculations";
 import addOffset from "../utilities/Vector/addOffset";
 import compassToVector from "../utilities/Compass/compassToVector";
+import LocalPlayer from "../components/LocalPlayer";
 
 export default class NetworkingSystem extends System {
   static queries = {

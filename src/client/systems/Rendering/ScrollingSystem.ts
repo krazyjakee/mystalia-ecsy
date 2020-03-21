@@ -5,9 +5,9 @@ import { Loadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToPixels } from "../../utilities/TileMap/calculations";
 import { TMJ } from "types/TMJ";
-import { LocalPlayer } from "../../components/Tags";
 import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
+import LocalPlayer from "../../components/LocalPlayer";
 
 export default class TileMapMover extends System {
   static queries = {

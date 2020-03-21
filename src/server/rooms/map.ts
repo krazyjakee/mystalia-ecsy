@@ -2,6 +2,7 @@ import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
 import MapState from "../components/map";
 import Player from "../components/player";
+import { savePlayerState } from "../utilities/dbState";
 
 export default class MapRoom extends Room<MapState> {
   async onAuth(client: Client, options: any) {
@@ -18,10 +19,10 @@ export default class MapRoom extends Room<MapState> {
   }
 
   onJoin(client: Client, options: any, user: IUser) {
-    console.log(user);
-    const userId = user.isAnonymous ? user.devices[0].id : user.username;
+    const userId = user.isAnonymous ? user._id : user.username;
     console.log(`${userId} joined ${this.roomName}`);
-    this.state.players[client.sessionId] = new Player();
+    this.state.players[client.sessionId] = new Player(user._id.toString());
+    savePlayerState(this.state.players[client.sessionId], this.roomName);
   }
 
   onMessage(client: Client, message: any) {
@@ -34,6 +35,7 @@ export default class MapRoom extends Room<MapState> {
 
   onLeave(client: Client, consented: boolean) {
     console.log(`${client.sessionId} left ${this.roomName}`);
+    savePlayerState(this.state.players[client.sessionId], this.roomName);
     delete this.state.players[client.sessionId];
   }
 

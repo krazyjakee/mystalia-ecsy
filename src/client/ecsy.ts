@@ -17,6 +17,7 @@ import FadeSystem from "./systems/Rendering/FadeSystem";
 
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
+import CreateTileMap from "./entities/TileMap";
 
 export default (user: User) => {
   world
@@ -34,6 +35,7 @@ export default (user: User) => {
     .registerSystem(FadeSystem);
 
   CreateLocalPlayer(user);
+  CreateTileMap(user);
 
   let prevTime = performance.now();
 

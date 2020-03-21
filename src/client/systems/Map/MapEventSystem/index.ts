@@ -3,7 +3,7 @@ import Movement from "../../../components/Movement";
 import { Loadable, Unloadable } from "../../../components/Loadable";
 import TileMap from "../../../components/TileMap";
 import getNextTileData from "./getNextTileData";
-import { LocalPlayer } from "../../../components/Tags";
+import LocalPlayer from "../../../components/LocalPlayer";
 
 export default class TileMapObjectListener extends System {
   static queries = {
