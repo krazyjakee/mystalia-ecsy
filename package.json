@@ -29,6 +29,7 @@
     "ecsy": "latest",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
+    "fantasy-name-generator": "^2.0.0",
     "keyboardjs": "^2.5.1",
     "mongoose": "^5.9.5",
     "normalize.css": "^8.0.1",
