@@ -21,7 +21,7 @@ export default class MapRoom extends Room<MapState> {
   onJoin(client: Client, options: any, user: IUser) {
     const userId = user.isAnonymous ? user._id : user.username;
     console.log(`${userId} joined ${this.roomName}`);
-    this.state.players[client.sessionId] = new Player(user._id.toString());
+    this.state.players[client.sessionId] = new Player(user);
     savePlayerState(this.state.players[client.sessionId], this.roomName);
   }
 
