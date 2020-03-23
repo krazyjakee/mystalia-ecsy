@@ -1955,8 +1955,8 @@
                         }, 
                         {
                          "name":"tile",
-                         "type":"string",
-                         "value":"1"
+                         "type":"int",
+                         "value":1818
                         }],
                  "rotation":0,
                  "type":"door",
