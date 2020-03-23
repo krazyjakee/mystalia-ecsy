@@ -6,6 +6,7 @@ import TileMap from "../../components/TileMap";
 import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import { vectorToTileId } from "../../utilities/TileMap/calculations";
+import isWalkable from "../../utilities/TileMap/isWalkable";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -75,15 +76,9 @@ export default class MouseInputSystem extends System {
         tileMapComponent.width
       );
 
-      const targetTileObject = tileMapComponent.objectTileStore.get(
-        clickedTile
-      );
-
       this.clickedPosition = undefined;
 
-      if (targetTileObject && targetTileObject.type === "block") {
-        return;
-      }
+      if (!isWalkable(tileMapComponent, clickedTile)) return;
 
       movement.targetTile = clickedTile;
     });

@@ -7,11 +7,11 @@ import {
   vectorToTileId
 } from "../utilities/TileMap/calculations";
 import directionFromTile from "../utilities/TileMap/directionFromTile";
-import { compassDirections } from "../utilities/Compass/compassDirections";
 import compassToVector from "../utilities/Compass/compassToVector";
 import addOffset from "../utilities/Vector/addOffset";
 import Position from "../components/Position";
 import { SendData } from "../components/Tags";
+import isWalkable from "../utilities/TileMap/isWalkable";
 
 export default class MovementSystem extends System {
   static queries = {
@@ -38,47 +38,53 @@ export default class MovementSystem extends System {
       const movement = entity.getMutableComponent(Movement);
       const position = entity.getMutableComponent(Position);
 
-      if (movement.targetTile !== undefined) {
-        let foundDestination = false;
-        const roundPosition = {
-          x: Math.round(position.value.x),
-          y: Math.round(position.value.y)
-        };
-        // do a simple check to see if our destination is within 1 tile
-        // TODO: there's probably a more mathematical way to calculate the direction than looping through them all until we find the corresponding one
-        for (const direction of compassDirections) {
-          const vector = compassToVector(direction);
-          const tileInDirection = vectorToTileId(
-            addOffset(roundPosition, vector),
-            columns
-          );
-          if (tileInDirection === movement.targetTile) {
-            const obj = tileMap.objectTileStore.get(tileInDirection);
-            if (!obj || obj.type !== "block") {
-              // collision check!
-              movement.tileQueue = [tileInDirection];
-              //movement.direction = direction;
-              foundDestination = true;
-            }
-            break;
-          }
-        }
+      const roundPosition = {
+        x: Math.round(position.value.x),
+        y: Math.round(position.value.y)
+      };
 
-        // if not we should use pathfinding
-        if (!foundDestination) {
-          const destinationTile = tileIdToVector(movement.targetTile, columns);
-          tileMap.aStar.findPath(
-            roundPosition.x,
-            roundPosition.y,
-            destinationTile.x,
-            destinationTile.y,
-            path => {
-              if (path) {
-                movement.tileQueue = path.map(p => p.x + p.y * columns);
+      const currentRoundTile = vectorToTileId(roundPosition, columns);
+
+      if (movement.targetTile !== undefined) {
+        if (
+          isWalkable(tileMap, movement.targetTile) &&
+          // don't set a new destination if we're already there or going there
+          movement.targetTile !== currentRoundTile &&
+          (!movement.direction ||
+            movement.targetTile !=
+              vectorToTileId(
+                addOffset(
+                  tileIdToVector(movement.currentTile, columns),
+                  compassToVector(movement.direction)
+                ),
+                columns
+              )) &&
+          (!movement.pathingTo || movement.pathingTo != movement.targetTile) &&
+          (!movement.tileQueue.length ||
+            movement.tileQueue[movement.tileQueue.length - 1] !==
+              movement.targetTile)
+        ) {
+          let foundDestination = false;
+          if (!foundDestination) {
+            const destinationTile = tileIdToVector(
+              movement.targetTile,
+              columns
+            );
+            movement.pathingTo = movement.targetTile;
+            tileMap.aStar.findPath(
+              roundPosition.x,
+              roundPosition.y,
+              destinationTile.x,
+              destinationTile.y,
+              path => {
+                if (path) {
+                  movement.tileQueue = path.map(p => p.x + p.y * columns);
+                }
+                movement.pathingTo = undefined;
               }
-            }
-          );
-          tileMap.aStar.calculate();
+            );
+            tileMap.aStar.calculate();
+          }
         }
 
         movement.targetTile = undefined;
@@ -88,9 +94,9 @@ export default class MovementSystem extends System {
         if (!movement.direction && movement.tileQueue.length) {
           while (!movement.direction && movement.tileQueue.length) {
             const nextTile = movement.tileQueue.shift();
-            if (nextTile && nextTile !== movement.currentTile) {
+            if (nextTile && nextTile !== currentRoundTile) {
               movement.direction = directionFromTile(
-                movement.currentTile,
+                currentRoundTile,
                 nextTile,
                 columns
               );
@@ -133,7 +139,7 @@ export default class MovementSystem extends System {
           const nextDirection = nextTarget
             ? directionFromTile(nextId, nextTarget, columns)
             : undefined;
-          if (movement.direction === nextDirection) {
+          if (nextDirection && movement.direction === nextDirection) {
             // if we're moving in the same direction we can keep moving
             position.value = addOffset(position.value, moveVector);
           } else {

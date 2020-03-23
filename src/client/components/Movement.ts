@@ -8,6 +8,7 @@ export default class Movement extends Component {
   currentTile: number = 0;
   tileQueue: number[] = [];
   speed: number = 8;
+  pathingTo?: number;
 
   reset() {
     this.direction = undefined;
@@ -16,5 +17,6 @@ export default class Movement extends Component {
     this.targetTile = undefined;
     this.tileQueue = [];
     this.speed = 8;
+    this.pathingTo = undefined;
   }
 }
