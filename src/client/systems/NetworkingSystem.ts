@@ -1,6 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../colyseus";
 import { SendData, Remove } from "../components/Tags";
+import NewMovementTarget from "../components/NewMovementTarget";
 import Movement from "../components/Movement";
 import CreateRemotePlayer from "../entities/RemotePlayer";
 import NetworkRoom, { RoomState } from "../components/NetworkRoom";
@@ -107,7 +108,9 @@ export default class NetworkingSystem extends System {
               const position = newRemotePlayer.getMutableComponent(Position);
               const movement = newRemotePlayer.getMutableComponent(Movement);
               movement.currentTile = player.targetTile;
-              movement.targetTile = player.targetTile;
+              newRemotePlayer.addComponent(NewMovementTarget, {
+                targetTile: player.targetTile
+              });
               position.value = tileIdToVector(player.targetTile, width);
             }
           }

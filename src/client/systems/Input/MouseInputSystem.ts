@@ -7,6 +7,7 @@ import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import { vectorToTileId } from "../../utilities/TileMap/calculations";
 import isWalkable from "../../utilities/TileMap/isWalkable";
+import NewMovementTarget from "../../components/NewMovementTarget";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -80,7 +81,7 @@ export default class MouseInputSystem extends System {
 
       if (!isWalkable(tileMapComponent, clickedTile)) return;
 
-      movement.targetTile = clickedTile;
+      entity.addComponent(NewMovementTarget, { targetTile: clickedTile });
     });
   }
 }

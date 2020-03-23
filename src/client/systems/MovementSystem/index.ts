@@ -1,17 +1,19 @@
 import { System, Entity, Not } from "ecsy";
-import Movement from "../components/Movement";
-import TileMap from "../components/TileMap";
-import { Loadable } from "../components/Loadable";
+import Movement from "../../components/Movement";
+import TileMap from "../../components/TileMap";
+import { Loadable } from "../../components/Loadable";
 import {
   tileIdToVector,
   vectorToTileId
-} from "../utilities/TileMap/calculations";
-import directionFromTile from "../utilities/TileMap/directionFromTile";
-import compassToVector from "../utilities/Compass/compassToVector";
-import addOffset from "../utilities/Vector/addOffset";
-import Position from "../components/Position";
-import { SendData } from "../components/Tags";
-import isWalkable from "../utilities/TileMap/isWalkable";
+} from "../../utilities/TileMap/calculations";
+import directionFromTile from "../../utilities/TileMap/directionFromTile";
+import compassToVector from "../../utilities/Compass/compassToVector";
+import addOffset from "../../utilities/Vector/addOffset";
+import Position from "../../components/Position";
+import { SendData } from "../../components/Tags";
+import NewMovementTarget from "../../components/NewMovementTarget";
+import roundVector from "../../utilities/Vector/roundVector";
+import awaitingTarget from "./awaitingTarget";
 
 export default class MovementSystem extends System {
   static queries = {
@@ -20,6 +22,9 @@ export default class MovementSystem extends System {
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)]
+    },
+    awaitingTarget: {
+      components: [Movement, Position, NewMovementTarget]
     }
   };
 
@@ -31,64 +36,20 @@ export default class MovementSystem extends System {
       this.queries.tileMaps.results[0];
     if (!tileMapEntity) return;
     const tileMap = (tileMapEntity as Entity).getComponent(TileMap);
-    const columns = tileMap.width;
 
+    // @ts-ignore
+    this.queries.awaitingTarget.results.forEach((entity: Entity) => {
+      awaitingTarget(entity, tileMap);
+    });
+
+    const columns = tileMap.width;
     // @ts-ignore
     this.queries.movableEntities.results.forEach((entity: Entity) => {
       const movement = entity.getMutableComponent(Movement);
       const position = entity.getMutableComponent(Position);
 
-      const roundPosition = {
-        x: Math.round(position.value.x),
-        y: Math.round(position.value.y)
-      };
-
+      const roundPosition = roundVector(position.value);
       const currentRoundTile = vectorToTileId(roundPosition, columns);
-
-      if (movement.targetTile !== undefined) {
-        if (
-          isWalkable(tileMap, movement.targetTile) &&
-          // don't set a new destination if we're already there or going there
-          movement.targetTile !== currentRoundTile &&
-          (!movement.direction ||
-            movement.targetTile !=
-              vectorToTileId(
-                addOffset(
-                  tileIdToVector(movement.currentTile, columns),
-                  compassToVector(movement.direction)
-                ),
-                columns
-              )) &&
-          (!movement.pathingTo || movement.pathingTo != movement.targetTile) &&
-          (!movement.tileQueue.length ||
-            movement.tileQueue[movement.tileQueue.length - 1] !==
-              movement.targetTile)
-        ) {
-          let foundDestination = false;
-          if (!foundDestination) {
-            const destinationTile = tileIdToVector(
-              movement.targetTile,
-              columns
-            );
-            movement.pathingTo = movement.targetTile;
-            tileMap.aStar.findPath(
-              roundPosition.x,
-              roundPosition.y,
-              destinationTile.x,
-              destinationTile.y,
-              path => {
-                if (path) {
-                  movement.tileQueue = path.map(p => p.x + p.y * columns);
-                }
-                movement.pathingTo = undefined;
-              }
-            );
-            tileMap.aStar.calculate();
-          }
-        }
-
-        movement.targetTile = undefined;
-      }
 
       const setDirection = () => {
         if (!movement.direction && movement.tileQueue.length) {
@@ -116,25 +77,18 @@ export default class MovementSystem extends System {
           y: direction.y * moveAmount
         };
         const currentVector = tileIdToVector(movement.currentTile, columns);
+        const nextPosition = addOffset(currentVector, direction);
         const distance = {
           // calculate how far we are from the next tile
-          x:
-            (currentVector.x +
-              direction.x -
-              (position.value.x + moveVector.x)) *
-            direction.x,
-          y:
-            (currentVector.y +
-              direction.y -
-              (position.value.y + moveVector.y)) *
-            direction.y
+          x: (nextPosition.x - (position.value.x + moveVector.x)) * direction.x,
+          y: (nextPosition.y - (position.value.y + moveVector.y)) * direction.y
         };
 
         if (distance.x <= 0 && distance.y <= 0) {
           const nextTarget = movement.tileQueue.length
             ? movement.tileQueue[0]
             : undefined;
-          const nextPosition = addOffset(currentVector, direction);
+
           const nextId = vectorToTileId(nextPosition, columns);
           const nextDirection = nextTarget
             ? directionFromTile(nextId, nextTarget, columns)

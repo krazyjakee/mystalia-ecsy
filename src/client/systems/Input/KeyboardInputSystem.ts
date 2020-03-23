@@ -7,8 +7,9 @@ import { Direction } from "types/Grid";
 import { vectorToTileId } from "../../utilities/TileMap/calculations";
 import { Loadable } from "../../components/Loadable";
 import { compassDirections } from "../../utilities/Compass/compassDirections";
-import compassToVector from "../../utilities/Compass/compassToVector";
-import addOffset from "../../utilities/Vector/addOffset";
+import tileInDirection from "../../utilities/TileMap/tileInDirection";
+import roundVector from "../../utilities/Vector/roundVector";
+import NewMovementTarget from "../../components/NewMovementTarget";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],
@@ -58,6 +59,7 @@ export default class KeyboardInputSystem extends System {
       // @ts-ignore
       this.queries.tileMaps.results[0].getComponent(TileMap);
     if (!tileMap) return;
+    const columns = tileMap.width;
     // @ts-ignore
     this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
       const movement = entity.getMutableComponent(Movement);
@@ -67,23 +69,21 @@ export default class KeyboardInputSystem extends System {
       compassDirections.forEach(compassKey => {
         movementKeys[compassKey].forEach(key => {
           if (this.pressedKeys.includes(key)) {
-            direction = compassToVector(compassKey);
+            direction = compassKey;
           }
         });
       });
 
       if (direction) {
         const position = entity.getComponent(Position);
-        movement.targetTile = vectorToTileId(
-          addOffset(
-            {
-              x: Math.round(position.value.x),
-              y: Math.round(position.value.y)
-            },
-            direction
-          ),
-          tileMap.width
+        const target = tileInDirection(
+          vectorToTileId(roundVector(position.value), columns),
+          direction,
+          columns
         );
+        //if (movement.targetTile !== target) {
+        entity.addComponent(NewMovementTarget, { targetTile: target });
+        //}
       }
     });
   }
