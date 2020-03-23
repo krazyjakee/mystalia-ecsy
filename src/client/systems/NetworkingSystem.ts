@@ -1,6 +1,6 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../colyseus";
-import { SendData, Remove } from "../components/Tags";
+import { SendData, Remove, AwaitingPosition } from "../components/Tags";
 import NewMovementTarget from "../components/NewMovementTarget";
 import Movement from "../components/Movement";
 import CreateRemotePlayer from "../entities/RemotePlayer";
@@ -79,32 +79,28 @@ export default class NetworkingSystem extends System {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
             player.onChange = function(changes) {
               changes.forEach(change => {
-                const newMovement = newRemotePlayer.getComponent(Movement);
                 // const newPosition = newRemotePlayer.getComponent(Position);
                 if (change.field === "targetTile") {
-                  // TODO: Is this a better solution?
-                  newMovement.tileQueue.push(change.value);
-                  // if (newMovement.targetTile !== undefined) {
-                  //   const targetVector = tileIdToVector(
-                  //     newMovement.targetTile,
-                  //     width
-                  //   );
-                  //   if (
-                  //     Math.abs(targetVector.x - newPosition.value.x) >= 5 ||
-                  //     Math.abs(targetVector.y - newPosition.value.y) >= 5
-                  //   ) {
-                  //     // if the new position is too far from the current one we should teleport
-                  //     newMovement.currentTile = newMovement.targetTile;
-                  //     newPosition.value = tileIdToVector(
-                  //       newMovement.targetTile,
-                  //       width
-                  //     );
-                  //   }
-                  // }
+                  const movement = newRemotePlayer.getComponent(Movement);
+                  const awaitingPosition = newRemotePlayer.hasComponent(
+                    AwaitingPosition
+                  );
+                  if (!awaitingPosition) movement.tileQueue.push(change.value);
+                  else if (player.targetTile !== undefined) {
+                    const position = newRemotePlayer.getMutableComponent(
+                      Position
+                    );
+                    movement.currentTile = player.targetTile;
+                    newRemotePlayer.addComponent(NewMovementTarget, {
+                      targetTile: player.targetTile
+                    });
+                    position.value = tileIdToVector(player.targetTile, width);
+                    newRemotePlayer.removeComponent(AwaitingPosition);
+                  }
                 }
               });
             };
-            if (player.targetTile) {
+            if (player.targetTile !== undefined) {
               const position = newRemotePlayer.getMutableComponent(Position);
               const movement = newRemotePlayer.getMutableComponent(Movement);
               movement.currentTile = player.targetTile;
@@ -112,6 +108,8 @@ export default class NetworkingSystem extends System {
                 targetTile: player.targetTile
               });
               position.value = tileIdToVector(player.targetTile, width);
+            } else {
+              newRemotePlayer.addComponent(AwaitingPosition);
             }
           }
         };
