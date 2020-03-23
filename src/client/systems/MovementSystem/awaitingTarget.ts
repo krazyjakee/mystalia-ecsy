@@ -20,7 +20,6 @@ export default (entity: Entity, tileMap: TileMap) => {
   const roundPosition = roundVector(position.value);
   const currentRoundTile = vectorToTileId(roundPosition, columns);
 
-  console.log(`Current position: ${roundPosition.x}, ${roundPosition.y}`);
   const destinationTile = tileIdToVector(newTarget, columns);
   if (
     // don't set a new destination if we're already there or going there
