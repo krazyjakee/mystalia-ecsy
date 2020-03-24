@@ -1,5 +1,6 @@
 import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
 import Movement from "src/client/components/Movement";
+import { DoorTileType } from "types/TileMap/ObjectTileStore";
 
 export default (
   player: Movement,
@@ -11,13 +12,10 @@ export default (
   const currentTile = player.currentTile;
   const objectTile = objectTileStore.get(currentTile);
 
-  if (objectTile) {
+  if (objectTile && objectTile.value) {
     switch (objectTile.type) {
       case "door": {
-        if (objectTile.value) {
-          return objectTile.value.tile;
-        }
-        break;
+        return (objectTile.value as DoorTileType).tile;
       }
     }
   }

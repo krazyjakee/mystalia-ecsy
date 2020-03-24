@@ -19,6 +19,7 @@ import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
 import PlayerNameSystem from "./systems/Rendering/PlayerNameSystem";
+import LightSystem from "./systems/Rendering/LightSystem";
 
 export default (user: User) => {
   world
@@ -33,6 +34,7 @@ export default (user: User) => {
     .registerSystem(AnimationSystem)
     .registerSystem(PlayerAnimationSystem)
     .registerSystem(RenderingSystem)
+    .registerSystem(LightSystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem);
 

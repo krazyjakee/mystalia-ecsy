@@ -4,6 +4,7 @@ import { Loadable, Unloadable } from "../../../components/Loadable";
 import TileMap from "../../../components/TileMap";
 import getNextTileData from "./getNextTileData";
 import LocalPlayer from "../../../components/LocalPlayer";
+import { DoorTileType } from "types/TileMap/ObjectTileStore";
 
 export default class TileMapObjectListener extends System {
   static queries = {
@@ -34,7 +35,9 @@ export default class TileMapObjectListener extends System {
           movement.tileQueue = [];
           movement.direction = undefined;
           tileMapEntity.addComponent(Unloadable, {
-            dataPath: `/assets/maps/${tileObject.value.map}.json`
+            dataPath: `/assets/maps/${
+              (tileObject.value as DoorTileType).map
+            }.json`
           });
         } else {
           if (direction || tileQueue.length) {

@@ -12,6 +12,7 @@ import createDrawableTile from "./createDrawableTile";
 import Movement from "../../../components/Movement";
 import Position from "../../../components/Position";
 import addOffset from "../../../utilities/Vector/addOffset";
+import context2d from "../../../canvas";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -32,6 +33,12 @@ export default class TileMapDrawer extends System {
       const { canvasCache, tiles, objectLayerIndex, width, height } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;
+
+      context2d.save();
+
+      if (tileMap.properties.light) {
+        context2d.filter = `brightness(${tileMap.properties.light}%)`;
+      }
 
       if (canvasCache.length) {
         const baseCanvasProperties = {
@@ -103,6 +110,7 @@ export default class TileMapDrawer extends System {
           }
         }
       }
+      context2d.restore();
     });
   }
 }

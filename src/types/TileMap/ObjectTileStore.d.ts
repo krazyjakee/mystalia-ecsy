@@ -1,4 +1,4 @@
-export type ObjectTileTypeString = "" | "block" | "door";
+export type ObjectTileTypeString = "" | "block" | "door" | "light";
 
 export type BlockTileType = null;
 
@@ -7,7 +7,11 @@ export type DoorTileType = {
   tile: number;
 };
 
-export type ObjectTileType = DoorTileType | BlockTileType;
+export type LightTileType = {
+  radius: number;
+};
+
+export type ObjectTileType = DoorTileType | BlockTileType | LightTileType;
 
 export type ObjectTile = {
   name: string;
