@@ -17,7 +17,7 @@ export default (
     const tileSetIdOffset = specialTile.id + firstGid;
     animatedTileStore[tileSetIdOffset] = specialTile.animation.map(tile => ({
       drawable:
-        createDrawableTile(tile.tileid, 0, tileSetStore, tmj) || undefined,
+        createDrawableTile(tile.tileid + 1, 0, tileSetStore, tmj) || undefined,
       sourceTile: tileIdToVector(tile.tileid, tileSetWidth / 32),
       interval: tile.duration
     }));

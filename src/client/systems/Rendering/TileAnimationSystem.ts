@@ -63,14 +63,16 @@ export default class TileAnimationSystem extends System {
               const newTile = animatedTiles.tiles[tile][0].drawable;
               if (newTile) {
                 const destination = tileIdToPixels(index, data.width);
-                newTile.x = destination.x;
-                newTile.y = destination.y;
 
                 animatedTiles.drawables[
                   index < tileMap.objectLayerIndex ? 0 : 1
                 ].push({
                   uid: index,
-                  drawable: newTile,
+                  drawable: {
+                    ...newTile,
+                    x: destination.x,
+                    y: destination.y
+                  },
                   tileSetTileId: tile
                 });
               }
