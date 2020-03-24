@@ -16,6 +16,9 @@ import Position from "../../../components/Position";
 import NetworkRoom from "../../../components/NetworkRoom";
 import RemotePlayer from "../../../components/RemotePlayer";
 import LocalPlayer from "../../../components/LocalPlayer";
+import AnimatedTile, {
+  AnimatedTilesInitiated
+} from "../../../components/AnimatedTile";
 
 export default class TileMapChanger extends System {
   static queries = {
@@ -23,7 +26,7 @@ export default class TileMapChanger extends System {
       components: [LocalPlayer, Movement, Position]
     },
     newLoadingTileMaps: {
-      components: [Loadable, TileMap, Drawable, Not(Fade)]
+      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)]
     },
     networkRoom: {
       components: [NetworkRoom]
@@ -52,7 +55,8 @@ export default class TileMapChanger extends System {
         loadable.loading = true;
 
         const drawable = tileMapEntity.getComponent(Drawable);
-        const tileMap = tileMapEntity.getComponent(TileMap);
+        const tileMap = tileMapEntity.getMutableComponent(TileMap);
+        const animatedTiles = tileMapEntity.getMutableComponent(AnimatedTile);
 
         if (loadable.dataPath) {
           loadable.loading = true;
@@ -73,7 +77,12 @@ export default class TileMapChanger extends System {
             drawable.reset();
           }
 
-          await loadTileMap(loadable.dataPath, drawable, tileMap);
+          await loadTileMap(
+            loadable.dataPath,
+            drawable,
+            tileMap,
+            animatedTiles
+          );
 
           const tilePixels = tileIdToPixels(tileId, drawable.data.width);
           const tileVector = tileIdToVector(tileId, drawable.data.width);
@@ -115,6 +124,7 @@ export default class TileMapChanger extends System {
           // Everything is good to go!
           loadable.loading = false;
           tileMapEntity.addComponent(Fade, { alpha: 0 });
+          tileMapEntity.removeComponent(AnimatedTilesInitiated);
         }
       }
     );

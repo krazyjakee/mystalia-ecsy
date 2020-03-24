@@ -4,11 +4,14 @@ import { TMJ, Layer } from "types/TMJ";
 import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { loadImage, loadData } from "../../../utilities/assets";
+import AnimatedTile from "../../../components/AnimatedTile";
+import createAnimatedTiles from "./createAnimatedTiles";
 
 export default async (
   dataPath: string,
   drawable: Drawable,
-  tileMap: TileMap
+  tileMap: TileMap,
+  animatedTiles: AnimatedTile
 ) => {
   const result = await loadData(dataPath);
   const data = result.data as TMJ;
@@ -56,16 +59,6 @@ export default async (
     const tileSetImage = await loadImage(`/assets/tilesets/${tileset.image}`);
     if (tileSetImage) {
       tileMap.tileSetStore[tileset.image] = tileSetImage;
-    }
-  }
-
-  // Set the animated tiles
-  for (let i = 0; i < tilesets.length; i += 1) {
-    const tileset = tilesets[i];
-    if (tileset.tiles) {
-      tileset.tiles.forEach(specialTile => {
-        tileMap.animatedTiles.push(specialTile.id + tileset.firstgid);
-      });
     }
   }
 };

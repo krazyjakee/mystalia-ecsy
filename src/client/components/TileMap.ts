@@ -7,7 +7,6 @@ import { TileMapProperties } from "types/TileMap/standard";
 
 export default class TileMap extends Component {
   properties: TileMapProperties = {};
-  animatedTiles: number[] = [];
   tiles: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
   objectLayerIndex: number = 0;
