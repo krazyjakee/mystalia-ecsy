@@ -4,11 +4,14 @@ import { TMJ, Layer } from "types/TMJ";
 import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { loadImage, loadData } from "../../../utilities/assets";
+import AnimatedTile from "../../../components/AnimatedTile";
+import createAnimatedTiles from "./createAnimatedTiles";
 
 export default async (
   dataPath: string,
   drawable: Drawable,
-  tileMap: TileMap
+  tileMap: TileMap,
+  animatedTiles: AnimatedTile
 ) => {
   const result = await loadData(dataPath);
   const data = result.data as TMJ;

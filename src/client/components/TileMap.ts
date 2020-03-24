@@ -18,10 +18,6 @@ export default class TileMap extends Component {
   targetTile: number | null = null;
   aStar = new EasyStarJs.js();
 
-  constructor() {
-    super();
-  }
-
   reset() {
     this.tiles = [];
     this.objectLayerIndex = 0;

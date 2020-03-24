@@ -14,11 +14,13 @@ import PlayerAnimationSystem from "./systems/Rendering/PlayerAnimationSystem";
 import ScrollingSystem from "./systems/Rendering/ScrollingSystem";
 import MapEventSystem from "./systems/Map/MapEventSystem";
 import FadeSystem from "./systems/Rendering/FadeSystem";
+import PlayerNameSystem from "./systems/Rendering/PlayerNameSystem";
+import LightSystem from "./systems/Rendering/LightSystem";
+import TileAnimationSystem from "./systems/Rendering/TileAnimationSystem";
 
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
-import PlayerNameSystem from "./systems/Rendering/PlayerNameSystem";
 
 export default (user: User) => {
   world
@@ -33,6 +35,8 @@ export default (user: User) => {
     .registerSystem(AnimationSystem)
     .registerSystem(PlayerAnimationSystem)
     .registerSystem(RenderingSystem)
+    .registerSystem(LightSystem)
+    .registerSystem(TileAnimationSystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem);
 

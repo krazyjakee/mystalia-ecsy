@@ -12,6 +12,9 @@ import createDrawableTile from "./createDrawableTile";
 import Movement from "../../../components/Movement";
 import Position from "../../../components/Position";
 import addOffset from "../../../utilities/Vector/addOffset";
+import context2d from "../../../canvas";
+import AnimatedTile from "../../../components/AnimatedTile";
+import { DrawableProperties } from "types/drawable";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -27,11 +30,18 @@ export default class TileMapDrawer extends System {
     // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
-
+      const animatedTiles = tileMapEntity.getComponent(AnimatedTile);
       const drawable = tileMapEntity.getComponent(Drawable);
+
       const { canvasCache, tiles, objectLayerIndex, width, height } = tileMap;
       const { offset } = drawable;
       const data: TMJ = drawable.data;
+
+      context2d.save();
+
+      if (tileMap.properties.light) {
+        context2d.filter = `brightness(${tileMap.properties.light}%)`;
+      }
 
       if (canvasCache.length) {
         const baseCanvasProperties = {
@@ -46,23 +56,43 @@ export default class TileMapDrawer extends System {
           offset: { x: 0, y: 0 }
         };
 
+        const drawableWithOffset = (
+          d: DrawableProperties,
+          x?: number,
+          y?: number
+        ) => ({
+          ...d,
+          offset: addOffset(offset, {
+            x: x ? x : 0,
+            y: y ? y : 0
+          })
+        });
+
         drawImage({
           ...baseCanvasProperties,
           image: canvasCache[0]
         });
 
+        animatedTiles.drawables[1].forEach(
+          tile => tile.drawable && drawImage(drawableWithOffset(tile.drawable))
+        );
+
         // @ts-ignore
         this.queries.players.results.forEach((player: Entity) => {
           const position = player.getComponent(Position);
           const playerDrawable = player.getComponent(Drawable);
-          drawImage({
-            ...drawableToDrawableProperties(playerDrawable),
-            offset: addOffset(offset, {
-              x: position.value.x * 32,
-              y: position.value.y * 32
-            })
-          });
+          drawImage(
+            drawableWithOffset(
+              drawableToDrawableProperties(playerDrawable),
+              position.value.x * 32,
+              position.value.y * 32
+            )
+          );
         });
+
+        animatedTiles.drawables[0].forEach(
+          tile => tile.drawable && drawImage(drawableWithOffset(tile.drawable))
+        );
 
         drawImage({
           ...baseCanvasProperties,
@@ -103,6 +133,7 @@ export default class TileMapDrawer extends System {
           }
         }
       }
+      context2d.restore();
     });
   }
 }
