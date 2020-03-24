@@ -37,7 +37,7 @@ interface AnimatedTile {
 
 interface SpecialTiles {
   id: number;
-  animation: AnimatedTile[];
+  animation?: AnimatedTile[];
 }
 
 export interface TileSet {
