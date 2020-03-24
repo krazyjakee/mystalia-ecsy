@@ -95,14 +95,16 @@ export default class TileMapDrawer extends System {
         for (const layer of data.layers) {
           if (layer.type === "tilelayer") {
             layer.data.forEach((tile, index) => {
-              const newTile = createDrawableTile(
-                tile,
-                index,
-                tileMap.tileSetStore,
-                drawable.data
-              );
-              if (newTile) {
-                tileMap.tiles.push(newTile);
+              if (!tileMap.animatedTiles.includes(tile)) {
+                const newTile = createDrawableTile(
+                  tile,
+                  index,
+                  tileMap.tileSetStore,
+                  drawable.data
+                );
+                if (newTile) {
+                  tileMap.tiles.push(newTile);
+                }
               }
             });
           } else {

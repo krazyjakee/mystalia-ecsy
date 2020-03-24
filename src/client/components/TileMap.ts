@@ -7,6 +7,7 @@ import { TileMapProperties } from "types/TileMap/standard";
 
 export default class TileMap extends Component {
   properties: TileMapProperties = {};
+  animatedTiles: number[] = [];
   tiles: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
   objectLayerIndex: number = 0;
@@ -17,10 +18,6 @@ export default class TileMap extends Component {
   name: string = "";
   targetTile: number | null = null;
   aStar = new EasyStarJs.js();
-
-  constructor() {
-    super();
-  }
 
   reset() {
     this.tiles = [];

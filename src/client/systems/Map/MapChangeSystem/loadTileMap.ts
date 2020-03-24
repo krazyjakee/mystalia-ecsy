@@ -58,4 +58,14 @@ export default async (
       tileMap.tileSetStore[tileset.image] = tileSetImage;
     }
   }
+
+  // Set the animated tiles
+  for (let i = 0; i < tilesets.length; i += 1) {
+    const tileset = tilesets[i];
+    if (tileset.tiles) {
+      tileset.tiles.forEach(specialTile => {
+        tileMap.animatedTiles.push(specialTile.id + tileset.firstgid);
+      });
+    }
+  }
 };

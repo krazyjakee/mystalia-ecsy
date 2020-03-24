@@ -30,6 +30,16 @@ interface Layer {
   properties: Property[];
 }
 
+interface AnimatedTile {
+  duration: number;
+  tileid: number;
+}
+
+interface SpecialTiles {
+  id: number;
+  animation: AnimatedTile[];
+}
+
 export interface TileSet {
   firstgid: number;
   image: string;
@@ -41,6 +51,7 @@ export interface TileSet {
   spacing: number;
   tileheight: number;
   tilewidth: number;
+  tiles: SpecialTiles[];
 }
 
 export type Property = {
