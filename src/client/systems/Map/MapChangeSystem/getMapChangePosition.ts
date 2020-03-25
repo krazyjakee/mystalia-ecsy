@@ -10,14 +10,13 @@ export default (
 ) => {
   const direction = player.direction || player.previousDirection;
   const currentTile = player.currentTile;
-  const objectTile = objectTileStore.get(currentTile);
+  const objectTile = objectTileStore.getByType<DoorTileType>(
+    currentTile,
+    "door"
+  );
 
   if (objectTile && objectTile.value) {
-    switch (objectTile.type) {
-      case "door": {
-        return (objectTile.value as DoorTileType).tile;
-      }
-    }
+    return (objectTile.value as DoorTileType).tile;
   }
 
   switch (direction) {
