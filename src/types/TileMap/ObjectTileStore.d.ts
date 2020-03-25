@@ -14,12 +14,12 @@ export type LightTileType = {
 
 export type ObjectTileType = DoorTileType | BlockTileType | LightTileType;
 
-export type ObjectTile = {
+export type ObjectTile<T> = {
   name: string;
   type: ObjectTileTypeString;
-  value: ObjectTileType;
+  value: T;
 };
 
 export type ObjectTileStoreType = {
-  [key: number]: ObjectTile;
+  [key: number]: ObjectTile<any>[];
 };

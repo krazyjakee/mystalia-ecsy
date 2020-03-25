@@ -30,14 +30,15 @@ export default class TileMapObjectListener extends System {
 
         const { objectTileStore } = tileMap;
 
-        const tileObject = objectTileStore.get(currentTile);
-        if (tileObject && tileObject.type === "door" && tileObject.value) {
+        const door = objectTileStore.getByType<DoorTileType>(
+          currentTile,
+          "door"
+        );
+        if (door) {
           movement.tileQueue = [];
           movement.direction = undefined;
           tileMapEntity.addComponent(Unloadable, {
-            dataPath: `/assets/maps/${
-              (tileObject.value as DoorTileType).map
-            }.json`
+            dataPath: `/assets/maps/${door.value.map}.json`
           });
         } else {
           if (direction || tileQueue.length) {

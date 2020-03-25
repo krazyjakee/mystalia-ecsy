@@ -33,20 +33,22 @@ export default (entity: Entity, tileMap: TileMap) => {
     isWalkable(tileMap, newTarget)
   ) {
     movement.pathingTo = newTarget;
-    tileMap.aStar.findPath(
-      roundPosition.x,
-      roundPosition.y,
-      destinationTile.x,
-      destinationTile.y,
-      path => {
-        if (path) {
-          movement.tileQueue = path.map(p => p.x + p.y * columns);
-          movement.targetTile = newTarget;
+    try {
+      tileMap.aStar.findPath(
+        roundPosition.x,
+        roundPosition.y,
+        destinationTile.x,
+        destinationTile.y,
+        path => {
+          if (path) {
+            movement.tileQueue = path.map(p => p.x + p.y * columns);
+            movement.targetTile = newTarget;
+          }
+          movement.pathingTo = undefined;
         }
-        movement.pathingTo = undefined;
-      }
-    );
-    tileMap.aStar.calculate();
+      );
+      tileMap.aStar.calculate();
+    } catch (_) {}
   }
 
   entity.removeComponent(NewMovementTarget);

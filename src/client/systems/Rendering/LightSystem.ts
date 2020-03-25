@@ -73,8 +73,11 @@ export default class LightSystem extends System {
       Object.keys(tileMap.objectTileStore.store).forEach(key => {
         const tileId = parseInt(key);
         const tilePosition = tileIdToPixels(tileId, tileMap.width);
-        const lightTile = tileMap.objectTileStore.store[tileId];
-        if (lightTile.value) {
+        const lightTile = tileMap.objectTileStore.getByType<LightTileType>(
+          tileId,
+          "light"
+        );
+        if (lightTile && lightTile.value) {
           const lightTileProperties = lightTile.value as LightTileType;
 
           if (lightTile.type === "light") {

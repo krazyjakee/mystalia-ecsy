@@ -33,11 +33,23 @@ export default class MapRoom extends Room<MapState> {
     }
   }
 
-  onLeave(client: Client, consented: boolean) {
+  async onLeave(client: Client, consented: boolean) {
     console.log(`${client.sessionId} left ${this.roomName}`);
-    savePlayerState(this.state.players[client.sessionId], this.roomName);
+    await savePlayerState(this.state.players[client.sessionId], this.roomName);
     delete this.state.players[client.sessionId];
   }
 
-  onDispose() {}
+  async onDispose() {
+    const sessionIds = Object.keys(this.state.players);
+    if (sessionIds.length) {
+      await Promise.all(
+        sessionIds.map(sessionId =>
+          savePlayerState(this.state.players[sessionId], this.roomName)
+        )
+      );
+      console.log(
+        `Saved ${sessionIds.length} players in "${this.roomName}" to db.`
+      );
+    }
+  }
 }

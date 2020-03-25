@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import client from "../colyseus";
 import startEcsy from "../ecsy";
 
@@ -10,6 +10,12 @@ export default () => {
     startEcsy(user);
     setHidden(true);
   };
+
+  useEffect(() => {
+    document.addEventListener("ws:close", () => {
+      setHidden(false);
+    });
+  }, []);
 
   return hidden ? null : (
     <div className="mainMenu">

@@ -17,6 +17,8 @@ import addOffset from "../utilities/Vector/addOffset";
 import compassToVector from "../utilities/Compass/compassToVector";
 import LocalPlayer from "../components/LocalPlayer";
 
+let connectionTimer: any;
+
 export default class NetworkingSystem extends System {
   static queries = {
     networkRoom: {
@@ -59,6 +61,7 @@ export default class NetworkingSystem extends System {
     if (!networkRoom.room) {
       networkRoom.joining = true;
       client.joinOrCreate(name).then(room => {
+        clearTimeout(connectionTimer);
         networkRoom.room = room as RoomState;
         networkRoom.joining = false;
         const myKey = room.sessionId;
@@ -129,6 +132,14 @@ export default class NetworkingSystem extends System {
             );
           }
         };
+
+        networkRoom.room.onLeave(() => {
+          connectionTimer = setTimeout(() => {
+            (window as any).ecsyError = true;
+            document.dispatchEvent(new Event("ws:close"));
+            alert("Server connection timed out");
+          }, 5000);
+        });
       });
     }
 

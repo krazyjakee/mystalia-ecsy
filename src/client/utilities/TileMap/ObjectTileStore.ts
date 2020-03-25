@@ -1,7 +1,8 @@
 import {
   ObjectTileStoreType,
   ObjectTile,
-  ObjectTileType
+  ObjectTileType,
+  ObjectTileTypeString
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId } from "./calculations";
 import { Property, Attributes, Layer } from "types/TMJ";
@@ -39,11 +40,13 @@ const mapObjectToTileTypes = (
 
   for (let tileId = 0; tileId < totalTiles; tileId += 1) {
     const newTileId = startTileId + col + row * tileMapColumns;
-    objectTileType[newTileId] = {
+    const newObjectTile = {
       name,
       type: type || "block",
       value
     };
+
+    objectTileType[newTileId] = [newObjectTile];
 
     col += 1;
 
@@ -71,15 +74,24 @@ export class ObjectTileStore {
     return this.store[tileId];
   }
 
-  getType(tileId: number) {
-    const tile = this.get(tileId);
-    if (tile) {
-      return tile.type;
+  getByType<T>(
+    tileId: number,
+    type: ObjectTileTypeString
+  ): ObjectTile<T> | undefined {
+    return this.store[tileId]?.find(tile => tile.type === type);
+  }
+
+  getTypes(tileId: number) {
+    const tiles = this.get(tileId);
+    if (tiles) {
+      return tiles.map(tile => tile.type);
     }
   }
 
-  set(tileId: number, data: ObjectTile) {
-    this.store[tileId] = data;
+  set<T>(tileId: number, data: ObjectTile<T>[]) {
+    this.store[tileId] = this.store[tileId]
+      ? this.store[tileId].concat(data)
+      : data;
   }
 
   add(layer: Layer) {
@@ -105,8 +117,8 @@ export class ObjectTileStore {
           .fill(0)
           .map((_, index2) => {
             const tileId = index1 * this.columns + index2;
-            const tile = this.store[tileId];
-            return tile && tile.type === "block" ? 1 : 0;
+            const tileTypes = this.getTypes(tileId);
+            return tileTypes && tileTypes.includes("block") ? 1 : 0;
           });
       });
   }
