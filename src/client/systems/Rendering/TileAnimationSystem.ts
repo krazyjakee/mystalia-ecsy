@@ -35,7 +35,7 @@ export default class TileAnimationSystem extends System {
       const data: TMJ = drawable.data;
       const { tilesets } = data;
 
-      animatedTiles.tiles = {};
+      animatedTiles.reset();
 
       for (let i = 0; i < tilesets.length; i += 1) {
         const tileset = tilesets[i];
@@ -78,8 +78,6 @@ export default class TileAnimationSystem extends System {
               }
             }
           });
-        } else {
-          tileMap.objectLayerIndex = tileMap.tiles.length;
         }
       }
 
