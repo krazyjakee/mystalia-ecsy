@@ -57,3 +57,7 @@ healthCheck(() => {
     `Server listening on port ${port} in ${process.env.NODE_ENV} mode!`
   );
 });
+
+gameServer.onShutdown(() => {
+  console.log("Graceful shutdown complete.");
+});

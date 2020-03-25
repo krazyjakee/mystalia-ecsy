@@ -129,6 +129,11 @@ export default class NetworkingSystem extends System {
             );
           }
         };
+
+        networkRoom.room.connection.onclose = () => {
+          (window as any).ecsyError = true;
+          document.dispatchEvent(new Event("ws:close"));
+        };
       });
     }
 

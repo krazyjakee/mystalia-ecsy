@@ -1,4 +1,8 @@
-import world from "../world";
 import NetworkRoom from "../components/NetworkRoom";
+import { getWorld } from "../ecsy";
 
-world.createEntity().addComponent(NetworkRoom);
+export default function CreateNetworkRoom() {
+  getWorld()
+    .createEntity()
+    .addComponent(NetworkRoom);
+}

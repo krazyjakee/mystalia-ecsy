@@ -1,4 +1,3 @@
-import world from "./world";
 import context2d from "./canvas";
 import User from "types/User";
 
@@ -21,6 +20,12 @@ import TileAnimationSystem from "./systems/Rendering/TileAnimationSystem";
 import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
+import { World } from "ecsy";
+import CreateNetworkRoom from "./entities/NetworkRoom";
+
+let world = new World();
+
+export const getWorld = () => world;
 
 export default (user: User) => {
   world
@@ -40,6 +45,7 @@ export default (user: User) => {
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem);
 
+  CreateNetworkRoom();
   CreateLocalPlayer(user);
   CreateTileMap(user);
 
@@ -51,7 +57,14 @@ export default (user: User) => {
 
     context2d.clearRect(0, 0, context2d.canvas.width, context2d.canvas.height);
     world.execute(dt, time);
-    requestAnimationFrame(update);
+
+    if ((window as any).ecsyError) {
+      world.stop();
+      world = new World();
+      (window as any).ecsyError = false;
+    } else {
+      requestAnimationFrame(update);
+    }
   }
 
   requestAnimationFrame(update);
