@@ -46,6 +46,7 @@ export const drawToShadowCanvas = (
   canvas.height = height;
 
   const shadowContext = canvas.getContext("2d") as CanvasRenderingContext2D;
+
   if (shadowContext) {
     for (let i = 0; i < drawables.length; i += 1) {
       const drawable = drawables[i];
