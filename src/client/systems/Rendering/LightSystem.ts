@@ -6,7 +6,12 @@ import { tileIdToPixels } from "../../utilities/TileMap/calculations";
 import context2d from "../../canvas";
 import Drawable from "../../components/Drawable";
 import addOffset from "../../utilities/Vector/addOffset";
-import gradient from "gradient-color";
+// import gradient from "gradient-color";
+
+const imageMask = new Image();
+imageMask.src = "/assets/utilities/lightmask.png";
+
+const lightCanvas = document.createElement("canvas");
 
 export default class LightSystem extends System {
   static queries = {
@@ -22,40 +27,50 @@ export default class LightSystem extends System {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
 
+      const largestWidth = Math.max(
+        tileMapDrawable.width,
+        context2d.canvas.width
+      );
+      const largestHeight = Math.max(
+        tileMapDrawable.height,
+        context2d.canvas.height
+      );
+
+      lightCanvas.width = largestWidth;
+      lightCanvas.height = largestHeight;
+
+      const shadowContext = lightCanvas.getContext(
+        "2d"
+      ) as CanvasRenderingContext2D;
+
+      if (tileMap.properties.light) {
+        shadowContext.beginPath();
+        shadowContext.rect(0, 0, largestWidth, largestHeight);
+        shadowContext.fillStyle = `rgba(0,0,0,${1 -
+          0.01 * parseInt(tileMap.properties.light)})`;
+        shadowContext.fill();
+      }
+
       const drawLight = (
         x: number,
         y: number,
-        radius: number,
-        color: string
+        radius: number
+        // color: string
       ) => {
-        const colors = gradient([color, "#000"], 10);
-
         radius = radius * 32;
-        context2d.save();
-        context2d.globalCompositeOperation = "lighter";
         const rnd = 0.05 * Math.sin((1.1 * Date.now()) / 1000);
         radius = radius * (1 + rnd);
-        const radialGradient = context2d.createRadialGradient(
-          x,
-          y,
-          0,
-          x,
-          y,
-          radius
+
+        shadowContext.drawImage(
+          imageMask,
+          x - radius,
+          y - radius,
+          radius * 2,
+          radius * 2
         );
-        radialGradient.addColorStop(0.0, colors[0]);
-        radialGradient.addColorStop(0.2 + rnd, colors[1]);
-        radialGradient.addColorStop(0.7 + rnd, colors[6]);
-        radialGradient.addColorStop(0.9, colors[8]);
-        radialGradient.addColorStop(1, colors[9]);
-        context2d.fillStyle = radialGradient;
-        context2d.beginPath();
-        context2d.arc(x, y, radius, 0, 2 * Math.PI);
-        context2d.fill();
-        context2d.restore();
       };
 
-      Object.keys(tileMap.objectTileStore.store).map(key => {
+      Object.keys(tileMap.objectTileStore.store).forEach(key => {
         const tileId = parseInt(key);
         const tilePosition = tileIdToPixels(tileId, tileMap.width);
         const lightTile = tileMap.objectTileStore.store[tileId];
@@ -67,12 +82,17 @@ export default class LightSystem extends System {
             drawLight(
               position.x + 16,
               position.y + 16,
-              lightTileProperties.radius,
-              "#615524"
+              lightTileProperties.radius
+              // lightTileProperties.color || "#292619"
             );
           }
         }
       });
+
+      context2d.save();
+      context2d.globalCompositeOperation = "multiply";
+      context2d.drawImage(lightCanvas, 0, 0, largestWidth, largestHeight);
+      context2d.restore();
     });
   }
 }

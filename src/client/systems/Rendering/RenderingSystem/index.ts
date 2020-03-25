@@ -40,7 +40,15 @@ export default class TileMapDrawer extends System {
       context2d.save();
 
       if (tileMap.properties.light) {
-        context2d.filter = `brightness(${tileMap.properties.light}%)`;
+        context2d.beginPath();
+        context2d.rect(
+          0,
+          0,
+          Math.max(drawable.width, context2d.canvas.width),
+          Math.max(drawable.height, context2d.canvas.height)
+        );
+        context2d.fillStyle = `black`;
+        context2d.fill();
       }
 
       if (canvasCache.length) {
