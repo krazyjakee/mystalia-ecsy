@@ -2,6 +2,7 @@ import React from "react";
 import { whiteText } from "../palette";
 import { createUseStyles } from "react-jss";
 import classnames from "classnames";
+import { guiAssetPath } from "../cssUtilities";
 
 const useStyles = createUseStyles({
   container: {
@@ -12,15 +13,15 @@ const useStyles = createUseStyles({
     height: 38
   },
   leftAddon: {
-    backgroundImage: "url(/assets/gui/form-control/input-side.png)"
+    backgroundImage: guiAssetPath("form-control/input-side.png")
   },
   rightAddon: {
-    backgroundImage: "url(/assets/gui/form-control/input-side.png)",
+    backgroundImage: guiAssetPath("form-control/input-side.png"),
     transform: "scaleX(-1)"
   },
   input: {
     height: 38,
-    backgroundImage: "url(/assets/gui/form-control/input-bg.png)",
+    backgroundImage: guiAssetPath("form-control/input-bg.png"),
     border: "none",
     padding: 0,
     margin: 0,
