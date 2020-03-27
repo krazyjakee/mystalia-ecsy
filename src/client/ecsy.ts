@@ -22,6 +22,7 @@ import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
 import { World } from "ecsy";
 import CreateNetworkRoom from "./entities/NetworkRoom";
+import DayNightSystem from "./systems/Rendering/DayNightSystem";
 
 let world = new World();
 
@@ -41,6 +42,7 @@ export default (user: User) => {
     .registerSystem(PlayerAnimationSystem)
     .registerSystem(RenderingSystem)
     .registerSystem(LightSystem)
+    .registerSystem(DayNightSystem)
     .registerSystem(TileAnimationSystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem);
