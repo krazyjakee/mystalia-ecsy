@@ -6,8 +6,8 @@
     "server": "cross-env NODE_ENV=development nodemon --watch src/server --exec ts-node ./src/server/index.ts",
     "client": "cross-env NODE_ENV=development webpack-dev-server --config src/server/webpack.config.ts",
     "start": "concurrently \"npm:server\" \"npm:client\"",
-    "start:prod": "cross-env NODE_ENV=production ts-node ./src/server/index.ts",
-    "build": "cross-env NODE_ENV=production webpack --config src/server/webpack.config.ts"
+    "start:prod": "ts-node ./src/server/index.ts",
+    "build": "webpack --config src/server/webpack.config.ts"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
