@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
 import client from "../colyseus";
 import startEcsy from "../ecsy";
+import { Button } from "./FormControls/Button";
+import { createUseStyles } from "react-jss";
+import { whiteText } from "./palette";
+
+const useStyles = createUseStyles({
+  title: {
+    fontSize: 36,
+    ...whiteText
+  }
+});
 
 export default () => {
+  const classes = useStyles();
   const [hidden, setHidden] = useState(false);
 
   const hotReloadEnabled = Boolean((window as any).webpackHotUpdate);
@@ -26,10 +37,9 @@ export default () => {
   return hidden || hotReloadEnabled ? null : (
     <div className="mainMenu">
       <div className="mainMenu-container">
-        <div className="title">Mystalia Online</div>
-        <button className="btn" onClick={login}>
-          Play
-        </button>
+        <div className={classes.title}>Mystalia Online</div>
+        <br />
+        <Button value="Play" onClick={login} />
       </div>
     </div>
   );

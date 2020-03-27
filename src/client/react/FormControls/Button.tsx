@@ -1,7 +1,8 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import { whiteText } from "../palette";
 import { createUseStyles } from "react-jss";
 import classnames from "classnames";
+import { guiAssetPath } from "../cssUtilities";
 
 const useStyles = createUseStyles({
   container: {
@@ -9,25 +10,25 @@ const useStyles = createUseStyles({
     cursor: "pointer",
     "&:active": {
       "& $leftAddon": {
-        backgroundImage: "url(/assets/gui/form-control/button-pressed-side.png)"
+        backgroundImage: guiAssetPath("form-control/button-pressed-side.png")
       },
       "& $rightAddon": {
-        backgroundImage: "url(/assets/gui/form-control/button-pressed-side.png)"
+        backgroundImage: guiAssetPath("form-control/button-pressed-side.png")
       },
       "& $input": {
-        backgroundImage: "url(/assets/gui/form-control/button-pressed-bg.png)",
+        backgroundImage: guiAssetPath("form-control/button-pressed-bg.png"),
         color: "#bababa"
       }
     },
     "&:hover": {
       "& $leftAddon": {
-        backgroundImage: "url(/assets/gui/form-control/button-hover-side.png)"
+        backgroundImage: guiAssetPath("form-control/button-hover-side.png")
       },
       "& $rightAddon": {
-        backgroundImage: "url(/assets/gui/form-control/button-hover-side.png)"
+        backgroundImage: guiAssetPath("form-control/button-hover-side.png")
       },
       "& $input": {
-        backgroundImage: "url(/assets/gui/form-control/button-hover-bg.png)"
+        backgroundImage: guiAssetPath("form-control/button-hover-bg.png")
       }
     }
   },
@@ -36,15 +37,17 @@ const useStyles = createUseStyles({
     height: 36
   },
   leftAddon: {
-    backgroundImage: "url(/assets/gui/form-control/button-side.png)"
+    backgroundImage: guiAssetPath("form-control/button-side.png")
   },
   rightAddon: {
-    backgroundImage: "url(/assets/gui/form-control/button-side.png)",
+    backgroundImage: guiAssetPath("form-control/button-side.png"),
     transform: "scaleX(-1)"
   },
   input: {
+    width: "100%",
     height: 36,
-    backgroundImage: "url(/assets/gui/form-control/button-bg.png)",
+    background: "transparent",
+    backgroundImage: guiAssetPath("form-control/button-bg.png"),
     border: "none",
     padding: "0 8px",
     margin: 0,
@@ -54,13 +57,17 @@ const useStyles = createUseStyles({
   }
 });
 
-export const Button = (props: React.InputHTMLAttributes<HTMLButtonElement>) => {
+export const Button = (
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>
+) => {
   const classes = useStyles();
   return (
-    <a className={classes.container}>
+    <div className={classes.container}>
       <div className={classnames(classes.leftAddon, classes.addon)}></div>
-      <button className={classes.input}>{props.value}</button>
+      <button className={classes.input} {...props}>
+        {props.value}
+      </button>
       <div className={classnames(classes.rightAddon, classes.addon)}></div>
-    </a>
+    </div>
   );
 };
