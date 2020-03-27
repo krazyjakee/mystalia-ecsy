@@ -5,6 +5,8 @@ import startEcsy from "../ecsy";
 export default () => {
   const [hidden, setHidden] = useState(false);
 
+  const hotReloadEnabled = Boolean((window as any).webpackHotUpdate);
+
   const login = async () => {
     const user = await client.auth.login();
     startEcsy(user);
@@ -15,9 +17,13 @@ export default () => {
     document.addEventListener("ws:close", () => {
       setHidden(false);
     });
+
+    if (hotReloadEnabled) {
+      login();
+    }
   }, []);
 
-  return hidden ? null : (
+  return hidden || hotReloadEnabled ? null : (
     <div className="mainMenu">
       <div className="mainMenu-container">
         <div className="title">Mystalia Online</div>

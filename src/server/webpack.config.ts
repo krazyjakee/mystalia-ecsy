@@ -27,6 +27,11 @@ const config = {
   },
   devtool:
     process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
+  devServer: {
+    contentBase: "./public",
+    hot: true,
+    port: 8081
+  },
   output: {
     filename: "app.js",
     path: path.resolve(__dirname, "..", "..", "public"),

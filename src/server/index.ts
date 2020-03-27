@@ -4,6 +4,7 @@ import * as express from "express";
 import * as path from "path";
 import * as http from "http";
 import * as fs from "fs";
+import * as cors from "cors";
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 import socialRoutes from "@colyseus/social/express";
@@ -19,6 +20,12 @@ if (process.env.NODE_ENV === "development") {
   const webpackDevMiddleware = require("webpack-dev-middleware");
   const config = require("./webpack.config").default;
   const compiler = webpack(config);
+
+  app.use(
+    cors({
+      origin: "*"
+    })
+  );
 
   app.use(
     webpackDevMiddleware(compiler, {

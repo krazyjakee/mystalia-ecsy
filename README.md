@@ -12,7 +12,8 @@
 ### Development mode
 
 - To run in development mode: `npm start`
-- Visit webpack-dev-server at http://localhost:8080
+- Visit webpack-dev-server (with hot reload) at http://localhost:8081
+- Visit server (without hot reload) at http://localhost:8080
 
 - To run in production mode: `npm run start:prod`
 - Visit the production server at http://localhost:8080
