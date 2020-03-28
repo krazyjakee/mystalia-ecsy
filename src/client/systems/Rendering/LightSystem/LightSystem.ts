@@ -16,7 +16,7 @@ imageMask.src = "/assets/utilities/lightmask.png";
 
 const lightCanvas = document.createElement("canvas");
 
-const dayLengthInMinutes = 1;
+const dayLengthInMinutes = 15;
 const dayLightPercentage = 66;
 
 export default class LightSystem extends System {
