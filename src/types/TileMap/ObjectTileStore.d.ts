@@ -10,6 +10,7 @@ export type DoorTileType = {
 export type LightTileType = {
   radius: number;
   color?: string;
+  intensity?: number;
 };
 
 export type ObjectTileType = DoorTileType | BlockTileType | LightTileType;

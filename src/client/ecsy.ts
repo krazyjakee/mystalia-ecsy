@@ -14,7 +14,7 @@ import ScrollingSystem from "./systems/Rendering/ScrollingSystem";
 import MapEventSystem from "./systems/Map/MapEventSystem";
 import FadeSystem from "./systems/Rendering/FadeSystem";
 import PlayerNameSystem from "./systems/Rendering/PlayerNameSystem";
-import LightSystem from "./systems/Rendering/LightSystem";
+import LightSystem from "./systems/Rendering/LightSystem/LightSystem";
 import TileAnimationSystem from "./systems/Rendering/TileAnimationSystem";
 
 import "./entities";
@@ -22,7 +22,6 @@ import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
 import { World } from "ecsy";
 import CreateNetworkRoom from "./entities/NetworkRoom";
-import DayNightSystem from "./systems/Rendering/DayNightSystem";
 
 let world = new World();
 
@@ -42,7 +41,6 @@ export default (user: User) => {
     .registerSystem(PlayerAnimationSystem)
     .registerSystem(RenderingSystem)
     .registerSystem(LightSystem)
-    .registerSystem(DayNightSystem)
     .registerSystem(TileAnimationSystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem);

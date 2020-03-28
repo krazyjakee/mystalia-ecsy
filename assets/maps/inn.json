@@ -287,9 +287,19 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"color",
+                         "type":"string",
+                         "value":"#ffffff"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":12
+                         "value":8
                         }],
                  "rotation":0,
                  "type":"light",
@@ -304,9 +314,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":6
+                         "value":4
                         }],
                  "rotation":0,
                  "type":"light",
@@ -321,9 +336,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":6
+                         "value":4
                         }],
                  "rotation":0,
                  "type":"light",
@@ -338,9 +358,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":6
+                         "value":4
                         }],
                  "rotation":0,
                  "type":"light",
@@ -355,9 +380,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":12
+                         "value":8
                         }],
                  "rotation":0,
                  "type":"light",
@@ -372,9 +402,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":12
+                         "value":8
                         }],
                  "rotation":0,
                  "type":"light",
@@ -389,9 +424,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
                          "name":"radius",
                          "type":"int",
-                         "value":12
+                         "value":8
                         }],
                  "rotation":0,
                  "type":"light",
