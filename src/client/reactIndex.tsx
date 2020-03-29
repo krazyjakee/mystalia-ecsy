@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import MainMenu from "./react/MainMenu";
 import { Clock } from "./react/Overlays/Clock";
+import { BasePanel } from "./react/Panels/BasePanel";
 
 const App = () => {
   return (

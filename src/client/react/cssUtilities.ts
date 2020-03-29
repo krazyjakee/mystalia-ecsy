@@ -3,5 +3,6 @@ export const guiAssetPath = (path: string, excludeUrlWrapper?: boolean) => {
   if (excludeUrlWrapper) {
     return result;
   }
+  new Image().src = result;
   return `url(${result})`;
 };
