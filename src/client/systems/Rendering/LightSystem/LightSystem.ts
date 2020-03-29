@@ -9,6 +9,8 @@ import addOffset from "../../../utilities/Vector/addOffset";
 import LocalPlayer from "../../../components/LocalPlayer";
 import Position from "../../../components/Position";
 import { drawLightSource } from "./lightRenderFunctions";
+import config from "../../../config.json";
+import { timeOfDayAsPercentage } from "../../../utilities/time";
 // import gradient from "gradient-color";
 
 const imageMask = new Image();
@@ -16,8 +18,7 @@ imageMask.src = "/assets/utilities/lightmask.png";
 
 const lightCanvas = document.createElement("canvas");
 
-const dayLengthInMinutes = 15;
-const dayLightPercentage = 66;
+const { dayLightPercentage } = config;
 
 export default class LightSystem extends System {
   static queries = {
@@ -59,11 +60,7 @@ export default class LightSystem extends System {
       if (environmentLight) {
         brightness = environmentLight;
       } else {
-        const utcTime =
-          new Date(new Date().toUTCString()).getTime() +
-          new Date().getUTCMilliseconds();
-        const minutesInMs = 1000 * 60 * dayLengthInMinutes;
-        const dayPercentage = ((utcTime / minutesInMs) % 1) * 100;
+        const dayPercentage = timeOfDayAsPercentage();
 
         if (dayPercentage < dayLightPercentage) {
           const phaseProgress = (100 / dayLightPercentage) * dayPercentage;

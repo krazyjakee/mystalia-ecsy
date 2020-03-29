@@ -9,6 +9,7 @@
     "typeRoots": ["node_modules/@types", "types"],
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "paths": {
       "types/*": ["src/types/*"],
       "serverState/*": ["src/server/components/*"]
