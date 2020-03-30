@@ -11,6 +11,7 @@ import socialRoutes from "@colyseus/social/express";
 import { getMapProperties } from "./utilities/tmjTools";
 import healthCheck from "./utilities/healthChecks";
 import MapRoom from "./rooms/map";
+import AdminRoom from "./rooms/admin";
 
 const port = parseInt(process.env.PORT || "8080");
 const app = express();
@@ -55,6 +56,9 @@ while ((file = dir.readSync()) !== null) {
     gameServer.define(properties.name, MapRoom);
   }
 }
+
+gameServer.define("admin", AdminRoom);
+
 dir.closeSync();
 console.log("Maps loaded");
 

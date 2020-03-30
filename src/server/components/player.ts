@@ -12,10 +12,14 @@ export default class PlayerState extends Schema {
   @type("string")
   displayName?: string;
 
+  @type("number")
+  role?: number;
+
   constructor(user: IUser) {
     super();
     this.dbId = user._id.toString();
     this.displayName = user.displayName;
+    this.role = user.metadata.role;
   }
 }
 

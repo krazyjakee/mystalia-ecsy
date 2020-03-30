@@ -4,5 +4,6 @@ export default interface User extends IUser {
   metadata: {
     currentTile: number;
     room: string;
+    role: number;
   };
 }

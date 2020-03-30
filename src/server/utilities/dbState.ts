@@ -8,6 +8,7 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
     if (user) {
       const newData: Partial<IUser> = {
         metadata: {
+          ...user.metadata,
           room: room
         }
       };
