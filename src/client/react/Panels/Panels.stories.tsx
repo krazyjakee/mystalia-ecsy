@@ -10,7 +10,7 @@ export default {
 export const BasePanel = () => <BasePanelComponent title="Panel Title" />;
 
 export const PanelSection = () => (
-  <PanelSectionComponent style={{ height: 600 }} />
+  <PanelSectionComponent style={{ height: 200 }} />
 );
 
 export const PanelWithSections = () => (

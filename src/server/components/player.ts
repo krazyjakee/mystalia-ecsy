@@ -19,9 +19,10 @@ export default class PlayerState extends Schema {
   }
 }
 
-export const PlayerDBState = {
+export const UserDBState = {
   currentTile: 2431,
-  room: "first"
+  room: "first",
+  role: 0
 };
 
 hooks.beforeAuthenticate((_, $setOnInsert) => {
@@ -31,5 +32,5 @@ hooks.beforeAuthenticate((_, $setOnInsert) => {
       $setOnInsert.displayName = customName;
     }
   }
-  $setOnInsert.metadata = PlayerDBState;
+  $setOnInsert.metadata = UserDBState;
 });
