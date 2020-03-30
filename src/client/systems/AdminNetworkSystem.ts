@@ -18,7 +18,11 @@ export default class AdminNetworkSystem extends System {
         const role = localPlayer.user.metadata.role;
         if (role && role > 0) {
           client.joinOrCreate("admin").then(room => {
-            // TODO Admin logic
+            document.dispatchEvent(new Event("admin:enable"));
+            room.onLeave(() => {
+              console.log("Admin access denied");
+              document.dispatchEvent(new Event("admin:disable"));
+            });
           });
         }
       }

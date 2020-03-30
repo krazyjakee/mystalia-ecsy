@@ -1,3 +1,6 @@
-import { Schema } from "@colyseus/schema";
+import { Schema, type } from "@colyseus/schema";
 
-export default class AdminState extends Schema {}
+export default class AdminState extends Schema {
+  @type("boolean")
+  enabled: boolean = true;
+}

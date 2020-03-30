@@ -15,5 +15,6 @@
       "serverState/*": ["src/server/components/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.stories.*"]
 }
