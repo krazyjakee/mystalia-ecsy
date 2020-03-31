@@ -1,6 +1,7 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
 import AdminState from "../components/admin";
+import { GameStateEventName, RoomReceivedMessage } from "types/gameState";
 
 export default class AdminRoom extends Room<AdminState> {
   async onAuth(client: Client, options: any) {
@@ -21,7 +22,29 @@ export default class AdminRoom extends Room<AdminState> {
     }
   }
 
-  onMessage(client: Client, message: any) {}
+  async onMessage(
+    client: Client,
+    message: RoomReceivedMessage<GameStateEventName>
+  ) {
+    if (message.command === "admin:list:allPlayers") {
+      const all = await User.find({});
+      console.log(
+        all.map(({ username, displayName }) => ({
+          username,
+          displayName
+        }))
+      );
+      this.send(client, {
+        command: "admin:list:allPlayers",
+        all: all
+          .filter(({ username, displayName }) => username && displayName)
+          .map(({ username, displayName }) => ({
+            username,
+            displayName
+          }))
+      });
+    }
+  }
 
   async onLeave(client: Client, consented: boolean) {}
 

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { TextInput as TextInputComponent } from "./TextInput";
 import { Button as ButtonComponent } from "./Button";
 import { TabButton as TabButtonComponent } from "./TabButton";
+import SelectComponent from "./Select";
 
 export default {
   title: "Form Controls"
@@ -37,4 +38,8 @@ export const TabButton = () => {
       />
     </>
   );
+};
+
+export const Select = () => {
+  return <SelectComponent />;
 };

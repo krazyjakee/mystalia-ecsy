@@ -16,6 +16,7 @@ import {
 import addOffset from "../utilities/Vector/addOffset";
 import compassToVector from "../utilities/Compass/compassToVector";
 import LocalPlayer from "../components/LocalPlayer";
+import gameState from "../gameState";
 
 let connectionTimer: any;
 
@@ -62,6 +63,7 @@ export default class NetworkingSystem extends System {
       networkRoom.joining = true;
       client.joinOrCreate(name).then(room => {
         clearTimeout(connectionTimer);
+        gameState.addRoom("map", room);
         networkRoom.room = room as RoomState;
         networkRoom.joining = false;
         const myKey = room.sessionId;

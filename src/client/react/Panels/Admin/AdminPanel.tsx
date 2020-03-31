@@ -4,22 +4,31 @@ import { BasePanel } from "../BasePanel";
 import { PanelSection } from "../PanelSection";
 import Hotkey from "../../Utilities/Hotkey";
 import { TabButton } from "../../FormControls/TabButton";
+import Select from "../../FormControls/Select";
+import gameState from "../../../gameState";
+import { useGameEvent } from "../../Hooks/useGameEvent";
 
-export default () => {
+type Props = {
+  forceEnable?: boolean;
+};
+
+export default ({ forceEnable }: Props) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(forceEnable || false);
+  const [allPlayersResponse] = useGameEvent("admin:list:allPlayers");
+
+  const playerList = allPlayersResponse && allPlayersResponse.all;
 
   useEffect(() => {
-    document.addEventListener("admin:enable", () => {
+    gameState.subscribe("admin:enable", () => {
       setEnabled(true);
+      gameState.sendRoom("admin", "admin:list:allPlayers");
     });
-    document.addEventListener("admin:disable", () => {
-      setEnabled(false);
-    });
-  }, []);
+    gameState.subscribe("admin:disable", () => setEnabled(false));
+  }, [allPlayersResponse]);
 
   return enabled ? (
-    <Hotkey keys={["Backquote"]}>
+    <Hotkey keys={["Backquote"]} show={forceEnable}>
       <BasePanel
         title="Admin Panel"
         rndOptions={{
@@ -31,7 +40,7 @@ export default () => {
       >
         <Grid fluid>
           <Row>
-            <Col xs={6}>
+            <Col>
               <PanelSection>
                 <TabButton
                   value="Player Management"
@@ -40,8 +49,19 @@ export default () => {
                 ></TabButton>
               </PanelSection>
             </Col>
-            <Col xs={6}>
-              <PanelSection />
+            <Col xs={true}>
+              <PanelSection>
+                <Select
+                  isLoading={!playerList}
+                  options={
+                    playerList &&
+                    playerList.map(player => ({
+                      label: player.displayName,
+                      value: player.username
+                    }))
+                  }
+                />
+              </PanelSection>
             </Col>
           </Row>
         </Grid>

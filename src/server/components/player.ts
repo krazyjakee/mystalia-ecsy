@@ -34,6 +34,7 @@ hooks.beforeAuthenticate((_, $setOnInsert) => {
     const customName = nameByRace("elf", { gender: "male" });
     if (typeof customName === "string") {
       $setOnInsert.displayName = customName;
+      $setOnInsert.username = customName.toLowerCase();
     }
   }
   $setOnInsert.metadata = UserDBState;
