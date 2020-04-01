@@ -11,6 +11,15 @@ export type GameStateEvents = {
   "admin:list:allMaps": {
     all: string[];
   };
+  "admin:teleport:request": {
+    username: string;
+    map: string;
+    tileId: number;
+  };
+  "admin:teleport:response": {
+    map: string;
+    tileId: number;
+  };
 };
 
 export type GameStateEventName = keyof GameStateEvents;

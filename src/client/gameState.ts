@@ -5,7 +5,7 @@ import {
 } from "types/gameState";
 import { Room } from "colyseus.js";
 
-type CallbacksContainer = { [key in GameStateEventName]: CallbackObject[] };
+type CallbacksContainer = { [key: string]: CallbackObject[] };
 type CallbackObject = {
   callback: Function;
   hash: number;
@@ -28,14 +28,7 @@ const makeHash = (input: string) => {
 class GameState {
   rooms: { [key: string]: Room } = {};
 
-  callbacks: CallbacksContainer = {
-    "admin:enable": [],
-    "admin:disable": [],
-    "admin:list:allPlayers": [],
-    "admin:list:requestAllPlayers": [],
-    "admin:list:requestAllMaps": [],
-    "admin:list:allMaps": []
-  };
+  callbacks: CallbacksContainer = {};
 
   addRoom(type: RoomTypes, room: Room) {
     room.onMessage(data => {
@@ -50,12 +43,13 @@ class GameState {
 
   send<T extends GameStateEventName>(
     type: RoomTypes = "map",
-    name: T
-    // data?: GameStateEvents[T]
+    name: T,
+    data?: GameStateEvents[T]
   ) {
     if (this.rooms[type]) {
       const messageData: RoomMessage<T> = {
-        command: name
+        command: name,
+        ...data
       };
 
       this.rooms[type].send(messageData);
@@ -69,20 +63,26 @@ class GameState {
     callback: (arg0: GameStateEvents[T]) => void
   ) {
     const hash = makeHash(callback.toString());
-    this.callbacks[eventName].push({
+    const callbackObject: CallbackObject = {
       callback,
       hash
-    });
+    };
+
+    this.callbacks[eventName]
+      ? this.callbacks[eventName].push(callbackObject)
+      : (this.callbacks[eventName] = [callbackObject]);
   }
 
   unsubscribe<T extends GameStateEventName>(
     eventName: T,
     callback: (arg0: GameStateEvents[T]) => void
   ) {
-    const hash = makeHash(callback.toString());
-    const index = this.callbacks[eventName].findIndex(cb => cb.hash === hash);
-    if (index > -1) {
-      this.callbacks[eventName].splice(index, 1);
+    if (this.callbacks[eventName]) {
+      const hash = makeHash(callback.toString());
+      const index = this.callbacks[eventName].findIndex(cb => cb.hash === hash);
+      if (index > -1) {
+        this.callbacks[eventName].splice(index, 1);
+      }
     }
   }
 
@@ -90,9 +90,11 @@ class GameState {
     eventName: T,
     options?: GameStateEvents[T]
   ) {
-    this.callbacks[eventName].forEach(callbackObject =>
-      callbackObject.callback(options)
-    );
+    if (this.callbacks[eventName]) {
+      this.callbacks[eventName].forEach(callbackObject =>
+        callbackObject.callback(options)
+      );
+    }
   }
 }
 

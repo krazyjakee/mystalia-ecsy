@@ -1,6 +1,6 @@
 import React from "react";
 import { BasePanel as BasePanelComponent } from "./BasePanel";
-import { PanelSection as PanelSectionComponent } from "./PanelSection";
+import { Section as SectionComponent } from "./Section";
 import AdminPanelComponent from "./Admin/AdminPanel";
 
 export default {
@@ -18,8 +18,6 @@ export const BasePanel = () => (
   />
 );
 
-export const PanelSection = () => (
-  <PanelSectionComponent style={{ height: 200 }} />
-);
+export const PanelSection = () => <SectionComponent style={{ height: 200 }} />;
 
 export const AdminPanel = () => <AdminPanelComponent forceEnable={true} />;

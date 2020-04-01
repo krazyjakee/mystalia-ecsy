@@ -24,7 +24,7 @@ const useStyles = createUseStyles({
     backgroundSize: "cover",
     height: "100%",
     width: "100%",
-    "&:before": {
+    "&:after": {
       boxSizing: "border-box",
       position: "absolute",
       height: "100%",
@@ -91,7 +91,8 @@ const useStyles = createUseStyles({
   },
   content: {
     flex: 1,
-    padding: 25
+    padding: 25,
+    zIndex: 1
   }
 });
 

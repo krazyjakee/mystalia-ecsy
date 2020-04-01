@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
-import { PanelSection } from "../PanelSection";
+import { Section } from "../Section";
 import Hotkey from "../../Utilities/Hotkey";
 import { TabButton } from "../../FormControls/TabButton";
-import Select from "../../FormControls/Select";
 import gameState from "../../../gameState";
-import { useGameEvent } from "../../Hooks/useGameEvent";
+import PlayerManagementForm from "./PlayerManagementForm";
 
 type Props = {
   forceEnable?: boolean;
@@ -15,23 +14,14 @@ type Props = {
 export default ({ forceEnable }: Props) => {
   const [activeTab, setActiveTab] = useState(0);
   const [enabled, setEnabled] = useState(forceEnable || false);
-  const [allPlayers] = useGameEvent("admin:list:allPlayers");
-  const [allMaps] = useGameEvent("admin:list:allMaps");
 
   useEffect(() => {
-    gameState.subscribe("admin:enable", () => {
-      setEnabled(true);
-    });
+    gameState.subscribe("admin:enable", () => setEnabled(true));
     gameState.subscribe("admin:disable", () => setEnabled(false));
-  }, [allPlayers, allMaps]);
-
-  const onShow = () => {
-    gameState.send("admin", "admin:list:requestAllPlayers");
-    gameState.send("admin", "admin:list:requestAllMaps");
-  };
+  }, []);
 
   return enabled ? (
-    <Hotkey keys={["Backquote"]} show={forceEnable} onShow={onShow}>
+    <Hotkey keys={["Backquote"]} show={forceEnable}>
       <BasePanel
         title="Admin Panel"
         rndOptions={{
@@ -44,39 +34,16 @@ export default ({ forceEnable }: Props) => {
         <Grid fluid>
           <Row>
             <Col>
-              <PanelSection>
+              <Section>
                 <TabButton
                   value="Player Management"
                   active={activeTab === 0}
                   onClick={() => setActiveTab(0)}
                 ></TabButton>
-              </PanelSection>
+              </Section>
             </Col>
             <Col xs={true}>
-              <PanelSection>
-                <Select
-                  placeholder="Select Player"
-                  isLoading={!allPlayers}
-                  options={
-                    allPlayers &&
-                    allPlayers.all.map(player => ({
-                      label: player.displayName,
-                      value: player.username
-                    }))
-                  }
-                />
-                <Select
-                  placeholder="Select Map"
-                  isLoading={!allMaps}
-                  options={
-                    allMaps &&
-                    allMaps.all.map(map => ({
-                      label: map,
-                      value: map
-                    }))
-                  }
-                />
-              </PanelSection>
+              <PlayerManagementForm />
             </Col>
           </Row>
         </Grid>

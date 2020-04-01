@@ -20,25 +20,29 @@ const useStyles = createUseStyles({
     transform: "scaleX(-1)"
   },
   input: {
+    flex: 1,
     height: 38,
+    backgroundColor: "transparent",
     backgroundImage: guiAssetPath("form-control/input-bg.png"),
     border: "none",
     padding: 0,
     margin: 0,
     outline: "none",
+    fontSize: 11,
     ...whiteText
   }
 });
 
-export const TextInput = (
-  props: React.InputHTMLAttributes<HTMLInputElement>
-) => {
+export const TextInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>((props: React.InputHTMLAttributes<HTMLInputElement>, ref) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <div className={classnames(classes.leftAddon, classes.addon)}></div>
-      <input className={classes.input} type="text" {...props} />
+      <input ref={ref} className={classes.input} type="text" {...props} />
       <div className={classnames(classes.rightAddon, classes.addon)}></div>
     </div>
   );
-};
+});

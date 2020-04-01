@@ -1,5 +1,12 @@
-import React from "react";
-import Select, { Styles, Props } from "react-select";
+import React, { useCallback } from "react";
+import Select, {
+  Styles,
+  Props,
+  OptionTypeBase,
+  OptionProps,
+  ValueType,
+  ActionMeta
+} from "react-select";
 import { guiAssetPath } from "../../cssUtilities";
 import { whiteText } from "../../palette";
 import CustomIndicator from "./CustomIndicator";
@@ -51,7 +58,14 @@ const customStyles: Styles = {
   }),
   input: provided => ({
     ...provided,
+    fontSize: 11,
     ...whiteText
+  }),
+  placeholder: provided => ({
+    ...provided,
+    fontSize: 11,
+    ...whiteText,
+    opacity: 0.5
   }),
   menu: provided => ({
     ...provided,
@@ -67,10 +81,22 @@ const customStyles: Styles = {
   })
 };
 
-export default (props: Props<{}>) => {
+export type SelectValue = { label: string; value: string };
+interface SelectProps extends Omit<Props<{}>, "onChange"> {
+  onChange: (e: SelectValue) => void;
+}
+export default (props: SelectProps) => {
+  // TODO https://github.com/DefinitelyTyped/DefinitelyTyped/issues/32553
+  const internalOnChange = (e: any) => {
+    if (props.onChange) {
+      props.onChange(e);
+    }
+  };
+
   return (
     <Select
       {...props}
+      onChange={internalOnChange}
       styles={customStyles}
       components={{
         DropdownIndicator: CustomIndicator,
