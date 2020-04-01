@@ -1,15 +1,10 @@
 import React from "react";
 import Select, { Styles, Props } from "react-select";
 import { guiAssetPath } from "../../cssUtilities";
-import { createUseStyles } from "react-jss";
 import { whiteText } from "../../palette";
 import CustomIndicator from "./CustomIndicator";
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" }
-];
+const backgroundColor = "rgba(56,56,56,0.8)";
 
 const customStyles: Styles = {
   control: provided => ({
@@ -20,7 +15,6 @@ const customStyles: Styles = {
     padding: "0 19px",
     alignItems: "baseline",
     "&:before, &:after": {
-      zIndex: 1,
       content: '""',
       position: "absolute",
       top: 0,
@@ -63,13 +57,13 @@ const customStyles: Styles = {
     ...provided,
     border: "2px solid #383838",
     borderRadius: 5,
-    backgroundColor: "rgba(56,56,56,0.8)",
+    backgroundColor,
     marginTop: 0
   }),
   option: (provided, state) => ({
     ...provided,
     ...whiteText,
-    backgroundColor: state.isFocused ? "#383838" : "transparent"
+    backgroundColor: state.isFocused ? backgroundColor : "transparent"
   })
 };
 

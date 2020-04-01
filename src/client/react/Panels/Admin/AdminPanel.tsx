@@ -15,20 +15,23 @@ type Props = {
 export default ({ forceEnable }: Props) => {
   const [activeTab, setActiveTab] = useState(0);
   const [enabled, setEnabled] = useState(forceEnable || false);
-  const [allPlayersResponse] = useGameEvent("admin:list:allPlayers");
-
-  const playerList = allPlayersResponse && allPlayersResponse.all;
+  const [allPlayers] = useGameEvent("admin:list:allPlayers");
+  const [allMaps] = useGameEvent("admin:list:allMaps");
 
   useEffect(() => {
     gameState.subscribe("admin:enable", () => {
       setEnabled(true);
-      gameState.sendRoom("admin", "admin:list:allPlayers");
     });
     gameState.subscribe("admin:disable", () => setEnabled(false));
-  }, [allPlayersResponse]);
+  }, [allPlayers, allMaps]);
+
+  const onShow = () => {
+    gameState.send("admin", "admin:list:requestAllPlayers");
+    gameState.send("admin", "admin:list:requestAllMaps");
+  };
 
   return enabled ? (
-    <Hotkey keys={["Backquote"]} show={forceEnable}>
+    <Hotkey keys={["Backquote"]} show={forceEnable} onShow={onShow}>
       <BasePanel
         title="Admin Panel"
         rndOptions={{
@@ -52,12 +55,24 @@ export default ({ forceEnable }: Props) => {
             <Col xs={true}>
               <PanelSection>
                 <Select
-                  isLoading={!playerList}
+                  placeholder="Select Player"
+                  isLoading={!allPlayers}
                   options={
-                    playerList &&
-                    playerList.map(player => ({
+                    allPlayers &&
+                    allPlayers.all.map(player => ({
                       label: player.displayName,
                       value: player.username
+                    }))
+                  }
+                />
+                <Select
+                  placeholder="Select Map"
+                  isLoading={!allMaps}
+                  options={
+                    allMaps &&
+                    allMaps.all.map(map => ({
+                      label: map,
+                      value: map
                     }))
                   }
                 />

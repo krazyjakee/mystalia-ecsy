@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 type Props = {
   keys: string | string[];
   show?: boolean;
+  onShow?: VoidFunction;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default (props: Props) => {
@@ -10,6 +11,9 @@ export default (props: Props) => {
 
   const toggleShow = () => {
     setShow(!show);
+    if (!show && props.onShow) {
+      props.onShow();
+    }
   };
 
   const eventListener = (e: KeyboardEvent) => {

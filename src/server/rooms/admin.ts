@@ -1,7 +1,8 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
 import AdminState from "../components/admin";
-import { GameStateEventName, RoomReceivedMessage } from "types/gameState";
+import { GameStateEventName, RoomMessage } from "types/gameState";
+import { readMapFiles } from "../utilities/mapFiles";
 
 export default class AdminRoom extends Room<AdminState> {
   async onAuth(client: Client, options: any) {
@@ -22,18 +23,10 @@ export default class AdminRoom extends Room<AdminState> {
     }
   }
 
-  async onMessage(
-    client: Client,
-    message: RoomReceivedMessage<GameStateEventName>
-  ) {
-    if (message.command === "admin:list:allPlayers") {
+  async onMessage(client: Client, message: RoomMessage<GameStateEventName>) {
+    console.log("received", message.command);
+    if (message.command === "admin:list:requestAllPlayers") {
       const all = await User.find({});
-      console.log(
-        all.map(({ username, displayName }) => ({
-          username,
-          displayName
-        }))
-      );
       this.send(client, {
         command: "admin:list:allPlayers",
         all: all
@@ -42,6 +35,13 @@ export default class AdminRoom extends Room<AdminState> {
             username,
             displayName
           }))
+      });
+    }
+    if (message.command === "admin:list:requestAllMaps") {
+      const maps = readMapFiles();
+      this.send(client, {
+        command: "admin:list:allMaps",
+        all: Object.keys(maps)
       });
     }
   }

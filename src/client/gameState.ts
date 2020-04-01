@@ -1,7 +1,7 @@
 import {
   GameStateEventName,
   GameStateEvents,
-  RoomSendMessage
+  RoomMessage
 } from "types/gameState";
 import { Room } from "colyseus.js";
 
@@ -31,7 +31,10 @@ class GameState {
   callbacks: CallbacksContainer = {
     "admin:enable": [],
     "admin:disable": [],
-    "admin:list:allPlayers": []
+    "admin:list:allPlayers": [],
+    "admin:list:requestAllPlayers": [],
+    "admin:list:requestAllMaps": [],
+    "admin:list:allMaps": []
   };
 
   addRoom(type: RoomTypes, room: Room) {
@@ -45,15 +48,14 @@ class GameState {
     delete this.rooms[type];
   }
 
-  sendRoom<T extends GameStateEventName>(
+  send<T extends GameStateEventName>(
     type: RoomTypes = "map",
     name: T
     // data?: GameStateEvents[T]
   ) {
     if (this.rooms[type]) {
-      const messageData: RoomSendMessage<T> = {
+      const messageData: RoomMessage<T> = {
         command: name
-        // data: data ? data : undefined
       };
 
       this.rooms[type].send(messageData);

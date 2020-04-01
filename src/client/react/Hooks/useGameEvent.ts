@@ -11,6 +11,7 @@ export const useGameEvent = <T extends GameStateEventName>(
   const [data, setData] = useState<GameStateEvents[T]>();
   useEffect(() => {
     gameState.subscribe(eventName, data => {
+      console.log("received", eventName, data);
       setData(data);
     });
   }, []);
