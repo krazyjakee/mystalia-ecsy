@@ -47,7 +47,7 @@ class GameState {
     data?: GameStateEvents[T]
   ) {
     if (this.rooms[type]) {
-      const messageData: RoomMessage<T> = {
+      const messageData = {
         command: name,
         ...data
       };

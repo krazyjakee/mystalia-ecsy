@@ -1,6 +1,6 @@
 import User from "./User";
 
-export type GameStateEvents = {
+export interface GameStateEvents {
   "admin:list:allPlayers": {
     all: Pick<User, "username" | "displayName">[];
   };
@@ -20,10 +20,13 @@ export type GameStateEvents = {
     map: string;
     tileId: number;
   };
-};
+}
 
 export type GameStateEventName = keyof GameStateEvents;
 
-export type RoomMessage<T extends GameStateEventName> = {
+type CommandBase<T> = {
   command: T;
 };
+
+export type RoomMessage<T extends GameStateEventName> = CommandBase<T> &
+  GameStateEvents[T];

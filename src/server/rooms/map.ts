@@ -23,6 +23,7 @@ export default class MapRoom extends Room<MapState> {
     console.log(`${userId} joined ${this.roomName}`);
     this.state.players[client.sessionId] = new Player(user);
     savePlayerState(this.state.players[client.sessionId], this.roomName);
+    // TODO use presence and subscribe to user based event messages
   }
 
   onMessage(client: Client, message: any) {
@@ -37,6 +38,7 @@ export default class MapRoom extends Room<MapState> {
     console.log(`${client.sessionId} left ${this.roomName}`);
     await savePlayerState(this.state.players[client.sessionId], this.roomName);
     delete this.state.players[client.sessionId];
+    // TODO use presence and unsubscribe to user based event messages
   }
 
   async onDispose() {

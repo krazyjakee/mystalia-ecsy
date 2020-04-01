@@ -1,7 +1,11 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
 import AdminState from "../components/admin";
-import { GameStateEventName, RoomMessage } from "types/gameState";
+import {
+  GameStateEventName,
+  RoomMessage,
+  GameStateEvents
+} from "types/gameState";
 import { readMapFiles } from "../utilities/mapFiles";
 
 export default class AdminRoom extends Room<AdminState> {
@@ -23,9 +27,12 @@ export default class AdminRoom extends Room<AdminState> {
     }
   }
 
-  async onMessage(client: Client, message: RoomMessage<GameStateEventName>) {
-    console.log("received", message.command);
-    if (message.command === "admin:list:requestAllPlayers") {
+  async onMessage(
+    client: Client,
+    { command, ...data }: RoomMessage<GameStateEventName>
+  ) {
+    console.log("received", command);
+    if (command === "admin:list:requestAllPlayers") {
       const all = await User.find({});
       this.send(client, {
         command: "admin:list:allPlayers",
@@ -37,12 +44,19 @@ export default class AdminRoom extends Room<AdminState> {
           }))
       });
     }
-    if (message.command === "admin:list:requestAllMaps") {
+    if (command === "admin:list:requestAllMaps") {
       const maps = readMapFiles();
       this.send(client, {
         command: "admin:list:allMaps",
         all: Object.keys(maps)
       });
+    }
+    if (command === "admin:teleport:request") {
+      const response: RoomMessage<"admin:teleport:response"> = {
+        command: "admin:teleport:response",
+        ...(data as GameStateEvents["admin:teleport:response"])
+      };
+      this.broadcast(response); // TODO broadcast using presence
     }
   }
 
