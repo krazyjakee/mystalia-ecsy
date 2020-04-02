@@ -6,3 +6,5 @@ export default class LocalPlayer extends Component {
 }
 
 export class RoleCheckPending extends TagComponent {}
+
+export class CommandsPending extends TagComponent {}

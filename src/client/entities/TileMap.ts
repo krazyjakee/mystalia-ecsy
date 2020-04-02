@@ -4,12 +4,13 @@ import { Loadable } from "../components/Loadable";
 import AnimatedTile from "../components/AnimatedTile";
 import User from "types/User";
 import { getWorld } from "../ecsy";
+import { mapAssetPath } from "../utilities/assets";
 
 export default function CreateTileMap(user: User) {
   getWorld()
     .createEntity()
     .addComponent(Loadable, {
-      dataPath: `/assets/maps/${user.metadata.room}.json`
+      dataPath: mapAssetPath(user.metadata.room)
     })
     .addComponent(Drawable)
     .addComponent(AnimatedTile)

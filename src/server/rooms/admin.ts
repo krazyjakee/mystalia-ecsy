@@ -7,6 +7,7 @@ import {
   GameStateEvents
 } from "types/gameState";
 import { readMapFiles } from "../utilities/mapFiles";
+import PlayerState from "serverState/player";
 
 export default class AdminRoom extends Room<AdminState> {
   async onAuth(client: Client, options: any) {
@@ -31,7 +32,6 @@ export default class AdminRoom extends Room<AdminState> {
     client: Client,
     { command, ...data }: RoomMessage<GameStateEventName>
   ) {
-    console.log("received", command);
     if (command === "admin:list:requestAllPlayers") {
       const all = await User.find({});
       this.send(client, {
@@ -52,11 +52,37 @@ export default class AdminRoom extends Room<AdminState> {
       });
     }
     if (command === "admin:teleport:request") {
-      const response: RoomMessage<"admin:teleport:response"> = {
-        command: "admin:teleport:response",
-        ...(data as GameStateEvents["admin:teleport:response"])
-      };
-      this.broadcast(response); // TODO broadcast using presence
+      const { username, ...teleportRequestData } = data as RoomMessage<
+        "admin:teleport:request"
+      >;
+
+      const { map, tileId } = teleportRequestData;
+
+      // Teleport to me or teleport to specific map
+      if (map && tileId) {
+        const response: RoomMessage<"admin:teleport:response"> = {
+          command: "admin:teleport:response",
+          ...(teleportRequestData as GameStateEvents["admin:teleport:response"])
+        };
+        this.presence.publish(`${username}:commands`, response);
+      } else {
+        // Teleport me to
+        this.presence.subscribe(
+          `${username}:state`,
+          ({ state, room }: { state: PlayerState; room: string }) => {
+            if (room && state.targetTile) {
+              const response: RoomMessage<"admin:teleport:response"> = {
+                command: "admin:teleport:response",
+                map: room,
+                tileId: state.targetTile
+              };
+              this.send(client, response);
+            }
+            this.presence.unsubscribe(`${username}:state`);
+          }
+        );
+        this.presence.publish(`${username}:requestState`, undefined);
+      }
     }
   }
 

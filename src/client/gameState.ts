@@ -5,11 +5,19 @@ import {
 } from "types/gameState";
 import { Room } from "colyseus.js";
 
-type CallbacksContainer = { [key: string]: CallbackObject[] };
-type CallbackObject = {
-  callback: Function;
+type CallbacksContainer<T extends GameStateEventName> = {
+  [key: string]: CallbackObject<T>[];
+};
+
+type CallbackFunction<T extends GameStateEventName> = (
+  arg0: GameStateEvents[T]
+) => void | false;
+
+type CallbackObject<T extends GameStateEventName> = {
+  callback: CallbackFunction<T>;
   hash: number;
 };
+
 type RoomTypes = "admin" | "map";
 
 const makeHash = (input: string) => {
@@ -28,7 +36,7 @@ const makeHash = (input: string) => {
 class GameState {
   rooms: { [key: string]: Room } = {};
 
-  callbacks: CallbacksContainer = {};
+  callbacks: CallbacksContainer<any> = {};
 
   addRoom(type: RoomTypes, room: Room) {
     room.onMessage(data => {
@@ -60,10 +68,10 @@ class GameState {
 
   subscribe<T extends GameStateEventName>(
     eventName: T,
-    callback: (arg0: GameStateEvents[T]) => void
+    callback: CallbackFunction<T>
   ) {
     const hash = makeHash(callback.toString());
-    const callbackObject: CallbackObject = {
+    const callbackObject: CallbackObject<T> = {
       callback,
       hash
     };
@@ -75,7 +83,7 @@ class GameState {
 
   unsubscribe<T extends GameStateEventName>(
     eventName: T,
-    callback: (arg0: GameStateEvents[T]) => void
+    callback: CallbackFunction<T>
   ) {
     if (this.callbacks[eventName]) {
       const hash = makeHash(callback.toString());
@@ -91,9 +99,11 @@ class GameState {
     options?: GameStateEvents[T]
   ) {
     if (this.callbacks[eventName]) {
-      this.callbacks[eventName].forEach(callbackObject =>
-        callbackObject.callback(options)
-      );
+      this.callbacks[eventName].forEach(callbackObject => {
+        if (callbackObject.callback(options) === false) {
+          this.unsubscribe(eventName, callbackObject.callback);
+        }
+      });
     }
   }
 }

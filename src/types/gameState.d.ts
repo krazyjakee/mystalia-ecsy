@@ -13,12 +13,16 @@ export interface GameStateEvents {
   };
   "admin:teleport:request": {
     username: string;
-    map: string;
-    tileId: number;
+    map?: string;
+    tileId?: number;
   };
   "admin:teleport:response": {
     map: string;
     tileId: number;
+  };
+  "localPlayer:movement:request": undefined;
+  "localPlayer:movement:response": {
+    currentTile: number;
   };
 }
 

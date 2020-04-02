@@ -26,3 +26,5 @@ export const loadData = async (path: string): Promise<any> => {
   const data = await axios.get(path);
   return data;
 };
+
+export const mapAssetPath = (name: string) => `/assets/maps/${name}.json`;

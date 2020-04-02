@@ -1,22 +1,22 @@
 import { System, Entity, Not } from "ecsy";
-import client from "../colyseus";
-import { SendData, Remove, AwaitingPosition } from "../components/Tags";
-import NewMovementTarget from "../components/NewMovementTarget";
-import Movement from "../components/Movement";
-import CreateRemotePlayer from "../entities/RemotePlayer";
-import NetworkRoom, { RoomState } from "../components/NetworkRoom";
-import RemotePlayer from "../components/RemotePlayer";
-import TileMap from "../components/TileMap";
-import { Loadable } from "../components/Loadable";
-import Position from "../components/Position";
+import client from "../../colyseus";
+import { SendData, Remove, AwaitingPosition } from "../../components/Tags";
+import NewMovementTarget from "../../components/NewMovementTarget";
+import Movement from "../../components/Movement";
+import CreateRemotePlayer from "../../entities/RemotePlayer";
+import NetworkRoom, { RoomState } from "../../components/NetworkRoom";
+import RemotePlayer from "../../components/RemotePlayer";
+import TileMap from "../../components/TileMap";
+import { Loadable } from "../../components/Loadable";
+import Position from "../../components/Position";
 import {
   tileIdToVector,
   vectorToTileId
-} from "../utilities/TileMap/calculations";
-import addOffset from "../utilities/Vector/addOffset";
-import compassToVector from "../utilities/Compass/compassToVector";
-import LocalPlayer from "../components/LocalPlayer";
-import gameState from "../gameState";
+} from "../../utilities/TileMap/calculations";
+import addOffset from "../../utilities/Vector/addOffset";
+import compassToVector from "../../utilities/Compass/compassToVector";
+import LocalPlayer from "../../components/LocalPlayer";
+import gameState from "../../gameState";
 
 let connectionTimer: any;
 

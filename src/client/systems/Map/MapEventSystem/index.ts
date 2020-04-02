@@ -5,6 +5,7 @@ import TileMap from "../../../components/TileMap";
 import getNextTileData from "./getNextTileData";
 import LocalPlayer from "../../../components/LocalPlayer";
 import { DoorTileType } from "types/TileMap/ObjectTileStore";
+import { mapAssetPath } from "../../../utilities/assets";
 
 export default class TileMapObjectListener extends System {
   static queries = {
@@ -38,7 +39,7 @@ export default class TileMapObjectListener extends System {
           movement.tileQueue = [];
           movement.direction = undefined;
           tileMapEntity.addComponent(Unloadable, {
-            dataPath: `/assets/maps/${door.value.map}.json`
+            dataPath: mapAssetPath(door.value.map)
           });
         } else {
           if (direction || tileQueue.length) {
@@ -53,7 +54,7 @@ export default class TileMapObjectListener extends System {
               const nextMap = tileMap.properties[compass];
               if (nextMap) {
                 tileMapEntity.addComponent(Unloadable, {
-                  dataPath: `/assets/maps/${nextMap}.json`
+                  dataPath: mapAssetPath(nextMap)
                 });
               }
             }

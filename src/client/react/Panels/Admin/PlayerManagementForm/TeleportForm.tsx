@@ -18,6 +18,30 @@ export default () => {
     gameState.send("admin", "admin:list:requestAllMaps");
   }, []);
 
+  const toMe = () => {
+    gameState.subscribe("localPlayer:movement:response", movement => {
+      const roomName = gameState.rooms["map"].name;
+      if (selectedUser && roomName && movement.currentTile) {
+        gameState.send("admin", "admin:teleport:request", {
+          username: selectedUser,
+          map: roomName,
+          tileId: movement.currentTile
+        });
+      }
+      return false;
+    });
+
+    gameState.trigger("localPlayer:movement:request");
+  };
+
+  const meTo = () => {
+    if (selectedUser) {
+      gameState.send("admin", "admin:teleport:request", {
+        username: selectedUser
+      });
+    }
+  };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedMap && tileIdRef.current && selectedUser) {
@@ -29,6 +53,12 @@ export default () => {
     }
     return false;
   };
+
+  const teleportDisabled =
+    !selectedUser ||
+    !selectedMap ||
+    !tileIdRef.current ||
+    !tileIdRef.current.value;
 
   return (
     <SubSection label="Teleport">
@@ -48,8 +78,10 @@ export default () => {
           }
         />
         <TextInput ref={tileIdRef} placeholder="Enter Tile ID" type="number" />
-        <Button value="Teleport" disabled={!selectedUser} />
+        <Button value="Teleport" disabled={teleportDisabled} />
       </form>
+      <Button value="Teleport To Me" disabled={!selectedUser} onClick={toMe} />
+      <Button value="Teleport Me To" disabled={!selectedUser} onClick={meTo} />
     </SubSection>
   );
 };

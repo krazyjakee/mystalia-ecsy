@@ -6,6 +6,9 @@ export default class PlayerState extends Schema {
   @type("string")
   dbId?: string;
 
+  @type("string")
+  username?: string;
+
   @type("number")
   targetTile?: number;
 
@@ -19,6 +22,7 @@ export default class PlayerState extends Schema {
     super();
     this.dbId = user._id.toString();
     this.displayName = user.displayName;
+    this.username = user.username;
     this.role = user.metadata.role;
   }
 }

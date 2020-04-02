@@ -1,8 +1,8 @@
 import { System, Entity, Not } from "ecsy";
-import client from "../colyseus";
-import { Loadable } from "../components/Loadable";
-import LocalPlayer, { RoleCheckPending } from "../components/LocalPlayer";
-import gameState from "../gameState";
+import client from "../../colyseus";
+import { Loadable } from "../../components/Loadable";
+import LocalPlayer, { RoleCheckPending } from "../../components/LocalPlayer";
+import gameState from "../../gameState";
 
 export default class AdminNetworkSystem extends System {
   static queries = {

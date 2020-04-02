@@ -3,6 +3,7 @@ import { User, verifyToken, IUser } from "@colyseus/social";
 import MapState from "../components/map";
 import Player from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
+import { RoomMessage, GameStateEventName } from "types/gameState";
 
 export default class MapRoom extends Room<MapState> {
   async onAuth(client: Client, options: any) {
@@ -23,7 +24,18 @@ export default class MapRoom extends Room<MapState> {
     console.log(`${userId} joined ${this.roomName}`);
     this.state.players[client.sessionId] = new Player(user);
     savePlayerState(this.state.players[client.sessionId], this.roomName);
-    // TODO use presence and subscribe to user based event messages
+    this.presence.subscribe(
+      `${user.username}:commands`,
+      (data: RoomMessage<GameStateEventName>) => {
+        this.send(client, data);
+      }
+    );
+    this.presence.subscribe(`${user.username}:requestState`, () => {
+      this.presence.publish(`${user.username}:state`, {
+        state: this.state.players[client.sessionId],
+        room: this.roomName
+      });
+    });
   }
 
   onMessage(client: Client, message: any) {
@@ -37,8 +49,10 @@ export default class MapRoom extends Room<MapState> {
   async onLeave(client: Client, consented: boolean) {
     console.log(`${client.sessionId} left ${this.roomName}`);
     await savePlayerState(this.state.players[client.sessionId], this.roomName);
+    this.presence.unsubscribe(
+      `${this.state.players[client.sessionId].username}:commands`
+    );
     delete this.state.players[client.sessionId];
-    // TODO use presence and unsubscribe to user based event messages
   }
 
   async onDispose() {

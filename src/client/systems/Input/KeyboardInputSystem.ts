@@ -62,8 +62,6 @@ export default class KeyboardInputSystem extends System {
     const columns = tileMap.width;
     // @ts-ignore
     this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
-      const movement = entity.getMutableComponent(Movement);
-
       let direction;
 
       compassDirections.forEach(compassKey => {
@@ -81,9 +79,8 @@ export default class KeyboardInputSystem extends System {
           direction,
           columns
         );
-        //if (movement.targetTile !== target) {
+
         entity.addComponent(NewMovementTarget, { targetTile: target });
-        //}
       }
     });
   }
