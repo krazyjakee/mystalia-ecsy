@@ -25,7 +25,7 @@ export default class MouseInputSystem extends System {
   };
 
   init() {
-    const rootElem = document.getElementById("react-root");
+    const rootElem = document.getElementById("click-area");
 
     const mouseMove = (e: MouseEvent) => {
       this.cursorPosition = { x: e.x, y: e.y };

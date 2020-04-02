@@ -4,7 +4,7 @@ import User from "types/User";
 import MapChangeSystem from "./systems/Map/MapChangeSystem";
 import RenderingSystem from "./systems/Rendering/RenderingSystem";
 import LoadingSystem from "./systems/LoadingSystem";
-import NetworkingSystem from "./systems/NetworkingSystem";
+import NetworkingSystem from "./systems/Network/NetworkingSystem";
 import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
 import MouseInputSystem from "./systems/Input/MouseInputSystem";
 import MovementSystem from "./systems/MovementSystem";
@@ -16,12 +16,14 @@ import FadeSystem from "./systems/Rendering/FadeSystem";
 import PlayerNameSystem from "./systems/Rendering/PlayerNameSystem";
 import LightSystem from "./systems/Rendering/LightSystem/LightSystem";
 import TileAnimationSystem from "./systems/Rendering/TileAnimationSystem";
-
-import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
 import { World } from "ecsy";
 import CreateNetworkRoom from "./entities/NetworkRoom";
+import AdminNetworkSystem from "./systems/Network/AdminNetworkSystem";
+import CommandsSystem from "./systems/Network/CommandsSystem";
+
+import "./entities";
 
 let world = new World();
 
@@ -43,7 +45,9 @@ export default (user: User) => {
     .registerSystem(LightSystem)
     .registerSystem(TileAnimationSystem)
     .registerSystem(FadeSystem)
-    .registerSystem(PlayerNameSystem);
+    .registerSystem(PlayerNameSystem)
+    .registerSystem(CommandsSystem)
+    .registerSystem(AdminNetworkSystem);
 
   CreateNetworkRoom();
   CreateLocalPlayer(user);

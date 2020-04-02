@@ -25,6 +25,7 @@
     "@types/mongoose": "^5.7.7",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "@types/react-select": "^3.0.11",
     "@types/webpack": "^4.4.32",
     "@types/webpack-dev-middleware": "^2.0.2",
     "axios": "^0.19.2",
@@ -44,7 +45,10 @@
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-flexbox-grid": "latest",
     "react-jss": "^10.1.1",
+    "react-rnd": "^10.1.8",
+    "react-select": "^3.1.0",
     "ts-node": "^8.2.0",
     "typescript": "^3.5.1"
   },

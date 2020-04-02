@@ -1,7 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
 import Movement from "../../components/Movement";
-import { Loadable } from "../../components/Loadable";
+import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import { tileIdToPixels } from "../../utilities/TileMap/calculations";
 import { TMJ } from "types/TMJ";
@@ -12,7 +12,7 @@ import LocalPlayer from "../../components/LocalPlayer";
 export default class TileMapMover extends System {
   static queries = {
     loadedTileMaps: {
-      components: [Not(Loadable), Drawable, TileMap]
+      components: [Not(Loadable), Not(Unloadable), Drawable, TileMap]
     },
     player: {
       components: [Not(Loadable), LocalPlayer, Movement, Drawable]

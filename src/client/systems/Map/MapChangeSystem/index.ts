@@ -56,7 +56,6 @@ export default class TileMapChanger extends System {
 
         const drawable = tileMapEntity.getComponent(Drawable);
         const tileMap = tileMapEntity.getMutableComponent(TileMap);
-        const animatedTiles = tileMapEntity.getMutableComponent(AnimatedTile);
 
         if (loadable.dataPath) {
           loadable.loading = true;
@@ -72,17 +71,12 @@ export default class TileMapChanger extends System {
               drawable.data.height,
               tileMap.objectTileStore
             );
-
-            tileMap.reset();
-            drawable.reset();
           }
 
-          await loadTileMap(
-            loadable.dataPath,
-            drawable,
-            tileMap,
-            animatedTiles
-          );
+          tileMap.reset();
+          drawable.reset();
+
+          await loadTileMap(loadable.dataPath, drawable, tileMap);
 
           const tilePixels = tileIdToPixels(tileId, drawable.data.width);
           const tileVector = tileIdToVector(tileId, drawable.data.width);

@@ -6,16 +6,24 @@ export default class PlayerState extends Schema {
   @type("string")
   dbId?: string;
 
+  @type("string")
+  username?: string;
+
   @type("number")
   targetTile?: number;
 
   @type("string")
   displayName?: string;
 
+  @type("number")
+  role?: number;
+
   constructor(user: IUser) {
     super();
     this.dbId = user._id.toString();
     this.displayName = user.displayName;
+    this.username = user.username;
+    this.role = user.metadata.role;
   }
 }
 
@@ -30,6 +38,7 @@ hooks.beforeAuthenticate((_, $setOnInsert) => {
     const customName = nameByRace("elf", { gender: "male" });
     if (typeof customName === "string") {
       $setOnInsert.displayName = customName;
+      $setOnInsert.username = customName.toLowerCase();
     }
   }
   $setOnInsert.metadata = UserDBState;

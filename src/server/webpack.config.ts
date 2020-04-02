@@ -15,6 +15,11 @@ const config = {
       {
         test: /\.s[ac]ss$/i,
         use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader",
+        include: /flexboxgrid/
       }
     ]
   },

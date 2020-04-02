@@ -1,21 +1,23 @@
 import React from "react";
-
 import { BasePanel as BasePanelComponent } from "./BasePanel";
-import { PanelSection as PanelSectionComponent } from "./PanelSection";
+import { Section as SectionComponent } from "./Section";
+import AdminPanelComponent from "./Admin/AdminPanel";
 
 export default {
   title: "Panels"
 };
 
-export const BasePanel = () => <BasePanelComponent title="Panel Title" />;
-
-export const PanelSection = () => (
-  <PanelSectionComponent style={{ height: 200 }} />
+export const BasePanel = () => (
+  <BasePanelComponent
+    title="Panel Title"
+    rndOptions={{
+      defaultWidth: 800,
+      defaultHeight: 200
+    }}
+    isDraggable={true}
+  />
 );
 
-export const PanelWithSections = () => (
-  <BasePanelComponent title="Panel Title With Sections" style={{ width: 800 }}>
-    <PanelSectionComponent style={{ flex: 1 }} />
-    <PanelSectionComponent style={{ flex: 1 }} />
-  </BasePanelComponent>
-);
+export const PanelSection = () => <SectionComponent style={{ height: 200 }} />;
+
+export const AdminPanel = () => <AdminPanelComponent forceEnable={true} />;
