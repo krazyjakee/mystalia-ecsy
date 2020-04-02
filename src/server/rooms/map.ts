@@ -22,7 +22,7 @@ export default class MapRoom extends Room<MapState> {
   onJoin(client: Client, options: any, user: IUser) {
     const userId = user.isAnonymous ? user._id : user.username;
     console.log(`${userId} joined ${this.roomName}`);
-    this.state.players[client.sessionId] = new Player(user);
+    this.state.players[client.sessionId] = new Player(user, this.roomName);
     savePlayerState(this.state.players[client.sessionId], this.roomName);
     this.presence.subscribe(
       `${user.username}:commands`,
@@ -31,10 +31,10 @@ export default class MapRoom extends Room<MapState> {
       }
     );
     this.presence.subscribe(`${user.username}:requestState`, () => {
-      this.presence.publish(`${user.username}:state`, {
-        state: this.state.players[client.sessionId],
-        room: this.roomName
-      });
+      this.presence.publish(
+        `${user.username}:state`,
+        this.state.players[client.sessionId]
+      );
     });
   }
 
@@ -49,9 +49,11 @@ export default class MapRoom extends Room<MapState> {
   async onLeave(client: Client, consented: boolean) {
     console.log(`${client.sessionId} left ${this.roomName}`);
     await savePlayerState(this.state.players[client.sessionId], this.roomName);
-    this.presence.unsubscribe(
-      `${this.state.players[client.sessionId].username}:commands`
-    );
+
+    const username = this.state.players[client.sessionId].username;
+    this.presence.unsubscribe(`${username}:commands`);
+    this.presence.unsubscribe(`${username}:requestState`);
+
     delete this.state.players[client.sessionId];
   }
 

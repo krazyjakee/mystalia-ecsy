@@ -4,26 +4,30 @@ import { nameByRace } from "fantasy-name-generator";
 
 export default class PlayerState extends Schema {
   @type("string")
-  dbId?: string;
+  dbId: string;
 
   @type("string")
-  username?: string;
+  username: string;
 
   @type("number")
   targetTile?: number;
 
   @type("string")
-  displayName?: string;
+  displayName: string;
 
   @type("number")
-  role?: number;
+  role: number;
 
-  constructor(user: IUser) {
+  @type("string")
+  currentRoom: string;
+
+  constructor(user: IUser, room: string) {
     super();
     this.dbId = user._id.toString();
     this.displayName = user.displayName;
     this.username = user.username;
     this.role = user.metadata.role;
+    this.currentRoom = room;
   }
 }
 

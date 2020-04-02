@@ -69,12 +69,12 @@ export default class AdminRoom extends Room<AdminState> {
         // Teleport me to
         this.presence.subscribe(
           `${username}:state`,
-          ({ state, room }: { state: PlayerState; room: string }) => {
-            if (room && state.targetTile) {
+          ({ currentRoom, targetTile }: PlayerState) => {
+            if (currentRoom && targetTile) {
               const response: RoomMessage<"admin:teleport:response"> = {
                 command: "admin:teleport:response",
-                map: room,
-                tileId: state.targetTile
+                map: currentRoom,
+                tileId: targetTile
               };
               this.send(client, response);
             }
