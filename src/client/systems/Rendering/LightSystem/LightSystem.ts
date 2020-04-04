@@ -1,8 +1,6 @@
 import { System, Entity, Not } from "ecsy";
-import { LightTileType } from "types/TileMap/ObjectTileStore";
 import { Loadable } from "../../../components/Loadable";
 import TileMap from "../../../components/TileMap";
-import { tileIdToPixels } from "../../../utilities/TileMap/calculations";
 import context2d from "../../../canvas";
 import Drawable from "../../../components/Drawable";
 import addOffset from "../../../utilities/Vector/addOffset";
@@ -11,6 +9,7 @@ import Position from "../../../components/Position";
 import { drawLightSource } from "./lightRenderFunctions";
 import config from "../../../config.json";
 import { timeOfDayAsPercentage } from "../../../utilities/time";
+import { tileIdToPixels } from "utilities/tileMap";
 // import gradient from "gradient-color";
 
 const imageMask = new Image();
@@ -109,12 +108,12 @@ export default class LightSystem extends System {
       Object.keys(tileMap.objectTileStore.store).forEach(key => {
         const tileId = parseInt(key);
         const tilePosition = tileIdToPixels(tileId, tileMap.width);
-        const lightTile = tileMap.objectTileStore.getByType<LightTileType>(
+        const lightTile = tileMap.objectTileStore.getByType<"light">(
           tileId,
           "light"
         );
         if (lightTile && lightTile.value) {
-          const lightTileProperties = lightTile.value as LightTileType;
+          const lightTileProperties = lightTile.value;
 
           if (lightTile.type === "light") {
             const position = addOffset(offset, tilePosition);

@@ -12,7 +12,7 @@ interface Attributes {
   y: number;
 }
 
-export type LayerType = "tilelayer" | "objectlayer";
+export type LayerType = "tilelayer" | "objectgroup";
 
 interface Layer {
   id: string;

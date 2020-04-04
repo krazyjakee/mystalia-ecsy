@@ -3,11 +3,11 @@ import Drawable from "../../components/Drawable";
 import Movement from "../../components/Movement";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
-import { tileIdToPixels } from "../../utilities/TileMap/calculations";
 import { TMJ } from "types/TMJ";
 import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
 import LocalPlayer from "../../components/LocalPlayer";
+import { tileIdToPixels } from "utilities/tileMap";
 
 export default class TileMapMover extends System {
   static queries = {

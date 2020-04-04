@@ -2,10 +2,6 @@ import { System, Entity, Not } from "ecsy";
 import Movement from "../../components/Movement";
 import TileMap from "../../components/TileMap";
 import { Loadable } from "../../components/Loadable";
-import {
-  tileIdToVector,
-  vectorToTileId
-} from "../../utilities/TileMap/calculations";
 import directionFromTile from "../../utilities/TileMap/directionFromTile";
 import compassToVector from "../../utilities/Compass/compassToVector";
 import addOffset from "../../utilities/Vector/addOffset";
@@ -14,6 +10,7 @@ import { SendData } from "../../components/Tags";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import roundVector from "../../utilities/Vector/roundVector";
 import awaitingTarget from "./awaitingTarget";
+import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 
 export default class MovementSystem extends System {
   static queries = {

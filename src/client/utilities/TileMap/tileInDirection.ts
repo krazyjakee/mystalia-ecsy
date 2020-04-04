@@ -1,5 +1,5 @@
 import { Direction } from "types/Grid";
-import { vectorToTileId, tileIdToVector } from "./calculations";
+import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 import addOffset from "../Vector/addOffset";
 import compassToVector from "../Compass/compassToVector";
 

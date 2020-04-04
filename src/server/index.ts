@@ -7,7 +7,6 @@ import * as cors from "cors";
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 import socialRoutes from "@colyseus/social/express";
-import { getMapProperties } from "./utilities/tmjTools";
 import healthCheck from "./utilities/healthChecks";
 import MapRoom from "./rooms/map";
 import AdminRoom from "./rooms/admin";

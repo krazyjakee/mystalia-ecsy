@@ -4,8 +4,11 @@ import MapState from "../components/map";
 import Player from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
+import ItemSpawner from "../utilities/itemSpawner";
 
 export default class MapRoom extends Room<MapState> {
+  itemSpawner?: ItemSpawner;
+
   async onAuth(client: Client, options: any) {
     // verify token authenticity
     const token = verifyToken(options.token);
@@ -17,6 +20,7 @@ export default class MapRoom extends Room<MapState> {
   onCreate() {
     console.log(`MapRoom "${this.roomName}" created`);
     this.setState(new MapState());
+    this.itemSpawner = new ItemSpawner(this.roomName, this.state.items);
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -24,12 +28,14 @@ export default class MapRoom extends Room<MapState> {
     console.log(`${userId} joined ${this.roomName}`);
     this.state.players[client.sessionId] = new Player(user, this.roomName);
     savePlayerState(this.state.players[client.sessionId], this.roomName);
+
     this.presence.subscribe(
       `${user.username}:commands`,
       (data: RoomMessage<GameStateEventName>) => {
         this.send(client, data);
       }
     );
+
     this.presence.subscribe(`${user.username}:requestState`, () => {
       this.presence.publish(
         `${user.username}:state`,
@@ -58,6 +64,10 @@ export default class MapRoom extends Room<MapState> {
   }
 
   async onDispose() {
+    if (this.itemSpawner) {
+      this.itemSpawner.dispose();
+    }
+
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
       await Promise.all(

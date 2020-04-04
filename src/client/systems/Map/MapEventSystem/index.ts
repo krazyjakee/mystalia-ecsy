@@ -4,7 +4,6 @@ import { Loadable, Unloadable } from "../../../components/Loadable";
 import TileMap from "../../../components/TileMap";
 import getNextTileData from "./getNextTileData";
 import LocalPlayer from "../../../components/LocalPlayer";
-import { DoorTileType } from "types/TileMap/ObjectTileStore";
 import { mapAssetPath } from "../../../utilities/assets";
 
 export default class TileMapObjectListener extends System {
@@ -31,10 +30,7 @@ export default class TileMapObjectListener extends System {
 
         const { objectTileStore } = tileMap;
 
-        const door = objectTileStore.getByType<DoorTileType>(
-          currentTile,
-          "door"
-        );
+        const door = objectTileStore.getByType<"door">(currentTile, "door");
         if (door) {
           movement.tileQueue = [];
           movement.direction = undefined;

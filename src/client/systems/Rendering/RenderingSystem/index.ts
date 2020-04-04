@@ -136,7 +136,7 @@ export default class TileMapDrawer extends System {
                 tileMap.tiles.push(newTile);
               }
             });
-          } else {
+          } else if (!tileMap.objectLayerIndex) {
             tileMap.objectLayerIndex = tileMap.tiles.length;
           }
         }

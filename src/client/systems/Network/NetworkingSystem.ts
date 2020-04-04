@@ -9,14 +9,11 @@ import RemotePlayer from "../../components/RemotePlayer";
 import TileMap from "../../components/TileMap";
 import { Loadable } from "../../components/Loadable";
 import Position from "../../components/Position";
-import {
-  tileIdToVector,
-  vectorToTileId
-} from "../../utilities/TileMap/calculations";
 import addOffset from "../../utilities/Vector/addOffset";
 import compassToVector from "../../utilities/Compass/compassToVector";
 import LocalPlayer from "../../components/LocalPlayer";
 import gameState from "../../gameState";
+import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 
 let connectionTimer: any;
 

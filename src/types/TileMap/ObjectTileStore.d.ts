@@ -1,26 +1,31 @@
-export type ObjectTileTypeString = "" | "block" | "door" | "light";
-
-export type BlockTileType = null;
-
-export type DoorTileType = {
-  map: string;
-  tile: number;
+export type ObjectTileType = {
+  "": null;
+  block: null;
+  door: {
+    map: string;
+    tile: number;
+  };
+  light: {
+    radius: number;
+    color?: string;
+    intensity?: number;
+  };
+  item: {
+    itemId: number;
+    chance: number;
+    quantity?: number;
+    maximumQuantity?: number;
+  };
 };
 
-export type LightTileType = {
-  radius: number;
-  color?: string;
-  intensity?: number;
-};
+export type ObjectTileTypeString = keyof ObjectTileType;
 
-export type ObjectTileType = DoorTileType | BlockTileType | LightTileType;
-
-export type ObjectTile<T> = {
+export type ObjectTile<T extends ObjectTileTypeString = any> = {
   name: string;
-  type: ObjectTileTypeString;
-  value: T;
+  type: T;
+  value: ObjectTileType[T];
 };
 
 export type ObjectTileStoreType = {
-  [key: number]: ObjectTile<any>[];
+  [key: number]: ObjectTile[];
 };

@@ -4,12 +4,12 @@ import Movement from "../../components/Movement";
 import Position from "../../components/Position";
 import TileMap from "../../components/TileMap";
 import { Direction } from "types/Grid";
-import { vectorToTileId } from "../../utilities/TileMap/calculations";
 import { Loadable } from "../../components/Loadable";
 import { compassDirections } from "../../utilities/Compass/compassDirections";
 import tileInDirection from "../../utilities/TileMap/tileInDirection";
 import roundVector from "../../utilities/Vector/roundVector";
 import NewMovementTarget from "../../components/NewMovementTarget";
+import { vectorToTileId } from "utilities/tileMap";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],

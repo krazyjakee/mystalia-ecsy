@@ -1,5 +1,5 @@
 import { Direction } from "types/Grid";
-import { tileIdToVector } from "./calculations";
+import { tileIdToVector } from "utilities/tileMap";
 
 export default (from: number, to: number, columns: number): Direction => {
   const fromVector = tileIdToVector(from, columns);

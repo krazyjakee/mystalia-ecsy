@@ -1,15 +1,12 @@
 import { Entity } from "ecsy";
 import Movement from "../../components/Movement";
-import {
-  tileIdToVector,
-  vectorToTileId
-} from "../../utilities/TileMap/calculations";
 import Position from "../../components/Position";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import tileInDirection from "../../utilities/TileMap/tileInDirection";
 import roundVector from "../../utilities/Vector/roundVector";
 import TileMap from "../../components/TileMap";
+import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 
 export default (entity: Entity, tileMap: TileMap) => {
   const columns = tileMap.width;
