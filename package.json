@@ -30,7 +30,7 @@
     "@types/webpack-dev-middleware": "^2.0.2",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
-    "colyseus": "^0.12.3",
+    "colyseus": "^0.12.5",
     "colyseus.js": "^0.12.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

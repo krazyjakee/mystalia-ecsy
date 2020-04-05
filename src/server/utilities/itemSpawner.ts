@@ -35,21 +35,17 @@ export default class ItemSpawner {
   }
 
   getItem(tileId: number, itemId?: number) {
-    let returnItem: ItemState | undefined;
-    Object.keys(this.itemState).forEach((key: string) => {
-      const item = this.itemState[key] as ItemState;
-      if (item.active === true && item.tileId === tileId) {
-        if (itemId) {
-          if (itemId === item.itemId) {
-            returnItem = item;
-          }
-        } else {
-          returnItem = item;
+    const keys = Object.keys(this.itemState);
+    for (let i = 0; i < keys.length; i += 1) {
+      const item = this.itemState[keys[i]] as ItemState;
+      if (item.tileId && item.tileId === tileId) {
+        if ((itemId && itemId === item.itemId) || !itemId) {
+          delete this.itemState[keys[i]];
+          return item;
         }
       }
-    });
-
-    return returnItem || null;
+    }
+    return null;
   }
 
   dispose() {

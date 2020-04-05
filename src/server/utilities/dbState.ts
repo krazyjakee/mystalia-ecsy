@@ -6,10 +6,17 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
     const user = await users.findById(player.dbId);
 
     if (user) {
+      const inventory = Object.keys(player.inventory)
+        .filter((key) => player.inventory[key].itemId)
+        .map((key) => {
+          const { itemId, position, quantity } = player.inventory[key];
+          return { itemId, position, quantity };
+        });
+
       const newData: Partial<IUser> = {
         metadata: {
           ...user.metadata,
-          inventory: player.inventory,
+          inventory,
           room,
         },
       };

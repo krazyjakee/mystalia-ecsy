@@ -18,6 +18,7 @@ import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
 import items from "../../data/items.json";
 import Item from "../../components/Item";
+import { isPresent } from "utilities/guards";
 
 let connectionTimer: any;
 
@@ -140,23 +141,39 @@ export default class NetworkingSystem extends System {
         };
 
         networkRoom.room.state.items.onAdd = (item) => {
-          const itemSpec = items.find((i) => i.id === item.itemId);
-          if (itemSpec) {
-            CreateItem(item, itemSpec);
+          if (isPresent(item.itemId)) {
+            const itemSpec = items.find((i) => i.id === item.itemId);
+            if (itemSpec) {
+              //@ts-ignore
+              const exists = this.queries.loadedItems.results.find(
+                (itemEntity: Entity) => {
+                  const itemComponent = itemEntity.getComponent(Item);
+                  return (
+                    itemComponent.itemId === item.itemId &&
+                    item.tileId === itemComponent.tileId
+                  );
+                }
+              );
+              if (!exists) {
+                CreateItem(item, itemSpec);
+              }
+            }
           }
         };
 
-        networkRoom.room.state.items.onRemove = (item) => {
-          //@ts-ignore
-          this.queries.loadedItems.results.forEach((itemEntity: Entity) => {
-            const itemComponent = itemEntity.getComponent(Item);
-            if (
-              itemComponent.itemId === item.itemId &&
-              item.tileId === itemComponent.tileId
-            ) {
-              itemEntity.remove();
-            }
-          });
+        networkRoom.room.state.items.onRemove = (item, key) => {
+          if (isPresent(item.itemId)) {
+            //@ts-ignore
+            this.queries.loadedItems.results.forEach((itemEntity: Entity) => {
+              const itemComponent = itemEntity.getComponent(Item);
+              if (
+                itemComponent.itemId === item.itemId &&
+                item.tileId === itemComponent.tileId
+              ) {
+                itemEntity.remove();
+              }
+            });
+          }
         };
 
         networkRoom.room.onLeave(() => {

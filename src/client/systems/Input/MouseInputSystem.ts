@@ -17,11 +17,11 @@ export default class MouseInputSystem extends System {
 
   static queries = {
     mouseEnabledEntities: {
-      components: [MouseInput, Movement]
+      components: [MouseInput, Movement],
     },
     tileMaps: {
-      components: [TileMap, Not(Loadable), Drawable]
-    }
+      components: [TileMap, Not(Loadable), Drawable],
+    },
   };
 
   init() {
@@ -67,10 +67,9 @@ export default class MouseInputSystem extends System {
     // @ts-ignore
     this.queries.mouseEnabledEntities.results.forEach((entity: Entity) => {
       if (!this.clickedPosition) return;
-      const movement = entity.getMutableComponent(Movement);
       const offsetClickedPosition = {
         x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,
-        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32
+        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32,
       };
       const clickedTile = vectorToTileId(
         offsetClickedPosition,

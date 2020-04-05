@@ -48,10 +48,10 @@ export const addItemToPlayer = (
   positions.sort();
   const len = inventoryKeys.length;
   const sum = ((len + 1) * (positions[0] + positions[len - 1])) / 2;
-  const missingPosition = sum - positions.reduce((x, y) => x + y);
+  const missingPosition = sum - positions.reduce((x, y) => x + y, 0);
   inventoryState[inventoryKeys.length] = new InventoryState(
     item.itemId,
-    missingPosition,
+    missingPosition || 0,
     item.quantity
   );
 };

@@ -7,6 +7,7 @@ import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../utilities/itemSpawner";
 
 export default class MapRoom extends Room<MapState> {
+  // autoDispose: boolean = false;
   itemSpawner?: ItemSpawner;
 
   async onAuth(client: Client, options: any) {

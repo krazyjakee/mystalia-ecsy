@@ -10,9 +10,6 @@ export default class ItemState extends Schema {
   @type("number")
   tileId: number;
 
-  @type("boolean")
-  active: boolean = true;
-
   constructor(id: number, tileId: number, quantity?: number) {
     super();
     this.itemId = id;

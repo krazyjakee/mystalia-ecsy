@@ -1,7 +1,7 @@
 import {
   GameStateEventName,
   GameStateEvents,
-  RoomMessage
+  RoomMessage,
 } from "types/gameState";
 import { Room } from "colyseus.js";
 
@@ -39,7 +39,7 @@ class GameState {
   callbacks: CallbacksContainer<any> = {};
 
   addRoom(type: RoomTypes, room: Room) {
-    room.onMessage(data => {
+    room.onMessage((data) => {
       this.trigger(data.command, data);
     });
     this.rooms[type] = room;
@@ -57,7 +57,7 @@ class GameState {
     if (this.rooms[type]) {
       const messageData = {
         command: name,
-        ...data
+        ...data,
       };
 
       this.rooms[type].send(messageData);
@@ -73,7 +73,7 @@ class GameState {
     const hash = makeHash(callback.toString());
     const callbackObject: CallbackObject<T> = {
       callback,
-      hash
+      hash,
     };
 
     this.callbacks[eventName]
@@ -87,7 +87,9 @@ class GameState {
   ) {
     if (this.callbacks[eventName]) {
       const hash = makeHash(callback.toString());
-      const index = this.callbacks[eventName].findIndex(cb => cb.hash === hash);
+      const index = this.callbacks[eventName].findIndex(
+        (cb) => cb.hash === hash
+      );
       if (index > -1) {
         this.callbacks[eventName].splice(index, 1);
       }
@@ -99,7 +101,7 @@ class GameState {
     options?: GameStateEvents[T]
   ) {
     if (this.callbacks[eventName]) {
-      this.callbacks[eventName].forEach(callbackObject => {
+      this.callbacks[eventName].forEach((callbackObject) => {
         if (callbackObject.callback(options) === false) {
           this.unsubscribe(eventName, callbackObject.callback);
         }
