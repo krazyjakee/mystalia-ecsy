@@ -28,14 +28,28 @@ export default class ItemSpawner {
           (this.itemState[index] && !this.itemState[index].active) ||
           !this.itemState[index]
         ) {
-          this.itemState[index] = new ItemState(
-            item.itemId,
-            item.tileId,
-            quantity
-          );
+          this.itemState[index] = new ItemState(item.id, item.tileId, quantity);
         }
       }
     });
+  }
+
+  getItem(tileId: number, itemId?: number) {
+    let returnItem: ItemState | undefined;
+    Object.keys(this.itemState).forEach((key: string) => {
+      const item = this.itemState[key] as ItemState;
+      if (item.active === true && item.tileId === tileId) {
+        if (itemId) {
+          if (itemId === item.itemId) {
+            returnItem = item;
+          }
+        } else {
+          returnItem = item;
+        }
+      }
+    });
+
+    return returnItem || null;
   }
 
   dispose() {

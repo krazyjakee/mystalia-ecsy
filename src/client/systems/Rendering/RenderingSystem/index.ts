@@ -5,7 +5,7 @@ import TileMap from "../../../components/TileMap";
 import {
   drawImage,
   drawToShadowCanvas,
-  drawableToDrawableProperties
+  drawableToDrawableProperties,
 } from "../../../utilities/drawing";
 import { TMJ } from "types/TMJ";
 import createDrawableTile from "./createDrawableTile";
@@ -14,16 +14,20 @@ import Position from "../../../components/Position";
 import addOffset from "../../../utilities/Vector/addOffset";
 import context2d from "../../../canvas";
 import AnimatedTile from "../../../components/AnimatedTile";
+import Item from "../../../components/Item";
 import { DrawableProperties } from "types/drawable";
 
 export default class TileMapDrawer extends System {
   static queries = {
     loadedTileMaps: {
-      components: [Not(Loadable), Drawable, TileMap]
+      components: [Not(Loadable), Drawable, TileMap],
     },
     players: {
-      components: [Not(Loadable), Drawable, Movement, Position]
-    }
+      components: [Not(Loadable), Drawable, Movement, Position],
+    },
+    loadedItems: {
+      components: [Not(Loadable), Item],
+    },
   };
 
   execute() {
@@ -61,7 +65,7 @@ export default class TileMapDrawer extends System {
           y: 0,
           width: window.innerWidth,
           height: window.innerHeight,
-          offset: { x: 0, y: 0 }
+          offset: { x: 0, y: 0 },
         };
 
         const drawableWithOffset = (
@@ -72,18 +76,27 @@ export default class TileMapDrawer extends System {
           ...d,
           offset: addOffset(offset, {
             x: x ? x : 0,
-            y: y ? y : 0
-          })
+            y: y ? y : 0,
+          }),
         });
 
         drawImage({
           ...baseCanvasProperties,
-          image: canvasCache[0]
+          image: canvasCache[0],
         });
 
         animatedTiles.drawables[1].forEach(
-          tile => tile.drawable && drawImage(drawableWithOffset(tile.drawable))
+          (tile) =>
+            tile.drawable && drawImage(drawableWithOffset(tile.drawable))
         );
+
+        // @ts-ignore
+        this.queries.loadedItems.results.forEach((itemEntity: Entity) => {
+          const itemDrawable = itemEntity.getComponent(Drawable);
+          drawImage(
+            drawableWithOffset(drawableToDrawableProperties(itemDrawable))
+          );
+        });
 
         // @ts-ignore
         this.queries.players.results.forEach((player: Entity) => {
@@ -99,12 +112,13 @@ export default class TileMapDrawer extends System {
         });
 
         animatedTiles.drawables[0].forEach(
-          tile => tile.drawable && drawImage(drawableWithOffset(tile.drawable))
+          (tile) =>
+            tile.drawable && drawImage(drawableWithOffset(tile.drawable))
         );
 
         drawImage({
           ...baseCanvasProperties,
-          image: canvasCache[1]
+          image: canvasCache[1],
         });
       } else if (tiles.length) {
         // Below player

@@ -22,6 +22,7 @@ import { World } from "ecsy";
 import CreateNetworkRoom from "./entities/NetworkRoom";
 import AdminNetworkSystem from "./systems/Network/AdminNetworkSystem";
 import CommandsSystem from "./systems/Network/CommandsSystem";
+import ItemSystem from "./systems/Rendering/ItemSystem";
 
 import "./entities";
 
@@ -31,7 +32,6 @@ export const getWorld = () => world;
 
 export default (user: User) => {
   world
-    .registerSystem(LoadingSystem)
     .registerSystem(KeyboardInputSystem)
     .registerSystem(MouseInputSystem)
     .registerSystem(NetworkingSystem)
@@ -40,6 +40,7 @@ export default (user: User) => {
     .registerSystem(MapEventSystem)
     .registerSystem(MovementSystem)
     .registerSystem(AnimationSystem)
+    .registerSystem(ItemSystem)
     .registerSystem(PlayerAnimationSystem)
     .registerSystem(RenderingSystem)
     .registerSystem(LightSystem)
@@ -47,7 +48,8 @@ export default (user: User) => {
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)
     .registerSystem(CommandsSystem)
-    .registerSystem(AdminNetworkSystem);
+    .registerSystem(AdminNetworkSystem)
+    .registerSystem(LoadingSystem);
 
   CreateNetworkRoom();
   CreateLocalPlayer(user);

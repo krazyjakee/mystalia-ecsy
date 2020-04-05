@@ -1,7 +1,7 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
 import MapState from "../components/map";
-import Player from "../components/player";
+import Player, { addItemToPlayer } from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../utilities/itemSpawner";
@@ -44,11 +44,27 @@ export default class MapRoom extends Room<MapState> {
     });
   }
 
-  onMessage(client: Client, message: any) {
-    const player = this.state.players[client.sessionId];
+  onMessage(client: Client, message: RoomMessage<GameStateEventName>) {
+    const player = this.state.players[client.sessionId] as Player;
 
-    if (message.command === "move" && message.targetTile) {
-      player.targetTile = message.targetTile;
+    if (message.command === "localPlayer:movement:report") {
+      const moveMessage = message as RoomMessage<"localPlayer:movement:report">;
+      player.targetTile = moveMessage.targetTile;
+    }
+
+    if (message.command === "localPlayer:inventory:pickup") {
+      const pickupMessage = message as RoomMessage<
+        "localPlayer:inventory:pickup"
+      >;
+      if (this.itemSpawner && player.targetTile) {
+        const item = this.itemSpawner.getItem(
+          player.targetTile,
+          pickupMessage.itemId
+        );
+        if (item) {
+          addItemToPlayer(player.inventory, item);
+        }
+      }
     }
   }
 
@@ -71,7 +87,7 @@ export default class MapRoom extends Room<MapState> {
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
       await Promise.all(
-        sessionIds.map(sessionId =>
+        sessionIds.map((sessionId) =>
           savePlayerState(this.state.players[sessionId], this.roomName)
         )
       );

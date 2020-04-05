@@ -1,21 +1,25 @@
 import { Vector } from "types/Grid";
 import {
   ObjectTileTypeString,
-  ObjectTileType
+  ObjectTileType,
 } from "types/TileMap/ObjectTileStore";
 import { Property } from "types/TMJ";
 
 export const tileIdToVector = (number: number, columns: number): Vector => {
   return {
     x: number % columns,
-    y: Math.floor(number / columns)
+    y: Math.floor(number / columns),
   };
 };
 
-export const tileIdToPixels = (number: number, columns: number): Vector => {
+export const tileIdToPixels = (
+  number: number,
+  columns: number,
+  tileSize: number = 32
+): Vector => {
   return {
-    x: (number % columns) * 32,
-    y: Math.floor(number / columns) * 32
+    x: (number % columns) * tileSize,
+    y: Math.floor(number / columns) * tileSize,
   };
 };
 
@@ -25,9 +29,13 @@ export const vectorToTileId = ({ x, y }: Vector, columns: number) => {
   return row * columns + column;
 };
 
-export const pixelsToTileId = ({ x, y }: Vector, columns: number) => {
-  const column = Math.floor(x / 32);
-  const row = Math.floor(y / 32);
+export const pixelsToTileId = (
+  { x, y }: Vector,
+  columns: number,
+  tileSize: number = 32
+) => {
+  const column = Math.floor(x / tileSize);
+  const row = Math.floor(y / tileSize);
   return row * columns + column;
 };
 
@@ -40,7 +48,7 @@ export const serializeProperties = <
   if (properties) {
     // @ts-ignore Need somewhere to start building the object
     property = {};
-    properties.forEach(objectProperty => {
+    properties.forEach((objectProperty) => {
       if (objectProperty.name) {
         // @ts-ignore Can't think of a better way to type this right now.
         property[objectProperty.name] = objectProperty.value;

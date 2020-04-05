@@ -20,9 +20,15 @@ export interface GameStateEvents {
     map: string;
     tileId: number;
   };
+  "localPlayer:movement:report": {
+    targetTile: number;
+  };
   "localPlayer:movement:request": undefined;
   "localPlayer:movement:response": {
     currentTile: number;
+  };
+  "localPlayer:inventory:pickup": {
+    itemId?: number;
   };
 }
 

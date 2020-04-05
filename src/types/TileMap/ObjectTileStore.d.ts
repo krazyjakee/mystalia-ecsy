@@ -11,7 +11,7 @@ export type ObjectTileType = {
     intensity?: number;
   };
   item: {
-    itemId: number;
+    id: number;
     chance: number;
     quantity?: number;
     maximumQuantity?: number;

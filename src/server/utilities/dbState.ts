@@ -9,8 +9,9 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
       const newData: Partial<IUser> = {
         metadata: {
           ...user.metadata,
-          room: room
-        }
+          inventory: player.inventory,
+          room,
+        },
       };
 
       if (player.targetTile) {
@@ -18,7 +19,7 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
       }
 
       await user.updateOne({
-        $set: newData
+        $set: newData,
       });
     }
   }
