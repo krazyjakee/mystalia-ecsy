@@ -15,7 +15,9 @@ import { readMapFiles } from "./utilities/mapFiles";
 const port = parseInt(process.env.PORT || "8080");
 const app = express();
 
-if (process.env.NODE_ENV === "development") {
+const isProduction = process.env.NODE_ENV !== "development";
+
+if (!isProduction) {
   const webpack = require("webpack");
   const webpackDevMiddleware = require("webpack-dev-middleware");
   const config = require("./webpack.config").default;
@@ -41,7 +43,8 @@ app.use("/", socialRoutes);
 
 const server = http.createServer(app);
 const gameServer = new Server({
-  server
+  server,
+  gracefullyShutdown: false
 });
 
 function shutdown(signal: string) {
