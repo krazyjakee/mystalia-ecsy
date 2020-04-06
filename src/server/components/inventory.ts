@@ -1,5 +1,9 @@
 import { Schema, type } from "@colyseus/schema";
-import ItemState from "./item";
+
+export type InventoryStateProps = Pick<
+  InventoryState,
+  "itemId" | "position" | "quantity"
+>;
 
 export default class InventoryState extends Schema {
   @type("number")
@@ -11,7 +15,7 @@ export default class InventoryState extends Schema {
   @type("number")
   quantity: number;
 
-  constructor(itemId: number, position: number, quantity: number = 1) {
+  constructor({ itemId, position, quantity = 1 }: InventoryStateProps) {
     super();
     this.itemId = itemId;
     this.position = position;

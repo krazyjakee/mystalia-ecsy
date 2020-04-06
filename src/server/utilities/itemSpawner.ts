@@ -1,7 +1,7 @@
-import { TMJ, Property } from "types/TMJ";
 import { readMapFiles, getTilesByType, SerializedObject } from "./mapFiles";
 import ItemState from "serverState/item";
 import { MapSchema } from "@colyseus/schema";
+import { safeMapSchemaIndex } from "./colyseusState";
 
 export default class ItemSpawner {
   itemState: MapSchema<ItemState>;
@@ -19,16 +19,18 @@ export default class ItemSpawner {
 
   tick() {
     this.mapItems.forEach((item, index) => {
+      const safeIndex = safeMapSchemaIndex(index);
       const chance = Math.floor(Math.random() * item.chance);
       const quantity = item.maximumQuantity
         ? Math.floor(Math.random() * item.maximumQuantity)
         : item.quantity;
       if (chance === 1) {
-        if (
-          (this.itemState[index] && !this.itemState[index].active) ||
-          !this.itemState[index]
-        ) {
-          this.itemState[index] = new ItemState(item.id, item.tileId, quantity);
+        if (!this.itemState[safeIndex]) {
+          this.itemState[safeIndex] = new ItemState(
+            item.id,
+            item.tileId,
+            quantity
+          );
         }
       }
     });
@@ -37,10 +39,11 @@ export default class ItemSpawner {
   getItem(tileId: number, itemId?: number) {
     const keys = Object.keys(this.itemState);
     for (let i = 0; i < keys.length; i += 1) {
-      const item = this.itemState[keys[i]] as ItemState;
-      if (item.tileId && item.tileId === tileId) {
+      const safeIndex = keys[i];
+      const item = this.itemState[safeIndex] as ItemState;
+      if (item && item.tileId && item.tileId === tileId) {
         if ((itemId && itemId === item.itemId) || !itemId) {
-          delete this.itemState[keys[i]];
+          delete this.itemState[safeIndex];
           return item;
         }
       }
