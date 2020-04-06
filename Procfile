@@ -1,1 +1,1 @@
-web: npm run start:prod
+web: ts-node -r tsconfig-paths/register ./src/server/index.ts
