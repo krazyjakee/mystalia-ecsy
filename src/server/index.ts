@@ -44,6 +44,19 @@ const gameServer = new Server({
   server
 });
 
+function shutdown(signal: string) {
+  return (err: any) => {
+    console.log(`${signal}...`);
+    if (err) console.error(err.stack || err);
+    gameServer.gracefullyShutdown(true, err);
+  };
+}
+
+process
+  .on("SIGTERM", shutdown("SIGTERM"))
+  .on("SIGINT", shutdown("SIGINT"))
+  .on("uncaughtException", shutdown("uncaughtException"));
+
 console.log("Loading map rooms...");
 const maps = readMapFiles();
 Object.keys(maps).forEach(mapName => {
@@ -64,16 +77,3 @@ healthCheck(() => {
 gameServer.onShutdown(() => {
   console.log("Graceful shutdown complete.");
 });
-
-process
-  .on("SIGTERM", shutdown("SIGTERM"))
-  .on("SIGINT", shutdown("SIGINT"))
-  .on("uncaughtException", shutdown("uncaughtException"));
-
-function shutdown(signal: string) {
-  return (err: any) => {
-    console.log(`${signal}...`);
-    if (err) console.error(err.stack || err);
-    gameServer.gracefullyShutdown(true, err);
-  };
-}
