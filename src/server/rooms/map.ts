@@ -1,11 +1,15 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
 import MapState from "../components/map";
-import Player from "../components/player";
+import Player, { addItemToPlayer } from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
+import ItemSpawner from "../utilities/itemSpawner";
 
 export default class MapRoom extends Room<MapState> {
+  // autoDispose: boolean = false;
+  itemSpawner?: ItemSpawner;
+
   async onAuth(client: Client, options: any) {
     // verify token authenticity
     const token = verifyToken(options.token);
@@ -17,6 +21,7 @@ export default class MapRoom extends Room<MapState> {
   onCreate() {
     console.log(`MapRoom "${this.roomName}" created`);
     this.setState(new MapState());
+    this.itemSpawner = new ItemSpawner(this.roomName, this.state.items);
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -24,12 +29,14 @@ export default class MapRoom extends Room<MapState> {
     console.log(`${userId} joined ${this.roomName}`);
     this.state.players[client.sessionId] = new Player(user, this.roomName);
     savePlayerState(this.state.players[client.sessionId], this.roomName);
+
     this.presence.subscribe(
       `${user.username}:commands`,
       (data: RoomMessage<GameStateEventName>) => {
         this.send(client, data);
       }
     );
+
     this.presence.subscribe(`${user.username}:requestState`, () => {
       this.presence.publish(
         `${user.username}:state`,
@@ -38,11 +45,27 @@ export default class MapRoom extends Room<MapState> {
     });
   }
 
-  onMessage(client: Client, message: any) {
-    const player = this.state.players[client.sessionId];
+  onMessage(client: Client, message: RoomMessage<GameStateEventName>) {
+    const player = this.state.players[client.sessionId] as Player;
 
-    if (message.command === "move" && message.targetTile) {
-      player.targetTile = message.targetTile;
+    if (message.command === "localPlayer:movement:report") {
+      const moveMessage = message as RoomMessage<"localPlayer:movement:report">;
+      player.targetTile = moveMessage.targetTile;
+    }
+
+    if (message.command === "localPlayer:inventory:pickup") {
+      const pickupMessage = message as RoomMessage<
+        "localPlayer:inventory:pickup"
+      >;
+      if (this.itemSpawner && player.targetTile) {
+        const item = this.itemSpawner.getItem(
+          player.targetTile,
+          pickupMessage.itemId
+        );
+        if (item) {
+          addItemToPlayer(player.inventory, item);
+        }
+      }
     }
   }
 
@@ -58,10 +81,14 @@ export default class MapRoom extends Room<MapState> {
   }
 
   async onDispose() {
+    if (this.itemSpawner) {
+      this.itemSpawner.dispose();
+    }
+
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
       await Promise.all(
-        sessionIds.map(sessionId =>
+        sessionIds.map((sessionId) =>
           savePlayerState(this.state.players[sessionId], this.roomName)
         )
       );

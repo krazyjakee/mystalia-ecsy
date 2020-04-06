@@ -3,10 +3,10 @@
   "author": "krazyjakee@gmail.com",
   "version": "0.0.1",
   "scripts": {
-    "server": "cross-env NODE_ENV=development nodemon --watch src/server --exec ts-node ./src/server/index.ts",
+    "server": "cross-env NODE_ENV=development nodemon --watch src/server --watch src/utilities --exec cross-env NODE_OPTIONS='--inspect=9230' ts-node -r tsconfig-paths/register ./src/server/index.ts",
     "client": "cross-env NODE_ENV=development webpack-dev-server --config src/server/webpack.config.ts",
     "start": "concurrently \"npm:server\" \"npm:client\"",
-    "start:prod": "ts-node ./src/server/index.ts",
+    "start:prod": "ts-node -r tsconfig-paths/register ./src/server/index.ts",
     "build": "webpack --config src/server/webpack.config.ts",
     "storybook": "start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook"
@@ -21,7 +21,6 @@
     "@types/express": "^4.16.1",
     "@types/html-webpack-plugin": "^3.2.0",
     "@types/jest": "^25.1.1",
-    "@types/keyboardjs": "^2.4.1",
     "@types/mongoose": "^5.7.7",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
@@ -30,7 +29,7 @@
     "@types/webpack-dev-middleware": "^2.0.2",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
-    "colyseus": "^0.12.3",
+    "colyseus": "^0.12.5",
     "colyseus.js": "^0.12.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -39,8 +38,6 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
     "fantasy-name-generator": "^2.0.0",
-    "gradient-color": "^2.0.1",
-    "keyboardjs": "^2.5.1",
     "mongoose": "^5.9.5",
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
@@ -50,6 +47,7 @@
     "react-rnd": "^10.1.8",
     "react-select": "^3.1.0",
     "ts-node": "^8.2.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.5.1"
   },
   "devDependencies": {
@@ -78,6 +76,9 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-middleware": "^3.7.0",
     "webpack-dev-server": "^3.10.3"
+  },
+  "peerDependencies": {
+    "@colyseus/schema": "latest"
   },
   "engines": {
     "node": "12.x"

@@ -4,18 +4,19 @@ import Movement from "../../components/Movement";
 import Position from "../../components/Position";
 import TileMap from "../../components/TileMap";
 import { Direction } from "types/Grid";
-import { vectorToTileId } from "../../utilities/TileMap/calculations";
 import { Loadable } from "../../components/Loadable";
 import { compassDirections } from "../../utilities/Compass/compassDirections";
 import tileInDirection from "../../utilities/TileMap/tileInDirection";
 import roundVector from "../../utilities/Vector/roundVector";
 import NewMovementTarget from "../../components/NewMovementTarget";
+import { vectorToTileId } from "utilities/tileMap";
+import gameState from "../../gameState";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],
   e: ["KeyD", "ArrowRight"],
   s: ["KeyS", "ArrowDown"],
-  w: ["KeyA", "ArrowLeft"]
+  w: ["KeyA", "ArrowLeft"],
 };
 
 export default class KeyboardInputSystem extends System {
@@ -24,19 +25,19 @@ export default class KeyboardInputSystem extends System {
 
   static queries = {
     keyboardEnabledEntities: {
-      components: [KeyboardInput, Movement, Position]
+      components: [KeyboardInput, Movement, Position],
     },
     tileMaps: {
-      components: [TileMap, Not(Loadable)]
-    }
+      components: [TileMap, Not(Loadable)],
+    },
   };
 
   init() {
     document.addEventListener(
       "keydown",
-      e => {
+      (e) => {
         const key = e.code;
-        if (!this.pressedKeys.includes(key)) {
+        if (!this.pressedKeys.includes(key) && !e.repeat) {
           this.pressedKeys.push(key);
         }
       },
@@ -44,7 +45,7 @@ export default class KeyboardInputSystem extends System {
     );
     document.addEventListener(
       "keyup",
-      e => {
+      (e) => {
         const key = e.code;
         this.pressedKeys.splice(this.pressedKeys.indexOf(key), 1);
       },
@@ -64,8 +65,8 @@ export default class KeyboardInputSystem extends System {
     this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
       let direction;
 
-      compassDirections.forEach(compassKey => {
-        movementKeys[compassKey].forEach(key => {
+      compassDirections.forEach((compassKey) => {
+        movementKeys[compassKey].forEach((key) => {
           if (this.pressedKeys.includes(key)) {
             direction = compassKey;
           }
@@ -81,6 +82,9 @@ export default class KeyboardInputSystem extends System {
         );
 
         entity.addComponent(NewMovementTarget, { targetTile: target });
+      } else if (this.pressedKeys.includes("KeyE")) {
+        gameState.send("map", "localPlayer:inventory:pickup");
+        this.pressedKeys.splice(this.pressedKeys.indexOf("KeyE"), 1);
       }
     });
   }

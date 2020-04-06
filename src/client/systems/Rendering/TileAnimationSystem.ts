@@ -7,11 +7,11 @@ import AnimatedTile, {
 } from "../../components/AnimatedTile";
 import { TMJ } from "types/TMJ";
 import createAnimatedTiles from "../Map/MapChangeSystem/createAnimatedTiles";
-import { tileIdToPixels } from "../../utilities/TileMap/calculations";
 import {
   AnimatedTileFrame,
   AnimatedTileDrawable
 } from "types/TileMap/AnimatedTiles";
+import { tileIdToPixels } from "utilities/tileMap";
 
 export default class TileAnimationSystem extends System {
   static queries = {

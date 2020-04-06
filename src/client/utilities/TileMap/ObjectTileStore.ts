@@ -4,11 +4,13 @@ import {
   ObjectTileType,
   ObjectTileTypeString
 } from "types/TileMap/ObjectTileStore";
-import { vectorToTileId } from "./calculations";
-import { Property, Attributes, Layer } from "types/TMJ";
+import { vectorToTileId } from "utilities/tileMap";
+import { Attributes, Layer, Property } from "types/TMJ";
 
-const serializeProperties = (properties?: Property[]): ObjectTileType => {
-  let property: ObjectTileType = null;
+const serializeProperties = <T extends ObjectTileTypeString>(
+  properties?: Property[]
+): ObjectTileType[T] | null => {
+  let property: ObjectTileType[T] | null = null;
   if (properties) {
     // @ts-ignore Need somewhere to start building the object
     property = {};
@@ -74,11 +76,14 @@ export class ObjectTileStore {
     return this.store[tileId];
   }
 
-  getByType<T>(
+  getByType<T extends ObjectTileTypeString>(
     tileId: number,
-    type: ObjectTileTypeString
-  ): ObjectTile<T> | undefined {
-    return this.store[tileId]?.find(tile => tile.type === type);
+    type: T
+  ): ObjectTile<T> | null {
+    if (this.store[tileId]) {
+      return this.store[tileId].find(tile => tile.type === type) || null;
+    }
+    return null;
   }
 
   getTypes(tileId: number) {
@@ -88,7 +93,7 @@ export class ObjectTileStore {
     }
   }
 
-  set<T>(tileId: number, data: ObjectTile<T>[]) {
+  set<T extends ObjectTileTypeString>(tileId: number, data: ObjectTile<T>[]) {
     this.store[tileId] = this.store[tileId]
       ? this.store[tileId].concat(data)
       : data;

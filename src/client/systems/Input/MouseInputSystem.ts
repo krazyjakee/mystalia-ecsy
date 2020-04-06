@@ -5,9 +5,9 @@ import Movement from "../../components/Movement";
 import TileMap from "../../components/TileMap";
 import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
-import { vectorToTileId } from "../../utilities/TileMap/calculations";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import NewMovementTarget from "../../components/NewMovementTarget";
+import { vectorToTileId } from "utilities/tileMap";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -17,11 +17,11 @@ export default class MouseInputSystem extends System {
 
   static queries = {
     mouseEnabledEntities: {
-      components: [MouseInput, Movement]
+      components: [MouseInput, Movement],
     },
     tileMaps: {
-      components: [TileMap, Not(Loadable), Drawable]
-    }
+      components: [TileMap, Not(Loadable), Drawable],
+    },
   };
 
   init() {
@@ -67,10 +67,9 @@ export default class MouseInputSystem extends System {
     // @ts-ignore
     this.queries.mouseEnabledEntities.results.forEach((entity: Entity) => {
       if (!this.clickedPosition) return;
-      const movement = entity.getMutableComponent(Movement);
       const offsetClickedPosition = {
         x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,
-        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32
+        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32,
       };
       const clickedTile = vectorToTileId(
         offsetClickedPosition,

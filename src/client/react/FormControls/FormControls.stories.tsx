@@ -6,7 +6,7 @@ import { TabButton as TabButtonComponent } from "./TabButton";
 import SelectComponent from "./Select";
 
 export default {
-  title: "Form Controls"
+  title: "Form Controls",
 };
 
 export const TextInput = () => (
@@ -41,5 +41,5 @@ export const TabButton = () => {
 };
 
 export const Select = () => {
-  return <SelectComponent />;
+  return <SelectComponent onChange={() => false} />;
 };

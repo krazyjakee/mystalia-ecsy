@@ -7,10 +7,6 @@ import getMapChangePosition from "./getMapChangePosition";
 import Drawable from "../../../components/Drawable";
 import Movement from "../../../components/Movement";
 import { Remove } from "../../../components/Tags";
-import {
-  tileIdToVector,
-  tileIdToPixels
-} from "../../../utilities/TileMap/calculations";
 import setOffset from "../../../utilities/Vector/setOffset";
 import Position from "../../../components/Position";
 import NetworkRoom from "../../../components/NetworkRoom";
@@ -19,6 +15,7 @@ import LocalPlayer from "../../../components/LocalPlayer";
 import AnimatedTile, {
   AnimatedTilesInitiated
 } from "../../../components/AnimatedTile";
+import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 
 export default class TileMapChanger extends System {
   static queries = {

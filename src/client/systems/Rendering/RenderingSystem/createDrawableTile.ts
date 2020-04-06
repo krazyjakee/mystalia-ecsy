@@ -1,7 +1,7 @@
-import { tileIdToVector } from "../../../utilities/TileMap/calculations";
 import { DrawableProperties } from "types/drawable";
 import { TMJ } from "types/TMJ";
 import { TileSetStore } from "types/TileMap/TileSetStore";
+import { tileIdToVector } from "utilities/tileMap";
 
 export default (
   sourceTileId: number,

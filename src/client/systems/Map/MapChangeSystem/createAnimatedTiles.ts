@@ -1,8 +1,8 @@
 import { SpecialTiles, TMJ } from "types/TMJ";
 import { AnimatedTileStore } from "types/TileMap/AnimatedTiles";
-import { tileIdToVector } from "../../../utilities/TileMap/calculations";
 import { TileSetStore } from "types/TileMap/TileSetStore";
 import createDrawableTile from "../../Rendering/RenderingSystem/createDrawableTile";
+import { tileIdToVector } from "utilities/tileMap";
 
 export default (
   specialTiles: SpecialTiles[],
