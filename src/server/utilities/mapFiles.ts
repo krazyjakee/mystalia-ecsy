@@ -3,10 +3,10 @@ import { getMapProperties } from "./tmjTools";
 import { TMJ } from "types/TMJ";
 import {
   ObjectTileType,
-  ObjectTileTypeString,
+  ObjectTileTypeString
 } from "types/TileMap/ObjectTileStore";
 import { isPresent } from "utilities/guards";
-import { pixelsToTileId, serializeProperties } from "utilities/TileMap";
+import { pixelsToTileId, serializeProperties } from "utilities/tileMap";
 
 export const readMapFiles = () => {
   const dir = fs.opendirSync("./assets/maps");
@@ -39,15 +39,15 @@ export const getTilesByType = <T extends ObjectTileTypeString>(
 ) => {
   let tiles: SerializedObject<T>[] = [];
   const objectLayers = mapData.layers.filter(
-    (layer) => layer.type === "objectgroup"
+    layer => layer.type === "objectgroup"
   );
-  objectLayers.forEach((objectLayer) => {
+  objectLayers.forEach(objectLayer => {
     if (objectLayer.objects) {
       const objectsOfType = objectLayer.objects.filter(
-        (object) => object.type === type
+        object => object.type === type
       );
       const serializedObjects = objectsOfType
-        .map((object) => {
+        .map(object => {
           const serializedObject = serializeProperties<T>(object.properties);
           if (serializedObject) {
             const newObject: SerializedObject<T> = {
@@ -55,7 +55,7 @@ export const getTilesByType = <T extends ObjectTileTypeString>(
               tileId: pixelsToTileId(
                 { x: object.x, y: object.y },
                 mapData.width
-              ),
+              )
             };
             return newObject;
           }
