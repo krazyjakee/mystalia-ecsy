@@ -4,6 +4,7 @@ import MainMenu from "./react/MainMenu";
 import { Clock } from "./react/Overlays/Clock";
 import AdminPanel from "./react/Panels/Admin/AdminPanel";
 import { createUseStyles } from "react-jss";
+import InventoryPanel from "./react/Panels/Inventory/InventoryPanel";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -11,8 +12,8 @@ const useStyles = createUseStyles({
     top: 0,
     left: 0,
     width: "100vw",
-    height: "100vh"
-  }
+    height: "100vh",
+  },
 });
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
       <MainMenu />
       <Clock />
       <AdminPanel />
+      <InventoryPanel />
     </>
   );
 };

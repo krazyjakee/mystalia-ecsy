@@ -87,6 +87,7 @@ export default class NetworkingSystem extends System {
         networkRoom.room.state.players.onAdd = (player, key) => {
           if (myKey !== key) {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
+
             player.onChange = function(changes) {
               changes.forEach((change) => {
                 // const newPosition = newRemotePlayer.getComponent(Position);
@@ -121,6 +122,21 @@ export default class NetworkingSystem extends System {
             } else {
               newRemotePlayer.addComponent(AwaitingPosition);
             }
+          } else {
+            gameState.trigger(
+              "localPlayer:inventory:response",
+              player.inventory
+            );
+            player.onChange = function(changes) {
+              changes.forEach((change) => {
+                if (change.field === "inventory") {
+                  gameState.trigger(
+                    "localPlayer:inventory:response",
+                    player.inventory
+                  );
+                }
+              });
+            };
           }
         };
 

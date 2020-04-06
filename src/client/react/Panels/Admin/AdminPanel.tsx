@@ -27,7 +27,7 @@ export default ({ forceEnable }: Props) => {
         rndOptions={{
           defaultWidth: 800,
           defaultHeight: 600,
-          minWidth: 619
+          minWidth: 619,
         }}
         isDraggable={true}
       >

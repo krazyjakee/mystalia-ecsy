@@ -1,4 +1,6 @@
 import User from "./User";
+import InventoryState from "serverState/inventory";
+import { MapSchema } from "@colyseus/schema";
 
 export interface GameStateEvents {
   "admin:list:allPlayers": {
@@ -30,6 +32,7 @@ export interface GameStateEvents {
   "localPlayer:inventory:pickup": {
     itemId?: number;
   };
+  "localPlayer:inventory:response": MapSchema<InventoryState>;
 }
 
 export type GameStateEventName = keyof GameStateEvents;

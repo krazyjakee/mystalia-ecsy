@@ -29,4 +29,4 @@ export const loadData = async (path: string): Promise<any> => {
 
 export const mapAssetPath = (name: string) => `/assets/maps/${name}.json`;
 
-export const ItemAssetPath = (name: string) => `/assets/items/${name}.png`;
+export const itemAssetPath = (name: string) => `/assets/items/${name}.png`;

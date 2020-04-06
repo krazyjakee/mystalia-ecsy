@@ -80,6 +80,9 @@
     "webpack-dev-middleware": "^3.7.0",
     "webpack-dev-server": "^3.10.3"
   },
+  "peerDependencies": {
+    "@colyseus/schema": "latest"
+  },
   "engines": {
     "node": "12.x"
   }

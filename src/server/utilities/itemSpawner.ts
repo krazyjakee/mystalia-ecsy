@@ -13,6 +13,7 @@ export default class ItemSpawner {
     const mapData = maps[mapName];
 
     this.itemState = itemState;
+    // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000) as NodeJS.Timeout;
     this.mapItems = getTilesByType("item", mapData) || [];
   }
