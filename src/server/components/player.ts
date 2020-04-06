@@ -5,7 +5,7 @@ import InventoryState from "./inventory";
 import ItemState from "./item";
 import {
   safeMapSchemaIndex,
-  arrayToMapSchema,
+  arrayToMapSchema
 } from "../utilities/colyseusState";
 
 export default class PlayerState extends Schema {
@@ -36,7 +36,10 @@ export default class PlayerState extends Schema {
     this.displayName = user.displayName;
     this.username = user.username;
     this.role = user.metadata.role;
-    this.inventory = arrayToMapSchema(user.metadata.inventory, InventoryState);
+    this.inventory = arrayToMapSchema(
+      user.metadata.inventory || [],
+      InventoryState
+    );
     this.currentRoom = room;
   }
 }
@@ -68,7 +71,7 @@ export const addItemToPlayer = (
   inventoryState[safeIndex] = new InventoryState({
     itemId: item.itemId,
     position: missingPosition || 0,
-    quantity: item.quantity,
+    quantity: item.quantity
   });
 };
 
@@ -76,7 +79,7 @@ export const UserDBState = {
   currentTile: 2431,
   room: "first",
   role: 0,
-  inventory: [],
+  inventory: []
 };
 
 hooks.beforeAuthenticate((_, $setOnInsert) => {

@@ -7,8 +7,7 @@ import { createUseStyles } from "react-jss";
 import { Section } from "../Section";
 import { useGameEvent } from "../../Hooks/useGameEvent";
 import itemsData from "../../../data/items.json";
-import InventoryState, { InventoryStateProps } from "serverState/inventory";
-import { ItemSpec, InventoryItems } from "types/TileMap/ItemTiles";
+import { InventoryItems } from "types/TileMap/ItemTiles";
 import InventoryItem from "./InventoryItem";
 
 const useStyles = createUseStyles({
@@ -16,18 +15,18 @@ const useStyles = createUseStyles({
     backgroundImage: guiAssetPath("panel/inventory-plank.png"),
     width: 343,
     height: 55,
-    marginBottom: 10,
+    marginBottom: 10
   },
   emptySlot: {
     backgroundImage: guiAssetPath("panel/inventory-slot.png"),
     width: 48,
     height: 48,
     margin: "0 6px 6px 6px",
-    float: "left",
+    float: "left"
   },
   slotContainer: {
-    position: "relative",
-  },
+    position: "relative"
+  }
 });
 
 type Props = {
@@ -43,7 +42,7 @@ export default ({ forceEnable = false }: Props) => {
     for (let key in inventoryState) {
       const item = inventoryState[key];
       const { itemId, position, quantity } = item;
-      const itemData = itemsData.find((data) => data.id === itemId);
+      const itemData = itemsData.find(data => data.id === itemId);
       if (itemData) {
         const { spritesheet, spriteId, name } = itemData;
 
@@ -53,7 +52,7 @@ export default ({ forceEnable = false }: Props) => {
           quantity,
           spritesheet,
           spriteId,
-          name,
+          name
         };
       }
     }
@@ -77,8 +76,8 @@ export default ({ forceEnable = false }: Props) => {
             right: false,
             top: false,
             topLeft: false,
-            topRight: false,
-          },
+            topRight: false
+          }
         }}
         isDraggable={true}
       >
@@ -90,10 +89,10 @@ export default ({ forceEnable = false }: Props) => {
                 <Grid fluid>
                   <Row>
                     <Col className={classes.slotContainer}>
-                      {emptySlots.map((_) => (
+                      {emptySlots.map(_ => (
                         <div className={classes.emptySlot} />
                       ))}
-                      {inventoryItems.map((item) => (
+                      {inventoryItems.map(item => (
                         <InventoryItem item={item} />
                       ))}
                     </Col>
