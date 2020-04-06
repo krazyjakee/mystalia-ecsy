@@ -70,7 +70,205 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":5
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":512,
+                 "y":896
+                }, 
+                {
+                 "height":32,
+                 "id":217,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":512,
+                 "y":1056
+                }, 
+                {
+                 "height":32,
+                 "id":218,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":352,
+                 "y":1120
+                }, 
+                {
+                 "height":32,
+                 "id":219,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":288,
+                 "y":1056
+                }, 
+                {
+                 "height":32,
+                 "id":220,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":256,
+                 "y":992
+                }, 
+                {
+                 "height":32,
+                 "id":221,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":896
+                }, 
+                {
+                 "height":32,
+                 "id":222,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":768,
+                 "y":1088
+                }, 
+                {
+                 "height":32,
+                 "id":223,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":736,
+                 "y":1152
+                }, 
+                {
+                 "height":32,
+                 "id":224,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":800,
+                 "y":1280
+                }, 
+                {
+                 "height":32,
+                 "id":225,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
                         }, 
                         {
                          "name":"id",
@@ -82,39 +280,17 @@
                  "visible":true,
                  "width":32,
                  "x":928,
-                 "y":640
+                 "y":1248
                 }, 
                 {
                  "height":32,
-                 "id":239,
+                 "id":226,
                  "name":"",
                  "properties":[
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":5
-                        }, 
-                        {
-                         "name":"id",
-                         "type":"int",
-                         "value":0
-                        }],
-                 "rotation":0,
-                 "type":"item",
-                 "visible":true,
-                 "width":32,
-                 "x":960,
-                 "y":640
-                }, 
-                {
-                 "height":32,
-                 "id":240,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"chance",
-                         "type":"int",
-                         "value":5
+                         "value":60
                         }, 
                         {
                          "name":"id",
@@ -126,17 +302,17 @@
                  "visible":true,
                  "width":32,
                  "x":992,
-                 "y":640
+                 "y":1184
                 }, 
                 {
                  "height":32,
-                 "id":241,
+                 "id":227,
                  "name":"",
                  "properties":[
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":5
+                         "value":60
                         }, 
                         {
                          "name":"id",
@@ -147,8 +323,184 @@
                  "type":"item",
                  "visible":true,
                  "width":32,
-                 "x":1024,
-                 "y":640
+                 "x":896,
+                 "y":1056
+                }, 
+                {
+                 "height":32,
+                 "id":228,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":1344,
+                 "y":1056
+                }, 
+                {
+                 "height":32,
+                 "id":229,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":1472,
+                 "y":992
+                }, 
+                {
+                 "height":32,
+                 "id":230,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":1408,
+                 "y":896
+                }, 
+                {
+                 "height":32,
+                 "id":231,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":1792,
+                 "y":992
+                }, 
+                {
+                 "height":32,
+                 "id":232,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":1824,
+                 "y":1088
+                }, 
+                {
+                 "height":32,
+                 "id":233,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":1760,
+                 "y":864
+                }, 
+                {
+                 "height":32,
+                 "id":234,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":2048,
+                 "y":1152
+                }, 
+                {
+                 "height":32,
+                 "id":235,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":60
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":2112,
+                 "y":1024
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2140,7 +2492,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -2169,7 +2521,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":242,
+ "nextobjectid":236,
  "orientation":"orthogonal",
  "properties":[
         {
