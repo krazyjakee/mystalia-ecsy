@@ -24,7 +24,7 @@ export default (entity: Entity, tileMap: TileMap) => {
     (!movement.direction ||
       newTarget !==
         tileInDirection(movement.currentTile, movement.direction, columns)) &&
-    (movement.pathingTo === undefined || movement.pathingTo != newTarget) &&
+    (movement.pathingTo === undefined || movement.pathingTo !== newTarget) &&
     (!movement.tileQueue.length ||
       movement.tileQueue[movement.tileQueue.length - 1] !== newTarget) &&
     isWalkable(tileMap, newTarget)
@@ -36,9 +36,9 @@ export default (entity: Entity, tileMap: TileMap) => {
         roundPosition.y,
         destinationTile.x,
         destinationTile.y,
-        path => {
+        (path) => {
           if (path) {
-            movement.tileQueue = path.map(p => p.x + p.y * columns);
+            movement.tileQueue = path.map((p) => p.x + p.y * columns);
             movement.targetTile = newTarget;
           }
           movement.pathingTo = undefined;
