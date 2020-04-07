@@ -6,6 +6,7 @@ import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../utilities/itemSpawner";
 import ItemSchema from "../db/ItemSchema";
+import ItemState from "serverState/item";
 
 export default class MapRoom extends Room<MapState> {
   // autoDispose: boolean = false;
@@ -23,6 +24,18 @@ export default class MapRoom extends Room<MapState> {
     console.log(`MapRoom "${this.roomName}" created`);
     this.setState(new MapState());
     this.itemSpawner = new ItemSpawner(this.roomName, this.state.items);
+    const items = mongoose.model("Item", ItemSchema);
+    items.find({ room: this.roomName }, (err, res) => {
+      if (err) return console.log(err.message);
+      res.forEach((doc) => {
+        const obj = doc.toJSON();
+        this.state.items[obj.index] = new ItemState(
+          obj.itemId,
+          obj.tileId,
+          obj.quantity
+        );
+      });
+    });
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -90,8 +103,13 @@ export default class MapRoom extends Room<MapState> {
     if (itemIds.length) {
       const Item = mongoose.model("Item", ItemSchema);
       itemIds.forEach((itemId) => {
+        // TODO: we probably want to Promise.all this like the players below
         const itemState = this.state.items[itemId];
-        const item = new Item(itemState);
+        const item = new Item({
+          ...itemState,
+          room: this.roomName,
+          index: itemId,
+        });
         item.save(function(err) {
           if (err) console.log(err.message);
         });

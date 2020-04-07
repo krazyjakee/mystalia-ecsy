@@ -4,4 +4,6 @@ export default new mongoose.Schema({
   itemId: Number,
   quantity: Number,
   tileId: Number,
+  room: String,
+  index: String,
 });
