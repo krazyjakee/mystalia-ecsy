@@ -21,7 +21,6 @@ export default class MapChangeSystem extends System {
           dataPath: mapAssetPath(changeMap.nextMap),
         });
       });
-      entity.removeComponent(ChangeMap);
     });
   }
 }

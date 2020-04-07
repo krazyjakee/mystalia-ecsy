@@ -13,24 +13,25 @@ import NetworkRoom from "../../../components/NetworkRoom";
 import RemotePlayer from "../../../components/RemotePlayer";
 import LocalPlayer from "../../../components/LocalPlayer";
 import AnimatedTile, {
-  AnimatedTilesInitiated
+  AnimatedTilesInitiated,
 } from "../../../components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
+import ChangeMap from "../../../components/ChangeMap";
 
 export default class TileMapChanger extends System {
   static queries = {
     player: {
-      components: [LocalPlayer, Movement, Position]
+      components: [LocalPlayer, Movement, Position],
     },
     newLoadingTileMaps: {
-      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)]
+      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)],
     },
     networkRoom: {
-      components: [NetworkRoom]
+      components: [NetworkRoom],
     },
     remotePlayers: {
-      components: [RemotePlayer]
-    }
+      components: [RemotePlayer],
+    },
   };
 
   execute() {
@@ -61,13 +62,18 @@ export default class TileMapChanger extends System {
           let tileId = movement.currentTile;
 
           // Do we have data from a previous map?
-          if (drawable.data) {
-            tileId = getMapChangePosition(
-              movement,
-              drawable.data.width,
-              drawable.data.height,
-              tileMap.objectTileStore
-            );
+          const changeMap = playerEntity.getComponent(ChangeMap);
+          if (changeMap) {
+            if (drawable.data) {
+              tileId = getMapChangePosition(
+                changeMap.direction,
+                movement.currentTile,
+                drawable.data.width,
+                drawable.data.height,
+                tileMap.objectTileStore
+              );
+            }
+            playerEntity.removeComponent(ChangeMap);
           }
 
           tileMap.reset();
@@ -82,7 +88,7 @@ export default class TileMapChanger extends System {
 
           const centeredVector = {
             x: tilePixels.x - Math.round(window.innerWidth / 2),
-            y: tilePixels.y - Math.round(window.innerHeight / 2)
+            y: tilePixels.y - Math.round(window.innerHeight / 2),
           };
 
           const mapOffset = setOffset(

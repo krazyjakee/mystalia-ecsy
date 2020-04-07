@@ -1,14 +1,13 @@
 import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
-import Movement from "src/client/components/Movement";
+import { Direction } from "types/Grid";
 
 export default (
-  player: Movement,
+  direction: Direction | undefined,
+  currentTile: number,
   columns: number,
   rows: number,
   objectTileStore: ObjectTileStore
 ) => {
-  const direction = player.direction || player.previousDirection;
-  const currentTile = player.currentTile;
   const objectTile = objectTileStore.getByType<"door">(currentTile, "door");
 
   if (objectTile && objectTile.value) {

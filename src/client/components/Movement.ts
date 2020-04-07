@@ -3,7 +3,6 @@ import { Direction } from "types/Grid";
 
 export default class Movement extends Component {
   direction?: Direction;
-  previousDirection?: Direction;
   targetTile?: number;
   currentTile: number = 0;
   tileQueue: number[] = [];
@@ -12,7 +11,6 @@ export default class Movement extends Component {
 
   reset() {
     this.direction = undefined;
-    this.previousDirection = undefined;
     this.currentTile = 0;
     this.targetTile = undefined;
     this.tileQueue = [];

@@ -97,7 +97,7 @@ export default class KeyboardInputSystem extends System {
           if (isEdge) {
             const nextMap = tileMap.properties[compass];
             if (nextMap) {
-              entity.addComponent(ChangeMap, { nextMap });
+              entity.addComponent(ChangeMap, { nextMap, direction });
             }
           }
         }
