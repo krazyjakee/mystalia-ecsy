@@ -2,6 +2,7 @@ import PlayerState from "../components/player";
 import users, { IUser } from "@colyseus/social/src/models/User";
 import { isPresent } from "utilities/guards";
 import { InventoryStateProps } from "serverState/inventory";
+import ItemState from "serverState/item";
 
 export const savePlayerState = async (player: PlayerState, room: string) => {
   if (player.dbId) {
@@ -12,8 +13,8 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
 
       if (player.inventory) {
         inventory = Object.keys(player.inventory)
-          .filter(key => isPresent(player.inventory[key].itemId))
-          .map(key => {
+          .filter((key) => isPresent(player.inventory[key].itemId))
+          .map((key) => {
             const { itemId, position, quantity } = player.inventory[key];
             return { itemId, position, quantity };
           });
@@ -23,8 +24,8 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
         metadata: {
           ...user.metadata,
           inventory,
-          room
-        }
+          room,
+        },
       };
 
       if (player.targetTile) {
@@ -32,7 +33,7 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
       }
 
       await user.updateOne({
-        $set: newData
+        $set: newData,
       });
     }
   }

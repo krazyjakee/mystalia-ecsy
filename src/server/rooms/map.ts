@@ -1,10 +1,11 @@
 import { Room, Client } from "colyseus";
-import { User, verifyToken, IUser } from "@colyseus/social";
+import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
 import MapState from "../components/map";
 import Player, { addItemToPlayer } from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../utilities/itemSpawner";
+import ItemSchema from "../db/ItemSchema";
 
 export default class MapRoom extends Room<MapState> {
   // autoDispose: boolean = false;
@@ -83,6 +84,18 @@ export default class MapRoom extends Room<MapState> {
   async onDispose() {
     if (this.itemSpawner) {
       this.itemSpawner.dispose();
+    }
+
+    const itemIds = Object.keys(this.state.items);
+    if (itemIds.length) {
+      const Item = mongoose.model("Item", ItemSchema);
+      itemIds.forEach((itemId) => {
+        const itemState = this.state.items[itemId];
+        const item = new Item(itemState);
+        item.save(function(err) {
+          if (err) console.log(err.message);
+        });
+      });
     }
 
     const sessionIds = Object.keys(this.state.players);
