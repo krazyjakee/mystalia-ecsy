@@ -2,9 +2,9 @@ import { System, Entity } from "ecsy";
 import LocalPlayer from "../../components/LocalPlayer";
 import TileMap from "../../components/TileMap";
 import { Loadable, Unloadable } from "../../components/Loadable";
-import { KeyboardInput, MouseInput } from "src/client/components/Tags";
+import { KeyboardInput, MouseInput } from "../../components/Tags";
 
-export default class MapChangeInputSystem extends System {
+export default class ToggleInputSystem extends System {
   static queries = {
     localPlayer: { components: [LocalPlayer] },
     loadedMap: { components: [TileMap, Loadable], added: true },

@@ -2,9 +2,11 @@ import context2d from "./canvas";
 import User from "types/User";
 
 import MapChangeSystem from "./systems/Map/MapChangeSystem";
+import MapLoadSystem from "./systems/Map/MapLoadSystem";
 import RenderingSystem from "./systems/Rendering/RenderingSystem";
 import LoadingSystem from "./systems/LoadingSystem";
 import NetworkingSystem from "./systems/Network/NetworkingSystem";
+import ToggleInputSystem from "./systems/Input/ToggleInputSystem";
 import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
 import MouseInputSystem from "./systems/Input/MouseInputSystem";
 import MovementSystem from "./systems/MovementSystem";
@@ -32,9 +34,11 @@ export const getWorld = () => world;
 
 export default (user: User) => {
   world
+    .registerSystem(ToggleInputSystem)
     .registerSystem(KeyboardInputSystem)
     .registerSystem(MouseInputSystem)
     .registerSystem(NetworkingSystem)
+    .registerSystem(MapLoadSystem)
     .registerSystem(MapChangeSystem)
     .registerSystem(ScrollingSystem)
     .registerSystem(MapEventSystem)

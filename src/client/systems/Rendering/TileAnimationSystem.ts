@@ -3,13 +3,13 @@ import { Loadable } from "../../components/Loadable";
 import Drawable from "../../components/Drawable";
 import TileMap from "../../components/TileMap";
 import AnimatedTile, {
-  AnimatedTilesInitiated
+  AnimatedTilesInitiated,
 } from "../../components/AnimatedTile";
 import { TMJ } from "types/TMJ";
-import createAnimatedTiles from "../Map/MapChangeSystem/createAnimatedTiles";
+import createAnimatedTiles from "../Map/MapLoadSystem/createAnimatedTiles";
 import {
   AnimatedTileFrame,
-  AnimatedTileDrawable
+  AnimatedTileDrawable,
 } from "types/TileMap/AnimatedTiles";
 import { tileIdToPixels } from "utilities/tileMap";
 
@@ -20,9 +20,9 @@ export default class TileAnimationSystem extends System {
         Not(Loadable),
         Not(AnimatedTilesInitiated),
         Drawable,
-        TileMap
-      ]
-    }
+        TileMap,
+      ],
+    },
   };
 
   execute() {
@@ -49,12 +49,12 @@ export default class TileAnimationSystem extends System {
               tileset.imagewidth,
               tileMap.tileSetStore,
               data
-            )
+            ),
           };
         }
       }
 
-      const tileIds = Object.keys(animatedTiles.tiles).map(k => parseInt(k));
+      const tileIds = Object.keys(animatedTiles.tiles).map((k) => parseInt(k));
 
       for (const layer of data.layers) {
         if (layer.type === "tilelayer") {
@@ -71,9 +71,9 @@ export default class TileAnimationSystem extends System {
                   drawable: {
                     ...newTile,
                     x: destination.x,
-                    y: destination.y
+                    y: destination.y,
                   },
-                  tileSetTileId: tile
+                  tileSetTileId: tile,
                 });
               }
             }
@@ -102,8 +102,8 @@ export default class TileAnimationSystem extends System {
         }
       };
 
-      animatedTiles.drawables.forEach(drawables => {
-        drawables.forEach(animationTile => {
+      animatedTiles.drawables.forEach((drawables) => {
+        drawables.forEach((animationTile) => {
           setNextFrame(0, animationTile);
         });
       });

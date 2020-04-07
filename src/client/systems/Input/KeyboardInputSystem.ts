@@ -11,6 +11,8 @@ import roundVector from "../../utilities/Vector/roundVector";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
 import gameState from "../../gameState";
+import getNextTileData from "../../utilities/TileMap/getNextTileData";
+import ChangeMap from "../../components/ChangeMap";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],
@@ -76,12 +78,29 @@ export default class KeyboardInputSystem extends System {
 
       if (direction) {
         const position = entity.getComponent(Position);
+        const movement = entity.getComponent(Movement);
         const target = tileInDirection(
           vectorToTileId(roundVector(position.value), columns),
           direction,
           rows,
           columns
         );
+
+        if (target === undefined) {
+          const { isEdge, compass } = getNextTileData(
+            movement.currentTile,
+            rows,
+            columns,
+            direction
+          );
+
+          if (isEdge) {
+            const nextMap = tileMap.properties[compass];
+            if (nextMap) {
+              entity.addComponent(ChangeMap, { nextMap });
+            }
+          }
+        }
 
         entity.addComponent(NewMovementTarget, { targetTile: target });
       } else if (this.pressedKeys.includes("KeyE")) {

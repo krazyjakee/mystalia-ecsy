@@ -1,5 +1,5 @@
 import { Direction } from "types/Grid";
-import isSideTile from "../../../utilities/TileMap/isSideTile";
+import isSideTile from "./isSideTile";
 
 export default (
   currentTile: number,
@@ -17,31 +17,31 @@ export default (
     case "e": {
       return {
         isEdge: edge.includes(direction),
-        compass: "east"
+        compass: "east",
       };
     }
     case "w": {
       return {
         isEdge: edge.includes(direction),
-        compass: "west"
+        compass: "west",
       };
     }
     case "n": {
       return {
         isEdge: edge.includes(direction),
-        compass: "north"
+        compass: "north",
       };
     }
     case "s": {
       return {
         isEdge: edge.includes(direction),
-        compass: "south"
+        compass: "south",
       };
     }
     default: {
       return {
         isEdge: false,
-        compass: "south"
+        compass: "south",
       };
     }
   }
