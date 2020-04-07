@@ -1,12 +1,12 @@
 import { System, Not, Entity } from "ecsy";
-import { Loadable } from "../../components/Loadable";
-import Drawable from "../../components/Drawable";
-import TileMap from "../../components/TileMap";
+import { Loadable } from "../../../components/Loadable";
+import Drawable from "../../../components/Drawable";
+import TileMap from "../../../components/TileMap";
 import AnimatedTile, {
   AnimatedTilesInitiated,
-} from "../../components/AnimatedTile";
+} from "../../../components/AnimatedTile";
 import { TMJ } from "types/TMJ";
-import createAnimatedTiles from "../Map/MapLoadSystem/createAnimatedTiles";
+import createAnimatedTiles from "./createAnimatedTiles";
 import {
   AnimatedTileFrame,
   AnimatedTileDrawable,
