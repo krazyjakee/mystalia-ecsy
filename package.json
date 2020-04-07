@@ -3,7 +3,7 @@
   "author": "krazyjakee@gmail.com",
   "version": "0.0.1",
   "scripts": {
-    "server": "cross-env NODE_ENV=development nodemon --watch src/server --watch src/utilities --exec cross-env NODE_OPTIONS='--inspect=9230' ts-node -r tsconfig-paths/register ./src/server/index.ts",
+    "server": "cross-env NODE_ENV=development nodemon --watch src/server --watch src/utilities --exec cross-env NODE_OPTIONS='--inspect' ts-node -r tsconfig-paths/register ./src/server/index.ts",
     "client": "cross-env NODE_ENV=development webpack-dev-server --config src/server/webpack.config.ts",
     "start": "concurrently \"npm:server\" \"npm:client\"",
     "start:prod": "ts-node -r tsconfig-paths/register ./src/server/index.ts",
