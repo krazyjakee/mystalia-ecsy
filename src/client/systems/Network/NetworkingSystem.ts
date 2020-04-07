@@ -1,6 +1,6 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../../colyseus";
-import { SendData, Remove, AwaitingPosition } from "../../components/Tags";
+import { SendData, AwaitingPosition, Remove } from "../../components/Tags";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import Movement from "../../components/Movement";
 import CreateRemotePlayer from "../../entities/RemotePlayer";
@@ -31,16 +31,13 @@ export default class NetworkingSystem extends System {
       components: [SendData, Movement, LocalPlayer],
     },
     remoteEntities: {
-      components: [RemotePlayer, Not(Remove)],
+      components: [RemotePlayer],
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)],
     },
     localEntities: {
       components: [LocalPlayer, Movement],
-    },
-    expiredRemotePlayers: {
-      components: [RemotePlayer, Remove],
     },
     loadedItems: {
       components: [Not(Loadable), Item],
@@ -186,7 +183,7 @@ export default class NetworkingSystem extends System {
                 itemComponent.itemId === item.itemId &&
                 item.tileId === itemComponent.tileId
               ) {
-                itemEntity.remove();
+                itemEntity.addComponent(Remove);
               }
             });
           }
@@ -221,12 +218,5 @@ export default class NetworkingSystem extends System {
       }
       entityToSend.removeComponent(SendData);
     });
-
-    // @ts-ignore
-    this.queries.expiredRemotePlayers.results.forEach(
-      (remotePlayer: Entity) => {
-        remotePlayer.remove();
-      }
-    );
   }
 }

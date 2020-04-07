@@ -6,7 +6,6 @@ import loadTileMap from "./loadTileMap";
 import getMapChangePosition from "./getMapChangePosition";
 import Drawable from "../../../components/Drawable";
 import Movement from "../../../components/Movement";
-import { Remove } from "../../../components/Tags";
 import setOffset from "../../../utilities/Vector/setOffset";
 import Position from "../../../components/Position";
 import NetworkRoom from "../../../components/NetworkRoom";
@@ -17,6 +16,8 @@ import AnimatedTile, {
 } from "../../../components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import ChangeMap from "../../../components/ChangeMap";
+import Item from "../../../components/Item";
+import { Remove } from "../../../components/Tags";
 
 export default class TileMapChanger extends System {
   static queries = {
@@ -31,6 +32,9 @@ export default class TileMapChanger extends System {
     },
     remotePlayers: {
       components: [RemotePlayer],
+    },
+    items: {
+      components: [Item],
     },
   };
 
@@ -63,16 +67,14 @@ export default class TileMapChanger extends System {
 
           // Do we have data from a previous map?
           const changeMap = playerEntity.getComponent(ChangeMap);
-          if (changeMap) {
-            if (drawable.data) {
-              tileId = getMapChangePosition(
-                changeMap.direction,
-                movement.currentTile,
-                drawable.data.width,
-                drawable.data.height,
-                tileMap.objectTileStore
-              );
-            }
+          if (drawable.data) {
+            tileId = getMapChangePosition(
+              changeMap?.direction,
+              movement.currentTile,
+              drawable.data.width,
+              drawable.data.height,
+              tileMap.objectTileStore
+            );
             playerEntity.removeComponent(ChangeMap);
           }
 
@@ -113,9 +115,14 @@ export default class TileMapChanger extends System {
             }
           );
 
-          // @ts-ignore
+          //@ts-ignore
           this.queries.remotePlayers.results.forEach((remotePlayer: Entity) => {
             remotePlayer.addComponent(Remove);
+          });
+
+          //@ts-ignore
+          this.queries.items.results.forEach((item: Entity) => {
+            item.addComponent(Remove);
           });
 
           // Everything is good to go!

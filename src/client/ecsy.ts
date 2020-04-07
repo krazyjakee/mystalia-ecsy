@@ -25,6 +25,7 @@ import CreateNetworkRoom from "./entities/NetworkRoom";
 import AdminNetworkSystem from "./systems/Network/AdminNetworkSystem";
 import CommandsSystem from "./systems/Network/CommandsSystem";
 import ItemSystem from "./systems/Rendering/ItemSystem";
+import CleanupSystem from "./systems/CleanupSystem";
 
 import "./entities";
 
@@ -53,7 +54,8 @@ export default (user: User) => {
     .registerSystem(PlayerNameSystem)
     .registerSystem(CommandsSystem)
     .registerSystem(AdminNetworkSystem)
-    .registerSystem(LoadingSystem);
+    .registerSystem(LoadingSystem)
+    .registerSystem(CleanupSystem);
 
   CreateNetworkRoom();
   CreateLocalPlayer(user);

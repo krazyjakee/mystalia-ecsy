@@ -23,7 +23,7 @@ export default class ItemSystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       // @ts-ignore
-      this.queries.loadingItems.added.forEach(async (itemEntity: Entity) => {
+      this.queries.loadingItems.added.forEach((itemEntity: Entity) => {
         const drawable = itemEntity.getMutableComponent(Drawable);
         const item = itemEntity.getComponent(Item);
 
