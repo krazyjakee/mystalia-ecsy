@@ -5,15 +5,16 @@ import TileMap from "../../../components/TileMap";
 import getNextTileData from "./getNextTileData";
 import LocalPlayer from "../../../components/LocalPlayer";
 import { mapAssetPath } from "../../../utilities/assets";
+import loadNewMap from "./loadNewMap";
 
 export default class TileMapObjectListener extends System {
   static queries = {
     loadedTileMaps: {
-      components: [Not(Loadable), TileMap]
+      components: [Not(Loadable), TileMap],
     },
     localPlayer: {
-      components: [Not(Loadable), Movement, LocalPlayer]
-    }
+      components: [Not(Loadable), Movement, LocalPlayer],
+    },
   };
 
   execute() {
@@ -34,9 +35,7 @@ export default class TileMapObjectListener extends System {
         if (door) {
           movement.tileQueue = [];
           movement.direction = undefined;
-          tileMapEntity.addComponent(Unloadable, {
-            dataPath: mapAssetPath(door.value.map)
-          });
+          loadNewMap(tileMapEntity, door.value.map);
         } else {
           if (direction || tileQueue.length) {
             const { isEdge, compass } = getNextTileData(
@@ -49,9 +48,7 @@ export default class TileMapObjectListener extends System {
             if (isEdge) {
               const nextMap = tileMap.properties[compass];
               if (nextMap) {
-                tileMapEntity.addComponent(Unloadable, {
-                  dataPath: mapAssetPath(nextMap)
-                });
+                loadNewMap(tileMapEntity, nextMap);
               }
             }
           } else {
