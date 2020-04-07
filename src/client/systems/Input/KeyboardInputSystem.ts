@@ -60,6 +60,7 @@ export default class KeyboardInputSystem extends System {
       // @ts-ignore
       this.queries.tileMaps.results[0].getComponent(TileMap);
     if (!tileMap) return;
+    const rows = tileMap.height;
     const columns = tileMap.width;
     // @ts-ignore
     this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
@@ -78,6 +79,7 @@ export default class KeyboardInputSystem extends System {
         const target = tileInDirection(
           vectorToTileId(roundVector(position.value), columns),
           direction,
+          rows,
           columns
         );
 

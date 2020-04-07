@@ -6,11 +6,15 @@ import compassToVector from "../Compass/compassToVector";
 export default (
   tileId: number,
   direction: Direction | undefined,
+  rows: number,
   columns: number
 ) => {
   if (!direction) return tileId;
-  return vectorToTileId(
-    addOffset(tileIdToVector(tileId, columns), compassToVector(direction)),
-    columns
+  const destination = addOffset(
+    tileIdToVector(tileId, columns),
+    compassToVector(direction)
   );
+  if (destination.x < 0 || destination.x >= columns) return undefined;
+  if (destination.y < 0 || destination.y >= rows) return undefined;
+  return vectorToTileId(destination, columns);
 };

@@ -10,6 +10,7 @@ import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 
 export default (entity: Entity, tileMap: TileMap) => {
   const columns = tileMap.width;
+  const rows = tileMap.height;
   const movement = entity.getMutableComponent(Movement);
   const position = entity.getMutableComponent(Position);
   const newTarget = entity.getComponent(NewMovementTarget).targetTile;
@@ -23,7 +24,12 @@ export default (entity: Entity, tileMap: TileMap) => {
     newTarget !== currentRoundTile &&
     (!movement.direction ||
       newTarget !==
-        tileInDirection(movement.currentTile, movement.direction, columns)) &&
+        tileInDirection(
+          movement.currentTile,
+          movement.direction,
+          rows,
+          columns
+        )) &&
     (movement.pathingTo === undefined || movement.pathingTo !== newTarget) &&
     (!movement.tileQueue.length ||
       movement.tileQueue[movement.tileQueue.length - 1] !== newTarget) &&
