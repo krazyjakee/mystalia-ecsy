@@ -2,16 +2,16 @@ import { System, Entity } from "ecsy";
 import { Loadable, SimpleLoadable } from "../components/Loadable";
 import Drawable from "../components/Drawable";
 import { loadImage, loadData } from "../utilities/assets";
+import { StaticQuery } from "types/ecsy";
 
 export default class Loader extends System {
-  static queries = {
+  static queries: StaticQuery = {
     unLoadedResources: {
-      components: [SimpleLoadable, Loadable, Drawable]
-    }
+      components: [SimpleLoadable, Loadable, Drawable],
+    },
   };
 
   execute() {
-    // @ts-ignore
     this.queries.unLoadedResources.results.forEach(async (resource: Entity) => {
       const loadable = resource.getComponent(Loadable);
       const drawable = resource.getComponent(Drawable);

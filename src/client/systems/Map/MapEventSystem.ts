@@ -4,9 +4,10 @@ import { Loadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import LocalPlayer from "../../components/LocalPlayer";
 import ChangeMap from "../../components/ChangeMap";
+import { StaticQuery } from "types/ecsy";
 
 export default class TileMapObjectListener extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
       components: [Not(Loadable), TileMap],
     },
@@ -16,12 +17,10 @@ export default class TileMapObjectListener extends System {
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const { width: columns, height: rows } = tileMap;
 
-      // @ts-ignore
       this.queries.localPlayer.results.forEach((playerEntity: Entity) => {
         const movement = playerEntity.getComponent(Movement);
 

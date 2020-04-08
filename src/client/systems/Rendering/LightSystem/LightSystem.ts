@@ -10,7 +10,7 @@ import { drawLightSource } from "./lightRenderFunctions";
 import config from "../../../config.json";
 import { timeOfDayAsPercentage } from "../../../utilities/time";
 import { tileIdToPixels } from "utilities/tileMap";
-// import gradient from "gradient-color";
+import { StaticQuery } from "types/ecsy";
 
 const imageMask = new Image();
 imageMask.src = "/assets/utilities/lightmask.png";
@@ -20,17 +20,16 @@ const lightCanvas = document.createElement("canvas");
 const { dayLightPercentage } = config;
 
 export default class LightSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
-      components: [Not(Loadable), TileMap, Drawable]
+      components: [Not(Loadable), TileMap, Drawable],
     },
     player: {
-      components: [Not(Loadable), LocalPlayer]
-    }
+      components: [Not(Loadable), LocalPlayer],
+    },
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
@@ -89,23 +88,22 @@ export default class LightSystem extends System {
       shadowContext.fill();
 
       if (!environmentLight || environmentLight < 40) {
-        // @ts-ignore
         this.queries.player.results.forEach((playerEntity: Entity) => {
           const { value } = playerEntity.getComponent(Position);
           const position = addOffset(offset, {
             x: value.x * 32,
-            y: value.y * 32
+            y: value.y * 32,
           });
           drawLightSource(shadowContext, position.x + 16, position.y + 16, {
             radius: 4,
             pulse: false,
             intensity: 30,
-            color: "#ffffff"
+            color: "#ffffff",
           });
         });
       }
 
-      Object.keys(tileMap.objectTileStore.store).forEach(key => {
+      Object.keys(tileMap.objectTileStore.store).forEach((key) => {
         const tileId = parseInt(key);
         const tilePosition = tileIdToPixels(tileId, tileMap.width);
         const lightTile = tileMap.objectTileStore.getByType<"light">(
@@ -127,7 +125,7 @@ export default class LightSystem extends System {
             drawLightSource(shadowContext, position.x + 16, position.y + 16, {
               radius: lightTileProperties.radius,
               color: lightTileProperties.color,
-              intensity
+              intensity,
             });
           }
         }

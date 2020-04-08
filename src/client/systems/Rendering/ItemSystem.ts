@@ -1,12 +1,13 @@
 import { System, Entity, Not } from "ecsy";
 import Drawable from "../../components/Drawable";
-import { Loadable, Unloadable } from "../../components/Loadable";
+import { Loadable } from "../../components/Loadable";
 import Item from "../../components/Item";
 import { tileIdToPixels } from "utilities/tileMap";
 import TileMap from "../../components/TileMap";
+import { StaticQuery } from "types/ecsy";
 
 export default class ItemSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
       components: [Not(Loadable), TileMap],
     },
@@ -19,10 +20,9 @@ export default class ItemSystem extends System {
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
-      // @ts-ignore
+
       this.queries.loadingItems.added.forEach((itemEntity: Entity) => {
         const drawable = itemEntity.getMutableComponent(Drawable);
         const item = itemEntity.getComponent(Item);

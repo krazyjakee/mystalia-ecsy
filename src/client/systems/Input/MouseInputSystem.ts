@@ -8,6 +8,7 @@ import Drawable from "../../components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
+import { StaticQuery } from "types/ecsy";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -15,7 +16,7 @@ export default class MouseInputSystem extends System {
   mouseDownPosition?: Vector;
   mouseDown?: boolean = false;
 
-  static queries = {
+  static queries: StaticQuery = {
     mouseEnabledEntities: {
       components: [MouseInput, Movement],
     },
@@ -55,17 +56,13 @@ export default class MouseInputSystem extends System {
     if (!this.clickedPosition) return;
 
     const tileMap =
-      // @ts-ignore
-      this.queries.tileMaps.results.length &&
-      // @ts-ignore
-      this.queries.tileMaps.results[0];
+      this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMap) return;
 
     const tileMapDrawable = tileMap.getComponent(Drawable);
     const tileMapComponent = tileMap.getComponent(TileMap);
 
-    // @ts-ignore
-    this.queries.mouseEnabledEntities.results.forEach((entity: Entity) => {
+    this.queries.mouseEnabledEntities.results.forEach((entity) => {
       if (!this.clickedPosition) return;
       const offsetClickedPosition = {
         x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,

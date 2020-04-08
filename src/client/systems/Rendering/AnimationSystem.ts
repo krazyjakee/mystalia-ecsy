@@ -1,16 +1,16 @@
 import { System, Entity } from "ecsy";
 import Drawable from "../../components/Drawable";
 import SpriteSheetAnimation from "../../components/SpriteSheetAnimation";
+import { StaticQuery } from "types/ecsy";
 
 export default class AnimationSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     animated: {
-      components: [Drawable, SpriteSheetAnimation]
-    }
+      components: [Drawable, SpriteSheetAnimation],
+    },
   };
 
   execute(delta: number) {
-    // @ts-ignore
     this.queries.animated.results.forEach(async (resource: Entity) => {
       const animation = resource.getComponent(SpriteSheetAnimation);
       const drawable = resource.getComponent(Drawable);

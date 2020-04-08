@@ -16,9 +16,10 @@ import context2d from "../../../canvas";
 import AnimatedTile from "../../../components/AnimatedTile";
 import Item from "../../../components/Item";
 import { DrawableProperties } from "types/drawable";
+import { StaticQuery } from "types/ecsy";
 
 export default class TileMapDrawer extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap],
     },
@@ -31,7 +32,6 @@ export default class TileMapDrawer extends System {
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const animatedTiles = tileMapEntity.getComponent(AnimatedTile);
@@ -90,7 +90,6 @@ export default class TileMapDrawer extends System {
             tile.drawable && drawImage(drawableWithOffset(tile.drawable))
         );
 
-        // @ts-ignore
         this.queries.loadedItems.results.forEach((itemEntity: Entity) => {
           const itemDrawable = itemEntity.getComponent(Drawable);
           drawImage(
@@ -98,7 +97,6 @@ export default class TileMapDrawer extends System {
           );
         });
 
-        // @ts-ignore
         this.queries.players.results.forEach((player: Entity) => {
           const position = player.getComponent(Position);
           const playerDrawable = player.getComponent(Drawable);

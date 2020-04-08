@@ -11,9 +11,10 @@ import NewMovementTarget from "../../components/NewMovementTarget";
 import roundVector from "../../utilities/Vector/roundVector";
 import awaitingTarget from "./awaitingTarget";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
+import { StaticQuery } from "types/ecsy";
 
 export default class MovementSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     movableEntities: {
       components: [Movement, Position],
     },
@@ -27,21 +28,17 @@ export default class MovementSystem extends System {
 
   execute(delta: number) {
     const tileMapEntity =
-      // @ts-ignore
-      this.queries.tileMaps.results.length &&
-      // @ts-ignore
-      this.queries.tileMaps.results[0];
+      this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMapEntity) return;
     const tileMap = (tileMapEntity as Entity).getComponent(TileMap);
 
-    // @ts-ignore
-    this.queries.awaitingTarget.results.forEach((entity: Entity) => {
+    this.queries.awaitingTarget.results.forEach((entity) => {
       awaitingTarget(entity, tileMap);
     });
 
     const columns = tileMap.width;
-    // @ts-ignore
-    this.queries.movableEntities.results.forEach((entity: Entity) => {
+
+    this.queries.movableEntities.results.forEach((entity) => {
       const movement = entity.getMutableComponent(Movement);
       const position = entity.getMutableComponent(Position);
 

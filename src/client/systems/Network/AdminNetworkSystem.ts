@@ -3,22 +3,22 @@ import client from "../../colyseus";
 import { Loadable } from "../../components/Loadable";
 import LocalPlayer, { RoleCheckPending } from "../../components/LocalPlayer";
 import gameState from "../../gameState";
+import { StaticQuery } from "types/ecsy";
 
 export default class AdminNetworkSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     localPlayer: {
-      components: [Not(Loadable), RoleCheckPending, LocalPlayer]
-    }
+      components: [Not(Loadable), RoleCheckPending, LocalPlayer],
+    },
   };
 
   execute() {
-    // @ts-ignore
     this.queries.localPlayer.results.forEach((localPlayerEntity: Entity) => {
       const localPlayer = localPlayerEntity.getComponent(LocalPlayer);
       if (localPlayer.user) {
         const role = localPlayer.user.metadata.role;
         if (role && role > 0) {
-          client.joinOrCreate("admin").then(room => {
+          client.joinOrCreate("admin").then((room) => {
             gameState.addRoom("admin", room);
             gameState.trigger("admin:enable");
             room.onLeave(() => {

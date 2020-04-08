@@ -4,19 +4,20 @@ import LocalPlayer from "../../components/LocalPlayer";
 import ChangeMap from "../../components/ChangeMap";
 import { Unloadable, Loadable } from "../../components/Loadable";
 import { mapAssetPath } from "../../utilities/assets";
+import { StaticQuery } from "types/ecsy";
 
 export default class MapChangeSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     tileMap: { components: [TileMap, Not(Unloadable), Not(Loadable)] },
     localPlayer: { components: [LocalPlayer, ChangeMap] },
   };
 
   execute() {
     //@ts-ignore
-    this.queries.localPlayer.results.forEach((entity: Entity) => {
+    this.queries.localPlayer.results.forEach((entity) => {
       const changeMap = entity.getComponent(ChangeMap);
       //@ts-ignore
-      this.queries.tileMap.results.forEach((entity: Entity) => {
+      this.queries.tileMap.results.forEach((entity) => {
         entity.addComponent(Unloadable, {
           dataPath: mapAssetPath(changeMap.nextMap),
         });

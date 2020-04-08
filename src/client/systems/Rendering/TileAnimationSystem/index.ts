@@ -5,6 +5,7 @@ import TileMap from "../../../components/TileMap";
 import AnimatedTile, {
   AnimatedTilesInitiated,
 } from "../../../components/AnimatedTile";
+import { StaticQuery } from "types/ecsy";
 import { TMJ } from "types/TMJ";
 import createAnimatedTiles from "./createAnimatedTiles";
 import {
@@ -14,7 +15,7 @@ import {
 import { tileIdToPixels } from "utilities/tileMap";
 
 export default class TileAnimationSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
       components: [
         Not(Loadable),
@@ -26,7 +27,6 @@ export default class TileAnimationSystem extends System {
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const animatedTiles = tileMapEntity.getComponent(AnimatedTile);

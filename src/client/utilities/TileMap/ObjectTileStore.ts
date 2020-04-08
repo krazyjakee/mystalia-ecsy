@@ -2,7 +2,7 @@ import {
   ObjectTileStoreType,
   ObjectTile,
   ObjectTileType,
-  ObjectTileTypeString
+  ObjectTileTypeString,
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId } from "utilities/tileMap";
 import { Attributes, Layer, Property } from "types/TMJ";
@@ -12,11 +12,12 @@ const serializeProperties = <T extends ObjectTileTypeString>(
 ): ObjectTileType[T] | null => {
   let property: ObjectTileType[T] | null = null;
   if (properties) {
-    // @ts-ignore Need somewhere to start building the object
+    // Need somewhere to start building the object
+    // @ts-ignore
     property = {};
-    properties.forEach(objectProperty => {
+    properties.forEach((objectProperty) => {
       if (objectProperty.name) {
-        // @ts-ignore Can't think of a better way to type this right now.
+        // @ts-ignore
         property[objectProperty.name] = objectProperty.value;
       }
     });
@@ -45,7 +46,7 @@ const mapObjectToTileTypes = (
     const newObjectTile = {
       name,
       type: type || "block",
-      value
+      value,
     };
 
     objectTileType[newTileId] = [newObjectTile];
@@ -81,7 +82,7 @@ export class ObjectTileStore {
     type: T
   ): ObjectTile<T> | null {
     if (this.store[tileId]) {
-      return this.store[tileId].find(tile => tile.type === type) || null;
+      return this.store[tileId].find((tile) => tile.type === type) || null;
     }
     return null;
   }
@@ -89,7 +90,7 @@ export class ObjectTileStore {
   getTypes(tileId: number) {
     const tiles = this.get(tileId);
     if (tiles) {
-      return tiles.map(tile => tile.type);
+      return tiles.map((tile) => tile.type);
     }
   }
 
@@ -104,9 +105,9 @@ export class ObjectTileStore {
       return;
     }
 
-    layer.objects.forEach(object => {
+    layer.objects.forEach((object) => {
       const tileData = mapObjectToTileTypes(object, this.columns);
-      Object.keys(tileData).forEach(id => {
+      Object.keys(tileData).forEach((id) => {
         const tileId = parseInt(id);
         this.set(tileId, tileData[tileId]);
       });

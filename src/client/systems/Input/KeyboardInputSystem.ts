@@ -13,6 +13,7 @@ import { vectorToTileId } from "utilities/tileMap";
 import gameState from "../../gameState";
 import getNextTileData from "../../utilities/TileMap/getNextTileData";
 import ChangeMap from "../../components/ChangeMap";
+import { StaticQuery } from "types/ecsy";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],
@@ -25,7 +26,7 @@ export default class KeyboardInputSystem extends System {
   pressedKeys: string[] = [];
   enabled: boolean = true;
 
-  static queries = {
+  static queries: StaticQuery = {
     keyboardEnabledEntities: {
       components: [KeyboardInput, Movement, Position],
     },
@@ -57,15 +58,13 @@ export default class KeyboardInputSystem extends System {
 
   execute() {
     const tileMap =
-      // @ts-ignore
       this.queries.tileMaps.results.length &&
-      // @ts-ignore
       this.queries.tileMaps.results[0].getComponent(TileMap);
     if (!tileMap) return;
     const rows = tileMap.height;
     const columns = tileMap.width;
-    // @ts-ignore
-    this.queries.keyboardEnabledEntities.results.forEach((entity: Entity) => {
+
+    this.queries.keyboardEnabledEntities.results.forEach((entity) => {
       let direction;
 
       compassDirections.forEach((compassKey) => {

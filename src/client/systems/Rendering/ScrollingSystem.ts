@@ -8,24 +8,23 @@ import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
 import LocalPlayer from "../../components/LocalPlayer";
 import { tileIdToPixels } from "utilities/tileMap";
+import { StaticQuery } from "types/ecsy";
 
 export default class TileMapMover extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
-      components: [Not(Loadable), Not(Unloadable), Drawable, TileMap]
+      components: [Not(Loadable), Not(Unloadable), Drawable, TileMap],
     },
     player: {
-      components: [Not(Loadable), LocalPlayer, Movement, Drawable]
-    }
+      components: [Not(Loadable), LocalPlayer, Movement, Drawable],
+    },
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
 
-      // @ts-ignore
       this.queries.player.results.forEach((playerEntity: Entity) => {
         const movement = playerEntity.getComponent(Movement);
         tileMap.targetTile = movement.currentTile;

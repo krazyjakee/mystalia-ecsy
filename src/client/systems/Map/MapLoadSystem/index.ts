@@ -18,9 +18,10 @@ import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import ChangeMap from "../../../components/ChangeMap";
 import Item from "../../../components/Item";
 import { Remove } from "../../../components/Tags";
+import { StaticQuery } from "types/ecsy";
 
 export default class TileMapChanger extends System {
-  static queries = {
+  static queries: StaticQuery = {
     player: {
       components: [LocalPlayer, Movement, Position],
     },
@@ -42,11 +43,10 @@ export default class TileMapChanger extends System {
     let playerEntity: Entity;
 
     //@ts-ignore
-    this.queries.player.results.forEach((entity: Entity) => {
+    this.queries.player.results.forEach((entity) => {
       playerEntity = entity;
     });
 
-    // @ts-ignore
     this.queries.newLoadingTileMaps.results.forEach(
       async (tileMapEntity: Entity) => {
         const loadable = tileMapEntity.getComponent(Loadable);
@@ -104,7 +104,6 @@ export default class TileMapChanger extends System {
           drawable.offset = mapOffset;
           tileMap.targetTile = tileId;
 
-          // @ts-ignore
           this.queries.networkRoom.results.forEach(
             (networkRoomEntity: Entity) => {
               const networkRoom = networkRoomEntity.getMutableComponent(

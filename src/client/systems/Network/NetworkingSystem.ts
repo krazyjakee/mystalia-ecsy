@@ -19,11 +19,12 @@ import { RoomMessage } from "types/gameState";
 import items from "../../data/items.json";
 import Item from "../../components/Item";
 import { isPresent } from "utilities/guards";
+import { StaticQuery } from "types/ecsy";
 
 let connectionTimer: any;
 
 export default class NetworkingSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     networkRoom: {
       components: [NetworkRoom],
     },
@@ -46,15 +47,11 @@ export default class NetworkingSystem extends System {
 
   execute() {
     const tileMapEntity =
-      // @ts-ignore
-      this.queries.tileMaps.results.length &&
-      // @ts-ignore
-      this.queries.tileMaps.results[0];
+      this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMapEntity) return;
     const tileMap = (tileMapEntity as Entity).getComponent(TileMap);
     const { name, width } = tileMap;
 
-    // @ts-ignore
     const networkRoomEntity = this.queries.networkRoom.results[0] as Entity;
 
     const networkRoom = networkRoomEntity.getMutableComponent(NetworkRoom);
@@ -70,7 +67,6 @@ export default class NetworkingSystem extends System {
         networkRoom.joining = false;
         const myKey = room.sessionId;
 
-        // @ts-ignore
         this.queries.localEntities.results.forEach((localEntity: Entity) => {
           const movement = localEntity.getComponent(Movement);
           if (movement.currentTile >= 0) {
@@ -199,7 +195,6 @@ export default class NetworkingSystem extends System {
       });
     }
 
-    // @ts-ignore
     this.queries.localEntitiesToSend.results.forEach((entityToSend: Entity) => {
       const movement = entityToSend.getComponent(Movement);
       if (movement.direction) {

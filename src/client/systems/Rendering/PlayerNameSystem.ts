@@ -7,22 +7,22 @@ import TileMap from "../../components/TileMap";
 import Drawable from "../../components/Drawable";
 import addOffset from "../../utilities/Vector/addOffset";
 import RemotePlayer from "../../components/RemotePlayer";
+import { StaticQuery } from "types/ecsy";
 
 export default class PlayerNameSystem extends System {
-  static queries = {
+  static queries: StaticQuery = {
     loadedTileMaps: {
-      components: [Not(Loadable), Drawable, TileMap]
+      components: [Not(Loadable), Drawable, TileMap],
     },
     localPlayer: {
-      components: [Not(Loadable), LocalPlayer, Position]
+      components: [Not(Loadable), LocalPlayer, Position],
     },
     remotePlayers: {
-      components: [Not(Loadable), RemotePlayer, Position]
-    }
+      components: [Not(Loadable), RemotePlayer, Position],
+    },
   };
 
   execute() {
-    // @ts-ignore
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
@@ -36,7 +36,7 @@ export default class PlayerNameSystem extends System {
 
         const textPosition = addOffset(offset, {
           x: position.value.x * 32 + 16,
-          y: position.value.y * 32
+          y: position.value.y * 32,
         });
 
         context2d.strokeText(name, textPosition.x, textPosition.y);
@@ -44,7 +44,6 @@ export default class PlayerNameSystem extends System {
         context2d.restore();
       };
 
-      // @ts-ignore
       this.queries.localPlayer.results.forEach((localPlayerEntity: Entity) => {
         const localPlayer = localPlayerEntity.getComponent(LocalPlayer);
         const position = localPlayerEntity.getComponent(Position);
@@ -53,7 +52,6 @@ export default class PlayerNameSystem extends System {
         }
       });
 
-      // @ts-ignore
       this.queries.remotePlayers.results.forEach(
         (remotePlayerEntity: Entity) => {
           const remotePlayer = remotePlayerEntity.getComponent(RemotePlayer);
