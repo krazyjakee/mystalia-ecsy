@@ -35,11 +35,7 @@ export default class TileMapObjectListener extends System {
           movement.tileQueue = [];
           movement.direction = undefined;
           playerEntity.addComponent(ChangeMap, { nextMap: door.value.map });
-        } /* TODO: do we need this?
-          } else {
-            tileMap.targetTile = null;
-          }
-        }*/
+        }
       });
     });
   }

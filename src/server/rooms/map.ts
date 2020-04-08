@@ -7,6 +7,7 @@ import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../utilities/itemSpawner";
 import ItemSchema from "../db/ItemSchema";
 import ItemState from "serverState/item";
+import { Mongoose, MongooseDocument, Model } from "mongoose";
 
 export default class MapRoom extends Room<MapState> {
   // autoDispose: boolean = false;
@@ -102,18 +103,21 @@ export default class MapRoom extends Room<MapState> {
     const itemIds = Object.keys(this.state.items);
     if (itemIds.length) {
       const Item = mongoose.model("Item", ItemSchema);
-      itemIds.forEach((itemId) => {
-        // TODO: we probably want to Promise.all this like the players below
-        const itemState = this.state.items[itemId];
-        const item = new Item({
-          ...itemState,
-          room: this.roomName,
-          index: itemId,
+      try {
+        const savePromises = itemIds.map((itemId) => {
+          const itemState = this.state.items[itemId];
+          const item = new Item({
+            ...itemState,
+            room: this.roomName,
+            index: itemId,
+          });
+          return item.save;
         });
-        item.save(function(err) {
-          if (err) console.log(err.message);
-        });
-      });
+
+        await Promise.all(savePromises);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     const sessionIds = Object.keys(this.state.players);
