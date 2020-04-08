@@ -23,7 +23,7 @@ export default class MapRoom extends Room<MapState> {
   onCreate() {
     console.log(`MapRoom "${this.roomName}" created`);
     this.setState(new MapState());
-    this.itemSpawner = new ItemSpawner(this.roomName, this.state.items);
+    this.itemSpawner = new ItemSpawner(this.roomName, this);
     const items = mongoose.model("Item", ItemSchema);
     items.find({ room: this.roomName }, (err, res) => {
       if (err) return console.log(err.message);

@@ -2,17 +2,19 @@ import { readMapFiles, getTilesByType, SerializedObject } from "./mapFiles";
 import ItemState from "serverState/item";
 import { MapSchema } from "@colyseus/schema";
 import { safeMapSchemaIndex } from "./colyseusState";
+import { Room } from "colyseus";
+import MapState from "serverState/map";
 
 export default class ItemSpawner {
-  itemState: MapSchema<ItemState>;
+  room: Room<MapState>;
   timer: NodeJS.Timeout;
   mapItems: SerializedObject<"item">[] = [];
 
-  constructor(mapName: string, itemState: MapSchema<ItemState>) {
+  constructor(mapName: string, room: Room<MapState>) {
     const maps = readMapFiles();
     const mapData = maps[mapName];
 
-    this.itemState = itemState;
+    this.room = room;
     // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000) as NodeJS.Timeout;
     this.mapItems = getTilesByType("item", mapData) || [];
@@ -26,8 +28,8 @@ export default class ItemSpawner {
         ? Math.floor(Math.random() * item.maximumQuantity)
         : item.quantity;
       if (chance === 1) {
-        if (!this.itemState[safeIndex]) {
-          this.itemState[safeIndex] = new ItemState(
+        if (!this.room.state.items[safeIndex]) {
+          this.room.state.items[safeIndex] = new ItemState(
             item.id,
             item.tileId,
             quantity
@@ -38,13 +40,11 @@ export default class ItemSpawner {
   }
 
   getItem(tileId: number, itemId?: number) {
-    const keys = Object.keys(this.itemState);
-    for (let i = 0; i < keys.length; i += 1) {
-      const safeIndex = keys[i];
-      const item = this.itemState[safeIndex] as ItemState;
+    for (let key in this.room.state.items) {
+      const item = this.room.state.items[key] as ItemState;
       if (item && item.tileId && item.tileId === tileId) {
         if ((itemId && itemId === item.itemId) || !itemId) {
-          delete this.itemState[safeIndex];
+          delete this.room.state.items[key];
           return item;
         }
       }
