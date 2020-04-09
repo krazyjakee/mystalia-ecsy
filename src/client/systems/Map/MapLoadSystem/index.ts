@@ -87,20 +87,34 @@ export default class TileMapChanger extends System {
           playerPosition.value = tileVector;
           movement.currentTile = tileId;
 
-          const centeredVector = {
-            x: tilePixels.x - Math.round(window.innerWidth / 2),
-            y: tilePixels.y - Math.round(window.innerHeight / 2),
-          };
+          const mapSmallerThanWindow =
+            drawable.width <= window.innerWidth &&
+            drawable.height <= window.innerHeight;
 
-          const mapOffset = setOffset(
-            centeredVector.x,
-            centeredVector.y,
-            { x: 0, y: 0 },
-            drawable.width,
-            drawable.height
-          );
+          if (mapSmallerThanWindow) {
+            drawable.offset = {
+              x:
+                Math.round(window.innerWidth / 2) -
+                Math.round(drawable.width / 2),
+              y:
+                Math.round(window.innerHeight / 2) -
+                Math.round(drawable.height / 2),
+            };
+          } else {
+            const centeredVector = {
+              x: tilePixels.x - Math.round(window.innerWidth / 2),
+              y: tilePixels.y - Math.round(window.innerHeight / 2),
+            };
 
-          drawable.offset = mapOffset;
+            drawable.offset = setOffset(
+              centeredVector.x,
+              centeredVector.y,
+              { x: 0, y: 0 },
+              drawable.width,
+              drawable.height
+            );
+          }
+
           tileMap.targetTile = tileId;
 
           this.queries.networkRoom.results.forEach(

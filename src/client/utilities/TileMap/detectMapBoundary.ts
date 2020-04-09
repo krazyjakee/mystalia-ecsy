@@ -13,10 +13,10 @@ export default (
   let newY = y;
   const boundary = {
     x: false,
-    y: false
+    y: false,
   };
 
-  if (requestX > 0) {
+  if (requestX >= 0) {
     boundary.x = true;
     newX = 0;
   } else if (requestX < 0 - (mapWidth - window.innerWidth)) {
@@ -24,7 +24,7 @@ export default (
     newX = 0 - (mapWidth - window.innerWidth);
   }
 
-  if (requestY > 0) {
+  if (requestY >= 0) {
     boundary.y = true;
     newY = 0;
   } else if (requestY < 0 - (mapHeight - window.innerHeight)) {
