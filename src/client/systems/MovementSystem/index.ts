@@ -11,10 +11,9 @@ import NewMovementTarget from "../../components/NewMovementTarget";
 import roundVector from "../../utilities/Vector/roundVector";
 import awaitingTarget from "./awaitingTarget";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
-import { StaticQuery } from "types/ecsy";
 
 export default class MovementSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     movableEntities: {
       components: [Movement, Position],
     },

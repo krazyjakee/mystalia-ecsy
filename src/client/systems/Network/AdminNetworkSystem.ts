@@ -3,10 +3,9 @@ import client from "../../colyseus";
 import { Loadable } from "../../components/Loadable";
 import LocalPlayer, { RoleCheckPending } from "../../components/LocalPlayer";
 import gameState from "../../gameState";
-import { StaticQuery } from "types/ecsy";
 
 export default class AdminNetworkSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     localPlayer: {
       components: [Not(Loadable), RoleCheckPending, LocalPlayer],
     },

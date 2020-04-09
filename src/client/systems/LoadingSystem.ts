@@ -2,10 +2,9 @@ import { System, Entity } from "ecsy";
 import { Loadable, SimpleLoadable } from "../components/Loadable";
 import Drawable from "../components/Drawable";
 import { loadImage, loadData } from "../utilities/assets";
-import { StaticQuery } from "types/ecsy";
 
 export default class Loader extends System {
-  static queries: StaticQuery = {
+  static queries = {
     unLoadedResources: {
       components: [SimpleLoadable, Loadable, Drawable],
     },

@@ -18,10 +18,9 @@ import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import ChangeMap from "../../../components/ChangeMap";
 import Item from "../../../components/Item";
 import { Remove } from "../../../components/Tags";
-import { StaticQuery } from "types/ecsy";
 
 export default class TileMapChanger extends System {
-  static queries: StaticQuery = {
+  static queries = {
     player: {
       components: [LocalPlayer, Movement, Position],
     },

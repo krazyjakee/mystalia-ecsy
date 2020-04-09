@@ -16,10 +16,9 @@ import context2d from "../../../canvas";
 import AnimatedTile from "../../../components/AnimatedTile";
 import Item from "../../../components/Item";
 import { DrawableProperties } from "types/drawable";
-import { StaticQuery } from "types/ecsy";
 
 export default class TileMapDrawer extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap],
     },

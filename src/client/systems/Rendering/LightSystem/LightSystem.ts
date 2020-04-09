@@ -10,7 +10,6 @@ import { drawLightSource } from "./lightRenderFunctions";
 import config from "../../../config.json";
 import { timeOfDayAsPercentage } from "../../../utilities/time";
 import { tileIdToPixels } from "utilities/tileMap";
-import { StaticQuery } from "types/ecsy";
 
 const imageMask = new Image();
 imageMask.src = "/assets/utilities/lightmask.png";
@@ -20,7 +19,7 @@ const lightCanvas = document.createElement("canvas");
 const { dayLightPercentage } = config;
 
 export default class LightSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), TileMap, Drawable],
     },

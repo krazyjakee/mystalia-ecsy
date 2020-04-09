@@ -9,10 +9,9 @@ import TileMap from "../../components/TileMap";
 import Drawable from "../../components/Drawable";
 import Movement from "../../components/Movement";
 import { mapAssetPath } from "../../utilities/assets";
-import { StaticQuery } from "types/ecsy";
 
 export default class CommandsSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     localPlayer: {
       components: [LocalPlayer, CommandsPending],
     },

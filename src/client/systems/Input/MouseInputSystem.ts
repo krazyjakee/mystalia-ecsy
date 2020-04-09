@@ -8,7 +8,6 @@ import Drawable from "../../components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
-import { StaticQuery } from "types/ecsy";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -16,7 +15,7 @@ export default class MouseInputSystem extends System {
   mouseDownPosition?: Vector;
   mouseDown?: boolean = false;
 
-  static queries: StaticQuery = {
+  static queries = {
     mouseEnabledEntities: {
       components: [MouseInput, Movement],
     },

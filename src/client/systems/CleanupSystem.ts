@@ -1,9 +1,8 @@
 import { System, Entity } from "ecsy";
 import { Remove } from "../components/Tags";
-import { StaticQuery } from "types/ecsy";
 
 export default class CleanupSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     toRemove: {
       components: [Remove],
     },

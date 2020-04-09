@@ -13,7 +13,6 @@ import { vectorToTileId } from "utilities/tileMap";
 import gameState from "../../gameState";
 import getNextTileData from "../../utilities/TileMap/getNextTileData";
 import ChangeMap from "../../components/ChangeMap";
-import { StaticQuery } from "types/ecsy";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],
@@ -26,7 +25,7 @@ export default class KeyboardInputSystem extends System {
   pressedKeys: string[] = [];
   enabled: boolean = true;
 
-  static queries: StaticQuery = {
+  static queries = {
     keyboardEnabledEntities: {
       components: [KeyboardInput, Movement, Position],
     },

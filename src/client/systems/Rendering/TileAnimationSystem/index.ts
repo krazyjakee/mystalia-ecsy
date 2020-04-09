@@ -5,7 +5,7 @@ import TileMap from "../../../components/TileMap";
 import AnimatedTile, {
   AnimatedTilesInitiated,
 } from "../../../components/AnimatedTile";
-import { StaticQuery } from "types/ecsy";
+
 import { TMJ } from "types/TMJ";
 import createAnimatedTiles from "./createAnimatedTiles";
 import {
@@ -15,7 +15,7 @@ import {
 import { tileIdToPixels } from "utilities/tileMap";
 
 export default class TileAnimationSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [
         Not(Loadable),

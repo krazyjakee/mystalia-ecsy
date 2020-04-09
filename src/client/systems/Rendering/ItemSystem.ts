@@ -4,10 +4,9 @@ import { Loadable } from "../../components/Loadable";
 import Item from "../../components/Item";
 import { tileIdToPixels } from "utilities/tileMap";
 import TileMap from "../../components/TileMap";
-import { StaticQuery } from "types/ecsy";
 
 export default class ItemSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), TileMap],
     },
@@ -23,7 +22,7 @@ export default class ItemSystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
 
-      this.queries.loadingItems.added.forEach((itemEntity: Entity) => {
+      this.queries.loadingItems.added?.forEach((itemEntity: Entity) => {
         const drawable = itemEntity.getMutableComponent(Drawable);
         const item = itemEntity.getComponent(Item);
 

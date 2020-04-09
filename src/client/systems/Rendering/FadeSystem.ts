@@ -3,10 +3,9 @@ import Fade from "../../components/Fade";
 import { fadeOverlay } from "../../utilities/drawing";
 import { Loadable, Unloadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
-import { StaticQuery } from "types/ecsy";
 
 export default class FadeSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadingTileMaps: {
       components: [Loadable, TileMap, Fade],
     },
@@ -34,9 +33,11 @@ export default class FadeSystem extends System {
       }
     );
 
-    this.queries.newUnloadingTileMaps.added.forEach((tileMapEntity: Entity) => {
-      tileMapEntity.addComponent(Fade);
-    });
+    this.queries.newUnloadingTileMaps.added?.forEach(
+      (tileMapEntity: Entity) => {
+        tileMapEntity.addComponent(Fade);
+      }
+    );
 
     this.queries.unloadingTileMaps.results.forEach((tileMapEntity: Entity) => {
       const fade = tileMapEntity.getComponent(Fade);
