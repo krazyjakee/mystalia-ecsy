@@ -21,25 +21,21 @@ export default class FadeSystem extends System {
   };
 
   execute() {
-    this.queries.loadingTileMaps.results.forEach(
-      async (tileMapEntity: Entity) => {
-        const fade = tileMapEntity.getComponent(Fade);
+    this.queries.loadingTileMaps.results.forEach(async (tileMapEntity) => {
+      const fade = tileMapEntity.getComponent(Fade);
 
-        fadeOverlay(fade);
-        if (fade.alpha > 1) {
-          tileMapEntity.removeComponent(Loadable);
-          tileMapEntity.removeComponent(Fade);
-        }
+      fadeOverlay(fade);
+      if (fade.alpha > 1) {
+        tileMapEntity.removeComponent(Loadable);
+        tileMapEntity.removeComponent(Fade);
       }
-    );
+    });
 
-    this.queries.newUnloadingTileMaps.added?.forEach(
-      (tileMapEntity: Entity) => {
-        tileMapEntity.addComponent(Fade);
-      }
-    );
+    this.queries.newUnloadingTileMaps.added?.forEach((tileMapEntity) => {
+      tileMapEntity.addComponent(Fade);
+    });
 
-    this.queries.unloadingTileMaps.results.forEach((tileMapEntity: Entity) => {
+    this.queries.unloadingTileMaps.results.forEach((tileMapEntity) => {
       const fade = tileMapEntity.getComponent(Fade);
 
       fadeOverlay(fade, false);

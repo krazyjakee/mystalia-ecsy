@@ -1,4 +1,4 @@
-import { Vector } from "types/Grid";
+import { Vector } from "types/TMJ";
 import detectMapBoundary from "../TileMap/detectMapBoundary";
 
 export default (

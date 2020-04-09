@@ -20,7 +20,7 @@ export default class TileMapMover extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
 

@@ -6,17 +6,13 @@ import Drawable from "../../../components/Drawable";
 import addOffset from "../../../utilities/Vector/addOffset";
 import LocalPlayer from "../../../components/LocalPlayer";
 import Position from "../../../components/Position";
-import { drawLightSource } from "./lightRenderFunctions";
-import config from "../../../config.json";
-import { timeOfDayAsPercentage } from "../../../utilities/time";
+import { drawLightSource, calculateBrightness } from "./lightRenderFunctions";
 import { tileIdToPixels } from "utilities/tileMap";
 
 const imageMask = new Image();
 imageMask.src = "/assets/utilities/lightmask.png";
 
 const lightCanvas = document.createElement("canvas");
-
-const { dayLightPercentage } = config;
 
 export default class LightSystem extends System {
   static queries = {
@@ -29,7 +25,8 @@ export default class LightSystem extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    context2d.save();
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
@@ -51,35 +48,10 @@ export default class LightSystem extends System {
       ) as CanvasRenderingContext2D;
 
       const environmentLight =
-        tileMap.properties.light && parseInt(tileMap.properties.light);
-      let brightness = 0;
+        !!tileMap.properties.light && parseInt(tileMap.properties.light);
 
-      if (environmentLight) {
-        brightness = environmentLight;
-      } else {
-        const dayPercentage = timeOfDayAsPercentage();
-
-        if (dayPercentage < dayLightPercentage) {
-          const phaseProgress = (100 / dayLightPercentage) * dayPercentage;
-          if (phaseProgress < 20) {
-            brightness = 80 + phaseProgress;
-          } else if (phaseProgress > 80) {
-            brightness = 100 - (phaseProgress - 80);
-          } else {
-            brightness = 100;
-          }
-        } else {
-          const phaseProgress =
-            100 - (100 / (100 - dayLightPercentage)) * (100 - dayPercentage);
-          if (phaseProgress < 40) {
-            brightness = 80 - phaseProgress * 2;
-          } else if (phaseProgress > 60) {
-            brightness = (phaseProgress - 60) * 2;
-          } else {
-            brightness = 0;
-          }
-        }
-      }
+      // TODO: brightness should not be calculated on the fly, there should be a system to store it for flamesystem and this one.
+      const brightness = calculateBrightness(environmentLight);
 
       shadowContext.beginPath();
       shadowContext.rect(0, 0, largestWidth, largestHeight);
@@ -102,38 +74,39 @@ export default class LightSystem extends System {
         });
       }
 
-      Object.keys(tileMap.objectTileStore.store).forEach((key) => {
-        const tileId = parseInt(key);
-        const tilePosition = tileIdToPixels(tileId, tileMap.width);
-        const lightTile = tileMap.objectTileStore.getByType<"light">(
-          tileId,
-          "light"
-        );
-        if (lightTile && lightTile.value) {
-          const lightTileProperties = lightTile.value;
+      if (environmentLight || (!environmentLight && brightness < 60)) {
+        Object.keys(tileMap.objectTileStore.store).forEach((key) => {
+          const tileId = parseInt(key);
+          const tilePosition = tileIdToPixels(tileId, tileMap.width);
+          const lightTile = tileMap.objectTileStore.getByType<"light">(
+            tileId,
+            "light"
+          );
+          if (lightTile && lightTile.value) {
+            const lightTileProperties = lightTile.value;
 
-          if (lightTile.type === "light") {
-            const position = addOffset(offset, tilePosition);
-            let intensity = lightTileProperties.intensity;
-            if (!intensity) {
-              if (brightness && brightness >= 50) {
-                intensity = 100 - (brightness - 50) * 2;
+            if (lightTile.type === "light") {
+              const position = addOffset(offset, tilePosition);
+              let intensity = lightTileProperties.intensity;
+              if (!intensity) {
+                if (brightness && brightness >= 50) {
+                  intensity = 100 - (brightness - 50) * 2;
+                }
               }
+
+              drawLightSource(shadowContext, position.x + 16, position.y + 16, {
+                radius: lightTileProperties.radius,
+                color: lightTileProperties.color,
+                intensity,
+              });
             }
-
-            drawLightSource(shadowContext, position.x + 16, position.y + 16, {
-              radius: lightTileProperties.radius,
-              color: lightTileProperties.color,
-              intensity,
-            });
           }
-        }
-      });
+        });
+      }
 
-      context2d.save();
       context2d.globalCompositeOperation = "multiply";
       context2d.drawImage(lightCanvas, 0, 0, largestWidth, largestHeight);
-      context2d.restore();
     });
+    context2d.restore();
   }
 }

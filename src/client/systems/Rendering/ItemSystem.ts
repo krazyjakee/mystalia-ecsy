@@ -19,7 +19,7 @@ export default class ItemSystem extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
 
       this.queries.loadingItems.added?.forEach((itemEntity: Entity) => {

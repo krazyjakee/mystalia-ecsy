@@ -1,4 +1,4 @@
-import { Vector } from "types/Grid";
+import { Vector } from "types/TMJ";
 import {
   ObjectTileTypeString,
   ObjectTileType,

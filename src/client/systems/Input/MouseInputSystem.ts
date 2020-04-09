@@ -1,6 +1,6 @@
 import { System, Entity, Not } from "ecsy";
 import { MouseInput } from "../../components/Tags";
-import { Vector } from "types/Grid";
+import { Vector } from "types/TMJ";
 import Movement from "../../components/Movement";
 import TileMap from "../../components/TileMap";
 import { Loadable } from "../../components/Loadable";

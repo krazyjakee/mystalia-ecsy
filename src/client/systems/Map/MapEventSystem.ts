@@ -16,7 +16,7 @@ export default class TileMapObjectListener extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const { width: columns, height: rows } = tileMap;
 

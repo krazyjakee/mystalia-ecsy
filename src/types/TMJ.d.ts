@@ -1,10 +1,16 @@
 import { ObjectTileTypeString } from "./TileMap/ObjectTileStore";
 
+export type Vector = {
+  x: number;
+  y: number;
+};
+
 interface Attributes {
   height: number;
   name: string;
   properties: Property[];
   rotation: number;
+  polygon: Vector[];
   type: ObjectTileTypeString;
   visible: boolean;
   width: number;

@@ -22,7 +22,7 @@ export default class PlayerNameSystem extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
 
