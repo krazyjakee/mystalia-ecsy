@@ -8,10 +8,9 @@ import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
 import LocalPlayer from "../../components/LocalPlayer";
 import { tileIdToPixels } from "utilities/tileMap";
-import { StaticQuery } from "types/ecsy";
 
 export default class TileMapMover extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), Not(Unloadable), Drawable, TileMap],
     },

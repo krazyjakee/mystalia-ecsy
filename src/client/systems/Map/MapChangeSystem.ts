@@ -4,10 +4,9 @@ import LocalPlayer from "../../components/LocalPlayer";
 import ChangeMap from "../../components/ChangeMap";
 import { Unloadable, Loadable } from "../../components/Loadable";
 import { mapAssetPath } from "../../utilities/assets";
-import { StaticQuery } from "types/ecsy";
 
 export default class MapChangeSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     tileMap: { components: [TileMap, Not(Unloadable), Not(Loadable)] },
     localPlayer: { components: [LocalPlayer, ChangeMap] },
   };

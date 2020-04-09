@@ -4,10 +4,9 @@ import { Loadable } from "../../components/Loadable";
 import TileMap from "../../components/TileMap";
 import LocalPlayer from "../../components/LocalPlayer";
 import ChangeMap from "../../components/ChangeMap";
-import { StaticQuery } from "types/ecsy";
 
 export default class TileMapObjectListener extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), TileMap],
     },

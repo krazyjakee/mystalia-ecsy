@@ -3,10 +3,9 @@ import Movement from "../../components/Movement";
 import { Loadable } from "../../components/Loadable";
 import SpriteSheetAnimation from "../../components/SpriteSheetAnimation";
 import { generateAnimationSteps } from "../../utilities/Animation/character";
-import { StaticQuery } from "types/ecsy";
 
 export default class PlayerAnimationSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     player: {
       components: [Not(Loadable), Movement, SpriteSheetAnimation],
     },

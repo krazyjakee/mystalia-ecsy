@@ -19,12 +19,11 @@ import { RoomMessage } from "types/gameState";
 import items from "../../data/items.json";
 import Item from "../../components/Item";
 import { isPresent } from "utilities/guards";
-import { StaticQuery } from "types/ecsy";
 
 let connectionTimer: any;
 
 export default class NetworkingSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     networkRoom: {
       components: [NetworkRoom],
     },
@@ -71,7 +70,7 @@ export default class NetworkingSystem extends System {
           const movement = localEntity.getComponent(Movement);
           if (movement.currentTile >= 0) {
             networkRoom.room?.send({
-              command: "move",
+              command: "localPlayer:movement:report",
               targetTile: movement.currentTile,
             });
           }

@@ -7,10 +7,9 @@ import TileMap from "../../components/TileMap";
 import Drawable from "../../components/Drawable";
 import addOffset from "../../utilities/Vector/addOffset";
 import RemotePlayer from "../../components/RemotePlayer";
-import { StaticQuery } from "types/ecsy";
 
 export default class PlayerNameSystem extends System {
-  static queries: StaticQuery = {
+  static queries = {
     loadedTileMaps: {
       components: [Not(Loadable), Drawable, TileMap],
     },
