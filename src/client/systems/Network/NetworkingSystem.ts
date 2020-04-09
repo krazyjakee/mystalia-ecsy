@@ -70,7 +70,7 @@ export default class NetworkingSystem extends System {
           const movement = localEntity.getComponent(Movement);
           if (movement.currentTile >= 0) {
             networkRoom.room?.send({
-              command: "move",
+              command: "localPlayer:movement:report",
               targetTile: movement.currentTile,
             });
           }
