@@ -50,6 +50,7 @@ export default class LightSystem extends System {
       const environmentLight =
         !!tileMap.properties.light && parseInt(tileMap.properties.light);
 
+      // TODO: brightness should not be calculated on the fly, there should be a system to store it for flamesystem and this one.
       const brightness = calculateBrightness(environmentLight);
 
       shadowContext.beginPath();

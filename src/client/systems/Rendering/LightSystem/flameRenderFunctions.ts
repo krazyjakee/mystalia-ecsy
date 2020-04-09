@@ -31,6 +31,7 @@ export const flameOn = (flameObjectTile: Attributes) => {
     };
 
     drawPolygon();
+    // TODO: It would be nice if it glowed a bit more.
     gCtx.filter = `blur(${blur}px)`;
     drawPolygon();
 
