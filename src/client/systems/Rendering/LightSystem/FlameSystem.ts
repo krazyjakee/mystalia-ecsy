@@ -1,10 +1,9 @@
-import { System, Entity, Not } from "ecsy";
+import { System, Not } from "ecsy";
 import { Loadable } from "../../../components/Loadable";
 import TileMap from "../../../components/TileMap";
 import Drawable from "../../../components/Drawable";
 import { TMJ } from "types/TMJ";
 import { flameOn } from "./flameRenderFunctions";
-import { pixelsToTileId, tileIdToPixels } from "utilities/tileMap";
 import context2d from "../../../canvas";
 import { calculateBrightness } from "./lightRenderFunctions";
 
@@ -28,7 +27,10 @@ export default class FlameSystem extends System {
       const drawable = tileMapEntity.getComponent(Drawable);
       const data = drawable.data as TMJ;
 
-      // finalCanvasContext.clearRect(0, 0, finalCanvas.width, finalCanvas.height);
+      finalCanvas.width = drawable.width;
+      finalCanvas.height = drawable.height;
+
+      finalCanvasContext.clearRect(0, 0, finalCanvas.width, finalCanvas.height);
 
       for (const layer of data.layers) {
         if (layer.type !== "tilelayer") {
@@ -57,8 +59,18 @@ export default class FlameSystem extends System {
 
       const brightness = calculateBrightness(environmentLight);
 
-      if (brightness < 40) {
-        context2d.drawImage(finalCanvas, offset.x, offset.y);
+      if (brightness < 60) {
+        context2d.drawImage(
+          finalCanvas,
+          0 - offset.x,
+          0 - offset.y,
+          context2d.canvas.width,
+          context2d.canvas.height,
+          0,
+          0,
+          context2d.canvas.width,
+          context2d.canvas.height
+        );
       }
     });
   }

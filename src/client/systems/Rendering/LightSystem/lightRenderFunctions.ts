@@ -65,10 +65,10 @@ export const calculateBrightness = (environmentLight: number | false) => {
 
     if (dayPercentage < dayLightPercentage) {
       const phaseProgress = (100 / dayLightPercentage) * dayPercentage;
-      if (phaseProgress < 20) {
+      if (phaseProgress < 40) {
         brightness = 80 + phaseProgress;
-      } else if (phaseProgress > 80) {
-        brightness = 100 - (phaseProgress - 80);
+      } else if (phaseProgress > 60) {
+        brightness = 100 - (phaseProgress - 60);
       } else {
         brightness = 100;
       }
@@ -76,7 +76,7 @@ export const calculateBrightness = (environmentLight: number | false) => {
       const phaseProgress =
         100 - (100 / (100 - dayLightPercentage)) * (100 - dayPercentage);
       if (phaseProgress < 40) {
-        brightness = 80 - phaseProgress * 2;
+        brightness = 60 - phaseProgress * 2;
       } else if (phaseProgress > 60) {
         brightness = (phaseProgress - 60) * 2;
       } else {
