@@ -21,7 +21,7 @@ export default class CommandsSystem extends System {
   };
 
   execute() {
-    this.queries.tileMap.results.forEach((tileMapEntity: Entity) => {
+    this.queries.tileMap.results.forEach((tileMapEntity) => {
       this.queries.localPlayer.results.forEach((localPlayerEntity: Entity) => {
         const drawable = tileMapEntity.getMutableComponent(Drawable);
         const movement = localPlayerEntity.getMutableComponent(Movement);

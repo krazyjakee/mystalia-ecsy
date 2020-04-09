@@ -4,7 +4,7 @@ import {
   ObjectTileType,
   ObjectTileTypeString,
 } from "types/TileMap/ObjectTileStore";
-import { vectorToTileId } from "utilities/tileMap";
+import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
 import { Attributes, Layer, Property } from "types/TMJ";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
@@ -32,9 +32,14 @@ const mapObjectToTileTypes = (
   const objectTileType: ObjectTileStoreType = {};
 
   const { width, height, x, y, type, name } = object;
-  const startTileId = vectorToTileId({ x: x / 32, y: y / 32 }, tileMapColumns);
-  const cols = Math.round(width / 32);
-  const rows = Math.round(height / 32);
+
+  const gridLocked = !["flame"].includes(type);
+
+  const startTileId = gridLocked
+    ? vectorToTileId({ x: x / 32, y: y / 32 }, tileMapColumns)
+    : pixelsToTileId({ x, y }, tileMapColumns);
+  const cols = Math.round(width / 32) || 1;
+  const rows = Math.round(height / 32) || 1;
   const value = serializeProperties(object.properties);
   const totalTiles = cols * rows;
 

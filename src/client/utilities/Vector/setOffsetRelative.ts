@@ -1,4 +1,4 @@
-import { Vector } from "types/Grid";
+import { Vector } from "types/TMJ";
 import addOffset from "./addOffset";
 import detectMapBoundary from "../TileMap/detectMapBoundary";
 

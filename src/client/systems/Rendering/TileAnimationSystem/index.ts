@@ -27,7 +27,7 @@ export default class TileAnimationSystem extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const animatedTiles = tileMapEntity.getComponent(AnimatedTile);
       const drawable = tileMapEntity.getComponent(Drawable);

@@ -6,7 +6,7 @@ import Drawable from "../../../components/Drawable";
 import addOffset from "../../../utilities/Vector/addOffset";
 import LocalPlayer from "../../../components/LocalPlayer";
 import Position from "../../../components/Position";
-import { drawLightSource } from "./lightRenderFunctions";
+import { drawLightSource, calculateBrightness } from "./lightRenderFunctions";
 import config from "../../../config.json";
 import { timeOfDayAsPercentage } from "../../../utilities/time";
 import { tileIdToPixels } from "utilities/tileMap";
@@ -29,7 +29,8 @@ export default class LightSystem extends System {
   };
 
   execute() {
-    this.queries.loadedTileMaps.results.forEach((tileMapEntity: Entity) => {
+    context2d.save();
+    this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
@@ -51,35 +52,9 @@ export default class LightSystem extends System {
       ) as CanvasRenderingContext2D;
 
       const environmentLight =
-        tileMap.properties.light && parseInt(tileMap.properties.light);
-      let brightness = 0;
+        !!tileMap.properties.light && parseInt(tileMap.properties.light);
 
-      if (environmentLight) {
-        brightness = environmentLight;
-      } else {
-        const dayPercentage = timeOfDayAsPercentage();
-
-        if (dayPercentage < dayLightPercentage) {
-          const phaseProgress = (100 / dayLightPercentage) * dayPercentage;
-          if (phaseProgress < 20) {
-            brightness = 80 + phaseProgress;
-          } else if (phaseProgress > 80) {
-            brightness = 100 - (phaseProgress - 80);
-          } else {
-            brightness = 100;
-          }
-        } else {
-          const phaseProgress =
-            100 - (100 / (100 - dayLightPercentage)) * (100 - dayPercentage);
-          if (phaseProgress < 40) {
-            brightness = 80 - phaseProgress * 2;
-          } else if (phaseProgress > 60) {
-            brightness = (phaseProgress - 60) * 2;
-          } else {
-            brightness = 0;
-          }
-        }
-      }
+      const brightness = calculateBrightness(environmentLight);
 
       shadowContext.beginPath();
       shadowContext.rect(0, 0, largestWidth, largestHeight);
@@ -130,10 +105,9 @@ export default class LightSystem extends System {
         }
       });
 
-      context2d.save();
       context2d.globalCompositeOperation = "multiply";
       context2d.drawImage(lightCanvas, 0, 0, largestWidth, largestHeight);
-      context2d.restore();
     });
+    context2d.restore();
   }
 }

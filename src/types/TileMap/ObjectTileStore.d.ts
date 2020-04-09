@@ -16,6 +16,11 @@ export type ObjectTileType = {
     quantity?: number;
     maximumQuantity?: number;
   };
+  flame: {
+    color?: string;
+    blur?: number;
+    opacity?: number;
+  };
 };
 
 export type ObjectTileTypeString = keyof ObjectTileType;

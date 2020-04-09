@@ -1,5 +1,5 @@
 import { Component } from "ecsy";
-import { Vector } from "types/Grid";
+import { Vector } from "types/TMJ";
 
 export default class Drawable extends Component {
   image?: CanvasImageSource | HTMLImageElement | null;
