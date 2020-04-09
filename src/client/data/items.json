@@ -4,5 +4,11 @@
     "name": "Apple",
     "spritesheet": "items",
     "spriteId": 302
+  },
+  {
+    "id": 1,
+    "name": "Stick",
+    "spritesheet": "items",
+    "spriteId": 259
   }
 ]

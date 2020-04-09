@@ -5,7 +5,7 @@ import InventoryState from "./inventory";
 import ItemState from "./item";
 import {
   safeMapSchemaIndex,
-  arrayToMapSchema
+  arrayToMapSchema,
 } from "../utilities/colyseusState";
 
 export default class PlayerState extends Schema {
@@ -64,14 +64,26 @@ export const addItemToPlayer = (
     return item.position;
   });
   positions.sort();
-  const len = inventoryKeys.length;
-  const sum = ((len + 1) * (positions[0] + positions[len - 1])) / 2;
-  const missingPosition = sum - positions.reduce((x, y) => x + y, 0);
+
+  const highestPosition = positions[0];
+  let missingPosition = 0;
+  while (missingPosition <= highestPosition) {
+    if (missingPosition === highestPosition) {
+      missingPosition += 1;
+    }
+
+    if (positions.includes(missingPosition)) {
+      missingPosition += 1;
+    } else {
+      break;
+    }
+  }
+
   const safeIndex = safeMapSchemaIndex(inventoryKeys.length);
   inventoryState[safeIndex] = new InventoryState({
     itemId: item.itemId,
     position: missingPosition || 0,
-    quantity: item.quantity
+    quantity: item.quantity,
   });
 };
 
@@ -79,7 +91,7 @@ export const UserDBState = {
   currentTile: 2431,
   room: "first",
   role: 0,
-  inventory: []
+  inventory: [],
 };
 
 hooks.beforeAuthenticate((_, $setOnInsert) => {
