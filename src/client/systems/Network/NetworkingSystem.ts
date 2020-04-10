@@ -1,6 +1,11 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../../colyseus";
-import { SendData, AwaitingPosition, Remove } from "../../components/Tags";
+import {
+  SendData,
+  AwaitingPosition,
+  Remove,
+  Gray,
+} from "../../components/Tags";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import Movement from "../../components/Movement";
 import CreateRemotePlayer from "../../entities/RemotePlayer";
@@ -60,6 +65,7 @@ export default class NetworkingSystem extends System {
     if (!networkRoom.room) {
       networkRoom.joining = true;
       client.joinOrCreate(name).then((room) => {
+        tileMapEntity.removeComponent(Gray);
         clearTimeout(connectionTimer);
         gameState.addRoom("map", room);
         networkRoom.room = room as RoomState;
@@ -185,10 +191,15 @@ export default class NetworkingSystem extends System {
         };
 
         networkRoom.room.onLeave(() => {
+          tileMapEntity.addComponent(Gray);
+          this.queries.localEntities.results.forEach(
+            (localPlayerEntity: Entity) => {
+              localPlayerEntity.removeComponent(Movement);
+            }
+          );
           connectionTimer = setTimeout(() => {
             (window as any).ecsyError = true;
-            document.dispatchEvent(new Event("ws:close"));
-            alert("Server connection timed out");
+            gameState.trigger("localPlayer:quit");
           }, 5000);
         });
       });

@@ -5,17 +5,18 @@ import { Button } from "./FormControls/Button";
 import { createUseStyles } from "react-jss";
 import { whiteText } from "./palette";
 import { guiAssetPath } from "./cssUtilities";
+import gameState from "../gameState";
 
 const useStyles = createUseStyles({
   title: {
     fontSize: 36,
-    ...whiteText
+    ...whiteText,
   },
   mainMenu: {
     backgroundImage: guiAssetPath("backdrops/darknight.jpg"),
     backgroundPosition: "center center",
     width: "100vw",
-    height: "100vh"
+    height: "100vh",
   },
   content: {
     position: "absolute",
@@ -24,8 +25,8 @@ const useStyles = createUseStyles({
     marginLeft: -120,
     marginTop: -42.5,
     textAlign: "center",
-    fontFamily: "Tahoma"
-  }
+    fontFamily: "Tahoma",
+  },
 });
 
 export default () => {
@@ -45,7 +46,7 @@ export default () => {
   };
 
   useEffect(() => {
-    document.addEventListener("ws:close", () => {
+    gameState.subscribe("localPlayer:quit", () => {
       setHidden(false);
     });
 
