@@ -1,4 +1,5 @@
-import React from "react";
+import React, { SFC, useState, useEffect } from "react";
+import { MapSchema } from "@colyseus/schema";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
 import Hotkey from "../../Utilities/Hotkey";
@@ -9,6 +10,7 @@ import { useGameEvent } from "../../Hooks/useGameEvent";
 import itemsData from "../../../data/items.json";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import InventoryItem from "./InventoryItem";
+import InventoryState from "serverState/inventory";
 
 const useStyles = createUseStyles({
   plank: {
@@ -31,16 +33,25 @@ const useStyles = createUseStyles({
 
 type Props = {
   forceEnable?: boolean;
+  propsInventoryState?: MapSchema<InventoryState>;
 };
 
-export default ({ forceEnable = false }: Props) => {
+
+export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const classes = useStyles();
   const [inventoryState] = useGameEvent("localPlayer:inventory:response");
+  const [iState, setiState] = useState<MapSchema<InventoryState>>();
+
+  useEffect(() => {
+    if (!iState) {
+      setiState(inventoryState || propsInventoryState);
+    }
+  });
 
   const inventoryItems: Array<InventoryItems> = [];
-  if (inventoryState) {
-    for (let key in inventoryState) {
-      const item = inventoryState[key];
+  if (iState) {
+    for (let key in iState) {
+      const item = iState[key] as InventoryState;
       const { itemId, position, quantity } = item;
       const itemData = itemsData.find(data => data.id === itemId);
       if (itemData) {

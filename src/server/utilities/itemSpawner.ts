@@ -16,6 +16,7 @@ export default class ItemSpawner {
 
     this.room = room;
 
+    // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000);
     this.mapItems = getTilesByType("item", mapData) || [];
   }
