@@ -1,5 +1,7 @@
-import React, { SFC, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { MapSchema } from "@colyseus/schema";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import Backend from "react-dnd-html5-backend";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
 import Hotkey from "../../Utilities/Hotkey";
@@ -36,6 +38,16 @@ type Props = {
   propsInventoryState?: MapSchema<InventoryState>;
 };
 
+const EmptySlot = (props: { index: number }) => {
+  const classes = useStyles();
+  const onDrop = () => ({ index: props.index });
+
+  const [collectedProps, drop] = useDrop({
+    accept: "x",
+    drop: onDrop
+  });
+  return <div className={classes.emptySlot} ref={drop} />;
+};
 
 export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const classes = useStyles();
@@ -100,12 +112,16 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
                 <Grid fluid>
                   <Row>
                     <Col className={classes.slotContainer}>
-                      {emptySlots.map(_ => (
-                        <div className={classes.emptySlot} />
-                      ))}
-                      {inventoryItems.map(item => (
-                        <InventoryItem item={item} />
-                      ))}
+                      <DndProvider backend={Backend}>
+                        <div>
+                          {emptySlots.map((_, index) => (
+                            <EmptySlot key={index} index={index} />
+                          ))}
+                          {inventoryItems.map(item => (
+                            <InventoryItem key={item.position} item={item} />
+                          ))}
+                        </div>
+                      </DndProvider>
                     </Col>
                   </Row>
                 </Grid>

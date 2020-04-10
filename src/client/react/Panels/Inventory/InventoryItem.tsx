@@ -5,6 +5,7 @@ import { createUseStyles } from "react-jss";
 import { itemAssetPath } from "../../../utilities/assets";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import { whiteText } from "../../palette";
+import { useDrag } from "react-dnd";
 
 type Props = {
   item: InventoryItems;
@@ -49,6 +50,14 @@ export default (props: Props) => {
     };
   }, [item]);
 
+  const [collectedProps, drag] = useDrag({
+    item: { id: item.position, type: "x" },
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      debugger;
+    }
+  });
+
   if (!spriteSheetSize) {
     return null;
   }
@@ -73,7 +82,12 @@ export default (props: Props) => {
   };
 
   return (
-    <div className={classes.root} style={rootStyles} title={item.name}>
+    <div
+      className={classes.root}
+      style={rootStyles}
+      title={item.name}
+      ref={drag}
+    >
       <div className={classes.sprite} style={spriteStyles}></div>
       <div className={classes.quantity}>
         {item.quantity > 1 ? item.quantity : ""}
