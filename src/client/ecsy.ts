@@ -29,6 +29,7 @@ import CleanupSystem from "./systems/CleanupSystem";
 
 import "./entities";
 import FlameSystem from "./systems/Rendering/LightSystem/FlameSystem";
+import GraySystem from "./systems/Rendering/GraySystem";
 
 let world = new World();
 
@@ -52,6 +53,7 @@ export default (user: User) => {
     .registerSystem(LightSystem)
     .registerSystem(FlameSystem)
     .registerSystem(TileAnimationSystem)
+    .registerSystem(GraySystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)
     .registerSystem(CommandsSystem)

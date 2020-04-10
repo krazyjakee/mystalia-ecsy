@@ -1,6 +1,12 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../../colyseus";
-import { SendData, AwaitingPosition, Remove } from "../../components/Tags";
+import {
+  SendData,
+  AwaitingPosition,
+  Remove,
+  Gray,
+  Disable
+} from "../../components/Tags";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import Movement from "../../components/Movement";
 import CreateRemotePlayer from "../../entities/RemotePlayer";
@@ -25,23 +31,23 @@ let connectionTimer: any;
 export default class NetworkingSystem extends System {
   static queries = {
     networkRoom: {
-      components: [NetworkRoom],
+      components: [NetworkRoom]
     },
     localEntitiesToSend: {
-      components: [SendData, Movement, LocalPlayer],
+      components: [SendData, Movement, LocalPlayer]
     },
     remoteEntities: {
-      components: [RemotePlayer],
+      components: [RemotePlayer]
     },
     tileMaps: {
-      components: [TileMap, Not(Loadable)],
+      components: [TileMap, Not(Loadable)]
     },
     localEntities: {
-      components: [LocalPlayer, Movement],
+      components: [LocalPlayer, Movement]
     },
     loadedItems: {
-      components: [Not(Loadable), Item],
-    },
+      components: [Not(Loadable), Item]
+    }
   };
 
   execute() {
@@ -59,7 +65,8 @@ export default class NetworkingSystem extends System {
 
     if (!networkRoom.room) {
       networkRoom.joining = true;
-      client.joinOrCreate(name).then((room) => {
+      client.joinOrCreate(name).then(room => {
+        tileMapEntity.removeComponent(Gray);
         clearTimeout(connectionTimer);
         gameState.addRoom("map", room);
         networkRoom.room = room as RoomState;
@@ -71,7 +78,7 @@ export default class NetworkingSystem extends System {
           if (movement.currentTile >= 0) {
             networkRoom.room?.send({
               command: "localPlayer:movement:report",
-              targetTile: movement.currentTile,
+              targetTile: movement.currentTile
             });
           }
         });
@@ -81,7 +88,7 @@ export default class NetworkingSystem extends System {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
 
             player.onChange = function(changes) {
-              changes.forEach((change) => {
+              changes.forEach(change => {
                 // const newPosition = newRemotePlayer.getComponent(Position);
                 if (change.field === "targetTile") {
                   const movement = newRemotePlayer.getComponent(Movement);
@@ -95,7 +102,7 @@ export default class NetworkingSystem extends System {
                     );
                     movement.currentTile = player.targetTile;
                     newRemotePlayer.addComponent(NewMovementTarget, {
-                      targetTile: player.targetTile,
+                      targetTile: player.targetTile
                     });
                     position.value = tileIdToVector(player.targetTile, width);
                     newRemotePlayer.removeComponent(AwaitingPosition);
@@ -108,7 +115,7 @@ export default class NetworkingSystem extends System {
               const movement = newRemotePlayer.getMutableComponent(Movement);
               movement.currentTile = player.targetTile;
               newRemotePlayer.addComponent(NewMovementTarget, {
-                targetTile: player.targetTile,
+                targetTile: player.targetTile
               });
               position.value = tileIdToVector(player.targetTile, width);
             } else {
@@ -120,7 +127,7 @@ export default class NetworkingSystem extends System {
               player.inventory
             );
             player.onChange = function(changes) {
-              changes.forEach((change) => {
+              changes.forEach(change => {
                 if (change.field === "inventory") {
                   gameState.trigger(
                     "localPlayer:inventory:response",
@@ -148,9 +155,9 @@ export default class NetworkingSystem extends System {
           }
         };
 
-        networkRoom.room.state.items.onAdd = (item) => {
+        networkRoom.room.state.items.onAdd = item => {
           if (isPresent(item.itemId)) {
-            const itemSpec = items.find((i) => i.id === item.itemId);
+            const itemSpec = items.find(i => i.id === item.itemId);
             if (itemSpec) {
               //@ts-ignore
               const exists = this.queries.loadedItems.results.find(
@@ -186,9 +193,12 @@ export default class NetworkingSystem extends System {
 
         networkRoom.room.onLeave(() => {
           connectionTimer = setTimeout(() => {
-            (window as any).ecsyError = true;
-            document.dispatchEvent(new Event("ws:close"));
-            alert("Server connection timed out");
+            this.queries.localEntities.results.forEach(
+              (localEntity: Entity) => {
+                localEntity.addComponent(Disable);
+              }
+            );
+            tileMapEntity.addComponent(Gray);
           }, 5000);
         });
       });
@@ -205,7 +215,7 @@ export default class NetworkingSystem extends System {
               compassToVector(movement.direction)
             ),
             width
-          ),
+          )
         };
 
         networkRoom.room?.send(packet);

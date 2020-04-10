@@ -23,7 +23,7 @@ export default class TileMapDrawer extends System {
       components: [Not(Loadable), Drawable, TileMap],
     },
     players: {
-      components: [Not(Loadable), Drawable, Movement, Position],
+      components: [Not(Loadable), Drawable, Position],
     },
     loadedItems: {
       components: [Not(Loadable), Item],

@@ -33,6 +33,7 @@ export interface GameStateEvents {
     itemId?: number;
   };
   "localPlayer:inventory:response": MapSchema<InventoryState>;
+  "localPlayer:quit": undefined;
 }
 
 export type GameStateEventName = keyof GameStateEvents;
