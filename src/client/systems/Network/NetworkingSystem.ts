@@ -191,13 +191,13 @@ export default class NetworkingSystem extends System {
         };
 
         networkRoom.room.onLeave(() => {
-          tileMapEntity.addComponent(Gray);
-          this.queries.localEntities.results.forEach(
-            (localPlayerEntity: Entity) => {
-              localPlayerEntity.removeComponent(Movement);
-            }
-          );
           connectionTimer = setTimeout(() => {
+            tileMapEntity.addComponent(Gray);
+            this.queries.localEntities.results.forEach(
+              (localPlayerEntity: Entity) => {
+                localPlayerEntity.removeComponent(Movement);
+              }
+            );
             (window as any).ecsyError = true;
             gameState.trigger("localPlayer:quit");
           }, 5000);
