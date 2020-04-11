@@ -87,6 +87,21 @@ export const addItemToPlayer = (
   });
 };
 
+export const moveInventoryItem = (
+  from: number,
+  to: number,
+  inventoryState: MapSchema<InventoryState>
+) => {
+  for (let key in inventoryState) {
+    const item = inventoryState[key];
+    if (item.position === from) {
+      inventoryState[key].position = to;
+    } else if (item.position === to) {
+      inventoryState[key].position = from;
+    }
+  }
+};
+
 export const UserDBState = {
   currentTile: 2431,
   room: "first",

@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { MapSchema } from "@colyseus/schema";
+import { useDrop, DndProvider } from "react-dnd";
+import Backend from "react-dnd-html5-backend";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
 import Hotkey from "../../Utilities/Hotkey";
@@ -9,40 +12,81 @@ import { useGameEvent } from "../../Hooks/useGameEvent";
 import itemsData from "../../../data/items.json";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import InventoryItem from "./InventoryItem";
+import InventoryState from "serverState/inventory";
+import gameState from "../../../gameState";
 
 const useStyles = createUseStyles({
   plank: {
     backgroundImage: guiAssetPath("panel/inventory-plank.png"),
     width: 343,
     height: 55,
-    marginBottom: 10
+    marginBottom: 10,
   },
   emptySlot: {
     backgroundImage: guiAssetPath("panel/inventory-slot.png"),
     width: 48,
     height: 48,
     margin: "0 6px 6px 6px",
-    float: "left"
+    float: "left",
   },
   slotContainer: {
-    position: "relative"
-  }
+    position: "relative",
+  },
 });
 
 type Props = {
   forceEnable?: boolean;
+  propsInventoryState?: MapSchema<InventoryState>;
 };
 
-export default ({ forceEnable = false }: Props) => {
+const EmptySlot = (props: { index: number }) => {
+  const classes = useStyles();
+  const onDrop = () => ({ index: props.index });
+
+  const [_, drop] = useDrop({
+    accept: "x",
+    drop: onDrop,
+  });
+  return <div className={classes.emptySlot} ref={drop} />;
+};
+
+export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const classes = useStyles();
   const [inventoryState] = useGameEvent("localPlayer:inventory:response");
+  const [iState, setiState] = useState<MapSchema<InventoryState>>();
+
+  useEffect(() => {
+    if (!iState) {
+      setiState(inventoryState || propsInventoryState);
+    }
+  });
+
+  const onDrop = (from: number, to: number) => {
+    if (iState) {
+      gameState.send("map", "localPlayer:inventory:move", {
+        from,
+        to,
+      });
+
+      const newIState = new MapSchema<InventoryState>(iState);
+      for (let key in newIState) {
+        const item = newIState[key] as InventoryState;
+        if (item.position === from) {
+          newIState[key].position = to;
+        } else if (item.position === to) {
+          newIState[key].position = from;
+        }
+      }
+      setiState(newIState);
+    }
+  };
 
   const inventoryItems: Array<InventoryItems> = [];
-  if (inventoryState) {
-    for (let key in inventoryState) {
-      const item = inventoryState[key];
+  if (iState) {
+    for (let key in iState) {
+      const item = iState[key] as InventoryState;
       const { itemId, position, quantity } = item;
-      const itemData = itemsData.find(data => data.id === itemId);
+      const itemData = itemsData.find((data) => data.id === itemId);
       if (itemData) {
         const { spritesheet, spriteId, name } = itemData;
 
@@ -52,7 +96,7 @@ export default ({ forceEnable = false }: Props) => {
           quantity,
           spritesheet,
           spriteId,
-          name
+          name,
         };
       }
     }
@@ -76,8 +120,8 @@ export default ({ forceEnable = false }: Props) => {
             right: false,
             top: false,
             topLeft: false,
-            topRight: false
-          }
+            topRight: false,
+          },
         }}
         isDraggable={true}
       >
@@ -89,12 +133,20 @@ export default ({ forceEnable = false }: Props) => {
                 <Grid fluid>
                   <Row>
                     <Col className={classes.slotContainer}>
-                      {emptySlots.map(_ => (
-                        <div className={classes.emptySlot} />
-                      ))}
-                      {inventoryItems.map(item => (
-                        <InventoryItem item={item} />
-                      ))}
+                      <DndProvider backend={Backend}>
+                        <div>
+                          {emptySlots.map((_, index) => (
+                            <EmptySlot key={index} index={index} />
+                          ))}
+                          {inventoryItems.map((item) => (
+                            <InventoryItem
+                              key={item.position}
+                              item={item}
+                              onDrop={onDrop}
+                            />
+                          ))}
+                        </div>
+                      </DndProvider>
                     </Col>
                   </Row>
                 </Grid>
