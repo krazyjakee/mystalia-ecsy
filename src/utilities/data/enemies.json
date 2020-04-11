@@ -1,0 +1,14 @@
+[
+  {
+    "id": 0,
+    "name": "Woodland Boar",
+    "spritesheet": "wildlife/boar",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5
+      }
+    },
+    "speed": 5
+  }
+]

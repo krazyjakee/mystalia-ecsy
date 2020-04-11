@@ -1,7 +1,7 @@
 import { Schema, MapSchema, type } from "@colyseus/schema";
 import PlayerState from "./player";
 import ItemState from "./item";
-import InventoryState from "./inventory";
+import EnemyState from "./enemy";
 
 export default class MapState extends Schema {
   @type({ map: PlayerState })
@@ -9,4 +9,7 @@ export default class MapState extends Schema {
 
   @type({ map: ItemState })
   items = new MapSchema<ItemState>();
+
+  @type({ map: EnemyState })
+  enemies = new MapSchema<EnemyState>();
 }

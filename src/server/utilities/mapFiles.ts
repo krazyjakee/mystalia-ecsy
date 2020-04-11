@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { getMapProperties } from "./tmjTools";
-import { TMJ } from "types/TMJ";
+import { TMJ, Attributes } from "types/TMJ";
 import {
   ObjectTileType,
   ObjectTileTypeString
@@ -8,9 +8,16 @@ import {
 import { isPresent } from "utilities/guards";
 import { pixelsToTileId, serializeProperties } from "utilities/tileMap";
 
+type MapDataCache = { [key: string]: TMJ };
+let mapCache: MapDataCache;
+
 export const readMapFiles = () => {
+  if (mapCache) {
+    return mapCache;
+  }
+
   const dir = fs.opendirSync("./assets/maps");
-  let maps: { [key: string]: TMJ } = {};
+  let maps: MapDataCache = {};
 
   let file;
   while ((file = dir.readSync()) !== null) {
@@ -26,18 +33,24 @@ export const readMapFiles = () => {
 
   dir.closeSync();
 
+  mapCache = maps;
+
   return maps;
 };
 
-export type SerializedObject<T extends ObjectTileTypeString> = {
+export type SerializedObjectTile<T extends ObjectTileTypeString> = Omit<
+  Attributes,
+  "properties"
+> & {
   tileId: number;
-} & ObjectTileType[T];
+  properties: ObjectTileType[T];
+};
 
 export const getTilesByType = <T extends ObjectTileTypeString>(
   type: T,
   mapData: TMJ
 ) => {
-  let tiles: SerializedObject<T>[] = [];
+  let tiles: SerializedObjectTile<T>[] = [];
   const objectLayers = mapData.layers.filter(
     layer => layer.type === "objectgroup"
   );
@@ -50,8 +63,9 @@ export const getTilesByType = <T extends ObjectTileTypeString>(
         .map(object => {
           const serializedObject = serializeProperties<T>(object.properties);
           if (serializedObject) {
-            const newObject: SerializedObject<T> = {
-              ...serializedObject,
+            const newObject: SerializedObjectTile<T> = {
+              ...object,
+              properties: serializedObject,
               tileId: pixelsToTileId(
                 { x: object.x, y: object.y },
                 mapData.width

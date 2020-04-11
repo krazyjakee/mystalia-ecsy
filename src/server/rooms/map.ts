@@ -3,14 +3,13 @@ import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
 import MapState from "../components/map";
 import Player, {
   addItemToPlayer,
-  moveInventoryItem,
+  moveInventoryItem
 } from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
-import ItemSpawner from "../utilities/itemSpawner";
+import ItemSpawner from "../workers/itemSpawner";
 import ItemSchema from "../db/ItemSchema";
 import ItemState from "serverState/item";
-import { Mongoose, MongooseDocument, Model } from "mongoose";
 
 export default class MapRoom extends Room<MapState> {
   // autoDispose: boolean = false;
@@ -31,7 +30,7 @@ export default class MapRoom extends Room<MapState> {
     const items = mongoose.model("Item", ItemSchema);
     items.find({ room: this.roomName }, (err, res) => {
       if (err) return console.log(err.message);
-      res.forEach((doc) => {
+      res.forEach(doc => {
         const obj = doc.toJSON();
         this.state.items[obj.index] = new ItemState(
           obj.itemId,
@@ -112,12 +111,12 @@ export default class MapRoom extends Room<MapState> {
     if (itemIds.length) {
       const Item = mongoose.model("Item", ItemSchema);
       try {
-        const savePromises = itemIds.map((itemId) => {
+        const savePromises = itemIds.map(itemId => {
           const itemState = this.state.items[itemId];
           const item = new Item({
             ...itemState,
             room: this.roomName,
-            index: itemId,
+            index: itemId
           });
           return item.save;
         });
@@ -131,7 +130,7 @@ export default class MapRoom extends Room<MapState> {
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
       await Promise.all(
-        sessionIds.map((sessionId) =>
+        sessionIds.map(sessionId =>
           savePlayerState(this.state.players[sessionId], this.roomName)
         )
       );

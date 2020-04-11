@@ -1,14 +1,17 @@
-import { readMapFiles, getTilesByType, SerializedObject } from "./mapFiles";
+import {
+  readMapFiles,
+  getTilesByType,
+  SerializedObjectTile
+} from "../utilities/mapFiles";
 import ItemState from "serverState/item";
-import { MapSchema } from "@colyseus/schema";
-import { safeMapSchemaIndex } from "./colyseusState";
+import { safeMapSchemaIndex } from "../utilities/colyseusState";
 import { Room } from "colyseus";
 import MapState from "serverState/map";
 
 export default class ItemSpawner {
   room: Room<MapState>;
   timer: NodeJS.Timeout;
-  mapItems: SerializedObject<"item">[] = [];
+  mapItems: SerializedObjectTile<"item">[] = [];
 
   constructor(mapName: string, room: Room<MapState>) {
     const maps = readMapFiles();
@@ -22,7 +25,8 @@ export default class ItemSpawner {
   }
 
   tick() {
-    this.mapItems.forEach((item, index) => {
+    this.mapItems.forEach((objectTile, index) => {
+      const item = objectTile.properties;
       const safeIndex = safeMapSchemaIndex(index);
       const chance = Math.floor(Math.random() * item.chance);
       const quantity = item.maximumQuantity
@@ -32,7 +36,7 @@ export default class ItemSpawner {
         if (!this.room.state.items[safeIndex]) {
           this.room.state.items[safeIndex] = new ItemState(
             item.id,
-            item.tileId,
+            objectTile.tileId,
             quantity
           );
         }

@@ -22,7 +22,7 @@ import gameState from "../../gameState";
 import CreateItem from "../../entities/Item";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
-import items from "../../data/items.json";
+import items from "utilities/data/items.json";
 import Item from "../../components/Item";
 import { isPresent } from "utilities/guards";
 

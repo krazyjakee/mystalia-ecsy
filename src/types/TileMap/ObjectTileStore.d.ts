@@ -21,6 +21,11 @@ export type ObjectTileType = {
     blur?: number;
     opacity?: number;
   };
+  enemyZone: {
+    chance: number;
+    enemy: number;
+    max: number;
+  };
 };
 
 export type ObjectTileTypeString = keyof ObjectTileType;
