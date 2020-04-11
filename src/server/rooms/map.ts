@@ -1,7 +1,10 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
 import MapState from "../components/map";
-import Player, { addItemToPlayer } from "../components/player";
+import Player, {
+  addItemToPlayer,
+  moveInventoryItem,
+} from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../utilities/itemSpawner";
@@ -81,6 +84,11 @@ export default class MapRoom extends Room<MapState> {
           addItemToPlayer(player.inventory, item);
         }
       }
+    }
+
+    if (message.command === "localPlayer:inventory:move") {
+      const { from, to } = message as RoomMessage<"localPlayer:inventory:move">;
+      moveInventoryItem(from, to, player.inventory);
     }
   }
 

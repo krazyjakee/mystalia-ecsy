@@ -33,6 +33,10 @@ export interface GameStateEvents {
     itemId?: number;
   };
   "localPlayer:inventory:response": MapSchema<InventoryState>;
+  "localPlayer:inventory:move": {
+    from: number;
+    to: number;
+  };
   "localPlayer:quit": undefined;
 }
 

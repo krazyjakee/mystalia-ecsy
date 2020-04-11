@@ -5,7 +5,7 @@ import { createUseStyles } from "react-jss";
 import { itemAssetPath } from "../../../utilities/assets";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import { whiteText } from "../../palette";
-import { useDrag, DragSourceHookSpec } from "react-dnd";
+import { useDrag, DragSourceHookSpec, useDrop } from "react-dnd";
 import { number } from "@colyseus/schema/lib/encoding/decode";
 
 type Props = {
@@ -37,7 +37,7 @@ const useStyles = createUseStyles({
 
 export default (props: Props) => {
   const classes = useStyles();
-  const { item, onDrop } = props;
+  const { item, onDrop: propsOnDrop } = props;
 
   const [spriteSheetSize, setSpriteSheetSize] = useState<{
     width: number;
@@ -56,9 +56,18 @@ export default (props: Props) => {
     item: { id: item.position, type: "x" },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      // @ts-ignore
-      onDrop(item.id, dropResult.value);
+      if (dropResult) {
+        // @ts-ignore
+        propsOnDrop(item.id, dropResult.index);
+      }
     },
+  });
+
+  const onDrop = () => ({ index: item.position });
+
+  const [_, drop] = useDrop({
+    accept: "x",
+    drop: onDrop,
   });
 
   if (!spriteSheetSize) {
@@ -85,15 +94,17 @@ export default (props: Props) => {
   };
 
   return (
-    <div
-      className={classes.root}
-      style={rootStyles}
-      title={item.name}
-      ref={drag}
-    >
-      <div className={classes.sprite} style={spriteStyles}></div>
-      <div className={classes.quantity}>
-        {item.quantity > 1 ? item.quantity : ""}
+    <div ref={drop}>
+      <div
+        className={classes.root}
+        style={rootStyles}
+        title={item.name}
+        ref={drag}
+      >
+        <div className={classes.sprite} style={spriteStyles}></div>
+        <div className={classes.quantity}>
+          {item.quantity > 1 ? item.quantity : ""}
+        </div>
       </div>
     </div>
   );

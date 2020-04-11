@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapSchema } from "@colyseus/schema";
-import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { useDrop, DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
@@ -13,6 +13,7 @@ import itemsData from "../../../data/items.json";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import InventoryItem from "./InventoryItem";
 import InventoryState from "serverState/inventory";
+import gameState from "../../../gameState";
 
 const useStyles = createUseStyles({
   plank: {
@@ -42,7 +43,7 @@ const EmptySlot = (props: { index: number }) => {
   const classes = useStyles();
   const onDrop = () => ({ index: props.index });
 
-  const [collectedProps, drop] = useDrop({
+  const [_, drop] = useDrop({
     accept: "x",
     drop: onDrop,
   });
@@ -60,7 +61,25 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
     }
   });
 
-  const onDrop = (from: number, to: number) => {};
+  const onDrop = (from: number, to: number) => {
+    if (iState) {
+      gameState.send("map", "localPlayer:inventory:move", {
+        from,
+        to,
+      });
+
+      const newIState = new MapSchema<InventoryState>(iState);
+      for (let key in newIState) {
+        const item = newIState[key] as InventoryState;
+        if (item.position === from) {
+          newIState[key].position = to;
+        } else if (item.position === to) {
+          newIState[key].position = from;
+        }
+      }
+      setiState(newIState);
+    }
+  };
 
   const inventoryItems: Array<InventoryItems> = [];
   if (iState) {
