@@ -1,12 +1,11 @@
-import {
-  readMapFiles,
-  getTilesByType,
-  SerializedObjectTile
-} from "../utilities/mapFiles";
+import { readMapFiles } from "../utilities/mapFiles";
 import ItemState from "serverState/item";
 import { safeMapSchemaIndex } from "../utilities/colyseusState";
 import { Room } from "colyseus";
 import MapState from "serverState/map";
+import { SerializedObjectTile, getTilesByType } from "utilities/tileMap";
+import { mongoose } from "@colyseus/social";
+import ItemSchema from "../db/ItemSchema";
 
 export default class ItemSpawner {
   room: Room<MapState>;
@@ -22,6 +21,21 @@ export default class ItemSpawner {
     // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000);
     this.mapItems = getTilesByType("item", mapData) || [];
+  }
+
+  loadFromDB() {
+    const items = mongoose.model("Item", ItemSchema);
+    items.find({ room: this.room.roomName }, (err, res) => {
+      if (err) return console.log(err.message);
+      res.forEach((doc) => {
+        const obj = doc.toJSON();
+        this.room.state.items[obj.index] = new ItemState(
+          obj.itemId,
+          obj.tileId,
+          obj.quantity
+        );
+      });
+    });
   }
 
   tick() {

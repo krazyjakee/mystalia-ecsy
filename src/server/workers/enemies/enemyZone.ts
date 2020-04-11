@@ -2,56 +2,102 @@ import enemySpecsData from "utilities/data/enemies.json";
 import { Room } from "colyseus";
 import MapState from "serverState/map";
 import Enemy from "./enemy";
-import { SerializedObjectTile } from "src/server/utilities/mapFiles";
-import { TMJ } from "types/TMJ";
+import { TMJ, Vector } from "types/TMJ";
+import {
+  pixelsToTileId,
+  tileIdToPixels,
+  SerializedObjectTile,
+} from "utilities/tileMap";
+import { classifyPoint } from "robust-point-in-polygon";
+import MapRoom from "../../rooms/map";
 
 const enemySpecs = enemySpecsData as EnemySpec[];
 
 export default class EnemyZone {
-  chance: number; // Chance of spawning a new enemy (1 in n)
-  enemyId: number; // The enemy ID
-  max: number; // The maximum number of enemies in the zone
+  objectTile: SerializedObjectTile<"enemyZone">;
+  allowedTiles: number[]; // Tiles within the polygon
   spec: EnemySpec;
-  room: Room<MapState>;
+  room: MapRoom;
   timer: NodeJS.Timeout;
   enemies: Enemy[] = [];
 
   constructor(
     objectTile: SerializedObjectTile<"enemyZone">,
     mapData: TMJ,
-    room: Room<MapState>
+    room: MapRoom
   ) {
-    const { chance, enemy, max } = objectTile.properties;
-    this.chance = chance;
-    this.enemyId = enemy;
-    this.max = max;
+    this.objectTile = objectTile;
+    const { enemy } = objectTile.properties;
     this.room = room;
 
-    const spec = enemySpecs.find(spec => spec.id === enemy) || enemySpecs[0];
+    const spec = enemySpecs.find((spec) => spec.id === enemy) || enemySpecs[0];
     this.spec = spec;
+
+    this.allowedTiles = this.calculateAllowedTiles(mapData);
 
     // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000);
   }
 
   tick() {
-    if (this.enemies.length < this.max) {
-      if (Math.floor(Math.random() * this.chance) === 1) {
+    const { chance, max } = this.objectTile.properties;
+    if (this.enemies.length < max) {
+      if (Math.floor(Math.random() * chance) === 1) {
         this.spawn();
       }
     }
   }
 
   spawn() {
-    this.enemies.push(new Enemy(this.spec, this.room));
+    this.enemies.push(new Enemy(this.spec, this.room, this.allowedTiles));
   }
 
-  setAllowedTiles() {
-    // TODO: Create a list of all TileIds that are within the polygon.
+  calculateAllowedTiles(mapData: TMJ) {
+    const columns = mapData.width;
+    const { x, y, polygon } = this.objectTile;
+    const mostNorthWesterlyPoint = {
+      x: x + Math.min(...polygon.map((p) => p.x)),
+      y: y + Math.min(...polygon.map((p) => p.y)),
+    };
+    const mostSouthEasterlyPoint = {
+      x: x + Math.max(...polygon.map((p) => p.x)),
+      y: y + Math.max(...polygon.map((p) => p.y)),
+    };
+    const startTile = pixelsToTileId(mostNorthWesterlyPoint, columns);
+    const endTile = pixelsToTileId(mostSouthEasterlyPoint, columns);
+
+    const vectorToVectorArray = (input: Vector) => [input.x, input.y];
+    const polygonVectorArray = polygon.map(vectorToVectorArray);
+
+    let allowedTiles: number[] = [];
+    for (let i = startTile; i < endTile; i += 1) {
+      const c = vectorToVectorArray(tileIdToPixels(i, columns));
+      const corners = [
+        c,
+        [c[0] + 32, c[1]],
+        [c[0], c[1] + 32],
+        [c[0] + 32, c[1] + 32],
+      ];
+      const tilesInsidePolygon = corners.filter(
+        (corner) => classifyPoint(polygonVectorArray, corner) === -1
+      );
+      if (tilesInsidePolygon.length === 4) {
+        allowedTiles.push(i);
+      }
+    }
+
+    allowedTiles = allowedTiles.filter((tileId) => {
+      if (this.room.objectTileStore) {
+        const tileTypes = this.room.objectTileStore.getTypes(tileId);
+        return tileTypes && tileTypes.includes("block") ? false : true;
+      }
+    });
+
+    return allowedTiles;
   }
 
   dispose() {
     clearInterval(this.timer);
-    this.enemies.forEach(enemy => enemy.dispose());
+    this.enemies.forEach((enemy) => enemy.dispose());
   }
 }

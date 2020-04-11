@@ -3,17 +3,25 @@ import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
 import MapState from "../components/map";
 import Player, {
   addItemToPlayer,
-  moveInventoryItem
+  moveInventoryItem,
 } from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
 import ItemSpawner from "../workers/itemSpawner";
 import ItemSchema from "../db/ItemSchema";
-import ItemState from "serverState/item";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
+import { readMapFiles } from "../utilities/mapFiles";
+import { TMJ } from "types/TMJ";
+import EnemySpawner from "../workers/enemySpawner";
 
 export default class MapRoom extends Room<MapState> {
-  // autoDispose: boolean = false;
   itemSpawner?: ItemSpawner;
+
+  enemySpawner?: EnemySpawner;
+
+  objectTileStore?: ObjectTileStore;
+
+  mapData?: TMJ;
 
   async onAuth(client: Client, options: any) {
     // verify token authenticity
@@ -26,19 +34,15 @@ export default class MapRoom extends Room<MapState> {
   onCreate() {
     console.log(`MapRoom "${this.roomName}" created`);
     this.setState(new MapState());
+
+    const maps = readMapFiles();
+    this.mapData = maps[this.roomName];
+    this.objectTileStore = new ObjectTileStore(this.mapData);
+
     this.itemSpawner = new ItemSpawner(this.roomName, this);
-    const items = mongoose.model("Item", ItemSchema);
-    items.find({ room: this.roomName }, (err, res) => {
-      if (err) return console.log(err.message);
-      res.forEach(doc => {
-        const obj = doc.toJSON();
-        this.state.items[obj.index] = new ItemState(
-          obj.itemId,
-          obj.tileId,
-          obj.quantity
-        );
-      });
-    });
+    this.itemSpawner.loadFromDB();
+
+    this.enemySpawner = new EnemySpawner(this.roomName, this);
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -107,16 +111,20 @@ export default class MapRoom extends Room<MapState> {
       this.itemSpawner.dispose();
     }
 
+    if (this.enemySpawner) {
+      this.enemySpawner.dispose();
+    }
+
     const itemIds = Object.keys(this.state.items);
     if (itemIds.length) {
       const Item = mongoose.model("Item", ItemSchema);
       try {
-        const savePromises = itemIds.map(itemId => {
+        const savePromises = itemIds.map((itemId) => {
           const itemState = this.state.items[itemId];
           const item = new Item({
             ...itemState,
             room: this.roomName,
-            index: itemId
+            index: itemId,
           });
           return item.save;
         });
@@ -130,7 +138,7 @@ export default class MapRoom extends Room<MapState> {
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
       await Promise.all(
-        sessionIds.map(sessionId =>
+        sessionIds.map((sessionId) =>
           savePlayerState(this.state.players[sessionId], this.roomName)
         )
       );

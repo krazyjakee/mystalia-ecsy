@@ -5,7 +5,7 @@ import {
   ObjectTileTypeString,
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
-import { Attributes, Layer, Property } from "types/TMJ";
+import { Attributes, Layer, Property, TMJ } from "types/TMJ";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -72,10 +72,18 @@ export class ObjectTileStore {
   columns: number = 0;
   rows: number = 0;
 
-  constructor(mapColumns: number, mapRows: number) {
-    this.columns = mapColumns;
-    this.rows = mapRows;
+  constructor(
+    mapData: TMJ | { width: number; height: number; layers: number[] } = {
+      width: 0,
+      height: 0,
+      layers: [],
+    }
+  ) {
+    const { width, height, layers } = mapData;
+    this.columns = width;
+    this.rows = height;
     this.store = {};
+    (layers as Layer[]).forEach((layer) => this.add(layer));
   }
 
   get(tileId: number) {

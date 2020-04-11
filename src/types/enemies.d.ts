@@ -16,4 +16,5 @@ type EnemySpec = {
   spriteId: number;
   behavior: EnemyBehaviour;
   speed: number;
+  maxDistance: number;
 };

@@ -1,5 +1,5 @@
 declare module "robust-point-in-polygon" {
-  type VectorArray = [number, number];
+  type VectorArray = number[];
 
   /*
     -1 if point is contained inside loop
@@ -8,5 +8,8 @@ declare module "robust-point-in-polygon" {
   */
   type Result = -1 | 0 | 1;
 
-  export const classifyPoint = (loop: VectorArray[], point: VectorArray): Result
+  export function classifyPoint(
+    loop: VectorArray[],
+    point: VectorArray
+  ): Result;
 }

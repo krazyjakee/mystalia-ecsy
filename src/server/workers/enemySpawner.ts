@@ -1,20 +1,20 @@
-import { readMapFiles, getTilesByType } from "../utilities/mapFiles";
-import { Room } from "colyseus";
-import MapState from "serverState/map";
+import { readMapFiles } from "../utilities/mapFiles";
 import EnemyZone from "./enemies/enemyZone";
+import { getTilesByType } from "utilities/tileMap";
+import MapRoom from "../rooms/map";
 
-export default class ItemSpawner {
-  room: Room<MapState>;
+export default class EnemySpawner {
+  room: MapRoom;
   timer: NodeJS.Timeout;
   enemyZones: EnemyZone[] = [];
 
-  constructor(mapName: string, room: Room<MapState>) {
+  constructor(mapName: string, room: MapRoom) {
     const maps = readMapFiles();
     const mapData = maps[mapName];
 
     this.enemyZones =
       getTilesByType("enemyZone", mapData).map(
-        zoneConfig => new EnemyZone(zoneConfig, mapData, room)
+        (zoneConfig) => new EnemyZone(zoneConfig, mapData, room)
       ) || [];
 
     this.room = room;
@@ -24,11 +24,11 @@ export default class ItemSpawner {
   }
 
   tick() {
-    this.enemyZones.forEach(enemyZone => enemyZone.tick());
+    this.enemyZones.forEach((enemyZone) => enemyZone.tick());
   }
 
   dispose() {
     clearInterval(this.timer);
-    this.enemyZones.forEach(enemyZone => enemyZone.dispose());
+    this.enemyZones.forEach((enemyZone) => enemyZone.dispose());
   }
 }
