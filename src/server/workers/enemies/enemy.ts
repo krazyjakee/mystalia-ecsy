@@ -21,14 +21,15 @@ export default class Enemy {
     room: MapRoom,
     allowedTiles: number[],
     zoneId?: number,
-    currentTile?: number
+    currentTile?: number,
+    stateId?: string
   ) {
     this.spec = spec;
     this.room = room;
     this.allowedTiles = allowedTiles;
-    this.stateId = `i${makeHash(
-      `${new Date().getTime() + new Date().getMilliseconds()}`
-    )}`;
+    this.stateId =
+      stateId ||
+      `i${makeHash(`${new Date().getTime() + new Date().getMilliseconds()}`)}`;
     this.mapColumns = this.room.mapData?.width || 0;
     this.speedMs = (10 - this.spec.speed) * 1000;
 
@@ -86,7 +87,7 @@ export default class Enemy {
       }
     }
 
-    tilesWithinRadius = tilesWithinRadius.filter(tile =>
+    tilesWithinRadius = tilesWithinRadius.filter((tile) =>
       this.allowedTiles.includes(tile)
     );
 
@@ -114,11 +115,11 @@ export default class Enemy {
         targetTileVector
       );
 
-      this.tilePath = aStarPath.map(tileVector =>
+      this.tilePath = aStarPath.map((tileVector) =>
         vectorToTileId(
           {
             x: tileVector[0],
-            y: tileVector[1]
+            y: tileVector[1],
           },
           columns
         )

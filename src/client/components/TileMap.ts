@@ -1,6 +1,5 @@
 import { Component } from "ecsy";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
-import * as EasyStarJs from "easystarjs";
 import { DrawableProperties } from "types/drawable";
 import { TileSetStore } from "types/TileMap/TileSetStore";
 import { TileMapProperties } from "types/TileMap/standard";

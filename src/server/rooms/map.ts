@@ -3,7 +3,7 @@ import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
 import MapState from "../components/map";
 import Player, {
   addItemToPlayer,
-  moveInventoryItem
+  moveInventoryItem,
 } from "../components/player";
 import { savePlayerState } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
@@ -14,6 +14,7 @@ import { readMapFiles } from "../utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import EnemySpawner from "../workers/enemySpawner";
 import EnemySchema from "../db/EnemySchema";
+import EnemyState from "serverState/enemy";
 
 export default class MapRoom extends Room<MapState> {
   itemSpawner?: ItemSpawner;
@@ -117,17 +118,28 @@ export default class MapRoom extends Room<MapState> {
     if (itemIds.length) {
       const Item = mongoose.model("Item", ItemSchema);
       try {
-        const savePromises = itemIds.map(itemId => {
-          const itemState = this.state.items[itemId];
+        const savePromises = itemIds.map((itemIndex) => {
+          const { itemId, quantity, tileId } = this.state.items[itemIndex];
           const item = new Item({
-            ...itemState,
+            itemId,
+            quantity,
+            tileId,
             room: this.roomName,
-            index: itemId
+            index: itemIndex,
           });
-          return item.save;
+          return Item.findOneAndUpdate(
+            {
+              index: itemIndex,
+            },
+            item,
+            { upsert: true }
+          );
         });
 
         await Promise.all(savePromises);
+        console.log(
+          `Saved ${itemIds.length} items in "${this.roomName}" to db.`
+        );
       } catch (err) {
         console.error(err);
       }
@@ -137,17 +149,30 @@ export default class MapRoom extends Room<MapState> {
     if (enemyIds.length) {
       const Enemy = mongoose.model("Enemy", EnemySchema);
       try {
-        const savePromises = enemyIds.map(enemyId => {
-          const enemyState = this.state.enemies[enemyId];
+        const savePromises = enemyIds.map((enemyIndex) => {
+          const { enemyId, zoneId, currentTile } = this.state.enemies[
+            enemyIndex
+          ] as EnemyState;
           const enemy = new Enemy({
-            ...enemyState,
+            enemyId,
+            zoneId,
+            currentTile,
             room: this.roomName,
-            index: enemyId
+            index: enemyIndex,
           });
-          return enemy.save;
+          return Enemy.findOneAndUpdate(
+            {
+              index: enemyIndex,
+            },
+            enemy,
+            { upsert: true }
+          );
         });
 
         await Promise.all(savePromises);
+        console.log(
+          `Saved ${enemyIds.length} enemies in "${this.roomName}" to db.`
+        );
       } catch (err) {
         console.error(err);
       }
@@ -156,7 +181,7 @@ export default class MapRoom extends Room<MapState> {
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
       await Promise.all(
-        sessionIds.map(sessionId =>
+        sessionIds.map((sessionId) =>
           savePlayerState(this.state.players[sessionId], this.roomName)
         )
       );
