@@ -6,28 +6,28 @@ import MapState from "serverState/map";
 import { SerializedObjectTile, getTilesByType } from "utilities/tileMap";
 import { mongoose } from "@colyseus/social";
 import ItemSchema from "../db/ItemSchema";
+import MapRoom from "../rooms/map";
 
 export default class ItemSpawner {
-  room: Room<MapState>;
+  room: MapRoom;
   timer: NodeJS.Timeout;
   mapItems: SerializedObjectTile<"item">[] = [];
 
-  constructor(mapName: string, room: Room<MapState>) {
-    const maps = readMapFiles();
-    const mapData = maps[mapName];
-
+  constructor(room: MapRoom) {
     this.room = room;
 
     // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000);
-    this.mapItems = getTilesByType("item", mapData) || [];
+    if (this.room.mapData) {
+      this.mapItems = getTilesByType("item", this.room.mapData) || [];
+    }
   }
 
   loadFromDB() {
     const items = mongoose.model("Item", ItemSchema);
     items.find({ room: this.room.roomName }, (err, res) => {
       if (err) return console.log(err.message);
-      res.forEach((doc) => {
+      res.forEach(doc => {
         const obj = doc.toJSON();
         this.room.state.items[obj.index] = new ItemState(
           obj.itemId,
@@ -44,7 +44,7 @@ export default class ItemSpawner {
       const safeIndex = safeMapSchemaIndex(index);
       const chance = Math.floor(Math.random() * item.chance);
       const quantity = item.maximumQuantity
-        ? Math.floor(Math.random() * item.maximumQuantity)
+        ? Math.floor(Math.random() * item.maximumQuantity) + 1
         : item.quantity;
       if (chance === 1) {
         if (!this.room.state.items[safeIndex]) {

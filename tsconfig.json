@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "moduleResolution": "node",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strict": true,
     "sourceMap": true,
     "baseUrl": ".",

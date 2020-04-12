@@ -9,7 +9,7 @@ type EnemyBehaviour = {
   [key in EnemyBehaviourNames]: EnemyBehaviourProperty;
 };
 
-type EnemySpec = {
+export type EnemySpec = {
   id: number;
   name: string;
   spritesheet: string;

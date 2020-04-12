@@ -8,7 +8,7 @@ declare module "robust-point-in-polygon" {
   */
   type Result = -1 | 0 | 1;
 
-  export function classifyPoint(
+  export default function robustPointInPolygon(
     loop: VectorArray[],
     point: VectorArray
   ): Result;

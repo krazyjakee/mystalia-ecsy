@@ -8,14 +8,13 @@ export default class EnemySpawner {
   timer: NodeJS.Timeout;
   enemyZones: EnemyZone[] = [];
 
-  constructor(mapName: string, room: MapRoom) {
-    const maps = readMapFiles();
-    const mapData = maps[mapName];
-
-    this.enemyZones =
-      getTilesByType("enemyZone", mapData).map(
-        (zoneConfig) => new EnemyZone(zoneConfig, mapData, room)
-      ) || [];
+  constructor(room: MapRoom) {
+    if (room.mapData) {
+      this.enemyZones =
+        getTilesByType("enemyZone", room.mapData).map(
+          zoneConfig => new EnemyZone(zoneConfig, room)
+        ) || [];
+    }
 
     this.room = room;
 
@@ -24,11 +23,11 @@ export default class EnemySpawner {
   }
 
   tick() {
-    this.enemyZones.forEach((enemyZone) => enemyZone.tick());
+    this.enemyZones.forEach(enemyZone => enemyZone.tick());
   }
 
   dispose() {
     clearInterval(this.timer);
-    this.enemyZones.forEach((enemyZone) => enemyZone.dispose());
+    this.enemyZones.forEach(enemyZone => enemyZone.dispose());
   }
 }
