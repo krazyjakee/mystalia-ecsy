@@ -13,6 +13,7 @@ import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { readMapFiles } from "../utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import EnemySpawner from "../workers/enemySpawner";
+import EnemySchema from "../db/EnemySchema";
 
 export default class MapRoom extends Room<MapState> {
   itemSpawner?: ItemSpawner;
@@ -124,6 +125,26 @@ export default class MapRoom extends Room<MapState> {
             index: itemId
           });
           return item.save;
+        });
+
+        await Promise.all(savePromises);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    const enemyIds = Object.keys(this.state.enemies);
+    if (enemyIds.length) {
+      const Enemy = mongoose.model("Enemy", EnemySchema);
+      try {
+        const savePromises = enemyIds.map(enemyId => {
+          const enemyState = this.state.enemies[enemyId];
+          const enemy = new Enemy({
+            ...enemyState,
+            room: this.roomName,
+            index: enemyId
+          });
+          return enemy.save;
         });
 
         await Promise.all(savePromises);

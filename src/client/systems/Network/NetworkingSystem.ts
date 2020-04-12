@@ -103,7 +103,6 @@ export default class NetworkingSystem extends System {
                 const awaitingPosition = newEnemy.hasComponent(
                   AwaitingPosition
                 );
-                console.log(awaitingPosition);
                 if (!awaitingPosition) movement.tileQueue.push(change.value);
                 else if (enemy.currentTile !== undefined) {
                   const position = newEnemy.getMutableComponent(Position);

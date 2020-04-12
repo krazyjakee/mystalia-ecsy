@@ -7,6 +7,9 @@ import {
 } from "utilities/tileMap";
 import MapRoom from "../../rooms/map";
 import { EnemySpec } from "types/enemies";
+import EnemySchema from "src/server/db/EnemySchema";
+import { mongoose } from "@colyseus/social";
+import EnemyState from "serverState/enemy";
 
 const robustPointInPolygon = require("robust-point-in-polygon");
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
@@ -45,9 +48,40 @@ export default class EnemyZone {
     }
   }
 
+  loadFromDB() {
+    const enemies = mongoose.model("Enemy", EnemySchema);
+    enemies.find(
+      { room: this.room.roomName, zoneId: this.objectTile.tileId },
+      (err, res) => {
+        if (err) return console.log(err.message);
+        res.forEach(doc => {
+          if (this.allowedTiles) {
+            const obj = doc.toJSON();
+            this.enemies.push(
+              new Enemy(
+                this.spec,
+                this.room,
+                this.allowedTiles,
+                this.objectTile.tileId,
+                obj.currentTile
+              )
+            );
+          }
+        });
+      }
+    );
+  }
+
   spawn() {
     if (this.allowedTiles?.length) {
-      this.enemies.push(new Enemy(this.spec, this.room, this.allowedTiles));
+      this.enemies.push(
+        new Enemy(
+          this.spec,
+          this.room,
+          this.allowedTiles,
+          this.objectTile.tileId
+        )
+      );
     }
   }
 

@@ -16,7 +16,13 @@ export default class Enemy {
   mapColumns: number;
   speedMs: number;
 
-  constructor(spec: EnemySpec, room: MapRoom, allowedTiles: number[]) {
+  constructor(
+    spec: EnemySpec,
+    room: MapRoom,
+    allowedTiles: number[],
+    zoneId?: number,
+    currentTile?: number
+  ) {
     this.spec = spec;
     this.room = room;
     this.allowedTiles = allowedTiles;
@@ -27,11 +33,13 @@ export default class Enemy {
     this.speedMs = (10 - this.spec.speed) * 1000;
 
     this.currentTile =
+      currentTile ||
       allowedTiles[Math.floor(Math.random() * allowedTiles.length)] + 1;
 
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
-      this.currentTile
+      this.currentTile,
+      zoneId
     );
 
     this.tick();
@@ -48,7 +56,7 @@ export default class Enemy {
           ] as EnemyState).currentTile = targetTile;
         }
         this.tick();
-      }, this.speedMs / 3);
+      }, 1000 / this.spec.speed);
     } else {
       setTimeout(() => {
         this.findNewTargetTile();

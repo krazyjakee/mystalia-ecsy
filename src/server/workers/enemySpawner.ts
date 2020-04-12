@@ -14,6 +14,8 @@ export default class EnemySpawner {
         getTilesByType("enemyZone", room.mapData).map(
           zoneConfig => new EnemyZone(zoneConfig, room)
         ) || [];
+
+      this.enemyZones.forEach(zone => zone.loadFromDB());
     }
 
     this.room = room;
