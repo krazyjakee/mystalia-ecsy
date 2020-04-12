@@ -48,7 +48,7 @@ export default class Enemy {
           ] as EnemyState).currentTile = targetTile;
         }
         this.tick();
-      }, this.speedMs);
+      }, this.speedMs / 3);
     } else {
       setTimeout(() => {
         this.findNewTargetTile();

@@ -25,6 +25,9 @@ import { RoomMessage } from "types/gameState";
 import items from "utilities/data/items.json";
 import Item from "../../components/Item";
 import { isPresent } from "utilities/guards";
+import CreateEnemy from "../../entities/Enemy";
+import enemySpecs from "utilities/data/enemies.json";
+import { EnemySpec } from "types/enemies";
 
 let connectionTimer: any;
 
@@ -82,6 +85,39 @@ export default class NetworkingSystem extends System {
             });
           }
         });
+
+        networkRoom.room.state.enemies.onAdd = (enemy, key) => {
+          const enemySpec = (enemySpecs as EnemySpec[]).find(
+            spec => spec.id === enemy.enemyId
+          );
+          if (!enemySpec) {
+            return;
+          }
+
+          const newEnemy = CreateEnemy(enemy, enemySpec);
+
+          enemy.onChange = function(changes) {
+            changes.forEach(change => {
+              if (change.field === "currentTile") {
+                const movement = newEnemy.getComponent(Movement);
+                const awaitingPosition = newEnemy.hasComponent(
+                  AwaitingPosition
+                );
+                console.log(awaitingPosition);
+                if (!awaitingPosition) movement.tileQueue.push(change.value);
+                else if (enemy.currentTile !== undefined) {
+                  const position = newEnemy.getMutableComponent(Position);
+                  movement.currentTile = enemy.currentTile;
+                  newEnemy.addComponent(NewMovementTarget, {
+                    targetTile: enemy.currentTile
+                  });
+                  position.value = tileIdToVector(enemy.currentTile, width);
+                  newEnemy.removeComponent(AwaitingPosition);
+                }
+              }
+            });
+          };
+        };
 
         networkRoom.room.state.players.onAdd = (player, key) => {
           if (myKey !== key) {
