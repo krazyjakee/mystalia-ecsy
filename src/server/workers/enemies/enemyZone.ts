@@ -46,7 +46,7 @@ export default class EnemyZone {
   }
 
   spawn() {
-    if (this.allowedTiles) {
+    if (this.allowedTiles?.length) {
       this.enemies.push(new Enemy(this.spec, this.room, this.allowedTiles));
     }
   }
@@ -66,7 +66,12 @@ export default class EnemyZone {
     const endTile = pixelsToTileId(mostSouthEasterlyPoint, columns);
 
     const vectorToVectorArray = (input: Vector) => [input.x, input.y];
-    const polygonVectorArray = polygon.map(vectorToVectorArray);
+    const polygonVectorArray = polygon.map(point =>
+      vectorToVectorArray({
+        x: x + point.x,
+        y: y + point.y
+      })
+    );
 
     let allowedTiles: number[] = [];
     for (let i = startTile; i < endTile; i += 1) {
@@ -78,7 +83,7 @@ export default class EnemyZone {
         [c[0] + 32, c[1] + 32]
       ];
       const tilesInsidePolygon = corners.filter(
-        corner => robustPointInPolygon(polygonVectorArray, corner) === -1
+        corner => robustPointInPolygon(polygonVectorArray, corner) !== 1
       );
       if (tilesInsidePolygon.length === 4) {
         allowedTiles.push(i);

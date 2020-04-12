@@ -16,7 +16,6 @@ export default class TileMap extends Component {
   height: number = 0;
   name: string = "";
   targetTile: number | null = null;
-  aStar = new EasyStarJs.js();
 
   reset() {
     this.tiles = [];
@@ -29,6 +28,5 @@ export default class TileMap extends Component {
     this.targetTile = null;
     this.canvasCache = [];
     this.properties = {};
-    this.aStar = new EasyStarJs.js();
   }
 }

@@ -37,20 +37,15 @@ export default (entity: Entity, tileMap: TileMap) => {
   ) {
     movement.pathingTo = newTarget;
     try {
-      tileMap.aStar.findPath(
-        roundPosition.x,
-        roundPosition.y,
-        destinationTile.x,
-        destinationTile.y,
-        (path) => {
-          if (path) {
-            movement.tileQueue = path.map((p) => p.x + p.y * columns);
-            movement.targetTile = newTarget;
-          }
-          movement.pathingTo = undefined;
-        }
+      const path = tileMap.objectTileStore.aStar.findPath(
+        roundPosition,
+        destinationTile
       );
-      tileMap.aStar.calculate();
+      if (path) {
+        movement.tileQueue = path.map(p => p[0] + p[1] * columns);
+        movement.targetTile = newTarget;
+      }
+      movement.pathingTo = undefined;
     } catch (_) {}
   }
 

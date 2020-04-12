@@ -30,22 +30,15 @@ export default async (
 
   // Set the map name
   tileMap.name =
-    data.properties.find((property) => property.name === "name")?.value ||
+    data.properties.find(property => property.name === "name")?.value ||
     "first";
 
   // Set the map properties
   const properties: TileMapProperties = {};
   data.properties.forEach(
-    (property) => (properties[property.name] = property.value)
+    property => (properties[property.name] = property.value)
   );
   tileMap.properties = properties;
-
-  // Setup the astar pathfinding grid
-  const aStarGridData = tileMap.objectTileStore.getBlockGrid();
-  if (aStarGridData) {
-    tileMap.aStar.setGrid(aStarGridData);
-    tileMap.aStar.setAcceptableTiles([0]);
-  }
 
   // Save tileset data and download assets
   const { tilesets } = data;

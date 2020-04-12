@@ -3,6 +3,7 @@ import EnemyState from "serverState/enemy";
 import MapRoom from "src/server/rooms/map";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
+import { isPresent } from "utilities/guards";
 
 export default class Enemy {
   stateId: string;
@@ -26,7 +27,7 @@ export default class Enemy {
     this.speedMs = (10 - this.spec.speed) * 1000;
 
     this.currentTile =
-      allowedTiles[Math.floor(Math.random() * allowedTiles.length)];
+      allowedTiles[Math.floor(Math.random() * allowedTiles.length)] + 1;
 
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
@@ -41,12 +42,13 @@ export default class Enemy {
       setTimeout(() => {
         const targetTile = this.tilePath.shift();
         if (targetTile) {
+          this.currentTile = targetTile;
           (this.room.state.enemies[
             this.stateId
           ] as EnemyState).currentTile = targetTile;
         }
         this.tick();
-      }, this.speedMs / 2);
+      }, this.speedMs);
     } else {
       setTimeout(() => {
         this.findNewTargetTile();
@@ -55,21 +57,20 @@ export default class Enemy {
     }
   }
 
-  findNewTargetTile() {
-    // TODO: Add "awayFrom" and "towards" to force direction of movement
+  findTilesInRadius() {
     const distance = this.spec.maxDistance;
     const columns = this.mapColumns;
     const topLeft = this.currentTile - distance * columns - distance;
     const tilesInRow = distance * 2 + 1;
     const tilesInRadius = tilesInRow * tilesInRow;
 
-    let tilesWithinDistance: number[] = [];
+    let tilesWithinRadius: number[] = [];
     let rowCount = 0;
     let columnCount = 0;
-    for (let i = 0; i < tilesInRadius; i += 1) {
-      tilesWithinDistance.push(columnCount + topLeft + columns * rowCount);
 
-      if (columnCount === tilesInRow) {
+    for (let i = 0; i < tilesInRadius; i += 1) {
+      tilesWithinRadius.push(columnCount + topLeft + columns * rowCount);
+      if (columnCount === tilesInRow - 1) {
         columnCount = 0;
         rowCount += 1;
       } else {
@@ -77,30 +78,44 @@ export default class Enemy {
       }
     }
 
-    tilesWithinDistance = tilesWithinDistance.filter(tile =>
+    tilesWithinRadius = tilesWithinRadius.filter(tile =>
       this.allowedTiles.includes(tile)
     );
 
-    const targetTile =
-      tilesWithinDistance[
-        Math.floor(Math.random() * tilesWithinDistance.length) + 1
-      ];
+    return tilesWithinRadius;
+  }
 
-    // TODO: Fix bug where targetTileVector is NaN
-    const currentTileVector = tileIdToVector(this.currentTile, columns);
-    const targetTileVector = tileIdToVector(targetTile, columns);
-    this.room.aStar.findPath(
-      currentTileVector.x,
-      currentTileVector.y,
-      targetTileVector.x,
-      targetTileVector.y,
-      path => {
-        this.tilePath = path.map(tileVector =>
-          vectorToTileId(tileVector, columns)
-        );
-      }
-    );
-    this.room.aStar.calculate();
+  findNewTargetTile() {
+    // TODO: Add "awayFrom" and "towards" to force direction of movement
+    const columns = this.mapColumns;
+
+    const tilesWithinRadius = this.findTilesInRadius();
+
+    let targetTile = this.currentTile;
+    while (targetTile === this.currentTile) {
+      targetTile =
+        tilesWithinRadius[Math.floor(Math.random() * tilesWithinRadius.length)];
+    }
+
+    if (this.room.objectTileStore) {
+      const currentTileVector = tileIdToVector(this.currentTile, columns);
+      const targetTileVector = tileIdToVector(targetTile, columns);
+
+      const aStarPath = this.room.objectTileStore.aStar.findPath(
+        currentTileVector,
+        targetTileVector
+      );
+
+      this.tilePath = aStarPath.map(tileVector =>
+        vectorToTileId(
+          {
+            x: tileVector[0],
+            y: tileVector[1]
+          },
+          columns
+        )
+      );
+    }
   }
 
   destroy() {

@@ -3,11 +3,13 @@ type EnemyBehaviourProperty = {
   distance: number;
 };
 
-type EnemyBehaviourNames = "skeptical" | "escape" | "attack";
-
 type EnemyBehaviour = {
-  [key in EnemyBehaviourNames]: EnemyBehaviourProperty;
+  skeptical?: EnemyBehaviourProperty;
+  escape?: EnemyBehaviourProperty;
+  attack?: EnemyBehaviourProperty;
 };
+
+type EnemyBehaviourNames = keyof EnemyBehaviour;
 
 export type EnemySpec = {
   id: number;

@@ -1,6 +1,5 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
-import * as EasyStarJs from "easystarjs";
 import MapState from "../components/map";
 import Player, {
   addItemToPlayer,
@@ -16,7 +15,6 @@ import { TMJ } from "types/TMJ";
 import EnemySpawner from "../workers/enemySpawner";
 
 export default class MapRoom extends Room<MapState> {
-  aStar: EasyStarJs.js = new EasyStarJs.js();
   itemSpawner?: ItemSpawner;
   enemySpawner?: EnemySpawner;
   objectTileStore?: ObjectTileStore;
@@ -37,10 +35,6 @@ export default class MapRoom extends Room<MapState> {
     const maps = readMapFiles();
     this.mapData = maps[this.roomName];
     this.objectTileStore = new ObjectTileStore(this.mapData);
-
-    console.log(this.objectTileStore.getBlockGrid());
-    this.aStar.setGrid(this.objectTileStore.getBlockGrid());
-    this.aStar.setAcceptableTiles([0]);
 
     this.itemSpawner = new ItemSpawner(this);
     this.itemSpawner.loadFromDB();

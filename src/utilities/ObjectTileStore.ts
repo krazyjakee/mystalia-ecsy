@@ -2,10 +2,11 @@ import {
   ObjectTileStoreType,
   ObjectTile,
   ObjectTileType,
-  ObjectTileTypeString,
+  ObjectTileTypeString
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
 import { Attributes, Layer, Property, TMJ } from "types/TMJ";
+import { AStarFinder } from "astar-typescript";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -15,7 +16,7 @@ const serializeProperties = <T extends ObjectTileTypeString>(
     // Need somewhere to start building the object
     // @ts-ignore
     property = {};
-    properties.forEach((objectProperty) => {
+    properties.forEach(objectProperty => {
       if (objectProperty.name) {
         // @ts-ignore
         property[objectProperty.name] = objectProperty.value;
@@ -51,7 +52,7 @@ const mapObjectToTileTypes = (
     const newObjectTile = {
       name,
       type: type || "block",
-      value,
+      value
     };
 
     objectTileType[newTileId] = [newObjectTile];
@@ -71,19 +72,31 @@ export class ObjectTileStore {
   store: ObjectTileStoreType;
   columns: number = 0;
   rows: number = 0;
+  aStar: AStarFinder;
 
   constructor(
     mapData: TMJ | { width: number; height: number; layers: number[] } = {
       width: 0,
       height: 0,
-      layers: [],
+      layers: []
     }
   ) {
     const { width, height, layers } = mapData;
     this.columns = width;
     this.rows = height;
     this.store = {};
-    (layers as Layer[]).forEach((layer) => this.add(layer));
+
+    (layers as Layer[]).forEach(layer => this.add(layer));
+
+    this.aStar = new AStarFinder({
+      grid: layers.length
+        ? {
+            matrix: this.getBlockGrid()
+          }
+        : { width: 2, height: 2 },
+      diagonalAllowed: false,
+      includeStartNode: false
+    });
   }
 
   get(tileId: number) {
@@ -95,7 +108,7 @@ export class ObjectTileStore {
     type: T
   ): ObjectTile<T> | null {
     if (this.store[tileId]) {
-      return this.store[tileId].find((tile) => tile.type === type) || null;
+      return this.store[tileId].find(tile => tile.type === type) || null;
     }
     return null;
   }
@@ -103,7 +116,7 @@ export class ObjectTileStore {
   getTypes(tileId: number) {
     const tiles = this.get(tileId);
     if (tiles) {
-      return tiles.map((tile) => tile.type);
+      return tiles.map(tile => tile.type);
     }
   }
 
@@ -118,9 +131,9 @@ export class ObjectTileStore {
       return;
     }
 
-    layer.objects.forEach((object) => {
+    layer.objects.forEach(object => {
       const tileData = mapObjectToTileTypes(object, this.columns);
-      Object.keys(tileData).forEach((id) => {
+      Object.keys(tileData).forEach(id => {
         const tileId = parseInt(id);
         this.set(tileId, tileData[tileId]);
       });
