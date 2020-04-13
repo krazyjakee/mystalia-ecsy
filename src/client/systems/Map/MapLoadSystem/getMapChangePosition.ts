@@ -1,4 +1,4 @@
-import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { Direction } from "types/Grid";
 
 export default (

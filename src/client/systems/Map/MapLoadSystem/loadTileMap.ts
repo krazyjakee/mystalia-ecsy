@@ -1,10 +1,9 @@
 import Drawable from "../../../components/Drawable";
 import TileMap from "../../../components/TileMap";
 import { TMJ, Layer } from "types/TMJ";
-import { ObjectTileStore } from "../../../utilities/TileMap/ObjectTileStore";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { loadImage, loadData } from "../../../utilities/assets";
-import AnimatedTile from "../../../components/AnimatedTile";
 
 export default async (
   dataPath: string,
@@ -27,8 +26,7 @@ export default async (
   data.layers.sort((a: Layer, b: Layer) => parseInt(a.id) - parseInt(b.id));
 
   // Create an object store from the object tiles
-  tileMap.objectTileStore = new ObjectTileStore(data.width, data.height);
-  data.layers.forEach(layer => tileMap.objectTileStore?.add(layer));
+  tileMap.objectTileStore = new ObjectTileStore(data);
 
   // Set the map name
   tileMap.name =
@@ -41,13 +39,6 @@ export default async (
     property => (properties[property.name] = property.value)
   );
   tileMap.properties = properties;
-
-  // Setup the astar pathfinding grid
-  const aStarGridData = tileMap.objectTileStore.getBlockGrid();
-  if (aStarGridData) {
-    tileMap.aStar.setGrid(aStarGridData);
-    tileMap.aStar.setAcceptableTiles([0]);
-  }
 
   // Save tileset data and download assets
   const { tilesets } = data;

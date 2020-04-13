@@ -4,6 +4,7 @@ import {
   RoomMessage,
 } from "types/gameState";
 import { Room } from "colyseus.js";
+import { makeHash } from "utilities/hash";
 
 type CallbacksContainer<T extends GameStateEventName> = {
   [key: string]: CallbackObject<T>[];
@@ -19,19 +20,6 @@ type CallbackObject<T extends GameStateEventName> = {
 };
 
 type RoomTypes = "admin" | "map";
-
-const makeHash = (input: string) => {
-  var hash = 0,
-    i,
-    chr;
-  if (input.length === 0) return hash;
-  for (i = 0; i < input.length; i++) {
-    chr = input.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0;
-  }
-  return hash;
-};
 
 class GameState {
   rooms: { [key: string]: Room } = {};

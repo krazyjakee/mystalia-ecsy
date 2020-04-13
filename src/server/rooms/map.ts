@@ -5,16 +5,19 @@ import Player, {
   addItemToPlayer,
   moveInventoryItem,
 } from "../components/player";
-import { savePlayerState } from "../utilities/dbState";
+import { savePlayerState, saveStateToDb } from "../utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
-import ItemSpawner from "../utilities/itemSpawner";
-import ItemSchema from "../db/ItemSchema";
-import ItemState from "serverState/item";
-import { Mongoose, MongooseDocument, Model } from "mongoose";
+import ItemSpawner from "../workers/itemSpawner";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
+import { readMapFiles } from "../utilities/mapFiles";
+import { TMJ } from "types/TMJ";
+import EnemySpawner from "../workers/enemySpawner";
 
 export default class MapRoom extends Room<MapState> {
-  // autoDispose: boolean = false;
   itemSpawner?: ItemSpawner;
+  enemySpawner?: EnemySpawner;
+  objectTileStore?: ObjectTileStore;
+  mapData?: TMJ;
 
   async onAuth(client: Client, options: any) {
     // verify token authenticity
@@ -27,19 +30,15 @@ export default class MapRoom extends Room<MapState> {
   onCreate() {
     console.log(`MapRoom "${this.roomName}" created`);
     this.setState(new MapState());
-    this.itemSpawner = new ItemSpawner(this.roomName, this);
-    const items = mongoose.model("Item", ItemSchema);
-    items.find({ room: this.roomName }, (err, res) => {
-      if (err) return console.log(err.message);
-      res.forEach((doc) => {
-        const obj = doc.toJSON();
-        this.state.items[obj.index] = new ItemState(
-          obj.itemId,
-          obj.tileId,
-          obj.quantity
-        );
-      });
-    });
+
+    const maps = readMapFiles();
+    this.mapData = maps[this.roomName];
+    this.objectTileStore = new ObjectTileStore(this.mapData);
+
+    this.itemSpawner = new ItemSpawner(this);
+    this.itemSpawner.loadFromDB();
+
+    this.enemySpawner = new EnemySpawner(this);
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -108,25 +107,12 @@ export default class MapRoom extends Room<MapState> {
       this.itemSpawner.dispose();
     }
 
-    const itemIds = Object.keys(this.state.items);
-    if (itemIds.length) {
-      const Item = mongoose.model("Item", ItemSchema);
-      try {
-        const savePromises = itemIds.map((itemId) => {
-          const itemState = this.state.items[itemId];
-          const item = new Item({
-            ...itemState,
-            room: this.roomName,
-            index: itemId,
-          });
-          return item.save;
-        });
-
-        await Promise.all(savePromises);
-      } catch (err) {
-        console.error(err);
-      }
+    if (this.enemySpawner) {
+      this.enemySpawner.dispose();
     }
+
+    await saveStateToDb("Item", this.roomName, this.state.items);
+    await saveStateToDb("Enemy", this.roomName, this.state.enemies);
 
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {

@@ -1,21 +1,27 @@
 import { Direction } from "types/Grid";
 
-export const generateAnimationSteps = (direction: Direction = "s") => {
+export const generateAnimationSteps = (
+  direction: Direction = "s",
+  { width, height }: { width: number; height: number } = {
+    width: 24,
+    height: 32
+  }
+) => {
   const ys = {
     n: 0,
-    e: 32,
-    s: 64,
-    w: 96
+    e: height,
+    s: height * 2,
+    w: height * 3
   };
   const y = ys[direction];
 
   return [
     {
-      x: 24,
+      x: width,
       y
     },
     {
-      x: 48,
+      x: width * 2,
       y
     },
     {

@@ -1,4 +1,4 @@
-import { Vector } from "./Grid";
+import { Vector } from "./TMJ";
 
 export type DrawableProperties = {
   name?: string;
