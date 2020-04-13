@@ -9,7 +9,6 @@ import MapRoom from "../../rooms/map";
 import { EnemySpec } from "types/enemies";
 import EnemySchema from "src/server/db/EnemySchema";
 import { mongoose } from "@colyseus/social";
-import EnemyState from "serverState/enemy";
 
 const robustPointInPolygon = require("robust-point-in-polygon");
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];

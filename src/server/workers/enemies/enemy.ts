@@ -3,7 +3,6 @@ import EnemyState from "serverState/enemy";
 import MapRoom from "src/server/rooms/map";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
-import { isPresent } from "utilities/guards";
 
 export default class Enemy {
   stateId: string;
