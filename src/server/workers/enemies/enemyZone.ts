@@ -3,7 +3,7 @@ import { TMJ, Vector } from "types/TMJ";
 import {
   pixelsToTileId,
   tileIdToPixels,
-  SerializedObjectTile,
+  SerializedObjectTile
 } from "utilities/tileMap";
 import MapRoom from "../../rooms/map";
 import { EnemySpec } from "types/enemies";
@@ -26,7 +26,7 @@ export default class EnemyZone {
     const { enemy } = objectTile.properties;
     this.room = room;
 
-    const spec = enemySpecs.find((spec) => spec.id === enemy) || enemySpecs[0];
+    const spec = enemySpecs.find(spec => spec.id === enemy) || enemySpecs[0];
     this.spec = spec;
 
     if (room.mapData) {
@@ -53,7 +53,7 @@ export default class EnemyZone {
       { room: this.room.roomName, zoneId: this.objectTile.tileId },
       (err, res) => {
         if (err) return console.log(err.message);
-        res.forEach((doc) => {
+        res.forEach(doc => {
           if (this.allowedTiles) {
             const obj = doc.toJSON();
             this.enemies.push(
@@ -68,7 +68,6 @@ export default class EnemyZone {
             );
           }
         });
-        this.room.state.triggerAll();
       }
     );
   }
@@ -90,21 +89,21 @@ export default class EnemyZone {
     const columns = mapData.width;
     const { x, y, polygon } = this.objectTile;
     const mostNorthWesterlyPoint = {
-      x: x + Math.min(...polygon.map((p) => p.x)),
-      y: y + Math.min(...polygon.map((p) => p.y)),
+      x: x + Math.min(...polygon.map(p => p.x)),
+      y: y + Math.min(...polygon.map(p => p.y))
     };
     const mostSouthEasterlyPoint = {
-      x: x + Math.max(...polygon.map((p) => p.x)),
-      y: y + Math.max(...polygon.map((p) => p.y)),
+      x: x + Math.max(...polygon.map(p => p.x)),
+      y: y + Math.max(...polygon.map(p => p.y))
     };
     const startTile = pixelsToTileId(mostNorthWesterlyPoint, columns);
     const endTile = pixelsToTileId(mostSouthEasterlyPoint, columns);
 
     const vectorToVectorArray = (input: Vector) => [input.x, input.y];
-    const polygonVectorArray = polygon.map((point) =>
+    const polygonVectorArray = polygon.map(point =>
       vectorToVectorArray({
         x: x + point.x,
-        y: y + point.y,
+        y: y + point.y
       })
     );
 
@@ -115,17 +114,17 @@ export default class EnemyZone {
         c,
         [c[0] + 32, c[1]],
         [c[0], c[1] + 32],
-        [c[0] + 32, c[1] + 32],
+        [c[0] + 32, c[1] + 32]
       ];
       const tilesInsidePolygon = corners.filter(
-        (corner) => robustPointInPolygon(polygonVectorArray, corner) !== 1
+        corner => robustPointInPolygon(polygonVectorArray, corner) !== 1
       );
       if (tilesInsidePolygon.length === 4) {
         allowedTiles.push(i);
       }
     }
 
-    allowedTiles = allowedTiles.filter((tileId) => {
+    allowedTiles = allowedTiles.filter(tileId => {
       if (this.room.objectTileStore) {
         const tileTypes = this.room.objectTileStore.getTypes(tileId);
         return tileTypes && tileTypes.includes("block") ? false : true;
@@ -137,6 +136,6 @@ export default class EnemyZone {
 
   dispose() {
     clearInterval(this.timer);
-    this.enemies.forEach((enemy) => enemy.dispose());
+    this.enemies.forEach(enemy => enemy.dispose());
   }
 }

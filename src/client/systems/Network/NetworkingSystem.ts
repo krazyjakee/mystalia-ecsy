@@ -94,7 +94,7 @@ export default class NetworkingSystem extends System {
             return;
           }
 
-          const newEnemy = CreateEnemy(enemy, enemySpec);
+          const newEnemy = CreateEnemy(enemy, enemySpec, tileMap.width);
 
           enemy.onChange = function(changes) {
             changes.forEach(change => {

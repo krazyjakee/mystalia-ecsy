@@ -9,7 +9,7 @@ import LocalPlayer, {
 } from "../components/LocalPlayer";
 
 export default function CreateLocalPlayer(user: User) {
-  return BaseCharacter(user.metadata.currentTile)
+  return BaseCharacter({ currentTile: user.metadata.currentTile })
     .addComponent(SpriteSheetAnimation, {
       speed: 10,
       steps: generateAnimationSteps("s")
