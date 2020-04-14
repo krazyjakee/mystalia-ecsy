@@ -17,31 +17,34 @@ export default (entity: Entity, tileMap: TileMap) => {
 
   const roundPosition = roundVector(position.value);
   const currentRoundTile = vectorToTileId(roundPosition, columns);
-
   const destinationTile = tileIdToVector(newTarget, columns);
+
+  const newTargetNotSameAsCurrent = newTarget !== currentRoundTile;
+  const movementDirectionDisabled = !movement.direction;
+  const targetNotInDirection =
+    newTarget !==
+    tileInDirection(movement.currentTile, movement.direction, rows, columns);
+  const notAlreadyMovingInTheDirection =
+    movement.pathingTo === undefined || movement.pathingTo !== newTarget;
+  const tileQueueEmptyOrDestinationIsTheSameAsTarget =
+    !movement.tileQueue.length ||
+    movement.tileQueue[movement.tileQueue.length - 1] !== newTarget;
+
   if (
-    // don't set a new destination if we're already there or going there
-    newTarget !== currentRoundTile &&
-    (!movement.direction ||
-      newTarget !==
-        tileInDirection(
-          movement.currentTile,
-          movement.direction,
-          rows,
-          columns
-        )) &&
-    (movement.pathingTo === undefined || movement.pathingTo !== newTarget) &&
-    (!movement.tileQueue.length ||
-      movement.tileQueue[movement.tileQueue.length - 1] !== newTarget) &&
+    newTargetNotSameAsCurrent &&
+    (movementDirectionDisabled || targetNotInDirection) &&
+    notAlreadyMovingInTheDirection &&
+    tileQueueEmptyOrDestinationIsTheSameAsTarget &&
     isWalkable(tileMap, newTarget)
   ) {
     movement.pathingTo = newTarget;
+
     try {
       const path = tileMap.objectTileStore.aStar.findPath(
         roundPosition,
         destinationTile
       );
-      if (path) {
+      if (path.length) {
         movement.tileQueue = path.map(p => p[0] + p[1] * columns);
         movement.targetTile = newTarget;
       }
