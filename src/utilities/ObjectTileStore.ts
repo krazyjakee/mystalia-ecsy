@@ -89,6 +89,14 @@ export class ObjectTileStore {
 
     (layers as Layer[]).forEach(layer => this.add(layer));
 
+    this.blockList = Array(width * height)
+      .fill(0)
+      .map((_, index) => index)
+      .filter((_, index) => {
+        const tileTypes = this.getTypes(index);
+        return tileTypes && tileTypes.includes("block");
+      });
+
     this.aStar = new AStarFinder({
       grid: layers.length
         ? {
@@ -98,14 +106,6 @@ export class ObjectTileStore {
       diagonalAllowed: false,
       includeStartNode: false
     });
-
-    this.blockList = Array(width * height)
-      .fill(0)
-      .map((_, index) => index)
-      .filter((_, index) => {
-        const tileTypes = this.getTypes(index);
-        return tileTypes && tileTypes.includes("block");
-      });
   }
 
   get(tileId: number) {
@@ -151,7 +151,6 @@ export class ObjectTileStore {
 
   // Creates an array for A* pathfinding
   getBlockGrid(): number[][] {
-    console.log(this.blockList);
     return Array(this.rows)
       .fill(0)
       .map((_, index1) => {
