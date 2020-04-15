@@ -76,27 +76,26 @@ export default class MovementSystem extends System {
           x: (nextPosition.x - (position.value.x + moveVector.x)) * direction.x,
           y: (nextPosition.y - (position.value.y + moveVector.y)) * direction.y
         };
+        const nextId = vectorToTileId(nextPosition, columns);
 
         if (distance.x <= 0 && distance.y <= 0) {
           const nextTarget = movement.tileQueue.length
             ? movement.tileQueue[0]
             : undefined;
 
-          const nextId = vectorToTileId(nextPosition, columns);
-          if (!tileMap.objectTileStore.blockList.includes(nextId)) {
-            const nextDirection = nextTarget
-              ? directionFromTile(nextId, nextTarget, columns)
-              : undefined;
-            if (nextDirection && movement.direction === nextDirection) {
-              // if we're moving in the same direction we can keep moving
-              position.value = addOffset(position.value, moveVector);
-            } else {
-              position.value = nextPosition;
-            }
-
-            movement.currentTile = nextId;
-            movement.direction = undefined;
+          const nextDirection = nextTarget
+            ? directionFromTile(nextId, nextTarget, columns)
+            : undefined;
+          if (nextDirection && movement.direction === nextDirection) {
+            // if we're moving in the same direction we can keep moving
+            position.value = addOffset(position.value, moveVector);
+          } else {
+            position.value = nextPosition;
           }
+          movement.currentTile = nextId;
+          movement.direction = undefined;
+        } else if (tileMap.objectTileStore.blockList.includes(nextId)) {
+          movement.direction = undefined;
         } else {
           position.value = addOffset(position.value, moveVector);
         }
