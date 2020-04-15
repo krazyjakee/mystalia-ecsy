@@ -7,7 +7,7 @@ import {
 } from "utilities/tileMap";
 import MapRoom from "../../rooms/map";
 import { EnemySpec } from "types/enemies";
-import EnemySchema from "src/server/db/EnemySchema";
+import EnemySchema from "../../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
 
 const robustPointInPolygon = require("robust-point-in-polygon");
@@ -126,8 +126,7 @@ export default class EnemyZone {
 
     allowedTiles = allowedTiles.filter(tileId => {
       if (this.room.objectTileStore) {
-        const tileTypes = this.room.objectTileStore.getTypes(tileId);
-        return tileTypes && tileTypes.includes("block") ? false : true;
+        return !this.room.objectTileStore.blockList.includes(tileId);
       }
     });
 

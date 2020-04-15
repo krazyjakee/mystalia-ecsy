@@ -72,6 +72,7 @@ export class ObjectTileStore {
   store: ObjectTileStoreType;
   columns: number = 0;
   rows: number = 0;
+  blockList: number[] = [];
   aStar: AStarFinder;
 
   constructor(
@@ -87,6 +88,14 @@ export class ObjectTileStore {
     this.store = {};
 
     (layers as Layer[]).forEach(layer => this.add(layer));
+
+    this.blockList = Array(width * height)
+      .fill(0)
+      .map((_, index) => index)
+      .filter((_, index) => {
+        const tileTypes = this.getTypes(index);
+        return tileTypes && tileTypes.includes("block");
+      });
 
     this.aStar = new AStarFinder({
       grid: layers.length
@@ -149,8 +158,7 @@ export class ObjectTileStore {
           .fill(0)
           .map((_, index2) => {
             const tileId = index1 * this.columns + index2;
-            const tileTypes = this.getTypes(tileId);
-            return tileTypes && tileTypes.includes("block") ? 1 : 0;
+            return this.blockList.includes(tileId) ? 1 : 0;
           });
       });
   }
