@@ -12,41 +12,44 @@ import NetworkRoom from "../../../components/NetworkRoom";
 import RemotePlayer from "../../../components/RemotePlayer";
 import LocalPlayer from "../../../components/LocalPlayer";
 import AnimatedTile, {
-  AnimatedTilesInitiated,
+  AnimatedTilesInitiated
 } from "../../../components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import ChangeMap from "../../../components/ChangeMap";
 import Item from "../../../components/Item";
 import { Remove } from "../../../components/Tags";
+import Enemy from "../../../components/Enemy";
 
 export default class TileMapChanger extends System {
   static queries = {
     player: {
-      components: [LocalPlayer, Movement, Position],
+      components: [LocalPlayer, Movement, Position]
     },
     newLoadingTileMaps: {
-      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)],
+      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)]
     },
     networkRoom: {
-      components: [NetworkRoom],
+      components: [NetworkRoom]
     },
     remotePlayers: {
-      components: [RemotePlayer],
+      components: [RemotePlayer]
+    },
+    enemies: {
+      components: [Enemy]
     },
     items: {
-      components: [Item],
-    },
+      components: [Item]
+    }
   };
 
   execute() {
     let playerEntity: Entity;
 
-    //@ts-ignore
-    this.queries.player.results.forEach((entity) => {
+    this.queries.player.results.forEach(entity => {
       playerEntity = entity;
     });
 
-    this.queries.newLoadingTileMaps.results.forEach(async (tileMapEntity) => {
+    this.queries.newLoadingTileMaps.results.forEach(async tileMapEntity => {
       const loadable = tileMapEntity.getComponent(Loadable);
       if (loadable.loading) {
         return;
@@ -97,12 +100,12 @@ export default class TileMapChanger extends System {
               Math.round(drawable.width / 2),
             y:
               Math.round(window.innerHeight / 2) -
-              Math.round(drawable.height / 2),
+              Math.round(drawable.height / 2)
           };
         } else {
           const centeredVector = {
             x: tilePixels.x - Math.round(window.innerWidth / 2),
-            y: tilePixels.y - Math.round(window.innerHeight / 2),
+            y: tilePixels.y - Math.round(window.innerHeight / 2)
           };
 
           drawable.offset = setOffset(
@@ -126,14 +129,16 @@ export default class TileMapChanger extends System {
           }
         );
 
-        //@ts-ignore
         this.queries.remotePlayers.results.forEach((remotePlayer: Entity) => {
           remotePlayer.addComponent(Remove);
         });
 
-        //@ts-ignore
         this.queries.items.results.forEach((item: Entity) => {
           item.addComponent(Remove);
+        });
+
+        this.queries.enemies.results.forEach((enemy: Entity) => {
+          enemy.addComponent(Remove);
         });
 
         // Everything is good to go!
