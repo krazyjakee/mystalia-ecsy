@@ -26,10 +26,11 @@ import AdminNetworkSystem from "./systems/Network/AdminNetworkSystem";
 import CommandsSystem from "./systems/Network/CommandsSystem";
 import ItemSystem from "./systems/Rendering/ItemSystem";
 import CleanupSystem from "./systems/CleanupSystem";
-
-import "./entities";
 import FlameSystem from "./systems/Rendering/LightSystem/FlameSystem";
 import GraySystem from "./systems/Rendering/GraySystem";
+import WeatherSystem from "./systems/Rendering/WeatherSystem";
+
+import "./entities";
 
 let world = new World();
 
@@ -50,6 +51,7 @@ export default (user: User) => {
     .registerSystem(ItemSystem)
     .registerSystem(PlayerAnimationSystem)
     .registerSystem(RenderingSystem)
+    .registerSystem(WeatherSystem)
     .registerSystem(LightSystem)
     .registerSystem(FlameSystem)
     .registerSystem(TileAnimationSystem)
