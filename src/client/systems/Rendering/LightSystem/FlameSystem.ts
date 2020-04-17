@@ -1,7 +1,7 @@
 import { System, Not } from "ecsy";
-import { Loadable } from "../../../components/Loadable";
-import TileMap from "../../../components/TileMap";
-import Drawable from "../../../components/Drawable";
+import { Loadable } from "@client/components/Loadable";
+import TileMap from "@client/components/TileMap";
+import Drawable from "@client/components/Drawable";
 import { TMJ } from "types/TMJ";
 import { flameOn } from "./flameRenderFunctions";
 import context2d from "../../../canvas";

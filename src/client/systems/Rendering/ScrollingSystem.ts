@@ -1,12 +1,12 @@
 import { System, Entity, Not } from "ecsy";
-import Drawable from "../../components/Drawable";
-import Movement from "../../components/Movement";
-import { Loadable, Unloadable } from "../../components/Loadable";
-import TileMap from "../../components/TileMap";
+import Drawable from "@client/components/Drawable";
+import Movement from "@client/components/Movement";
+import { Loadable, Unloadable } from "@client/components/Loadable";
+import TileMap from "@client/components/TileMap";
 import { TMJ } from "types/TMJ";
 import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
-import LocalPlayer from "../../components/LocalPlayer";
+import LocalPlayer from "@client/components/LocalPlayer";
 import { tileIdToPixels } from "utilities/tileMap";
 
 export default class TileMapMover extends System {

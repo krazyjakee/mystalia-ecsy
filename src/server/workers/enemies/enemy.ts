@@ -1,5 +1,5 @@
 import { makeHash } from "utilities/hash";
-import EnemyState from "serverState/enemy";
+import EnemyState from "@server/components/enemy";
 import MapRoom from "src/server/rooms/map";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";

@@ -1,12 +1,12 @@
 import { System, Entity, Not } from "ecsy";
-import { MouseInput } from "../../components/Tags";
+import { MouseInput } from "@client/components/Tags";
 import { Vector } from "types/TMJ";
-import Movement from "../../components/Movement";
-import TileMap from "../../components/TileMap";
-import { Loadable } from "../../components/Loadable";
-import Drawable from "../../components/Drawable";
+import Movement from "@client/components/Movement";
+import TileMap from "@client/components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import Drawable from "@client/components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
-import NewMovementTarget from "../../components/NewMovementTarget";
+import NewMovementTarget from "@client/components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
 
 export default class MouseInputSystem extends System {

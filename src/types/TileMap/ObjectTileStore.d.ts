@@ -1,3 +1,5 @@
+import { Biome } from "utilities/weather";
+
 export type ObjectTileType = {
   "": null;
   block: null;
@@ -25,6 +27,15 @@ export type ObjectTileType = {
     chance: number;
     enemy: number;
     max: number;
+  };
+  mapProps: {
+    name: string;
+    biome: Biome;
+    light?: number;
+    north?: string;
+    east?: string;
+    south?: string;
+    west?: string;
   };
 };
 

@@ -1,5 +1,5 @@
 import { System, Entity } from "ecsy";
-import { Remove } from "../components/Tags";
+import { Remove } from "@client/components/Tags";
 
 export default class CleanupSystem extends System {
   static queries = {

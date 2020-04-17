@@ -1,55 +1,56 @@
 import { System, Entity, Not } from "ecsy";
-import { Loadable } from "../../../components/Loadable";
-import Fade from "../../../components/Fade";
-import TileMap from "../../../components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import Fade from "@client/components/Fade";
+import TileMap from "@client/components/TileMap";
 import loadTileMap from "./loadTileMap";
 import getMapChangePosition from "./getMapChangePosition";
-import Drawable from "../../../components/Drawable";
-import Movement from "../../../components/Movement";
-import setOffset from "../../../utilities/Vector/setOffset";
-import Position from "../../../components/Position";
-import NetworkRoom from "../../../components/NetworkRoom";
-import RemotePlayer from "../../../components/RemotePlayer";
-import LocalPlayer from "../../../components/LocalPlayer";
+import Drawable from "@client/components/Drawable";
+import Movement from "@client/components/Movement";
+import setOffset from "@client/utilities/Vector/setOffset";
+import Position from "@client/components/Position";
+import NetworkRoom from "@client/components/NetworkRoom";
+import RemotePlayer from "@client/components/RemotePlayer";
+import LocalPlayer from "@client/components/LocalPlayer";
 import AnimatedTile, {
-  AnimatedTilesInitiated
-} from "../../../components/AnimatedTile";
+  AnimatedTilesInitiated,
+} from "@client/components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
-import ChangeMap from "../../../components/ChangeMap";
-import Item from "../../../components/Item";
-import { Remove } from "../../../components/Tags";
-import Enemy from "../../../components/Enemy";
+import ChangeMap from "@client/components/ChangeMap";
+import Item from "@client/components/Item";
+import { Remove } from "@client/components/Tags";
+import Enemy from "@client/components/Enemy";
+import Weather from "@client/components/Weather";
 
 export default class TileMapChanger extends System {
   static queries = {
     player: {
-      components: [LocalPlayer, Movement, Position]
+      components: [LocalPlayer, Movement, Position],
     },
     newLoadingTileMaps: {
-      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)]
+      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)],
     },
     networkRoom: {
-      components: [NetworkRoom]
+      components: [NetworkRoom],
     },
     remotePlayers: {
-      components: [RemotePlayer]
+      components: [RemotePlayer],
     },
     enemies: {
-      components: [Enemy]
+      components: [Enemy],
     },
     items: {
-      components: [Item]
-    }
+      components: [Item],
+    },
   };
 
   execute() {
     let playerEntity: Entity;
 
-    this.queries.player.results.forEach(entity => {
+    this.queries.player.results.forEach((entity) => {
       playerEntity = entity;
     });
 
-    this.queries.newLoadingTileMaps.results.forEach(async tileMapEntity => {
+    this.queries.newLoadingTileMaps.results.forEach(async (tileMapEntity) => {
       const loadable = tileMapEntity.getComponent(Loadable);
       if (loadable.loading) {
         return;
@@ -57,8 +58,9 @@ export default class TileMapChanger extends System {
 
       loadable.loading = true;
 
-      const drawable = tileMapEntity.getComponent(Drawable);
+      const drawable = tileMapEntity.getMutableComponent(Drawable);
       const tileMap = tileMapEntity.getMutableComponent(TileMap);
+      const weather = tileMapEntity.getMutableComponent(Weather);
 
       if (loadable.dataPath) {
         loadable.loading = true;
@@ -81,6 +83,7 @@ export default class TileMapChanger extends System {
 
         tileMap.reset();
         drawable.reset();
+        weather.reset();
 
         await loadTileMap(loadable.dataPath, drawable, tileMap);
 
@@ -100,12 +103,12 @@ export default class TileMapChanger extends System {
               Math.round(drawable.width / 2),
             y:
               Math.round(window.innerHeight / 2) -
-              Math.round(drawable.height / 2)
+              Math.round(drawable.height / 2),
           };
         } else {
           const centeredVector = {
             x: tilePixels.x - Math.round(window.innerWidth / 2),
-            y: tilePixels.y - Math.round(window.innerHeight / 2)
+            y: tilePixels.y - Math.round(window.innerHeight / 2),
           };
 
           drawable.offset = setOffset(

@@ -1,9 +1,9 @@
-import ItemState from "serverState/item";
-import { safeMapSchemaIndex } from "../utilities/colyseusState";
+import ItemState from "@server/components/item";
+import { safeMapSchemaIndex } from "@server/utilities/colyseusState";
 import { SerializedObjectTile, getTilesByType } from "utilities/tileMap";
 import { mongoose } from "@colyseus/social";
-import ItemSchema from "../db/ItemSchema";
-import MapRoom from "../rooms/map";
+import ItemSchema from "@server/db/ItemSchema";
+import MapRoom from "@server/rooms/map";
 
 export default class ItemSpawner {
   room: MapRoom;
@@ -18,13 +18,15 @@ export default class ItemSpawner {
     if (this.room.mapData) {
       this.mapItems = getTilesByType("item", this.room.mapData) || [];
     }
+
+    this.loadFromDB();
   }
 
   loadFromDB() {
     const items = mongoose.model("Item", ItemSchema);
     items.find({ room: this.room.roomName }, (err, res) => {
       if (err) return console.log(err.message);
-      res.forEach(doc => {
+      res.forEach((doc) => {
         const obj = doc.toJSON();
         this.room.state.items[obj.index] = new ItemState(
           obj.itemId,

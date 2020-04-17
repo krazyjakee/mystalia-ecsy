@@ -1,7 +1,7 @@
-import { Loadable, SimpleLoadable } from "../components/Loadable";
-import Drawable from "../components/Drawable";
-import Movement from "../components/Movement";
-import Position from "../components/Position";
+import { Loadable, SimpleLoadable } from "@client/components/Loadable";
+import Drawable from "@client/components/Drawable";
+import Movement from "@client/components/Movement";
+import Position from "@client/components/Position";
 import { getWorld } from "../ecsy";
 import { characterAssetPath } from "../utilities/assets";
 import { Vector } from "types/TMJ";
@@ -19,7 +19,7 @@ export default function BaseCharacter({
   currentPosition = { x: 0, y: 0 },
   spriteId = "1",
   speed = 8,
-  size
+  size,
 }: BaseCharacterProps = {}) {
   const { width, height } = size || { width: 24, height: 32 };
   return getWorld()
@@ -32,7 +32,7 @@ export default function BaseCharacter({
       sourceWidth: width,
       sourceHeight: height,
       x: 32 - width,
-      y: 32 - height
+      y: 32 - height,
     })
     .addComponent(Movement, { currentTile, speed })
     .addComponent(Position, { value: currentPosition });

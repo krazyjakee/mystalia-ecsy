@@ -1,5 +1,5 @@
 import User from "./User";
-import InventoryState from "serverState/inventory";
+import InventoryState from "@server/components/inventory";
 import { MapSchema } from "@colyseus/schema";
 
 export interface GameStateEvents {

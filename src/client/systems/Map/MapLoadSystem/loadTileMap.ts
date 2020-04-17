@@ -1,5 +1,5 @@
-import Drawable from "../../../components/Drawable";
-import TileMap from "../../../components/TileMap";
+import Drawable from "@client/components/Drawable";
+import TileMap from "@client/components/TileMap";
 import { TMJ, Layer } from "types/TMJ";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
@@ -30,13 +30,13 @@ export default async (
 
   // Set the map name
   tileMap.name =
-    data.properties.find(property => property.name === "name")?.value ||
+    data.properties.find((property) => property.name === "name")?.value ||
     "first";
 
   // Set the map properties
   const properties: TileMapProperties = {};
   data.properties.forEach(
-    property => (properties[property.name] = property.value)
+    (property) => (properties[property.name] = property.value)
   );
   tileMap.properties = properties;
 

@@ -1,7 +1,7 @@
 import { System, Not, Entity } from "ecsy";
-import { Loadable } from "../../../components/Loadable";
-import Drawable from "../../../components/Drawable";
-import TileMap from "../../../components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import Drawable from "@client/components/Drawable";
+import TileMap from "@client/components/TileMap";
 import {
   drawImage,
   drawToShadowCanvas,
@@ -9,12 +9,12 @@ import {
 } from "../../../utilities/drawing";
 import { TMJ } from "types/TMJ";
 import createDrawableTile from "./createDrawableTile";
-import Movement from "../../../components/Movement";
-import Position from "../../../components/Position";
+import Movement from "@client/components/Movement";
+import Position from "@client/components/Position";
 import addOffset from "../../../utilities/Vector/addOffset";
 import context2d from "../../../canvas";
-import AnimatedTile from "../../../components/AnimatedTile";
-import Item from "../../../components/Item";
+import AnimatedTile from "@client/components/AnimatedTile";
+import Item from "@client/components/Item";
 import { DrawableProperties } from "types/drawable";
 
 export default class TileMapDrawer extends System {

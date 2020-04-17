@@ -11,9 +11,10 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "paths": {
+      "@client/*": ["src/client/*"],
+      "@server/*": ["src/server/*"],
       "types/*": ["src/types/*"],
-      "utilities/*": ["src/utilities/*"],
-      "serverState/*": ["src/server/components/*"]
+      "utilities/*": ["src/utilities/*"]
     }
   },
   "include": ["src/**/*"],

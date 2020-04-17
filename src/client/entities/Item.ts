@@ -1,8 +1,8 @@
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { getWorld } from "../ecsy";
-import Item from "../components/Item";
-import Drawable from "../components/Drawable";
-import { Loadable, SimpleLoadable } from "../components/Loadable";
+import Item from "@client/components/Item";
+import Drawable from "@client/components/Drawable";
+import { Loadable, SimpleLoadable } from "@client/components/Loadable";
 import { itemAssetPath } from "../utilities/assets";
 
 export default function CreateItem(item: Item, itemSpec: ItemSpec) {

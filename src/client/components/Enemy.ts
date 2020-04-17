@@ -1,5 +1,5 @@
 import { Component } from "ecsy";
-import EnemyState from "serverState/enemy";
+import EnemyState from "@server/components/enemy";
 
 export default class Enemy extends Component {
   key?: string;

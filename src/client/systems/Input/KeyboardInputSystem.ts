@@ -1,18 +1,18 @@
 import { System, Entity, Not } from "ecsy";
-import { KeyboardInput } from "../../components/Tags";
-import Movement from "../../components/Movement";
-import Position from "../../components/Position";
-import TileMap from "../../components/TileMap";
+import { KeyboardInput } from "@client/components/Tags";
+import Movement from "@client/components/Movement";
+import Position from "@client/components/Position";
+import TileMap from "@client/components/TileMap";
 import { Direction } from "types/Grid";
-import { Loadable } from "../../components/Loadable";
+import { Loadable } from "@client/components/Loadable";
 import { compassDirections } from "../../utilities/Compass/compassDirections";
 import tileInDirection from "../../utilities/TileMap/tileInDirection";
 import roundVector from "../../utilities/Vector/roundVector";
-import NewMovementTarget from "../../components/NewMovementTarget";
+import NewMovementTarget from "@client/components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
 import gameState from "../../gameState";
 import getNextTileData from "../../utilities/TileMap/getNextTileData";
-import ChangeMap from "../../components/ChangeMap";
+import ChangeMap from "@client/components/ChangeMap";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],

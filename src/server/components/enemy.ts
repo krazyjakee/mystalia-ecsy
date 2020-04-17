@@ -1,4 +1,4 @@
-import { Schema, type, ArraySchema } from "@colyseus/schema";
+import { Schema, type } from "@colyseus/schema";
 
 export default class EnemyState extends Schema {
   @type("number")

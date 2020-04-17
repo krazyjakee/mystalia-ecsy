@@ -1,7 +1,7 @@
 import Enemy from "./enemy";
 import MapRoom from "../../rooms/map";
 import { readMapFiles } from "../../utilities/mapFiles";
-import MapState from "serverState/map";
+import MapState from "@server/components/map";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 
 const allowedTiles = [
@@ -25,7 +25,7 @@ const allowedTiles = [
   52,
   53,
   54,
-  55
+  55,
 ];
 
 const enemySpec = {
@@ -36,11 +36,11 @@ const enemySpec = {
   behavior: {
     escape: {
       distance: 5,
-      chance: 1
-    }
+      chance: 1,
+    },
   },
   speed: 1,
-  maxDistance: 1
+  maxDistance: 1,
 };
 
 const createMapRoom = () => {
@@ -73,7 +73,7 @@ describe("Enemy", () => {
 
     test("should only contain allowed tiles", () => {
       const tilesInRadius = enemy.findTilesInRadius();
-      const overlap = tilesInRadius.filter(tileInRadius =>
+      const overlap = tilesInRadius.filter((tileInRadius) =>
         enemy.allowedTiles.includes(tileInRadius)
       );
       expect(overlap.length).toBe(tilesInRadius.length);

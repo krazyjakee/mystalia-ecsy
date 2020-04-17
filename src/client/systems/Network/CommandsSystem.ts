@@ -1,13 +1,13 @@
 import { System, Not, Entity } from "ecsy";
-import { Loadable, Unloadable } from "../../components/Loadable";
+import { Loadable, Unloadable } from "@client/components/Loadable";
 import LocalPlayer, {
   RoleCheckPending,
   CommandsPending,
-} from "../../components/LocalPlayer";
+} from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
-import TileMap from "../../components/TileMap";
-import Drawable from "../../components/Drawable";
-import Movement from "../../components/Movement";
+import TileMap from "@client/components/TileMap";
+import Drawable from "@client/components/Drawable";
+import Movement from "@client/components/Movement";
 import { mapAssetPath } from "../../utilities/assets";
 
 export default class CommandsSystem extends System {
