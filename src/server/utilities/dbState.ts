@@ -1,7 +1,7 @@
 import PlayerState from "../components/player";
 import users, { IUser } from "@colyseus/social/src/models/User";
 import { isPresent } from "utilities/guards";
-import { InventoryStateProps } from "serverState/inventory";
+import { InventoryStateProps } from "@server/components/inventory";
 import ItemSchema from "../db/ItemSchema";
 import EnemySchema from "../db/EnemySchema";
 import { mongoose } from "@colyseus/social";

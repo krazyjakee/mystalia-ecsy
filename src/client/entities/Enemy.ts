@@ -3,7 +3,7 @@ import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
 import { generateAnimationSteps } from "../utilities/Animation/character";
 import Enemy from "@client/components/Enemy";
 import { EnemySpec } from "types/enemies";
-import EnemyState from "serverState/enemy";
+import EnemyState from "@server/components/enemy";
 import { AwaitingPosition } from "@client/components/Tags";
 import { tileIdToVector } from "utilities/tileMap";
 

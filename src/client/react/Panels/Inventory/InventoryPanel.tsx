@@ -12,7 +12,7 @@ import { useGameEvent } from "../../Hooks/useGameEvent";
 import itemsData from "utilities/data/items.json";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import InventoryItem from "./InventoryItem";
-import InventoryState from "serverState/inventory";
+import InventoryState from "@server/components/inventory";
 import gameState from "../../../gameState";
 
 const useStyles = createUseStyles({
@@ -20,18 +20,18 @@ const useStyles = createUseStyles({
     backgroundImage: guiAssetPath("panel/inventory-plank.png"),
     width: 343,
     height: 55,
-    marginBottom: 10
+    marginBottom: 10,
   },
   emptySlot: {
     backgroundImage: guiAssetPath("panel/inventory-slot.png"),
     width: 48,
     height: 48,
     margin: "0 6px 6px 6px",
-    float: "left"
+    float: "left",
   },
   slotContainer: {
-    position: "relative"
-  }
+    position: "relative",
+  },
 });
 
 type Props = {
@@ -45,7 +45,7 @@ const EmptySlot = (props: { index: number }) => {
 
   const [_, drop] = useDrop({
     accept: "x",
-    drop: onDrop
+    drop: onDrop,
   });
   return <div className={classes.emptySlot} ref={drop} />;
 };
@@ -65,7 +65,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
     if (iState) {
       gameState.send("map", "localPlayer:inventory:move", {
         from,
-        to
+        to,
       });
 
       const newIState = new MapSchema<InventoryState>(iState);
@@ -86,7 +86,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
     for (let key in iState) {
       const item = iState[key] as InventoryState;
       const { itemId, position, quantity } = item;
-      const itemData = itemsData.find(data => data.id === itemId);
+      const itemData = itemsData.find((data) => data.id === itemId);
       if (itemData) {
         const { spritesheet, spriteId, name } = itemData;
 
@@ -96,7 +96,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
           quantity,
           spritesheet,
           spriteId,
-          name
+          name,
         };
       }
     }
@@ -120,8 +120,8 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
             right: false,
             top: false,
             topLeft: false,
-            topRight: false
-          }
+            topRight: false,
+          },
         }}
         isDraggable={true}
       >
@@ -138,7 +138,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
                           {emptySlots.map((_, index) => (
                             <EmptySlot key={index} index={index} />
                           ))}
-                          {inventoryItems.map(item => (
+                          {inventoryItems.map((item) => (
                             <InventoryItem
                               key={item.position}
                               item={item}

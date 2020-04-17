@@ -1,6 +1,6 @@
 import { Component } from "ecsy";
 import { Room } from "colyseus.js";
-import MapState from "serverState/map";
+import MapState from "@server/components/map";
 
 export type RoomState = Room<MapState>;
 

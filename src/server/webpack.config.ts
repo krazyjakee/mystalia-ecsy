@@ -28,7 +28,7 @@ const config = {
     alias: {
       types: path.resolve(__dirname, "..", "types"),
       utilities: path.resolve(__dirname, "..", "utilities"),
-      serverState: path.resolve(__dirname, "..", "server/components"),
+      "@server": path.resolve(__dirname, "..", "server"),
       "@client": path.resolve(__dirname, "..", "client"),
     },
   },

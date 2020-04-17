@@ -1,9 +1,9 @@
-import ItemState from "serverState/item";
-import { safeMapSchemaIndex } from "../utilities/colyseusState";
+import ItemState from "@server/components/item";
+import { safeMapSchemaIndex } from "@server/utilities/colyseusState";
 import { SerializedObjectTile, getTilesByType } from "utilities/tileMap";
 import { mongoose } from "@colyseus/social";
-import ItemSchema from "../db/ItemSchema";
-import MapRoom from "../rooms/map";
+import ItemSchema from "@server/db/ItemSchema";
+import MapRoom from "@server/rooms/map";
 
 export default class ItemSpawner {
   room: MapRoom;

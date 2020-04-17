@@ -1,6 +1,6 @@
 import EnemyZone from "./enemies/enemyZone";
 import { getTilesByType } from "utilities/tileMap";
-import MapRoom from "../rooms/map";
+import MapRoom from "@server/rooms/map";
 
 export default class EnemySpawner {
   room: MapRoom;

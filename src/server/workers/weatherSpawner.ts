@@ -1,9 +1,9 @@
-import MapRoom from "../rooms/map";
-import WeatherSchema from "../db/WeatherSchema";
+import MapRoom from "@server/rooms/map";
+import WeatherSchema from "@server/db/WeatherSchema";
 import { mongoose } from "@colyseus/social";
 import { Weather, Biome, biomeWeather, weatherChance } from "utilities/weather";
 import { serializeProperties } from "utilities/tileMap";
-import WeatherState from "serverState/weather";
+import WeatherState from "@server/components/weather";
 import { ArraySchema } from "@colyseus/schema";
 
 export default class WeatherSpawner {

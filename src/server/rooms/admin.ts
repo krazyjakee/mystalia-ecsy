@@ -1,13 +1,13 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
-import AdminState from "../components/admin";
+import AdminState from "@server/components/admin";
 import {
   GameStateEventName,
   RoomMessage,
-  GameStateEvents
+  GameStateEvents,
 } from "types/gameState";
-import { readMapFiles } from "../utilities/mapFiles";
-import PlayerState from "serverState/player";
+import { readMapFiles } from "@server/utilities/mapFiles";
+import PlayerState from "@server/components/player";
 
 export default class AdminRoom extends Room<AdminState> {
   async onAuth(client: Client, options: any) {
@@ -40,15 +40,15 @@ export default class AdminRoom extends Room<AdminState> {
           .filter(({ username, displayName }) => username && displayName)
           .map(({ username, displayName }) => ({
             username,
-            displayName
-          }))
+            displayName,
+          })),
       });
     }
     if (command === "admin:list:requestAllMaps") {
       const maps = readMapFiles();
       this.send(client, {
         command: "admin:list:allMaps",
-        all: Object.keys(maps)
+        all: Object.keys(maps),
       });
     }
     if (command === "admin:teleport:request") {
@@ -62,7 +62,7 @@ export default class AdminRoom extends Room<AdminState> {
       if (map && tileId) {
         const response: RoomMessage<"admin:teleport:response"> = {
           command: "admin:teleport:response",
-          ...(teleportRequestData as GameStateEvents["admin:teleport:response"])
+          ...(teleportRequestData as GameStateEvents["admin:teleport:response"]),
         };
         this.presence.publish(`${username}:commands`, response);
       } else {
@@ -74,7 +74,7 @@ export default class AdminRoom extends Room<AdminState> {
               const response: RoomMessage<"admin:teleport:response"> = {
                 command: "admin:teleport:response",
                 map: currentRoom,
-                tileId: targetTile
+                tileId: targetTile,
               };
               this.send(client, response);
             }

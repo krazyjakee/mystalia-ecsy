@@ -1,6 +1,6 @@
 import MapRoom from "../../rooms/map";
 import { readMapFiles } from "../../utilities/mapFiles";
-import MapState from "serverState/map";
+import MapState from "@server/components/map";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import EnemyZone from "./enemyZone";
 import { getTilesByType } from "utilities/tileMap";
@@ -46,7 +46,7 @@ describe("EnemyZone", () => {
         52,
         53,
         54,
-        55
+        55,
       ]);
     });
   });

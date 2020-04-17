@@ -1,18 +1,18 @@
 import { Room, Client } from "colyseus";
-import { User, verifyToken, IUser, mongoose } from "@colyseus/social";
-import MapState from "../components/map";
+import { User, verifyToken, IUser } from "@colyseus/social";
+import MapState from "@server/components/map";
 import Player, {
   addItemToPlayer,
   moveInventoryItem,
-} from "../components/player";
-import { savePlayerState, saveStateToDb } from "../utilities/dbState";
+} from "@server/components/player";
+import { savePlayerState, saveStateToDb } from "@server/utilities/dbState";
 import { RoomMessage, GameStateEventName } from "types/gameState";
-import ItemSpawner from "../workers/itemSpawner";
+import ItemSpawner from "@server/workers/itemSpawner";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
-import { readMapFiles } from "../utilities/mapFiles";
+import { readMapFiles } from "@server/utilities/mapFiles";
 import { TMJ } from "types/TMJ";
-import EnemySpawner from "../workers/enemySpawner";
-import WeatherSpawner from "../workers/weatherSpawner";
+import EnemySpawner from "@server/workers/enemySpawner";
+import WeatherSpawner from "@server/workers/weatherSpawner";
 
 export default class MapRoom extends Room<MapState> {
   itemSpawner?: ItemSpawner;

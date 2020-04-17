@@ -1,4 +1,4 @@
-import { InventoryStateProps } from "serverState/inventory";
+import { InventoryStateProps } from "@server/components/inventory";
 
 export type ItemSpec = {
   id: number;
