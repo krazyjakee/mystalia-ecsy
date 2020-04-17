@@ -67,7 +67,8 @@ export default class WeatherSpawner {
           Math.floor(Math.random() * weatherChance[weather]) + 1 === 1
       );
       const duration = Math.floor(Math.random() * 25) + 5;
-      this.setWeather(weathers, duration * 1000);
+      // TODO: Set to 60000 after testing
+      this.setWeather(weathers, duration * 2000);
     }
   }
 
