@@ -1,7 +1,7 @@
 import { DrawableProperties } from "types/drawable";
 import context2d from "../canvas";
-import Drawable from "../components/Drawable";
-import Fade from "../components/Fade";
+import Drawable from "@client/components/Drawable";
+import Fade from "@client/components/Fade";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -17,7 +17,7 @@ export const drawImage = (
     y,
     width,
     height,
-    offset
+    offset,
   } = drawable;
 
   if (image) {
@@ -70,7 +70,7 @@ export const drawableToDrawableProperties = (drawable: Drawable) => {
     y,
     width,
     height,
-    offset
+    offset,
   } = drawable;
 
   const drawableProperties: DrawableProperties = {
@@ -83,7 +83,7 @@ export const drawableToDrawableProperties = (drawable: Drawable) => {
     y,
     width,
     height,
-    offset
+    offset,
   };
   return drawableProperties;
 };
@@ -99,7 +99,7 @@ export const fadeOverlay = (fade: Fade, fadeIn: boolean = true) => {
 };
 
 export const waitForNextFrame = () =>
-  new Promise(accept => {
+  new Promise((accept) => {
     requestAnimationFrame(() => {
       accept();
     });

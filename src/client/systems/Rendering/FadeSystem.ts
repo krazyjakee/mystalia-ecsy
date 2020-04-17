@@ -1,8 +1,8 @@
 import { System, Entity, Not } from "ecsy";
-import Fade from "../../components/Fade";
+import Fade from "@client/components/Fade";
 import { fadeOverlay } from "../../utilities/drawing";
-import { Loadable, Unloadable } from "../../components/Loadable";
-import TileMap from "../../components/TileMap";
+import { Loadable, Unloadable } from "@client/components/Loadable";
+import TileMap from "@client/components/TileMap";
 
 export default class FadeSystem extends System {
   static queries = {

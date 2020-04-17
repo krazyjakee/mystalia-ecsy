@@ -1,11 +1,11 @@
-import Drawable from "../components/Drawable";
-import TileMap from "../components/TileMap";
-import { Loadable } from "../components/Loadable";
-import AnimatedTile from "../components/AnimatedTile";
+import Drawable from "@client/components/Drawable";
+import TileMap from "@client/components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import AnimatedTile from "@client/components/AnimatedTile";
 import User from "types/User";
 import { getWorld } from "../ecsy";
 import { mapAssetPath } from "../utilities/assets";
-import Weather from "../components/Weather";
+import Weather from "@client/components/Weather";
 
 export default function CreateTileMap(user: User) {
   getWorld()

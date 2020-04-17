@@ -1,6 +1,6 @@
 import { System, Entity } from "ecsy";
-import { Loadable, SimpleLoadable } from "../components/Loadable";
-import Drawable from "../components/Drawable";
+import { Loadable, SimpleLoadable } from "@client/components/Loadable";
+import Drawable from "@client/components/Drawable";
 import { loadImage, loadData } from "../utilities/assets";
 
 export default class Loader extends System {

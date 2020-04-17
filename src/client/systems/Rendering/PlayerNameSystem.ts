@@ -1,12 +1,12 @@
 import { System, Entity, Not } from "ecsy";
-import { Loadable } from "../../components/Loadable";
-import LocalPlayer from "../../components/LocalPlayer";
+import { Loadable } from "@client/components/Loadable";
+import LocalPlayer from "@client/components/LocalPlayer";
 import context2d from "../../canvas";
-import Position from "../../components/Position";
-import TileMap from "../../components/TileMap";
-import Drawable from "../../components/Drawable";
+import Position from "@client/components/Position";
+import TileMap from "@client/components/TileMap";
+import Drawable from "@client/components/Drawable";
 import addOffset from "../../utilities/Vector/addOffset";
-import RemotePlayer from "../../components/RemotePlayer";
+import RemotePlayer from "@client/components/RemotePlayer";
 
 export default class PlayerNameSystem extends System {
   static queries = {

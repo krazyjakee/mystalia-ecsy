@@ -1,9 +1,9 @@
 import { System, Entity, Not } from "ecsy";
-import Movement from "../../components/Movement";
-import { Loadable } from "../../components/Loadable";
-import TileMap from "../../components/TileMap";
-import LocalPlayer from "../../components/LocalPlayer";
-import ChangeMap from "../../components/ChangeMap";
+import Movement from "@client/components/Movement";
+import { Loadable } from "@client/components/Loadable";
+import TileMap from "@client/components/TileMap";
+import LocalPlayer from "@client/components/LocalPlayer";
+import ChangeMap from "@client/components/ChangeMap";
 
 export default class TileMapObjectListener extends System {
   static queries = {

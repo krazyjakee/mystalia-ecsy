@@ -1,8 +1,8 @@
 import { System, Entity, Not } from "ecsy";
-import TileMap from "../../components/TileMap";
-import LocalPlayer from "../../components/LocalPlayer";
-import ChangeMap from "../../components/ChangeMap";
-import { Unloadable, Loadable } from "../../components/Loadable";
+import TileMap from "@client/components/TileMap";
+import LocalPlayer from "@client/components/LocalPlayer";
+import ChangeMap from "@client/components/ChangeMap";
+import { Unloadable, Loadable } from "@client/components/Loadable";
 import { mapAssetPath } from "../../utilities/assets";
 
 export default class MapChangeSystem extends System {

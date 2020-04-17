@@ -1,24 +1,25 @@
 import { System, Entity, Not } from "ecsy";
-import { Loadable } from "../../../components/Loadable";
-import Fade from "../../../components/Fade";
-import TileMap from "../../../components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import Fade from "@client/components/Fade";
+import TileMap from "@client/components/TileMap";
 import loadTileMap from "./loadTileMap";
 import getMapChangePosition from "./getMapChangePosition";
-import Drawable from "../../../components/Drawable";
-import Movement from "../../../components/Movement";
-import setOffset from "../../../utilities/Vector/setOffset";
-import Position from "../../../components/Position";
-import NetworkRoom from "../../../components/NetworkRoom";
-import RemotePlayer from "../../../components/RemotePlayer";
-import LocalPlayer from "../../../components/LocalPlayer";
+import Drawable from "@client/components/Drawable";
+import Movement from "@client/components/Movement";
+import setOffset from "@client/utilities/Vector/setOffset";
+import Position from "@client/components/Position";
+import NetworkRoom from "@client/components/NetworkRoom";
+import RemotePlayer from "@client/components/RemotePlayer";
+import LocalPlayer from "@client/components/LocalPlayer";
 import AnimatedTile, {
   AnimatedTilesInitiated,
-} from "../../../components/AnimatedTile";
+} from "@client/components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
-import ChangeMap from "../../../components/ChangeMap";
-import Item from "../../../components/Item";
-import { Remove } from "../../../components/Tags";
-import Enemy from "../../../components/Enemy";
+import ChangeMap from "@client/components/ChangeMap";
+import Item from "@client/components/Item";
+import { Remove } from "@client/components/Tags";
+import Enemy from "@client/components/Enemy";
+import Weather from "@client/components/Weather";
 
 export default class TileMapChanger extends System {
   static queries = {

@@ -1,9 +1,9 @@
 import { System, Entity, Not } from "ecsy";
-import Drawable from "../../components/Drawable";
-import { Loadable } from "../../components/Loadable";
-import Item from "../../components/Item";
+import Drawable from "@client/components/Drawable";
+import { Loadable } from "@client/components/Loadable";
+import Item from "@client/components/Item";
 import { tileIdToPixels } from "utilities/tileMap";
-import TileMap from "../../components/TileMap";
+import TileMap from "@client/components/TileMap";
 
 export default class ItemSystem extends System {
   static queries = {

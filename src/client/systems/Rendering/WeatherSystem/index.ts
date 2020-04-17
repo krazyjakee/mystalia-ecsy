@@ -1,8 +1,8 @@
 import { System, Not } from "ecsy";
-import Drawable from "../../../components/Drawable";
-import { Loadable } from "../../../components/Loadable";
-import TileMap from "../../../components/TileMap";
-import Weather from "../../../components/Weather";
+import Drawable from "@client/components/Drawable";
+import { Loadable } from "@client/components/Loadable";
+import TileMap from "@client/components/TileMap";
+import Weather from "@client/components/Weather";
 import drawRain from "./rain";
 import { Vector } from "types/TMJ";
 

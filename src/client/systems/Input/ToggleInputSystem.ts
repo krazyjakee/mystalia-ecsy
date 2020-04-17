@@ -1,8 +1,8 @@
 import { System, Entity } from "ecsy";
-import LocalPlayer from "../../components/LocalPlayer";
-import TileMap from "../../components/TileMap";
-import { Loadable, Unloadable } from "../../components/Loadable";
-import { KeyboardInput, MouseInput } from "../../components/Tags";
+import LocalPlayer from "@client/components/LocalPlayer";
+import TileMap from "@client/components/TileMap";
+import { Loadable, Unloadable } from "@client/components/Loadable";
+import { KeyboardInput, MouseInput } from "@client/components/Tags";
 
 export default class ToggleInputSystem extends System {
   static queries = {

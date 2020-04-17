@@ -1,7 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import client from "../../colyseus";
-import { Loadable } from "../../components/Loadable";
-import LocalPlayer, { RoleCheckPending } from "../../components/LocalPlayer";
+import { Loadable } from "@client/components/Loadable";
+import LocalPlayer, { RoleCheckPending } from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
 
 export default class AdminNetworkSystem extends System {

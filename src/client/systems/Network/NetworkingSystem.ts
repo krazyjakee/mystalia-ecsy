@@ -6,29 +6,29 @@ import {
   Remove,
   Gray,
   Disable,
-} from "../../components/Tags";
-import NewMovementTarget from "../../components/NewMovementTarget";
-import Movement from "../../components/Movement";
+} from "@client/components/Tags";
+import NewMovementTarget from "@client/components/NewMovementTarget";
+import Movement from "@client/components/Movement";
 import CreateRemotePlayer from "../../entities/RemotePlayer";
-import NetworkRoom, { RoomState } from "../../components/NetworkRoom";
-import RemotePlayer from "../../components/RemotePlayer";
-import TileMap from "../../components/TileMap";
-import { Loadable } from "../../components/Loadable";
-import Position from "../../components/Position";
+import NetworkRoom, { RoomState } from "@client/components/NetworkRoom";
+import RemotePlayer from "@client/components/RemotePlayer";
+import TileMap from "@client/components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import Position from "@client/components/Position";
 import addOffset from "../../utilities/Vector/addOffset";
 import compassToVector from "../../utilities/Compass/compassToVector";
-import LocalPlayer from "../../components/LocalPlayer";
+import LocalPlayer from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
 import CreateItem from "../../entities/Item";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
 import items from "utilities/data/items.json";
-import Item from "../../components/Item";
+import Item from "@client/components/Item";
 import { isPresent } from "utilities/guards";
 import CreateEnemy from "../../entities/Enemy";
 import enemySpecs from "utilities/data/enemies.json";
 import { EnemySpec } from "types/enemies";
-import Weather from "../../components/Weather";
+import Weather from "@client/components/Weather";
 
 let connectionTimer: any;
 

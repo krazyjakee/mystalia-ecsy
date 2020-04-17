@@ -1,11 +1,11 @@
 import { System, Entity, Not } from "ecsy";
-import { Loadable } from "../../../components/Loadable";
-import TileMap from "../../../components/TileMap";
+import { Loadable } from "@client/components/Loadable";
+import TileMap from "@client/components/TileMap";
 import context2d from "../../../canvas";
-import Drawable from "../../../components/Drawable";
+import Drawable from "@client/components/Drawable";
 import addOffset from "../../../utilities/Vector/addOffset";
-import LocalPlayer from "../../../components/LocalPlayer";
-import Position from "../../../components/Position";
+import LocalPlayer from "@client/components/LocalPlayer";
+import Position from "@client/components/Position";
 import { drawLightSource, calculateBrightness } from "./lightRenderFunctions";
 import { tileIdToPixels } from "utilities/tileMap";
 
