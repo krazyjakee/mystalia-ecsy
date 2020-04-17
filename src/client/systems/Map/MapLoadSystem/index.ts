@@ -12,7 +12,7 @@ import NetworkRoom from "../../../components/NetworkRoom";
 import RemotePlayer from "../../../components/RemotePlayer";
 import LocalPlayer from "../../../components/LocalPlayer";
 import AnimatedTile, {
-  AnimatedTilesInitiated
+  AnimatedTilesInitiated,
 } from "../../../components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import ChangeMap from "../../../components/ChangeMap";
@@ -23,33 +23,33 @@ import Enemy from "../../../components/Enemy";
 export default class TileMapChanger extends System {
   static queries = {
     player: {
-      components: [LocalPlayer, Movement, Position]
+      components: [LocalPlayer, Movement, Position],
     },
     newLoadingTileMaps: {
-      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)]
+      components: [Loadable, TileMap, Drawable, AnimatedTile, Not(Fade)],
     },
     networkRoom: {
-      components: [NetworkRoom]
+      components: [NetworkRoom],
     },
     remotePlayers: {
-      components: [RemotePlayer]
+      components: [RemotePlayer],
     },
     enemies: {
-      components: [Enemy]
+      components: [Enemy],
     },
     items: {
-      components: [Item]
-    }
+      components: [Item],
+    },
   };
 
   execute() {
     let playerEntity: Entity;
 
-    this.queries.player.results.forEach(entity => {
+    this.queries.player.results.forEach((entity) => {
       playerEntity = entity;
     });
 
-    this.queries.newLoadingTileMaps.results.forEach(async tileMapEntity => {
+    this.queries.newLoadingTileMaps.results.forEach(async (tileMapEntity) => {
       const loadable = tileMapEntity.getComponent(Loadable);
       if (loadable.loading) {
         return;
@@ -57,8 +57,9 @@ export default class TileMapChanger extends System {
 
       loadable.loading = true;
 
-      const drawable = tileMapEntity.getComponent(Drawable);
+      const drawable = tileMapEntity.getMutableComponent(Drawable);
       const tileMap = tileMapEntity.getMutableComponent(TileMap);
+      const weather = tileMapEntity.getMutableComponent(Weather);
 
       if (loadable.dataPath) {
         loadable.loading = true;
@@ -81,6 +82,7 @@ export default class TileMapChanger extends System {
 
         tileMap.reset();
         drawable.reset();
+        weather.reset();
 
         await loadTileMap(loadable.dataPath, drawable, tileMap);
 
@@ -100,12 +102,12 @@ export default class TileMapChanger extends System {
               Math.round(drawable.width / 2),
             y:
               Math.round(window.innerHeight / 2) -
-              Math.round(drawable.height / 2)
+              Math.round(drawable.height / 2),
           };
         } else {
           const centeredVector = {
             x: tilePixels.x - Math.round(window.innerWidth / 2),
-            y: tilePixels.y - Math.round(window.innerHeight / 2)
+            y: tilePixels.y - Math.round(window.innerHeight / 2),
           };
 
           drawable.offset = setOffset(

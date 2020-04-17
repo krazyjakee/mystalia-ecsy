@@ -3,6 +3,7 @@ import WeatherSchema from "../db/WeatherSchema";
 import { mongoose } from "@colyseus/social";
 import { Weather, Biome, biomeWeather, weatherChance } from "utilities/weather";
 import { serializeProperties } from "utilities/tileMap";
+import WeatherState from "serverState/weather";
 import { ArraySchema } from "@colyseus/schema";
 
 export default class WeatherSpawner {
@@ -18,8 +19,9 @@ export default class WeatherSpawner {
     const mapData = this.room.mapData;
     if (mapData) {
       const mapProperties = serializeProperties<"mapProps">(mapData.properties);
-      this.biome = mapProperties?.biome;
+      this.biome = mapProperties?.biome || "forest";
       this.presenceKey = `weatherWorker:${this.biome}`;
+      this.tick();
     }
   }
 
@@ -45,6 +47,8 @@ export default class WeatherSpawner {
       this.master = true;
       this.room.presence.sadd(`${this.presenceKey}:enabled`, 1);
       this.loadFromDB();
+    } else if (this.master) {
+      this.generateWeather();
     } else if (this.presenceKey) {
       this.room.presence.subscribe(
         this.presenceKey,
@@ -62,22 +66,24 @@ export default class WeatherSpawner {
         (weather) =>
           Math.floor(Math.random() * weatherChance[weather]) + 1 === 1
       );
-      const duration = Math.floor(Math.random() * 30) + 5;
-      this.setWeather(weathers, duration);
+      const duration = Math.floor(Math.random() * 25) + 5;
+      this.setWeather(weathers, duration * 1000);
     }
   }
 
   setWeather(weathers: Weather[], duration: number) {
     if (this.presenceKey && this.biome) {
       if (!this.room.state.weather[this.biome]) {
-        this.room.state.weather[this.biome] = {};
-      }
-      for (let index in this.room.state.weather[this.biome]) {
-        if (weathers[index]) {
-          this.room.state.weather[this.biome][index] = weathers[index];
-        } else {
-          delete this.room.state.weather[this.biome][index];
-        }
+        this.room.state.weather[this.biome] = new WeatherState(
+          this.biome,
+          weathers,
+          duration
+        );
+      } else {
+        this.room.state.weather[this.biome].weathers = new ArraySchema<Weather>(
+          ...weathers
+        );
+        this.room.state.weather[this.biome].duration = duration;
       }
 
       this.room.presence.publish(this.presenceKey, { weathers, duration });

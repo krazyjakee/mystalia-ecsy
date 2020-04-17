@@ -28,7 +28,7 @@ export default class PlayerState extends Schema {
   currentRoom: string;
 
   @type({ map: InventoryState })
-  inventory = new MapSchema<InventoryState>();
+  inventory: MapSchema<InventoryState>;
 
   constructor(user: IUser, room: string) {
     super();

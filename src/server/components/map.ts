@@ -14,6 +14,6 @@ export default class MapState extends Schema {
   @type({ map: EnemyState })
   enemies = new MapSchema<EnemyState>();
 
-  @type(["string"])
+  @type({ map: WeatherState })
   weather = new MapSchema<WeatherState>();
 }

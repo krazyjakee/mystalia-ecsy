@@ -5,7 +5,7 @@ import {
   AwaitingPosition,
   Remove,
   Gray,
-  Disable
+  Disable,
 } from "../../components/Tags";
 import NewMovementTarget from "../../components/NewMovementTarget";
 import Movement from "../../components/Movement";
@@ -28,29 +28,30 @@ import { isPresent } from "utilities/guards";
 import CreateEnemy from "../../entities/Enemy";
 import enemySpecs from "utilities/data/enemies.json";
 import { EnemySpec } from "types/enemies";
+import Weather from "../../components/Weather";
 
 let connectionTimer: any;
 
 export default class NetworkingSystem extends System {
   static queries = {
     networkRoom: {
-      components: [NetworkRoom]
+      components: [NetworkRoom],
     },
     localEntitiesToSend: {
-      components: [SendData, Movement, LocalPlayer]
+      components: [SendData, Movement, LocalPlayer],
     },
     remoteEntities: {
-      components: [RemotePlayer]
+      components: [RemotePlayer],
     },
     tileMaps: {
-      components: [TileMap, Not(Loadable)]
+      components: [TileMap, Not(Loadable)],
     },
     localEntities: {
-      components: [LocalPlayer, Movement]
+      components: [LocalPlayer, Movement],
     },
     loadedItems: {
-      components: [Not(Loadable), Item]
-    }
+      components: [Not(Loadable), Item],
+    },
   };
 
   execute() {
@@ -68,7 +69,7 @@ export default class NetworkingSystem extends System {
 
     if (!networkRoom.room) {
       networkRoom.joining = true;
-      client.joinOrCreate(name).then(room => {
+      client.joinOrCreate(name).then((room) => {
         tileMapEntity.removeComponent(Gray);
         clearTimeout(connectionTimer);
         gameState.addRoom("map", room);
@@ -81,14 +82,14 @@ export default class NetworkingSystem extends System {
           if (movement.currentTile >= 0) {
             networkRoom.room?.send({
               command: "localPlayer:movement:report",
-              targetTile: movement.currentTile
+              targetTile: movement.currentTile,
             });
           }
         });
 
         networkRoom.room.state.enemies.onAdd = (enemy, key) => {
           const enemySpec = (enemySpecs as EnemySpec[]).find(
-            spec => spec.id === enemy.enemyId
+            (spec) => spec.id === enemy.enemyId
           );
           if (!enemySpec) {
             return;
@@ -97,7 +98,7 @@ export default class NetworkingSystem extends System {
           const newEnemy = CreateEnemy(enemy, enemySpec, tileMap.width);
 
           enemy.onChange = function(changes) {
-            changes.forEach(change => {
+            changes.forEach((change) => {
               if (change.field === "currentTile") {
                 const movement = newEnemy.getComponent(Movement);
                 const awaitingPosition = newEnemy.hasComponent(
@@ -108,7 +109,7 @@ export default class NetworkingSystem extends System {
                   const position = newEnemy.getMutableComponent(Position);
                   movement.currentTile = enemy.currentTile;
                   newEnemy.addComponent(NewMovementTarget, {
-                    targetTile: enemy.currentTile
+                    targetTile: enemy.currentTile,
                   });
                   position.value = tileIdToVector(enemy.currentTile, width);
                   newEnemy.removeComponent(AwaitingPosition);
@@ -123,7 +124,7 @@ export default class NetworkingSystem extends System {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
 
             player.onChange = function(changes) {
-              changes.forEach(change => {
+              changes.forEach((change) => {
                 // const newPosition = newRemotePlayer.getComponent(Position);
                 if (change.field === "targetTile") {
                   const movement = newRemotePlayer.getComponent(Movement);
@@ -137,7 +138,7 @@ export default class NetworkingSystem extends System {
                     );
                     movement.currentTile = player.targetTile;
                     newRemotePlayer.addComponent(NewMovementTarget, {
-                      targetTile: player.targetTile
+                      targetTile: player.targetTile,
                     });
                     position.value = tileIdToVector(player.targetTile, width);
                     newRemotePlayer.removeComponent(AwaitingPosition);
@@ -150,7 +151,7 @@ export default class NetworkingSystem extends System {
               const movement = newRemotePlayer.getMutableComponent(Movement);
               movement.currentTile = player.targetTile;
               newRemotePlayer.addComponent(NewMovementTarget, {
-                targetTile: player.targetTile
+                targetTile: player.targetTile,
               });
               position.value = tileIdToVector(player.targetTile, width);
             } else {
@@ -162,7 +163,7 @@ export default class NetworkingSystem extends System {
               player.inventory
             );
             player.onChange = function(changes) {
-              changes.forEach(change => {
+              changes.forEach((change) => {
                 if (change.field === "inventory") {
                   gameState.trigger(
                     "localPlayer:inventory:response",
@@ -190,9 +191,9 @@ export default class NetworkingSystem extends System {
           }
         };
 
-        networkRoom.room.state.items.onAdd = item => {
+        networkRoom.room.state.items.onAdd = (item) => {
           if (isPresent(item.itemId)) {
-            const itemSpec = items.find(i => i.id === item.itemId);
+            const itemSpec = items.find((i) => i.id === item.itemId);
             if (itemSpec) {
               //@ts-ignore
               const exists = this.queries.loadedItems.results.find(
@@ -213,7 +214,6 @@ export default class NetworkingSystem extends System {
 
         networkRoom.room.state.items.onRemove = (item, key) => {
           if (isPresent(item.itemId)) {
-            //@ts-ignore
             this.queries.loadedItems.results.forEach((itemEntity: Entity) => {
               const itemComponent = itemEntity.getComponent(Item);
               if (
@@ -224,6 +224,18 @@ export default class NetworkingSystem extends System {
               }
             });
           }
+        };
+
+        networkRoom.room.state.weather.onAdd = (weatherState) => {
+          const weather = tileMapEntity.getMutableComponent(Weather);
+          weather.active = weatherState.weathers;
+          weatherState.onChange = (changes) => {
+            changes.forEach((change) => {
+              if (change.field === "weathers") {
+                weather.active = change.value;
+              }
+            });
+          };
         };
 
         networkRoom.room.onLeave(() => {
@@ -250,7 +262,7 @@ export default class NetworkingSystem extends System {
               compassToVector(movement.direction)
             ),
             width
-          )
+          ),
         };
 
         networkRoom.room?.send(packet);

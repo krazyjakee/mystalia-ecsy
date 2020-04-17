@@ -10,22 +10,22 @@ type RainParticle = {
   ys: number;
 };
 
-const newParticle = (w: number, h: number): RainParticle => ({
+const newParticle = (w: number, h: number, heavy: boolean): RainParticle => ({
   x: Math.random() * w,
   y: Math.random() * h,
-  l: Math.random() * 2,
+  l: Math.random() * (heavy ? 3 : 2),
   life: Math.random() * 30,
   xs: -1 + Math.random() * 1 + 0.5,
   ys: Math.random() * 4 + 4,
 });
 
 const init: RainParticle[] = [];
-const maxParts = 300;
+const maxParts = 600;
 for (let a = 0; a < maxParts; a++) {
-  init.push(newParticle(window.innerWidth, window.innerHeight));
+  init.push(newParticle(window.innerWidth, window.innerHeight, false));
 }
 
-export default (offset: Vector) => {
+export default (offset: Vector, heavy: boolean = false) => {
   context2d.save();
   context2d.strokeStyle = "rgba(174,194,224,0.8)";
   context2d.lineWidth = 1;
@@ -34,7 +34,7 @@ export default (offset: Vector) => {
   const w = window.innerWidth;
   const h = window.innerHeight;
   const particles: RainParticle[] = [];
-  for (let b = 0; b < maxParts; b++) {
+  for (let b = 0; b < (heavy ? 600 : 300); b++) {
     particles[b] = init[b];
   }
 
@@ -57,7 +57,7 @@ export default (offset: Vector) => {
     }
 
     if (p.life <= -10) {
-      particles[b] = newParticle(w, h);
+      particles[b] = newParticle(w, h, heavy);
     } else if (p.life <= 0) {
       particles[b].y -= 5;
     }
