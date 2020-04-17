@@ -12,10 +12,13 @@ import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { readMapFiles } from "../utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import EnemySpawner from "../workers/enemySpawner";
+import WeatherSpawner from "../workers/weatherSpawner";
 
 export default class MapRoom extends Room<MapState> {
   itemSpawner?: ItemSpawner;
   enemySpawner?: EnemySpawner;
+  weatherSpawner?: WeatherSpawner;
+
   objectTileStore?: ObjectTileStore;
   mapData?: TMJ;
 
@@ -36,9 +39,8 @@ export default class MapRoom extends Room<MapState> {
     this.objectTileStore = new ObjectTileStore(this.mapData);
 
     this.itemSpawner = new ItemSpawner(this);
-    this.itemSpawner.loadFromDB();
-
     this.enemySpawner = new EnemySpawner(this);
+    this.weatherSpawner = new WeatherSpawner(this);
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -109,6 +111,13 @@ export default class MapRoom extends Room<MapState> {
 
     if (this.enemySpawner) {
       this.enemySpawner.dispose();
+    }
+
+    if (this.weatherSpawner) {
+      if (this.weatherSpawner.master) {
+        await saveStateToDb("Weather", this.roomName, this.state.weather);
+      }
+      this.weatherSpawner.dispose();
     }
 
     await saveStateToDb("Item", this.roomName, this.state.items);

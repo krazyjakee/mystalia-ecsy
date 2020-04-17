@@ -18,13 +18,15 @@ export default class ItemSpawner {
     if (this.room.mapData) {
       this.mapItems = getTilesByType("item", this.room.mapData) || [];
     }
+
+    this.loadFromDB();
   }
 
   loadFromDB() {
     const items = mongoose.model("Item", ItemSchema);
     items.find({ room: this.room.roomName }, (err, res) => {
       if (err) return console.log(err.message);
-      res.forEach(doc => {
+      res.forEach((doc) => {
         const obj = doc.toJSON();
         this.room.state.items[obj.index] = new ItemState(
           obj.itemId,

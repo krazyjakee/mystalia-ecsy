@@ -5,7 +5,8 @@ import { InventoryStateProps } from "serverState/inventory";
 import ItemSchema from "../db/ItemSchema";
 import EnemySchema from "../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
-import { MapSchema } from "@colyseus/schema";
+import { MapSchema, ArraySchema } from "@colyseus/schema";
+import WeatherSchema from "../db/WeatherSchema";
 
 export const savePlayerState = async (player: PlayerState, room: string) => {
   if (player.dbId) {
@@ -51,12 +52,16 @@ const schemas = {
     schema: EnemySchema,
     fields: ["enemyId", "zoneId", "currentTile"],
   },
+  Weather: {
+    schema: WeatherSchema,
+    fields: ["biome", "weathers", "duration"],
+  },
 };
 
 export const saveStateToDb = async (
   key: string,
   roomName: string,
-  state: MapSchema<any>
+  state: MapSchema<any> | ArraySchema<any>
 ) => {
   const { schema, fields } = schemas[key];
   const indexIds = Object.keys(state);
