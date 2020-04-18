@@ -5,13 +5,14 @@ import Position from "@client/components/Position";
 import { getWorld } from "../ecsy";
 import { characterAssetPath } from "../utilities/assets";
 import { Vector } from "types/TMJ";
+import { Size } from "types/TileMap/standard";
 
 type BaseCharacterProps = {
   currentTile?: number;
   currentPosition?: Vector;
   spriteId?: string;
   speed?: number;
-  size?: { width: number; height: number };
+  size?: Size;
 };
 
 export default function BaseCharacter({

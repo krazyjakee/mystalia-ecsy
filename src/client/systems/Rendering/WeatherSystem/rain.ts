@@ -20,7 +20,7 @@ const newParticle = (w: number, h: number, heavy: boolean): RainParticle => ({
 });
 
 const init: RainParticle[] = [];
-const maxParts = 600;
+const maxParts = 1000;
 for (let a = 0; a < maxParts; a++) {
   init.push(newParticle(window.innerWidth, window.innerHeight, false));
 }
@@ -34,7 +34,7 @@ export default (offset: Vector, heavy: boolean = false) => {
   const w = window.innerWidth;
   const h = window.innerHeight;
   const particles: RainParticle[] = [];
-  for (let b = 0; b < (heavy ? 600 : 300); b++) {
+  for (let b = 0; b < (heavy ? maxParts : 300); b++) {
     particles[b] = init[b];
   }
 

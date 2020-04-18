@@ -1,32 +1,33 @@
 import { Direction } from "types/Grid";
+import { Size } from "types/TileMap/standard";
 
 export const generateAnimationSteps = (
   direction: Direction = "s",
-  { width, height }: { width: number; height: number } = {
+  { width, height }: Size = {
     width: 24,
-    height: 32
+    height: 32,
   }
 ) => {
   const ys = {
     n: 0,
     e: height,
     s: height * 2,
-    w: height * 3
+    w: height * 3,
   };
   const y = ys[direction];
 
   return [
     {
       x: width,
-      y
+      y,
     },
     {
       x: width * 2,
-      y
+      y,
     },
     {
       x: 0,
-      y
-    }
+      y,
+    },
   ];
 };
