@@ -6,7 +6,7 @@ export default class Movement extends Component {
   targetTile?: number;
   currentTile: number = 0;
   tileQueue: number[] = [];
-  speed: number = 8;
+  speed: number = 6;
   pathingTo?: number;
 
   reset() {
@@ -14,7 +14,7 @@ export default class Movement extends Component {
     this.currentTile = 0;
     this.targetTile = undefined;
     this.tileQueue = [];
-    this.speed = 8;
+    this.speed = 6;
     this.pathingTo = undefined;
   }
 }
