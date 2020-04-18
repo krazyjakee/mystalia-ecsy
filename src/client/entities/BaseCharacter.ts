@@ -19,7 +19,7 @@ export default function BaseCharacter({
   currentTile,
   currentPosition = { x: 0, y: 0 },
   spriteId = "1",
-  speed = 8,
+  speed = 6,
   size,
 }: BaseCharacterProps = {}) {
   const { width, height } = size || { width: 24, height: 32 };
@@ -32,8 +32,8 @@ export default function BaseCharacter({
       height,
       sourceWidth: width,
       sourceHeight: height,
-      x: 32 - width,
-      y: 32 - height,
+      x: (32 - width) / 2,
+      y: (32 - height) / 2,
     })
     .addComponent(Movement, { currentTile, speed })
     .addComponent(Position, { value: currentPosition });

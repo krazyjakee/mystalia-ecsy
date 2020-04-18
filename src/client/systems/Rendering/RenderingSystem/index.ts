@@ -7,7 +7,7 @@ import {
   drawToShadowCanvas,
   drawableToDrawableProperties,
 } from "../../../utilities/drawing";
-import { TMJ } from "types/TMJ";
+import { TMJ, Vector } from "types/TMJ";
 import createDrawableTile from "./createDrawableTile";
 import Movement from "@client/components/Movement";
 import Position from "@client/components/Position";
@@ -16,6 +16,19 @@ import context2d from "../../../canvas";
 import AnimatedTile from "@client/components/AnimatedTile";
 import Item from "@client/components/Item";
 import { DrawableProperties } from "types/drawable";
+
+const drawableWithOffset = (
+  d: DrawableProperties,
+  offset: Vector,
+  x?: number,
+  y?: number
+) => ({
+  ...d,
+  offset: addOffset(offset, {
+    x: x ? x : 0,
+    y: y ? y : 0,
+  }),
+});
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -44,12 +57,7 @@ export default class TileMapDrawer extends System {
 
       if (tileMap.properties.light) {
         context2d.beginPath();
-        context2d.rect(
-          0,
-          0,
-          Math.max(drawable.width, context2d.canvas.width),
-          Math.max(drawable.height, context2d.canvas.height)
-        );
+        context2d.rect(0, 0, drawable.width, drawable.height);
         context2d.fillStyle = `black`;
         context2d.fill();
       }
@@ -64,20 +72,7 @@ export default class TileMapDrawer extends System {
           y: 0,
           width: window.innerWidth,
           height: window.innerHeight,
-          offset: { x: 0, y: 0 },
         };
-
-        const drawableWithOffset = (
-          d: DrawableProperties,
-          x?: number,
-          y?: number
-        ) => ({
-          ...d,
-          offset: addOffset(offset, {
-            x: x ? x : 0,
-            y: y ? y : 0,
-          }),
-        });
 
         drawImage({
           ...baseCanvasProperties,
@@ -86,13 +81,17 @@ export default class TileMapDrawer extends System {
 
         animatedTiles.drawables[1].forEach(
           (tile) =>
-            tile.drawable && drawImage(drawableWithOffset(tile.drawable))
+            tile.drawable &&
+            drawImage(drawableWithOffset(tile.drawable, offset))
         );
 
         this.queries.loadedItems.results.forEach((itemEntity: Entity) => {
           const itemDrawable = itemEntity.getComponent(Drawable);
           drawImage(
-            drawableWithOffset(drawableToDrawableProperties(itemDrawable))
+            drawableWithOffset(
+              drawableToDrawableProperties(itemDrawable),
+              offset
+            )
           );
         });
 
@@ -102,6 +101,7 @@ export default class TileMapDrawer extends System {
           drawImage(
             drawableWithOffset(
               drawableToDrawableProperties(playerDrawable),
+              offset,
               position.value.x * 32,
               position.value.y * 32
             )
@@ -110,7 +110,8 @@ export default class TileMapDrawer extends System {
 
         animatedTiles.drawables[0].forEach(
           (tile) =>
-            tile.drawable && drawImage(drawableWithOffset(tile.drawable))
+            tile.drawable &&
+            drawImage(drawableWithOffset(tile.drawable, offset))
         );
 
         drawImage({

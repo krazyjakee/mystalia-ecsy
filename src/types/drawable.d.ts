@@ -11,5 +11,5 @@ export type DrawableProperties = {
   y: number;
   width: number;
   height: number;
-  offset: Vector;
+  offset?: Vector;
 };

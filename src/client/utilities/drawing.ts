@@ -17,7 +17,7 @@ export const drawImage = (
     y,
     width,
     height,
-    offset,
+    offset = { x: 0, y: 0 },
   } = drawable;
 
   if (image) {

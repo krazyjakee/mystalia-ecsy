@@ -228,14 +228,16 @@ export default class NetworkingSystem extends System {
 
         networkRoom.room.state.weather.onAdd = (weatherState) => {
           const weather = tileMapEntity.getMutableComponent(Weather);
-          weather.active = weatherState.weathers;
-          weatherState.onChange = (changes) => {
-            changes.forEach((change) => {
-              if (change.field === "weathers") {
-                weather.active = change.value;
-              }
-            });
-          };
+          if (weather) {
+            weather.active = weatherState.weathers;
+            weatherState.onChange = (changes) => {
+              changes.forEach((change) => {
+                if (change.field === "weathers") {
+                  weather.active = change.value;
+                }
+              });
+            };
+          }
         };
 
         networkRoom.room.onLeave(() => {

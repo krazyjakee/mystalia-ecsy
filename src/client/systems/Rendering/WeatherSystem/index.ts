@@ -37,6 +37,7 @@ export default class WeatherSystem extends System {
       }
       if (active.includes("lightRain")) {
         drawRain(rainOffset);
+        // TODO: Fade in the overcast
         drawOvercast(0.1);
       } else if (active.includes("heavyRain")) {
         drawRain(rainOffset, true);

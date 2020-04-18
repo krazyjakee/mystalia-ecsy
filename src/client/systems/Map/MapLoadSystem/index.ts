@@ -83,7 +83,9 @@ export default class TileMapChanger extends System {
 
         tileMap.reset();
         drawable.reset();
-        weather.reset();
+        if (weather) {
+          weather.reset();
+        }
 
         await loadTileMap(loadable.dataPath, drawable, tileMap);
 
@@ -121,6 +123,12 @@ export default class TileMapChanger extends System {
         }
 
         tileMap.targetTile = tileId;
+
+        if (tileMap.properties.light) {
+          tileMapEntity.removeComponent(Weather);
+        } else {
+          tileMapEntity.addComponent(Weather);
+        }
 
         this.queries.networkRoom.results.forEach(
           (networkRoomEntity: Entity) => {

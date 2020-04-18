@@ -8,11 +8,13 @@ import LocalPlayer from "@client/components/LocalPlayer";
 import Position from "@client/components/Position";
 import { drawLightSource, calculateBrightness } from "./lightRenderFunctions";
 import { tileIdToPixels } from "utilities/tileMap";
+import { drawImage } from "@client/utilities/drawing";
 
 const imageMask = new Image();
 imageMask.src = "/assets/utilities/lightmask.png";
 
 const lightCanvas = document.createElement("canvas");
+const shadowContext = lightCanvas.getContext("2d") as CanvasRenderingContext2D;
 
 export default class LightSystem extends System {
   static queries = {
@@ -31,21 +33,8 @@ export default class LightSystem extends System {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
 
-      const largestWidth = Math.max(
-        tileMapDrawable.width,
-        context2d.canvas.width
-      );
-      const largestHeight = Math.max(
-        tileMapDrawable.height,
-        context2d.canvas.height
-      );
-
-      lightCanvas.width = largestWidth;
-      lightCanvas.height = largestHeight;
-
-      const shadowContext = lightCanvas.getContext(
-        "2d"
-      ) as CanvasRenderingContext2D;
+      lightCanvas.width = tileMapDrawable.width;
+      lightCanvas.height = tileMapDrawable.height;
 
       const environmentLight =
         !!tileMap.properties.light && parseInt(tileMap.properties.light);
@@ -54,9 +43,13 @@ export default class LightSystem extends System {
       const brightness = calculateBrightness(environmentLight);
 
       shadowContext.beginPath();
-      shadowContext.rect(0, 0, largestWidth, largestHeight);
       shadowContext.fillStyle = `rgba(0,0,0,${1 - 0.01 * brightness})`;
-      shadowContext.fill();
+      shadowContext.fillRect(
+        0,
+        0,
+        tileMapDrawable.width,
+        tileMapDrawable.height
+      );
 
       if (!environmentLight || environmentLight < 40) {
         this.queries.player.results.forEach((playerEntity: Entity) => {
@@ -75,7 +68,7 @@ export default class LightSystem extends System {
       }
 
       if (environmentLight || (!environmentLight && brightness < 60)) {
-        Object.keys(tileMap.objectTileStore.store).forEach((key) => {
+        for (let key in tileMap.objectTileStore.store) {
           const tileId = parseInt(key);
           const tilePosition = tileIdToPixels(tileId, tileMap.width);
           const lightTile = tileMap.objectTileStore.getByType<"light">(
@@ -101,11 +94,25 @@ export default class LightSystem extends System {
               });
             }
           }
-        });
+        }
       }
 
       context2d.globalCompositeOperation = "multiply";
-      context2d.drawImage(lightCanvas, 0, 0, largestWidth, largestHeight);
+
+      const minWidth = Math.min(tileMapDrawable.width, window.innerWidth);
+      const minHeight = Math.min(tileMapDrawable.height, window.innerHeight);
+
+      drawImage({
+        image: lightCanvas,
+        sourceX: 0,
+        sourceY: 0,
+        sourceWidth: minWidth,
+        sourceHeight: minHeight,
+        x: 0,
+        y: 0,
+        width: minWidth,
+        height: minHeight,
+      });
     });
     context2d.restore();
   }

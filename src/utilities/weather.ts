@@ -24,7 +24,7 @@ export const weatherChance: { [key in Weather]: number } = {
   heavyRain: 15,
   thunder: 25,
   windy: 20,
-  cloudy: 20,
+  cloudy: 5,
   snowy: 10,
   foggy: 25,
   dusty: 15,
