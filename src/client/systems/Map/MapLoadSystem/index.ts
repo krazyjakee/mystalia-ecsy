@@ -20,6 +20,9 @@ import Item from "@client/components/Item";
 import { Remove } from "@client/components/Tags";
 import Enemy from "@client/components/Enemy";
 import Weather from "@client/components/Weather";
+import config from "@client/config.json";
+
+const { allowableOffMapDistance } = config;
 
 export default class TileMapChanger extends System {
   static queries = {
@@ -94,9 +97,11 @@ export default class TileMapChanger extends System {
         playerPosition.value = tileVector;
         movement.currentTile = tileId;
 
+        const windowWidth = window.innerWidth + allowableOffMapDistance * 2;
+        const windowHeight = window.innerHeight + allowableOffMapDistance * 2;
+
         const mapSmallerThanWindow =
-          drawable.width <= window.innerWidth &&
-          drawable.height <= window.innerHeight;
+          drawable.width <= windowWidth && drawable.height <= windowHeight;
 
         if (mapSmallerThanWindow) {
           drawable.offset = {
@@ -109,8 +114,8 @@ export default class TileMapChanger extends System {
           };
         } else {
           const centeredVector = {
-            x: tilePixels.x - Math.round(window.innerWidth / 2),
-            y: tilePixels.y - Math.round(window.innerHeight / 2),
+            x: tilePixels.x - Math.round(windowWidth / 2),
+            y: tilePixels.y - Math.round(windowHeight / 2),
           };
 
           drawable.offset = setOffset(

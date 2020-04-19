@@ -17,13 +17,13 @@ import gameState from "../../../gameState";
 
 const useStyles = createUseStyles({
   plank: {
-    backgroundImage: guiAssetPath("panel/inventory-plank.png"),
+    backgroundImage: guiAssetPath("panel/inventory/inventory-plank.png"),
     width: 343,
     height: 55,
     marginBottom: 10,
   },
   emptySlot: {
-    backgroundImage: guiAssetPath("panel/inventory-slot.png"),
+    backgroundImage: guiAssetPath("panel/inventory/inventory-slot.png"),
     width: 48,
     height: 48,
     margin: "0 6px 6px 6px",

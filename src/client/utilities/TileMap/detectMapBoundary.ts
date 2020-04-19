@@ -1,4 +1,7 @@
 import { Vector } from "types/TMJ";
+import config from "@client/config.json";
+
+const { allowableOffMapDistance } = config;
 
 export default (
   x: number,
@@ -16,20 +19,26 @@ export default (
     y: false,
   };
 
-  if (requestX >= 0) {
+  if (requestX >= allowableOffMapDistance) {
     boundary.x = true;
-    newX = 0;
-  } else if (requestX < 0 - (mapWidth - window.innerWidth)) {
+    newX = allowableOffMapDistance;
+  } else if (
+    requestX <
+    0 - (mapWidth + allowableOffMapDistance - window.innerWidth)
+  ) {
     boundary.x = true;
-    newX = 0 - (mapWidth - window.innerWidth);
+    newX = 0 - (mapWidth + allowableOffMapDistance - window.innerWidth);
   }
 
-  if (requestY >= 0) {
+  if (requestY >= allowableOffMapDistance) {
     boundary.y = true;
-    newY = 0;
-  } else if (requestY < 0 - (mapHeight - window.innerHeight)) {
+    newY = allowableOffMapDistance;
+  } else if (
+    requestY <
+    0 - (mapHeight + allowableOffMapDistance - window.innerHeight)
+  ) {
     boundary.y = true;
-    newY = 0 - (mapHeight - window.innerHeight);
+    newY = 0 - (mapHeight + allowableOffMapDistance - window.innerHeight);
   }
 
   return [{ x: newX, y: newY }, boundary];

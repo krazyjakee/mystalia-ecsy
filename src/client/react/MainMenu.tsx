@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import client from "../colyseus";
 import startEcsy from "../ecsy";
 import { Button } from "./FormControls/Button";
 import { createUseStyles } from "react-jss";
 import { whiteText } from "./palette";
 import { guiAssetPath } from "./cssUtilities";
-import gameState from "../gameState";
 
 const useStyles = createUseStyles({
   title: {
@@ -29,9 +28,8 @@ const useStyles = createUseStyles({
   },
 });
 
-export default () => {
+export default (props: { hidden: boolean; login: VoidFunction }) => {
   const classes = useStyles();
-  const [hidden, setHidden] = useState(false);
 
   const hotReloadEnabled = Boolean((window as any).webpackHotUpdate);
 
@@ -41,21 +39,17 @@ export default () => {
       client.auth.logout();
       user = await client.auth.login();
     }
+    props.login();
     startEcsy(user);
-    setHidden(true);
   };
 
   useEffect(() => {
-    gameState.subscribe("localPlayer:quit", () => {
-      setHidden(false);
-    });
-
     if (hotReloadEnabled) {
       login();
     }
   }, []);
 
-  return hidden || hotReloadEnabled ? null : (
+  return props.hidden || hotReloadEnabled ? null : (
     <div className={classes.mainMenu}>
       <div className={classes.content}>
         <div className={classes.title}>Mystalia Online</div>

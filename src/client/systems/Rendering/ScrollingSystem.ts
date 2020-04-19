@@ -8,6 +8,9 @@ import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
 import LocalPlayer from "@client/components/LocalPlayer";
 import { tileIdToPixels } from "utilities/tileMap";
+import config from "@client/config.json";
+
+const { allowableOffMapDistance } = config;
 
 export default class TileMapMover extends System {
   static queries = {
@@ -59,7 +62,10 @@ export default class TileMapMover extends System {
           offsetY += 4;
         }
 
-        if (offsetX === 0 && offsetY === 0) {
+        if (
+          offsetX === allowableOffMapDistance &&
+          offsetY === allowableOffMapDistance
+        ) {
           return;
         }
 
