@@ -81,7 +81,7 @@ export default (user: User) => {
       world = new World();
       (window as any).ecsyError = false;
     } else {
-      requestAnimationFrame(update);
+      // requestAnimationFrame(update);
     }
   }
 

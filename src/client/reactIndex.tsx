@@ -1,10 +1,12 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import * as ReactDOM from "react-dom";
 import MainMenu from "./react/MainMenu";
 import { Clock } from "./react/Overlays/Clock";
 import AdminPanel from "./react/Panels/Admin/AdminPanel";
 import { createUseStyles } from "react-jss";
 import InventoryPanel from "./react/Panels/Inventory/InventoryPanel";
+import TopMenu from "./react/Panels/TopMenu";
+import gameState from "./gameState";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -18,14 +20,26 @@ const useStyles = createUseStyles({
 
 const App = () => {
   const classes = useStyles();
+  const [inGame, setInGame] = useState(false);
+
+  useEffect(() => {
+    gameState.subscribe("localPlayer:quit", () => {
+      setInGame(false);
+    });
+  }, []);
 
   return (
     <>
       <div id="click-area" className={classes.clickArea}></div>
-      <MainMenu />
-      <Clock />
-      <AdminPanel />
-      <InventoryPanel />
+      <MainMenu hidden={inGame} login={() => setInGame(true)} />
+      {inGame ? (
+        <>
+          <Clock />
+          <AdminPanel />
+          <InventoryPanel />
+          <TopMenu />
+        </>
+      ) : null}
     </>
   );
 };
