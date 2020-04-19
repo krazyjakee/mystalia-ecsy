@@ -8,6 +8,9 @@ import addOffset from "../../utilities/Vector/addOffset";
 import setOffsetRelative from "../../utilities/Vector/setOffsetRelative";
 import LocalPlayer from "@client/components/LocalPlayer";
 import { tileIdToPixels } from "utilities/tileMap";
+import config from "@client/config.json";
+
+const { allowableOffMapDistance } = config;
 
 export default class TileMapMover extends System {
   static queries = {
@@ -37,10 +40,12 @@ export default class TileMapMover extends System {
         const tileVectorOffset = addOffset(tileVector, tileMapDrawable.offset);
 
         const percentageX = Math.round(
-          (tileVectorOffset.x * 100) / window.innerWidth
+          (tileVectorOffset.x * 100) /
+            (window.innerWidth + allowableOffMapDistance * 2)
         );
         const percentageY = Math.round(
-          (tileVectorOffset.y * 100) / window.innerHeight
+          (tileVectorOffset.y * 100) /
+            (window.innerHeight + allowableOffMapDistance * 2)
         );
 
         let offsetX = 0;
@@ -59,7 +64,10 @@ export default class TileMapMover extends System {
           offsetY += 4;
         }
 
-        if (offsetX === 0 && offsetY === 0) {
+        if (
+          offsetX === allowableOffMapDistance &&
+          offsetY === allowableOffMapDistance
+        ) {
           return;
         }
 
