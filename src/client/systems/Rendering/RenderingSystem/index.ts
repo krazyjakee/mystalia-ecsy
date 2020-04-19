@@ -55,12 +55,10 @@ export default class TileMapDrawer extends System {
 
       context2d.save();
 
-      if (tileMap.properties.light) {
-        context2d.beginPath();
-        context2d.rect(0, 0, drawable.width, drawable.height);
-        context2d.fillStyle = `black`;
-        context2d.fill();
-      }
+      context2d.beginPath();
+      context2d.rect(0, 0, drawable.width, drawable.height);
+      context2d.fillStyle = `black`;
+      context2d.fill();
 
       if (canvasCache.length) {
         const baseCanvasProperties = {
