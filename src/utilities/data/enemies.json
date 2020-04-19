@@ -10,7 +10,9 @@
       }
     },
     "speed": 1,
-    "maxDistance": 6
+    "maxDistance": 6,
+    "hp": [40, 60],
+    "abilities": [0]
   },
   {
     "id": 1,

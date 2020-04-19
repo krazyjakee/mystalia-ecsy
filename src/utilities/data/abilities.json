@@ -1,0 +1,10 @@
+[
+  {
+    "id": 0,
+    "name": "Bite",
+    "spritesheet": "spells",
+    "spriteId": 104,
+    "type": "physical",
+    "damage": [6, 12]
+  }
+]

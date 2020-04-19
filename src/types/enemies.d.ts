@@ -19,4 +19,6 @@ export type EnemySpec = {
   behavior: EnemyBehaviour;
   speed: number;
   maxDistance: number;
+  hp: number[];
+  abilities: number[];
 };
