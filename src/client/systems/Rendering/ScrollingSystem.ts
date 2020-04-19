@@ -40,12 +40,10 @@ export default class TileMapMover extends System {
         const tileVectorOffset = addOffset(tileVector, tileMapDrawable.offset);
 
         const percentageX = Math.round(
-          (tileVectorOffset.x * 100) /
-            (window.innerWidth + allowableOffMapDistance * 2)
+          (tileVectorOffset.x * 100) / window.innerWidth
         );
         const percentageY = Math.round(
-          (tileVectorOffset.y * 100) /
-            (window.innerHeight + allowableOffMapDistance * 2)
+          (tileVectorOffset.y * 100) / window.innerHeight
         );
 
         let offsetX = 0;
