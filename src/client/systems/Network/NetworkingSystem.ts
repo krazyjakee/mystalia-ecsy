@@ -97,6 +97,11 @@ export default class NetworkingSystem extends System {
 
           const newEnemy = CreateEnemy(enemy, enemySpec, tileMap.width);
 
+          gameState.trigger("enemy:change", {
+            index: key,
+            enemy,
+          });
+
           enemy.onChange = function(changes) {
             changes.forEach((change) => {
               if (change.field === "currentTile") {
@@ -115,6 +120,10 @@ export default class NetworkingSystem extends System {
                   newEnemy.removeComponent(AwaitingPosition);
                 }
               }
+              gameState.trigger("enemy:change", {
+                index: key,
+                enemy,
+              });
             });
           };
         };

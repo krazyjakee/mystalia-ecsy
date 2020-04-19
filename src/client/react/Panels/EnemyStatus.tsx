@@ -72,7 +72,7 @@ type Props = {
 export const EnemyStatus = (props: Props) => {
   const classes = useStyles();
   const {
-    index,
+    index: propIndex,
     spec: { name, abilities: specAbilities },
   } = props.enemy;
 
@@ -84,7 +84,7 @@ export const EnemyStatus = (props: Props) => {
 
   useEffect(() => {
     const enemyUpdate = (data: { index: string; enemy: EnemyState }) => {
-      if (data.index) {
+      if (data.index === propIndex) {
         console.log(`Enemy ${data.index} updated`);
       }
     };
@@ -118,7 +118,11 @@ export const EnemyStatus = (props: Props) => {
   };
 
   return (
-    <div {...props} className={classes.root}>
+    <div
+      {...props}
+      id={`enemyStateComponent${propIndex}`}
+      className={classes.root}
+    >
       <div className={classes.label}>{name}</div>
       <div className={classes.healthBar}>
         <div className={classes.healthBarInner}> </div>

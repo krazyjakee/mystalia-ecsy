@@ -78,5 +78,7 @@ export default class MouseInputSystem extends System {
 
       entity.addComponent(NewMovementTarget, { targetTile: clickedTile });
     });
+
+    // TODO: Add mouse hover enabled entities (enemies). On enemy hover trigger an event to spawn a new EnemyStatus panel that follows the enemy. Move the panel using the div style.
   }
 }
