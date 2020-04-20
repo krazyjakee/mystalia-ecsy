@@ -4,10 +4,11 @@ import { generateAnimationSteps } from "../utilities/Animation/character";
 import Enemy from "@client/components/Enemy";
 import { EnemySpec } from "types/enemies";
 import EnemyState from "@server/components/enemy";
-import { AwaitingPosition } from "@client/components/Tags";
 import { tileIdToVector } from "utilities/tileMap";
+import { MouseListener } from "@client/components/Tags";
 
 export default function CreateEnemy(
+  key: string,
   enemy: EnemyState,
   enemySpec: EnemySpec,
   mapWidth: number
@@ -28,5 +29,6 @@ export default function CreateEnemy(
       speed: enemySpec.speed,
       steps: generateAnimationSteps("s", size),
     })
-    .addComponent(Enemy, enemy);
+    .addComponent(Enemy, { key, state: enemy })
+    .addComponent(MouseListener);
 }

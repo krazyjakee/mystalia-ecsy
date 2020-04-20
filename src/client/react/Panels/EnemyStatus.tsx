@@ -1,13 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { guiAssetPath, spellAssetPath } from "../cssUtilities";
 import { whiteText } from "../palette";
-import { EnemySpec } from "types/enemies";
+import { EnemyReference } from "types/enemies";
 import gameState from "@client/gameState";
-import EnemyState from "@server/components/enemy";
 import abilitiesData from "utilities/data/abilities.json";
 import { tileIdToPixels } from "utilities/tileMap";
-import { loadImage } from "@client/utilities/assets";
 import { AbilitySpec } from "types/types";
 import { isPresent } from "utilities/guards";
 
@@ -62,38 +60,48 @@ const useStyles = createUseStyles({
   },
 });
 
-type Props = {
-  enemy: {
-    index: string;
-    spec: EnemySpec;
-  };
-} & React.HTMLAttributes<HTMLDivElement>;
-
-export const EnemyStatus = (props: Props) => {
+export const EnemyStatus = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const classes = useStyles();
-  const {
-    index: propIndex,
-    spec: { name, abilities: specAbilities },
-  } = props.enemy;
+
+  const [enemy, setEnemy] = useState<EnemyReference>({});
+  const [mouseOver, setMouseOver] = useState(false);
+  const { key } = enemy;
+
+  const enemyUnHovered = (data: EnemyReference) => {
+    if (!mouseOver || !data.key) {
+      setEnemy({});
+    }
+  };
+
+  useEffect(() => {
+    const enemyUpdate = (data: EnemyReference) => {
+      if (data.key === key) {
+        setEnemy(data);
+      }
+    };
+
+    const enemyHovered = (data: EnemyReference) => {
+      setEnemy(data);
+    };
+
+    gameState.subscribe("enemy:change", enemyUpdate);
+    gameState.subscribe("enemy:hovered", enemyHovered);
+    gameState.subscribe("enemy:unhovered", enemyUnHovered);
+    return () => {
+      gameState.unsubscribe("enemy:change", enemyUpdate);
+      gameState.unsubscribe("enemy:hovered", enemyHovered);
+      gameState.unsubscribe("enemy:unhovered", enemyUnHovered);
+    };
+  }, [key, mouseOver]);
+
+  if (!enemy.enemySpec) return null;
+  const { name, abilities: specAbilities } = enemy.enemySpec;
 
   const abilities: AbilitySpec[] = specAbilities
     .map((specAbility) =>
       (abilitiesData as AbilitySpec[]).find((a) => a.id === specAbility)
     )
     .filter(isPresent);
-
-  useEffect(() => {
-    const enemyUpdate = (data: { index: string; enemy: EnemyState }) => {
-      if (data.index === propIndex) {
-        console.log(`Enemy ${data.index} updated`);
-      }
-    };
-
-    gameState.subscribe("enemy:change", enemyUpdate);
-    return () => {
-      gameState.unsubscribe("enemy:change", enemyUpdate);
-    };
-  }, []);
 
   const blankAbilities = new Array(5).fill(0);
 
@@ -120,8 +128,13 @@ export const EnemyStatus = (props: Props) => {
   return (
     <div
       {...props}
-      id={`enemyStateComponent${propIndex}`}
+      id="enemyStateComponent"
       className={classes.root}
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => {
+        setMouseOver(false);
+        enemyUnHovered({});
+      }}
     >
       <div className={classes.label}>{name}</div>
       <div className={classes.healthBar}>

@@ -2,6 +2,7 @@ import User from "./User";
 import InventoryState from "@server/components/inventory";
 import { MapSchema } from "@colyseus/schema";
 import EnemyState from "@server/components/enemy";
+import { EnemyReference } from "./enemies";
 
 export interface GameStateEvents {
   "admin:list:allPlayers": {
@@ -39,7 +40,9 @@ export interface GameStateEvents {
     to: number;
   };
   "localPlayer:quit": undefined;
-  "enemy:change": { index: string; enemy: EnemyState };
+  "enemy:change": EnemyReference;
+  "enemy:hovered": EnemyReference;
+  "enemy:unhovered": EnemyReference;
 }
 
 export type GameStateEventName = keyof GameStateEvents;

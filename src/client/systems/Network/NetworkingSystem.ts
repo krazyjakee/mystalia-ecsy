@@ -95,11 +95,12 @@ export default class NetworkingSystem extends System {
             return;
           }
 
-          const newEnemy = CreateEnemy(enemy, enemySpec, tileMap.width);
+          const newEnemy = CreateEnemy(key, enemy, enemySpec, tileMap.width);
 
           gameState.trigger("enemy:change", {
-            index: key,
-            enemy,
+            key,
+            enemyState: enemy,
+            enemySpec,
           });
 
           enemy.onChange = function(changes) {
@@ -121,8 +122,9 @@ export default class NetworkingSystem extends System {
                 }
               }
               gameState.trigger("enemy:change", {
-                index: key,
-                enemy,
+                key,
+                enemyState: enemy,
+                enemySpec,
               });
             });
           };

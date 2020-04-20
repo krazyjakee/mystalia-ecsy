@@ -10,6 +10,8 @@ export class KeyboardInput extends TagComponent {}
 
 export class MouseInput extends TagComponent {}
 
+export class MouseListener extends TagComponent {}
+
 export class AwaitingPosition extends TagComponent {}
 
 export class Gray extends TagComponent {}
