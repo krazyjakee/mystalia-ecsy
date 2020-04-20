@@ -1,5 +1,5 @@
-import { System, Entity, Not } from "ecsy";
-import { MouseInput } from "@client/components/Tags";
+import { System, Not } from "ecsy";
+import { MouseInput, MouseListener } from "@client/components/Tags";
 import { Vector } from "types/TMJ";
 import Movement from "@client/components/Movement";
 import TileMap from "@client/components/TileMap";
@@ -8,6 +8,13 @@ import Drawable from "@client/components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import NewMovementTarget from "@client/components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
+import { areColliding } from "@client/utilities/Vector/collision";
+import addOffset from "@client/utilities/Vector/addOffset";
+import config from "@client/config.json";
+import Position from "@client/components/Position";
+import { MouseIsOver } from "@client/components/MouseIs";
+
+const { allowableOffMapDistance } = config;
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -18,6 +25,9 @@ export default class MouseInputSystem extends System {
   static queries = {
     mouseEnabledEntities: {
       components: [MouseInput, Movement],
+    },
+    mouseHoverEntities: {
+      components: [MouseListener, Position, Drawable],
     },
     tileMaps: {
       components: [TileMap, Not(Loadable), Drawable],
@@ -52,8 +62,6 @@ export default class MouseInputSystem extends System {
   }
 
   execute() {
-    if (!this.clickedPosition) return;
-
     const tileMap =
       this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMap) return;
@@ -77,6 +85,38 @@ export default class MouseInputSystem extends System {
       if (!isWalkable(tileMapComponent, clickedTile)) return;
 
       entity.addComponent(NewMovementTarget, { targetTile: clickedTile });
+    });
+
+    this.queries.mouseHoverEntities.results.forEach((entity) => {
+      const drawable = entity.getComponent(Drawable);
+      const { value } = entity.getComponent(Position);
+      const isMousedOver = entity.hasComponent(MouseIsOver);
+
+      const enemyPosition = addOffset(
+        { x: value.x * 32, y: value.y * 32 },
+        tileMapDrawable.offset
+      );
+
+      if (this.cursorPosition) {
+        const mouseOver = areColliding(
+          {
+            ...this.cursorPosition,
+            width: 1,
+            height: 1,
+          },
+          {
+            ...enemyPosition,
+            width: drawable.width,
+            height: drawable.height,
+          },
+          tileMapDrawable.offset
+        );
+
+        if (mouseOver && !isMousedOver) {
+          entity.addComponent(MouseIsOver, { position: this.cursorPosition });
+        } else if (!mouseOver && isMousedOver)
+          entity.removeComponent(MouseIsOver);
+      }
     });
   }
 }

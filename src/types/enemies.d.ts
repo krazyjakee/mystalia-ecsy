@@ -1,3 +1,5 @@
+import EnemyState from "@server/components/enemy";
+
 type EnemyBehaviourProperty = {
   chance: number;
   distance: number;
@@ -19,4 +21,12 @@ export type EnemySpec = {
   behavior: EnemyBehaviour;
   speed: number;
   maxDistance: number;
+  hp: number[];
+  abilities: number[];
+};
+
+export type EnemyReference = {
+  key?: string;
+  enemySpec?: EnemySpec;
+  enemyState?: EnemyState;
 };

@@ -6,3 +6,9 @@ export const guiAssetPath = (path: string, excludeUrlWrapper?: boolean) => {
   new Image().src = result;
   return `url(${result})`;
 };
+
+export const spellAssetPath = (path: string) => {
+  const result = `/assets/spells/${path}`;
+  new Image().src = result;
+  return `url(${result})`;
+};

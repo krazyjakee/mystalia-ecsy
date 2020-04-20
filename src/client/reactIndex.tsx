@@ -7,6 +7,7 @@ import { createUseStyles } from "react-jss";
 import InventoryPanel from "./react/Panels/Inventory/InventoryPanel";
 import TopMenu from "./react/Panels/TopMenu";
 import gameState from "./gameState";
+import { EnemyStatus } from "./react/Panels/EnemyStatus";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -38,6 +39,7 @@ const App = () => {
           <AdminPanel />
           <InventoryPanel />
           <TopMenu />
+          <EnemyStatus />
         </>
       ) : null}
     </>

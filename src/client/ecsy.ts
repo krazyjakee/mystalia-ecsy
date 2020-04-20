@@ -31,6 +31,7 @@ import GraySystem from "./systems/Rendering/GraySystem";
 import WeatherSystem from "./systems/Rendering/WeatherSystem";
 
 import "./entities";
+import EnemyHoverSystem from "./systems/HUD/EnemyHoverSystem";
 
 let world = new World();
 
@@ -41,6 +42,7 @@ export default (user: User) => {
     .registerSystem(ToggleInputSystem)
     .registerSystem(KeyboardInputSystem)
     .registerSystem(MouseInputSystem)
+    .registerSystem(EnemyHoverSystem)
     .registerSystem(NetworkingSystem)
     .registerSystem(MapLoadSystem)
     .registerSystem(MapChangeSystem)

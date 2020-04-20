@@ -25,13 +25,13 @@ if (!isProduction) {
 
   app.use(
     cors({
-      origin: "*"
+      origin: "*",
     })
   );
 
   app.use(
     webpackDevMiddleware(compiler, {
-      publicPath: config.output.publicPath
+      publicPath: config.output.publicPath,
     })
   );
 }
@@ -44,7 +44,7 @@ app.use("/", socialRoutes);
 const server = http.createServer(app);
 const gameServer = new Server({
   server,
-  gracefullyShutdown: false
+  gracefullyShutdown: false,
 });
 
 function shutdown(signal: string) {
@@ -62,7 +62,7 @@ process
 
 console.log("Loading map rooms...");
 const maps = readMapFiles();
-Object.keys(maps).forEach(mapName => {
+Object.keys(maps).forEach((mapName) => {
   gameServer.define(mapName, MapRoom);
 });
 

@@ -6,11 +6,14 @@
     "spriteId": 0,
     "behavior": {
       "escape": {
-        "distance": 5
+        "distance": 5,
+        "chance": 2
       }
     },
     "speed": 1,
-    "maxDistance": 6
+    "maxDistance": 6,
+    "hp": [40, 60],
+    "abilities": [0]
   },
   {
     "id": 1,
@@ -18,6 +21,14 @@
     "spritesheet": "wildlife/fish",
     "spriteId": 0,
     "speed": 1,
-    "maxDistance": 6
+    "maxDistance": 6,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "hp": [40, 60],
+    "abilities": []
   }
 ]

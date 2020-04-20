@@ -41,6 +41,8 @@ const enemySpec = {
   },
   speed: 1,
   maxDistance: 1,
+  hp: [40, 60],
+  abilities: [0],
 };
 
 const createMapRoom = () => {

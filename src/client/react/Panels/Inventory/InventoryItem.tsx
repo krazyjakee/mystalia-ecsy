@@ -5,8 +5,7 @@ import { createUseStyles } from "react-jss";
 import { itemAssetPath } from "../../../utilities/assets";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
 import { whiteText } from "../../palette";
-import { useDrag, DragSourceHookSpec, useDrop } from "react-dnd";
-import { number } from "@colyseus/schema/lib/encoding/decode";
+import { useDrag, useDrop } from "react-dnd";
 
 type Props = {
   item: InventoryItems;
