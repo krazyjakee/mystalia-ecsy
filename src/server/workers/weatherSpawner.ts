@@ -32,20 +32,23 @@ export default class WeatherSpawner {
       const biomeWeather = res[0];
       if (biomeWeather) {
         const obj = biomeWeather.toJSON();
-        this.setWeather(obj.weathers, obj.duration);
-      } else {
-        this.generateWeather();
+        if (obj.weathers && obj.duration) {
+          this.setWeather(obj.weathers, obj.duration);
+          return;
+        }
       }
+      this.generateWeather();
     });
   }
 
-  tick() {
-    const biomeWorkerExists = this.room.presence.get(
-      `${this.presenceKey}:enabled`
+  async tick() {
+    const biomeWorkerExists = await this.room.presence.hget(
+      `${this.presenceKey}:enabled`,
+      "i"
     );
-    if (biomeWorkerExists != 1) {
+    if (!biomeWorkerExists) {
       this.master = true;
-      this.room.presence.sadd(`${this.presenceKey}:enabled`, 1);
+      this.room.presence.hset(`${this.presenceKey}:enabled`, "i", "i");
       this.loadFromDB();
     } else if (this.master) {
       this.generateWeather();
@@ -100,6 +103,6 @@ export default class WeatherSpawner {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.room.presence.sadd(`${this.presenceKey}:enabled`, 0);
+    this.room.presence.del(`${this.presenceKey}:enabled`);
   }
 }
