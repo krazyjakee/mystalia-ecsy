@@ -5,7 +5,7 @@ import Enemy from "@client/components/Enemy";
 import { EnemySpec } from "types/enemies";
 import EnemyState from "@server/components/enemy";
 import { tileIdToVector } from "utilities/tileMap";
-import { MouseListener } from "@client/components/Tags";
+import { MouseInput } from "@client/components/Tags";
 
 export default function CreateEnemy(
   key: string,
@@ -30,5 +30,5 @@ export default function CreateEnemy(
       steps: generateAnimationSteps("s", size),
     })
     .addComponent(Enemy, { key, state: enemy })
-    .addComponent(MouseListener);
+    .addComponent(MouseInput);
 }

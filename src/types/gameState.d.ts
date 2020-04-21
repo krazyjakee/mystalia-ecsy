@@ -41,8 +41,8 @@ export interface GameStateEvents {
   };
   "localPlayer:quit": undefined;
   "enemy:change": EnemyReference;
-  "enemy:hovered": EnemyReference;
-  "enemy:unhovered": EnemyReference;
+  "enemy:focused": EnemyReference;
+  "enemy:unfocused": EnemyReference;
 }
 
 export type GameStateEventName = keyof GameStateEvents;

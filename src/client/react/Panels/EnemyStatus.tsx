@@ -64,35 +64,32 @@ export const EnemyStatus = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const classes = useStyles();
 
   const [enemy, setEnemy] = useState<EnemyReference>({});
-  const [mouseOver, setMouseOver] = useState(false);
   const { key } = enemy;
 
-  const enemyUnHovered = (data: EnemyReference) => {
-    if (!mouseOver || !data.key) {
-      setEnemy({});
-    }
-  };
-
   useEffect(() => {
+    const enemyUnFocused = () => {
+      setEnemy({});
+    };
+
     const enemyUpdate = (data: EnemyReference) => {
       if (data.key === key) {
         setEnemy(data);
       }
     };
 
-    const enemyHovered = (data: EnemyReference) => {
+    const enemyFocused = (data: EnemyReference) => {
       setEnemy(data);
     };
 
     gameState.subscribe("enemy:change", enemyUpdate);
-    gameState.subscribe("enemy:hovered", enemyHovered);
-    gameState.subscribe("enemy:unhovered", enemyUnHovered);
+    gameState.subscribe("enemy:focused", enemyFocused);
+    gameState.subscribe("enemy:unfocused", enemyUnFocused);
     return () => {
       gameState.unsubscribe("enemy:change", enemyUpdate);
-      gameState.unsubscribe("enemy:hovered", enemyHovered);
-      gameState.unsubscribe("enemy:unhovered", enemyUnHovered);
+      gameState.unsubscribe("enemy:focused", enemyFocused);
+      gameState.unsubscribe("enemy:unfocused", enemyUnFocused);
     };
-  }, [key, mouseOver]);
+  }, [key]);
 
   if (!enemy.enemySpec) return null;
   const { name, abilities: specAbilities } = enemy.enemySpec;
@@ -126,16 +123,7 @@ export const EnemyStatus = (props: React.HTMLAttributes<HTMLDivElement>) => {
   };
 
   return (
-    <div
-      {...props}
-      id="enemyStateComponent"
-      className={classes.root}
-      onMouseEnter={() => setMouseOver(true)}
-      onMouseLeave={() => {
-        setMouseOver(false);
-        enemyUnHovered({});
-      }}
-    >
+    <div {...props} id="enemyStateComponent" className={classes.root}>
       <div className={classes.label}>{name}</div>
       <div className={classes.healthBar}>
         <div className={classes.healthBarInner}> </div>

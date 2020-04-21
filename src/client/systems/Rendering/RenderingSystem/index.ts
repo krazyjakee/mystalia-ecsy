@@ -6,6 +6,7 @@ import {
   drawImage,
   drawToShadowCanvas,
   drawableToDrawableProperties,
+  drawableWithOffset,
 } from "../../../utilities/drawing";
 import { TMJ, Vector } from "types/TMJ";
 import createDrawableTile from "./createDrawableTile";
@@ -16,19 +17,6 @@ import context2d from "../../../canvas";
 import AnimatedTile from "@client/components/AnimatedTile";
 import Item from "@client/components/Item";
 import { DrawableProperties } from "types/drawable";
-
-const drawableWithOffset = (
-  d: DrawableProperties,
-  offset: Vector,
-  x?: number,
-  y?: number
-) => ({
-  ...d,
-  offset: addOffset(offset, {
-    x: x ? x : 0,
-    y: y ? y : 0,
-  }),
-});
 
 export default class TileMapDrawer extends System {
   static queries = {

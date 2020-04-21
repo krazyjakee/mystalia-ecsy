@@ -31,7 +31,7 @@ import GraySystem from "./systems/Rendering/GraySystem";
 import WeatherSystem from "./systems/Rendering/WeatherSystem";
 
 import "./entities";
-import EnemyHoverSystem from "./systems/HUD/EnemyHoverSystem";
+import EnemyStatusSystem from "./systems/HUD/EnemyStatusSystem";
 
 let world = new World();
 
@@ -42,7 +42,6 @@ export default (user: User) => {
     .registerSystem(ToggleInputSystem)
     .registerSystem(KeyboardInputSystem)
     .registerSystem(MouseInputSystem)
-    .registerSystem(EnemyHoverSystem)
     .registerSystem(NetworkingSystem)
     .registerSystem(MapLoadSystem)
     .registerSystem(MapChangeSystem)
@@ -57,6 +56,7 @@ export default (user: User) => {
     .registerSystem(LightSystem)
     .registerSystem(FlameSystem)
     .registerSystem(TileAnimationSystem)
+    .registerSystem(EnemyStatusSystem)
     .registerSystem(GraySystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)

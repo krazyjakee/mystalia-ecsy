@@ -2,6 +2,8 @@ import { DrawableProperties } from "types/drawable";
 import context2d from "../canvas";
 import Drawable from "@client/components/Drawable";
 import Fade from "@client/components/Fade";
+import { Vector } from "types/TMJ";
+import addOffset from "./Vector/addOffset";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -59,6 +61,19 @@ export const drawToShadowCanvas = (
   return shadowContext;
 };
 
+export const drawableWithOffset = (
+  d: DrawableProperties,
+  offset: Vector,
+  x?: number,
+  y?: number
+) => ({
+  ...d,
+  offset: addOffset(offset, {
+    x: x ? x : 0,
+    y: y ? y : 0,
+  }),
+});
+
 export const drawableToDrawableProperties = (drawable: Drawable) => {
   const {
     image = null,
@@ -104,3 +119,12 @@ export const waitForNextFrame = () =>
       accept();
     });
   });
+
+export const createShadowCanvas = (): [
+  HTMLCanvasElement,
+  CanvasRenderingContext2D
+] => {
+  const canvas = document.createElement("canvas");
+  const shadowContext = canvas.getContext("2d") as CanvasRenderingContext2D;
+  return [canvas, shadowContext];
+};

@@ -30,6 +30,8 @@ export const vectorToTileId = ({ x, y }: Vector, columns: number) => {
   return row * columns + column;
 };
 
+export const vectorToPixels = ({ x, y }: Vector) => ({ x: x * 32, y: y * 32 });
+
 export const pixelsToTileId = (
   { x, y }: Vector,
   columns: number,

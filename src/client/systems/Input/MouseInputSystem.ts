@@ -1,7 +1,6 @@
 import { System, Not } from "ecsy";
-import { MouseInput, MouseListener } from "@client/components/Tags";
+import { MouseInput, Focused } from "@client/components/Tags";
 import { Vector } from "types/TMJ";
-import Movement from "@client/components/Movement";
 import TileMap from "@client/components/TileMap";
 import { Loadable } from "@client/components/Loadable";
 import Drawable from "@client/components/Drawable";
@@ -10,11 +9,8 @@ import NewMovementTarget from "@client/components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
 import { areColliding } from "@client/utilities/Vector/collision";
 import addOffset from "@client/utilities/Vector/addOffset";
-import config from "@client/config.json";
 import Position from "@client/components/Position";
-import { MouseIsOver } from "@client/components/MouseIs";
-
-const { allowableOffMapDistance } = config;
+import LocalPlayer from "@client/components/LocalPlayer";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -23,11 +19,11 @@ export default class MouseInputSystem extends System {
   mouseDown?: boolean = false;
 
   static queries = {
-    mouseEnabledEntities: {
-      components: [MouseInput, Movement],
+    localPlayer: {
+      components: [MouseInput, LocalPlayer],
     },
-    mouseHoverEntities: {
-      components: [MouseListener, Position, Drawable],
+    mouseEnabledEntities: {
+      components: [MouseInput, Position, Drawable, Not(LocalPlayer)],
     },
     tileMaps: {
       components: [TileMap, Not(Loadable), Drawable],
@@ -69,38 +65,21 @@ export default class MouseInputSystem extends System {
     const tileMapDrawable = tileMap.getComponent(Drawable);
     const tileMapComponent = tileMap.getComponent(TileMap);
 
-    this.queries.mouseEnabledEntities.results.forEach((entity) => {
-      if (!this.clickedPosition) return;
-      const offsetClickedPosition = {
-        x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,
-        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32,
-      };
-      const clickedTile = vectorToTileId(
-        offsetClickedPosition,
-        tileMapComponent.width
-      );
+    this.queries.localPlayer.results.forEach((entity) => {
+      this.queries.mouseEnabledEntities.results.forEach((entity) => {
+        if (!this.clickedPosition) return;
+        const drawable = entity.getComponent(Drawable);
+        const { value } = entity.getComponent(Position);
+        const isFocused = entity.hasComponent(Focused);
 
-      this.clickedPosition = undefined;
+        const enemyPosition = addOffset(
+          { x: value.x * 32, y: value.y * 32 },
+          tileMapDrawable.offset
+        );
 
-      if (!isWalkable(tileMapComponent, clickedTile)) return;
-
-      entity.addComponent(NewMovementTarget, { targetTile: clickedTile });
-    });
-
-    this.queries.mouseHoverEntities.results.forEach((entity) => {
-      const drawable = entity.getComponent(Drawable);
-      const { value } = entity.getComponent(Position);
-      const isMousedOver = entity.hasComponent(MouseIsOver);
-
-      const enemyPosition = addOffset(
-        { x: value.x * 32, y: value.y * 32 },
-        tileMapDrawable.offset
-      );
-
-      if (this.cursorPosition) {
-        const mouseOver = areColliding(
+        const isClicked = areColliding(
           {
-            ...this.cursorPosition,
+            ...this.clickedPosition,
             width: 1,
             height: 1,
           },
@@ -112,11 +91,33 @@ export default class MouseInputSystem extends System {
           tileMapDrawable.offset
         );
 
-        if (mouseOver && !isMousedOver) {
-          entity.addComponent(MouseIsOver, { position: this.cursorPosition });
-        } else if (!mouseOver && isMousedOver)
-          entity.removeComponent(MouseIsOver);
+        if (isClicked && !isFocused) {
+          entity.addComponent(Focused);
+          this.clickedPosition = undefined;
+        } else if (!isClicked && isFocused) {
+          entity.removeComponent(Focused);
+        }
+      });
+
+      if (!this.clickedPosition) return;
+
+      const offsetClickedPosition = {
+        x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,
+        y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32,
+      };
+      const clickedTile = vectorToTileId(
+        offsetClickedPosition,
+        tileMapComponent.width
+      );
+
+      if (isWalkable(tileMapComponent, clickedTile)) {
+        this.queries.mouseEnabledEntities.results.forEach((entity) => {
+          entity.removeComponent(Focused);
+        });
+        entity.addComponent(NewMovementTarget, { targetTile: clickedTile });
       }
+
+      this.clickedPosition = undefined;
     });
   }
 }
