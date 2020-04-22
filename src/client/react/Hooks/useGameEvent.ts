@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import gameState from "../../gameState";
-import { GameStateEvents, GameStateEventName } from "types/gameState";
+import { GameStateEvents, RoomMessageType } from "types/gameState";
 
-export const useGameEvent = <T extends GameStateEventName>(
+export const useGameEvent = <T extends RoomMessageType>(
   eventName: T
 ): [
   GameStateEvents[T] | undefined,
@@ -10,7 +10,7 @@ export const useGameEvent = <T extends GameStateEventName>(
 ] => {
   const [data, setData] = useState<GameStateEvents[T]>();
   useEffect(() => {
-    gameState.subscribe(eventName, data => {
+    gameState.subscribe(eventName, (data) => {
       setData(data);
     });
   }, []);

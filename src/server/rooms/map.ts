@@ -1,20 +1,20 @@
 import { Room, Client } from "colyseus";
 import { User, verifyToken, IUser } from "@colyseus/social";
+import { Dispatcher } from "@colyseus/command";
 import MapState from "@server/components/map";
-import Player, {
-  addItemToPlayer,
-  moveInventoryItem,
-} from "@server/components/player";
+import Player from "@server/components/player";
 import { savePlayerState, saveStateToDb } from "@server/utilities/dbState";
-import { RoomMessage, GameStateEventName } from "types/gameState";
+import { RoomMessageType, PresenceMessage, RoomMessage } from "types/gameState";
 import ItemSpawner from "@server/workers/itemSpawner";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { readMapFiles } from "@server/utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import EnemySpawner from "@server/workers/enemySpawner";
 import WeatherSpawner from "@server/workers/weatherSpawner";
+import { roomCommands, RoomCommandsAvailable } from "./mapEventHandlers";
 
 export default class MapRoom extends Room<MapState> {
+  dispatcher = new Dispatcher(this);
   itemSpawner?: ItemSpawner;
   enemySpawner?: EnemySpawner;
   weatherSpawner?: WeatherSpawner;
@@ -41,6 +41,24 @@ export default class MapRoom extends Room<MapState> {
     this.itemSpawner = new ItemSpawner(this);
     this.enemySpawner = new EnemySpawner(this);
     this.weatherSpawner = new WeatherSpawner(this);
+
+    const roomCommandsAvailable = Object.keys(
+      roomCommands
+    ) as RoomCommandsAvailable[];
+    roomCommandsAvailable.forEach((cmd) => {
+      const RoomCommand = roomCommands[cmd];
+      if (RoomCommand) {
+        this.onMessage(
+          cmd,
+          (client: Client, data?: RoomMessage<typeof cmd>) => {
+            this.dispatcher.dispatch(new RoomCommand(), {
+              data,
+              sessionId: client.sessionId,
+            });
+          }
+        );
+      }
+    });
   }
 
   onJoin(client: Client, options: any, user: IUser) {
@@ -51,8 +69,8 @@ export default class MapRoom extends Room<MapState> {
 
     this.presence.subscribe(
       `${user.username}:commands`,
-      (data: RoomMessage<GameStateEventName>) => {
-        this.send(client, data);
+      (data: PresenceMessage<RoomMessageType>) => {
+        client.send(data.command, data);
       }
     );
 
@@ -62,35 +80,6 @@ export default class MapRoom extends Room<MapState> {
         this.state.players[client.sessionId]
       );
     });
-  }
-
-  onMessage(client: Client, message: RoomMessage<GameStateEventName>) {
-    const player = this.state.players[client.sessionId] as Player;
-
-    if (message.command === "localPlayer:movement:report") {
-      const moveMessage = message as RoomMessage<"localPlayer:movement:report">;
-      player.targetTile = moveMessage.targetTile;
-    }
-
-    if (message.command === "localPlayer:inventory:pickup") {
-      const pickupMessage = message as RoomMessage<
-        "localPlayer:inventory:pickup"
-      >;
-      if (this.itemSpawner && player.targetTile) {
-        const item = this.itemSpawner.getItem(
-          player.targetTile,
-          pickupMessage.itemId
-        );
-        if (item) {
-          addItemToPlayer(player.inventory, item);
-        }
-      }
-    }
-
-    if (message.command === "localPlayer:inventory:move") {
-      const { from, to } = message as RoomMessage<"localPlayer:inventory:move">;
-      moveInventoryItem(from, to, player.inventory);
-    }
   }
 
   async onLeave(client: Client, consented: boolean) {
