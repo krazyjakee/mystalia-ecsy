@@ -1,7 +1,6 @@
 import User from "./User";
 import InventoryState from "@server/components/inventory";
 import { MapSchema } from "@colyseus/schema";
-import EnemyState from "@server/components/enemy";
 import { EnemyReference } from "./enemies";
 
 export interface GameStateEvents {
@@ -45,11 +44,13 @@ export interface GameStateEvents {
   "enemy:unfocused": EnemyReference;
 }
 
-export type GameStateEventName = keyof GameStateEvents;
+export type RoomMessageType = keyof GameStateEvents;
 
-type CommandBase<T> = {
+export type RoomMessage<T extends RoomMessageType> = GameStateEvents[T];
+
+export type CommandBase<T> = {
   command: T;
 };
 
-export type RoomMessage<T extends GameStateEventName> = CommandBase<T> &
+export type PresenceMessage<T extends RoomMessageType> = CommandBase<T> &
   GameStateEvents[T];

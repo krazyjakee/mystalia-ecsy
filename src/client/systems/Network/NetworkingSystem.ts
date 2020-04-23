@@ -80,8 +80,7 @@ export default class NetworkingSystem extends System {
         this.queries.localEntities.results.forEach((localEntity: Entity) => {
           const movement = localEntity.getComponent(Movement);
           if (movement.currentTile >= 0) {
-            networkRoom.room?.send({
-              command: "localPlayer:movement:report",
+            networkRoom.room?.send("localPlayer:movement:report", {
               targetTile: movement.currentTile,
             });
           }
@@ -268,7 +267,6 @@ export default class NetworkingSystem extends System {
       const movement = entityToSend.getComponent(Movement);
       if (movement.direction) {
         const packet: RoomMessage<"localPlayer:movement:report"> = {
-          command: "localPlayer:movement:report",
           targetTile: vectorToTileId(
             addOffset(
               tileIdToVector(movement.currentTile, width),
@@ -278,7 +276,7 @@ export default class NetworkingSystem extends System {
           ),
         };
 
-        networkRoom.room?.send(packet);
+        networkRoom.room?.send("localPlayer:movement:report", packet);
       }
       entityToSend.removeComponent(SendData);
     });

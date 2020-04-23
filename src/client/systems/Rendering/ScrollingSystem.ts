@@ -50,16 +50,16 @@ export default class TileMapMover extends System {
         let offsetY = 0;
 
         if (percentageX > 50) {
-          offsetX -= 4;
+          offsetX -= 3;
         }
         if (percentageY > 50) {
-          offsetY -= 4;
+          offsetY -= 3;
         }
         if (percentageX < 50) {
-          offsetX += 4;
+          offsetX += 3;
         }
         if (percentageY < 50) {
-          offsetY += 4;
+          offsetY += 3;
         }
 
         if (

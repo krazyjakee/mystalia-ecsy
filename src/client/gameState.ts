@@ -1,20 +1,16 @@
-import {
-  GameStateEventName,
-  GameStateEvents,
-  RoomMessage,
-} from "types/gameState";
+import { GameStateEvents, RoomMessageType } from "types/gameState";
 import { Room } from "colyseus.js";
 import { makeHash } from "utilities/hash";
 
-type CallbacksContainer<T extends GameStateEventName> = {
+type CallbacksContainer<T extends RoomMessageType> = {
   [key: string]: CallbackObject<T>[];
 };
 
-type CallbackFunction<T extends GameStateEventName> = (
+type CallbackFunction<T extends RoomMessageType> = (
   arg0: GameStateEvents[T]
 ) => void | false;
 
-type CallbackObject<T extends GameStateEventName> = {
+type CallbackObject<T extends RoomMessageType> = {
   callback: CallbackFunction<T>;
   hash: number;
 };
@@ -27,8 +23,8 @@ class GameState {
   callbacks: CallbacksContainer<any> = {};
 
   addRoom(type: RoomTypes, room: Room) {
-    room.onMessage((data) => {
-      this.trigger(data.command, data);
+    room.onMessage("*", (command, data) => {
+      this.trigger(command as RoomMessageType, data);
     });
     this.rooms[type] = room;
   }
@@ -37,24 +33,23 @@ class GameState {
     delete this.rooms[type];
   }
 
-  send<T extends GameStateEventName>(
+  send<T extends RoomMessageType>(
     type: RoomTypes = "map",
     name: T,
     data?: GameStateEvents[T]
   ) {
     if (this.rooms[type]) {
       const messageData = {
-        command: name,
         ...data,
       };
 
-      this.rooms[type].send(messageData);
+      this.rooms[type].send(name, messageData);
       return true;
     }
     return false;
   }
 
-  subscribe<T extends GameStateEventName>(
+  subscribe<T extends RoomMessageType>(
     eventName: T,
     callback: CallbackFunction<T>
   ) {
@@ -69,7 +64,7 @@ class GameState {
       : (this.callbacks[eventName] = [callbackObject]);
   }
 
-  unsubscribe<T extends GameStateEventName>(
+  unsubscribe<T extends RoomMessageType>(
     eventName: T,
     callback: CallbackFunction<T>
   ) {
@@ -84,7 +79,7 @@ class GameState {
     }
   }
 
-  trigger<T extends GameStateEventName>(
+  trigger<T extends RoomMessageType>(
     eventName: T,
     options?: GameStateEvents[T]
   ) {
