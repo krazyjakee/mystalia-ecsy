@@ -51,14 +51,16 @@ export default (offset: Vector, heavy: boolean = false) => {
     particles[b].life -= 1;
     p.x += p.xs + offset.x;
     p.y += p.ys + offset.y;
+
     if (p.x > w || p.y > h) {
       p.x = Math.random() * w;
       p.y = -20;
     }
 
     if (p.life <= -10) {
-      particles[b] = newParticle(w, h, heavy);
+      init[b] = newParticle(w, h, heavy);
     } else if (p.life <= 0) {
+      particles[b].l = 0.5;
       particles[b].y -= 5;
     }
   }
