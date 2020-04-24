@@ -56,9 +56,9 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const [iState, setiState] = useState<MapSchema<InventoryState>>();
 
   useEffect(() => {
-    if (!iState) {
-      setiState(inventoryState || propsInventoryState);
-    }
+    //if (!iState) {
+    setiState(inventoryState || propsInventoryState);
+    //}
   });
 
   const onDrop = (from: number, to: number) => {
