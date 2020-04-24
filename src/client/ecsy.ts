@@ -73,7 +73,8 @@ export default (user: User) => {
 
   let prevTime = performance.now();
 
-  function update(time: number) {
+  function update() {
+    const time = performance.now();
     const dt = time - prevTime;
     prevTime = time;
 

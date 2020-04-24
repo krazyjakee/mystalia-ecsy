@@ -63,45 +63,53 @@ export default class MovementSystem extends System {
       setDirection();
 
       if (movement.direction) {
-        const moveAmount = Math.min(movement.speed * (delta / 1000), 1);
-        const direction = compassToVector(movement.direction);
-        const moveVector = {
-          x: direction.x * moveAmount,
-          y: direction.y * moveAmount,
-        };
-        const currentVector = tileIdToVector(movement.currentTile, columns);
-        const nextPosition = addOffset(currentVector, direction);
-        const distance = {
-          // calculate how far we are from the next tile
-          x: (nextPosition.x - (position.value.x + moveVector.x)) * direction.x,
-          y: (nextPosition.y - (position.value.y + moveVector.y)) * direction.y,
-        };
-        const nextId = vectorToTileId(nextPosition, columns);
+        let moveAmount = movement.speed * (delta / 1000);
+        while (moveAmount > 0 && movement.direction) {
+          const currentMoveAmount = Math.min(moveAmount, 1);
+          moveAmount -= currentMoveAmount;
+          const direction = compassToVector(movement.direction);
+          const moveVector = {
+            x: direction.x * currentMoveAmount,
+            y: direction.y * currentMoveAmount,
+          };
+          const currentVector = tileIdToVector(movement.currentTile, columns);
+          const nextPosition = addOffset(currentVector, direction);
+          const distance = {
+            // calculate how far we are from the next tile
+            x:
+              (nextPosition.x - (position.value.x + moveVector.x)) *
+              direction.x,
+            y:
+              (nextPosition.y - (position.value.y + moveVector.y)) *
+              direction.y,
+          };
+          const nextId = vectorToTileId(nextPosition, columns);
 
-        if (distance.x <= 0 && distance.y <= 0) {
-          const nextTarget = movement.tileQueue.length
-            ? movement.tileQueue[0]
-            : undefined;
+          if (distance.x <= 0 && distance.y <= 0) {
+            const nextTarget = movement.tileQueue.length
+              ? movement.tileQueue[0]
+              : undefined;
 
-          const nextDirection = nextTarget
-            ? directionFromTile(nextId, nextTarget, columns)
-            : undefined;
-          if (nextDirection && movement.direction === nextDirection) {
-            // if we're moving in the same direction we can keep moving
-            position.value = addOffset(position.value, moveVector);
+            const nextDirection = nextTarget
+              ? directionFromTile(nextId, nextTarget, columns)
+              : undefined;
+            if (nextDirection && movement.direction === nextDirection) {
+              // if we're moving in the same direction we can keep moving
+              position.value = addOffset(position.value, moveVector);
+            } else {
+              position.value = nextPosition;
+            }
+            movement.currentTile = nextId;
+            movement.direction = undefined;
+          } else if (tileMap.objectTileStore.blockList.includes(nextId)) {
+            movement.direction = undefined;
           } else {
-            position.value = nextPosition;
+            position.value = addOffset(position.value, moveVector);
           }
-          movement.currentTile = nextId;
-          movement.direction = undefined;
-        } else if (tileMap.objectTileStore.blockList.includes(nextId)) {
-          movement.direction = undefined;
-        } else {
-          position.value = addOffset(position.value, moveVector);
+
+          setDirection();
         }
       }
-
-      setDirection();
     });
   }
 }
