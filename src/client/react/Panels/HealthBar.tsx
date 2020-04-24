@@ -8,7 +8,7 @@ const useStyles = createUseStyles({
   },
   healthBarBackground: {
     position: "absolute",
-    filter: "grayscale(100%)",
+    filter: "grayscale(100%) brightness(0.7)",
     backgroundImage: guiAssetPath("panel/healthbar.png"),
     backgroundSize: "100% 100%",
   },

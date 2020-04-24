@@ -28,6 +28,7 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
         metadata: {
           xp: 0,
           damage: 0,
+          energyUsed: 0,
           ...user.metadata,
           inventory,
           room,

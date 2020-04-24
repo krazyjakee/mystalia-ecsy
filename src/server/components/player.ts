@@ -30,6 +30,9 @@ export default class PlayerState extends Schema {
   @type("number")
   damage: number;
 
+  @type("number")
+  energyUsed: number;
+
   @type("string")
   currentRoom: string;
 
@@ -44,6 +47,7 @@ export default class PlayerState extends Schema {
     this.role = user.metadata.role;
     this.xp = user.metadata.xp;
     this.damage = user.metadata.damage;
+    this.energyUsed = user.metadata.energyUsed;
     this.inventory = arrayToMapSchema(
       user.metadata.inventory || [],
       InventoryState
@@ -117,6 +121,7 @@ export const UserDBState = {
   inventory: [],
   xp: 0,
   damage: 0,
+  energyUsed: 0,
 };
 
 hooks.beforeAuthenticate((_, $setOnInsert) => {

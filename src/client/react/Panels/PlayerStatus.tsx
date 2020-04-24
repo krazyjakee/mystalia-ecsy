@@ -77,7 +77,7 @@ export const PlayerStatus = ({ name, large = false, ...props }: Props) => {
         height={healthBarHeight}
         top={energyBarTop}
         left={healthBarLeft}
-        percentage={100}
+        percentage={70}
         hue={120}
       />
     </div>

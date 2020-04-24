@@ -5,6 +5,7 @@ export type AbilitySpec = {
   spriteId: number;
   type: AbilityType;
   damage: number[];
+  energy: number;
 };
 
 export type AbilityType = "physical";

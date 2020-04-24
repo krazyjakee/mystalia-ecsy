@@ -5,6 +5,7 @@
     "spritesheet": "spells",
     "spriteId": 104,
     "type": "physical",
-    "damage": [6, 12]
+    "damage": [6, 12],
+    "energy": 1
   }
 ]
