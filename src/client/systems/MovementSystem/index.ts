@@ -63,7 +63,7 @@ export default class MovementSystem extends System {
       setDirection();
 
       if (movement.direction) {
-        const moveAmount = movement.speed * (delta / 1000);
+        const moveAmount = Math.min(movement.speed * (delta / 1000), 1);
         const direction = compassToVector(movement.direction);
         const moveVector = {
           x: direction.x * moveAmount,
