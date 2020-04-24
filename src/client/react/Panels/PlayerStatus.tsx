@@ -48,6 +48,7 @@ export const PlayerStatus = ({ name, large = false, ...props }: Props) => {
   const healthBarWidth = large ? 175 : 115;
   const healthBarHeight = large ? 13 : 10;
 
+  // TODO show level (based on xp) and player portrait
   return (
     <div
       {...props}

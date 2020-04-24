@@ -114,6 +114,7 @@ export const EnemyStatus = (props: Props) => {
     return null;
   };
 
+  // TODO show enemy portait
   return (
     <div {...props} id="enemyStateComponent" className={classes.root}>
       <div className={classes.label}>{name}</div>
