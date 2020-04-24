@@ -32,6 +32,7 @@ import WeatherSystem from "./systems/Rendering/WeatherSystem";
 
 import "./entities";
 import EnemyStatusSystem from "./systems/HUD/EnemyStatusSystem";
+import PickUpSystem from "./systems/PickUpSystem";
 
 let world = new World();
 
@@ -44,10 +45,11 @@ export default (user: User) => {
     .registerSystem(MouseInputSystem)
     .registerSystem(NetworkingSystem)
     .registerSystem(MapLoadSystem)
-    .registerSystem(MapChangeSystem)
     .registerSystem(ScrollingSystem)
     .registerSystem(MapEventSystem)
     .registerSystem(MovementSystem)
+    .registerSystem(PickUpSystem)
+    .registerSystem(MapChangeSystem)
     .registerSystem(AnimationSystem)
     .registerSystem(ItemSystem)
     .registerSystem(PlayerAnimationSystem)
@@ -71,7 +73,8 @@ export default (user: User) => {
 
   let prevTime = performance.now();
 
-  function update(time: number) {
+  function update() {
+    const time = performance.now();
     const dt = time - prevTime;
     prevTime = time;
 
@@ -86,6 +89,5 @@ export default (user: User) => {
       requestAnimationFrame(update);
     }
   }
-
   requestAnimationFrame(update);
 };
