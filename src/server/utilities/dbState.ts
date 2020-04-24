@@ -26,6 +26,8 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
 
       const newData: Partial<IUser> = {
         metadata: {
+          xp: 0,
+          damage: 0,
           ...user.metadata,
           inventory,
           room,
