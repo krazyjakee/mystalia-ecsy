@@ -11,6 +11,9 @@ import { areColliding } from "@client/utilities/Vector/collision";
 import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
+import ChangeMap from "@client/components/ChangeMap";
+import { Direction } from "types/Grid";
+import getNextTileData from "@client/utilities/TileMap/getNextTileData";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -106,12 +109,23 @@ export default class MouseInputSystem extends System {
         y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32,
       };
 
-      if (offsetClickedPosition.y < 0) offsetClickedPosition.y = 0;
-      if (offsetClickedPosition.x < 0) offsetClickedPosition.x = 0;
-      if (offsetClickedPosition.y >= tileMapComponent.height)
+      let mapDir: Direction | undefined;
+      if (offsetClickedPosition.y < 0) {
+        offsetClickedPosition.y = 0;
+        mapDir = "n";
+      }
+      if (offsetClickedPosition.x < 0) {
+        offsetClickedPosition.x = 0;
+        mapDir = "w";
+      }
+      if (offsetClickedPosition.y >= tileMapComponent.height) {
         offsetClickedPosition.y = tileMapComponent.height - 1;
-      if (offsetClickedPosition.x >= tileMapComponent.width)
+        mapDir = "s";
+      }
+      if (offsetClickedPosition.x >= tileMapComponent.width) {
         offsetClickedPosition.x = tileMapComponent.width - 1;
+        mapDir = "e";
+      }
 
       const clickedTile = vectorToTileId(
         offsetClickedPosition,
@@ -119,6 +133,22 @@ export default class MouseInputSystem extends System {
       );
 
       if (isWalkable(tileMapComponent, clickedTile)) {
+        if (mapDir) {
+          const { isEdge, compass } = getNextTileData(
+            clickedTile,
+            tileMapComponent.height,
+            tileMapComponent.width,
+            mapDir
+          );
+
+          if (isEdge) {
+            const nextMap = tileMapComponent.properties[compass];
+            if (nextMap) {
+              entity.addComponent(ChangeMap, { nextMap, direction: mapDir });
+            }
+          }
+        }
+
         this.queries.mouseEnabledEntities.results.forEach((entity) => {
           entity.removeComponent(Focused);
         });
