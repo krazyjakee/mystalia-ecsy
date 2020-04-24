@@ -105,6 +105,14 @@ export default class MouseInputSystem extends System {
         x: this.clickedPosition.x / 32 - tileMapDrawable.offset.x / 32,
         y: this.clickedPosition.y / 32 - tileMapDrawable.offset.y / 32,
       };
+
+      if (offsetClickedPosition.y < 0) offsetClickedPosition.y = 0;
+      if (offsetClickedPosition.x < 0) offsetClickedPosition.x = 0;
+      if (offsetClickedPosition.y >= tileMapComponent.height)
+        offsetClickedPosition.y = tileMapComponent.height - 1;
+      if (offsetClickedPosition.x >= tileMapComponent.width)
+        offsetClickedPosition.x = tileMapComponent.width - 1;
+
       const clickedTile = vectorToTileId(
         offsetClickedPosition,
         tileMapComponent.width
