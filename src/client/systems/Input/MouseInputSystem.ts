@@ -133,26 +133,13 @@ export default class MouseInputSystem extends System {
       );
 
       if (isWalkable(tileMapComponent, clickedTile)) {
-        if (mapDir) {
-          const { isEdge, compass } = getNextTileData(
-            clickedTile,
-            tileMapComponent.height,
-            tileMapComponent.width,
-            mapDir
-          );
-
-          if (isEdge) {
-            const nextMap = tileMapComponent.properties[compass];
-            if (nextMap) {
-              entity.addComponent(ChangeMap, { nextMap, direction: mapDir });
-            }
-          }
-        }
-
         this.queries.mouseEnabledEntities.results.forEach((entity) => {
           entity.removeComponent(Focused);
         });
-        entity.addComponent(NewMovementTarget, { targetTile: clickedTile });
+        entity.addComponent(NewMovementTarget, {
+          targetTile: clickedTile,
+          mapDir,
+        });
       }
 
       this.clickedPosition = undefined;
