@@ -54,10 +54,10 @@ export default class LightSystem extends System {
       if (!environmentLight || environmentLight < 40) {
         this.queries.player.results.forEach((playerEntity: Entity) => {
           const { value } = playerEntity.getComponent(Position);
-          const position = addOffset(offset, {
+          const position = {
             x: value.x * 32,
             y: value.y * 32,
-          });
+          };
           drawLightSource(shadowContext, position.x + 16, position.y + 16, {
             radius: 4,
             pulse: false,
@@ -79,7 +79,6 @@ export default class LightSystem extends System {
             const lightTileProperties = lightTile.value;
 
             if (lightTile.type === "light") {
-              const position = addOffset(offset, tilePosition);
               let intensity = lightTileProperties.intensity;
               if (!intensity) {
                 if (brightness && brightness >= 50) {
@@ -87,11 +86,16 @@ export default class LightSystem extends System {
                 }
               }
 
-              drawLightSource(shadowContext, position.x + 16, position.y + 16, {
-                radius: lightTileProperties.radius,
-                color: lightTileProperties.color,
-                intensity,
-              });
+              drawLightSource(
+                shadowContext,
+                tilePosition.x + 16,
+                tilePosition.y + 16,
+                {
+                  radius: lightTileProperties.radius,
+                  color: lightTileProperties.color,
+                  intensity,
+                }
+              );
             }
           }
         }
@@ -112,6 +116,7 @@ export default class LightSystem extends System {
         y: 0,
         width: minWidth,
         height: minHeight,
+        offset,
       });
     });
     context2d.restore();

@@ -8,15 +8,12 @@ import {
   drawableToDrawableProperties,
   drawableWithOffset,
 } from "../../../utilities/drawing";
-import { TMJ, Vector } from "types/TMJ";
+import { TMJ } from "types/TMJ";
 import createDrawableTile from "./createDrawableTile";
-import Movement from "@client/components/Movement";
 import Position from "@client/components/Position";
-import addOffset from "../../../utilities/Vector/addOffset";
 import context2d from "../../../canvas";
 import AnimatedTile from "@client/components/AnimatedTile";
 import Item from "@client/components/Item";
-import { DrawableProperties } from "types/drawable";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -44,7 +41,7 @@ export default class TileMapDrawer extends System {
       context2d.save();
 
       context2d.beginPath();
-      context2d.rect(0, 0, drawable.width, drawable.height);
+      context2d.rect(0, 0, context2d.canvas.width, context2d.canvas.height);
       context2d.fillStyle = `black`;
       context2d.fill();
 
