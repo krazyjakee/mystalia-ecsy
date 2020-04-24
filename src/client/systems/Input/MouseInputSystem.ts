@@ -1,5 +1,9 @@
 import { System, Not } from "ecsy";
-import { MouseInput, Focused } from "@client/components/Tags";
+import {
+  MouseInput,
+  Focused,
+  PickUpAtDestination,
+} from "@client/components/Tags";
 import { Vector } from "types/TMJ";
 import TileMap from "@client/components/TileMap";
 import { Loadable } from "@client/components/Loadable";
@@ -11,15 +15,14 @@ import { areColliding } from "@client/utilities/Vector/collision";
 import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
-import ChangeMap from "@client/components/ChangeMap";
 import { Direction } from "types/Grid";
-import getNextTileData from "@client/utilities/TileMap/getNextTileData";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
   cursorPosition?: Vector;
   mouseDownPosition?: Vector;
   mouseDown?: boolean = false;
+  doubleClicked: boolean = false;
 
   static queries = {
     localPlayer: {
@@ -42,6 +45,7 @@ export default class MouseInputSystem extends System {
 
     const click = (e: MouseEvent) => {
       this.clickedPosition = { x: e.x, y: e.y };
+      this.doubleClicked = false;
     };
 
     const mouseDown = (e: MouseEvent) => {
@@ -52,11 +56,16 @@ export default class MouseInputSystem extends System {
       this.mouseDownPosition = undefined;
     };
 
+    const doubleClick = () => {
+      this.doubleClicked = true;
+    };
+
     if (rootElem) {
       rootElem.addEventListener("mousemove", mouseMove);
       rootElem.addEventListener("click", click);
       rootElem.addEventListener("mousedown", mouseDown);
       rootElem.addEventListener("mouseup", mouseUp);
+      rootElem.addEventListener("dblclick", doubleClick);
     }
   }
 
@@ -140,6 +149,7 @@ export default class MouseInputSystem extends System {
           targetTile: clickedTile,
           mapDir,
         });
+        if (this.doubleClicked) entity.addComponent(PickUpAtDestination);
       }
 
       this.clickedPosition = undefined;

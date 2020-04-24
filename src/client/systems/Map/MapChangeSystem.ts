@@ -16,6 +16,7 @@ export default class MapChangeSystem extends System {
     //@ts-ignore
     this.queries.localPlayer.results.forEach((entity) => {
       const movement = entity.getComponent(Movement);
+      // don't change map until the player has stopped moving
       if (movement.tileQueue.length || movement.direction) return;
       const changeMap = entity.getComponent(ChangeMap);
       //@ts-ignore
