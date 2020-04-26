@@ -1,0 +1,14 @@
+[
+  {
+    "id": 0,
+    "name": "Polegreen Inn",
+    "trades": [
+      {
+        "sell": 2,
+        "sellAmount": 1,
+        "buy": 0,
+        "buyAmount": 15
+      }
+    ]
+  }
+]

@@ -14,7 +14,7 @@ const useStyles = createUseStyles({
     padding: "0 18px",
     display: "flex",
     flexDirection: "column",
-    height: "100%"
+    height: "100%",
   },
   border: {
     position: "relative",
@@ -35,8 +35,8 @@ const useStyles = createUseStyles({
       borderWidth: 57,
       borderImageSource: guiAssetPath("panel/panel-border.png"),
       borderImageSlice: 57,
-      borderImageRepeat: "round"
-    }
+      borderImageRepeat: "round",
+    },
   },
   header: {
     position: "relative",
@@ -50,26 +50,26 @@ const useStyles = createUseStyles({
       bottom: -8,
       width: 130,
       height: 67,
-      backgroundImage: guiAssetPath("panel/panel-heading-side.png")
+      backgroundImage: guiAssetPath("panel/panel-heading-side.png"),
     },
     "&:before": {
-      left: -18
+      left: -18,
     },
     "&:after": {
       right: -18,
-      transform: "scaleX(-1)"
-    }
+      transform: "scaleX(-1)",
+    },
   },
   labelContainer: {
     height: 0,
-    textAlign: "center"
+    textAlign: "center",
   },
   label: {
     display: "inline-block",
     position: "relative",
     zIndex: 1,
-    height: 24,
-    padding: "9px 39px",
+    height: 27,
+    padding: "8px 39px",
     backgroundImage: guiAssetPath("panel/panel-label-bg.png"),
     backgroundRepeat: "repeat-x",
     ...whiteText,
@@ -79,21 +79,21 @@ const useStyles = createUseStyles({
       bottom: 3,
       width: 39,
       height: 42,
-      backgroundImage: guiAssetPath("panel/panel-label-side.png")
+      backgroundImage: guiAssetPath("panel/panel-label-side.png"),
     },
     "&:before": {
-      left: -18
+      left: -18,
     },
     "&:after": {
       right: -18,
-      transform: "scaleX(-1)"
-    }
+      transform: "scaleX(-1)",
+    },
   },
   content: {
     flex: 1,
     padding: 25,
-    zIndex: 1
-  }
+    zIndex: 1,
+  },
 });
 
 const makeRnd = (children: React.ReactNode, rndOptions: Props) => {
@@ -119,32 +119,32 @@ const makeRnd = (children: React.ReactNode, rndOptions: Props) => {
       dragHandleClassName="panelDragHandle"
       resizeHandleStyles={{
         top: {
-          top: 59
+          top: 59,
         },
         topLeft: {
           top: 59,
-          left: 18
+          left: 18,
         },
         topRight: {
           top: 59,
-          right: 18
+          right: 18,
         },
         bottom: {
-          bottom: 0
+          bottom: 0,
         },
         bottomLeft: {
           bottom: 0,
-          left: 18
+          left: 18,
         },
         bottomRight: {
-          right: 18
+          right: 18,
         },
         left: {
-          left: 18
+          left: 18,
         },
         right: {
-          right: 18
-        }
+          right: 18,
+        },
       }}
       {...rndOptions}
     >

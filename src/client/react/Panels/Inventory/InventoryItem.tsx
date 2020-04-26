@@ -1,11 +1,10 @@
-import React, { useState, useEffect, CSSProperties } from "react";
+import React, { CSSProperties } from "react";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import { createUseStyles } from "react-jss";
-
-import { itemAssetPath } from "../../../utilities/assets";
-import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
+import { tileIdToVector } from "utilities/tileMap";
 import { whiteText } from "../../palette";
 import { useDrag, useDrop } from "react-dnd";
+import Sprite from "@client/react/Utilities/Sprite";
 
 type Props = {
   item: InventoryItems;
@@ -21,10 +20,6 @@ const useStyles = createUseStyles({
     padding: 12,
     boxSizing: "border-box",
   },
-  sprite: {
-    width: 24,
-    height: 24,
-  },
   quantity: {
     position: "absolute",
     right: 4,
@@ -37,19 +32,6 @@ const useStyles = createUseStyles({
 export default (props: Props) => {
   const classes = useStyles();
   const { item, onDrop: propsOnDrop } = props;
-
-  const [spriteSheetSize, setSpriteSheetSize] = useState<{
-    width: number;
-    height: number;
-  }>();
-
-  useEffect(() => {
-    const image = new Image();
-    image.src = itemAssetPath(item.spritesheet);
-    image.onload = () => {
-      setSpriteSheetSize({ width: image.width, height: image.height });
-    };
-  }, [item]);
 
   const [collectedProps, drag] = useDrag({
     item: { id: item.position, type: "x" },
@@ -69,27 +51,11 @@ export default (props: Props) => {
     drop: onDrop,
   });
 
-  if (!spriteSheetSize) {
-    return null;
-  }
-
-  const spriteOffset = tileIdToPixels(
-    item.spriteId,
-    spriteSheetSize.width / 16,
-    24
-  );
   const slotOffset = tileIdToVector(item.position, 5);
 
   const rootStyles: CSSProperties = {
     left: slotOffset.x * 60,
     top: slotOffset.y * 54,
-  };
-
-  const spriteStyles: CSSProperties = {
-    backgroundImage: `url(${itemAssetPath(item.spritesheet)})`,
-    backgroundPosition: `-${spriteOffset.x}px -${spriteOffset.y}px`,
-    backgroundSize: `${spriteSheetSize.width * 1.5}px ${spriteSheetSize.height *
-      1.5}px`,
   };
 
   return (
@@ -100,7 +66,12 @@ export default (props: Props) => {
         title={item.name}
         ref={drag}
       >
-        <div className={classes.sprite} style={spriteStyles}></div>
+        <Sprite
+          spriteId={item.spriteId}
+          spritesheet={item.spritesheet}
+          spriteSize={16}
+          sizeMultiplier={1.5}
+        />
         <div className={classes.quantity}>
           {item.quantity > 1 ? item.quantity : ""}
         </div>

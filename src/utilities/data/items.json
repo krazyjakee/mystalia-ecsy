@@ -10,5 +10,11 @@
     "name": "Stick",
     "spritesheet": "items",
     "spriteId": 259
+  },
+  {
+    "id": 2,
+    "name": "Apple Pulp",
+    "spritesheet": "items",
+    "spriteId": 321
   }
 ]

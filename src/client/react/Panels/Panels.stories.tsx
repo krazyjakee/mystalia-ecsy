@@ -6,6 +6,7 @@ import InventoryPanelComponent from "./Inventory/InventoryPanel";
 import TopMenuComponent from "./TopMenu";
 import { EnemyStatus as EnemyStatusComponent } from "./EnemyStatus";
 import { PlayerStatus as PlayerStatusComponent } from "./PlayerStatus";
+import ShopPanelComponent from "./Shop/ShopPanel";
 import { MapSchema } from "@colyseus/schema";
 
 export default {
@@ -79,4 +80,22 @@ export const PlayerStatus = () => (
     <div style={{ height: 170 }} />
     <PlayerStatusComponent name="Player 2" />
   </>
+);
+
+export const ShopPanel = () => (
+  <ShopPanelComponent
+    forceEnable={true}
+    shop={{
+      id: 0,
+      name: "Polegreen Inn",
+      trades: [
+        {
+          sell: 2,
+          sellAmount: 1,
+          buy: 0,
+          buyAmount: 15,
+        },
+      ],
+    }}
+  />
 );
