@@ -42,9 +42,10 @@ const useStyles = createUseStyles({
 
 type Props = {
   trade: TradeSpec;
+  valid: boolean;
 };
 
-export default ({ trade }: Props) => {
+export default ({ trade, valid }: Props) => {
   const classes = useStyles();
 
   const buyItem = itemsData.find((item) => item.id === trade.buy);
@@ -52,7 +53,10 @@ export default ({ trade }: Props) => {
 
   if (isPresent(buyItem) && isPresent(sellItem)) {
     return (
-      <Col className={classes.root}>
+      <Col
+        className={classes.root}
+        style={{ opacity: valid ? undefined : 0.5 }}
+      >
         <Row>
           <Col xs={2}>
             <div className={classes.iconContainer}>

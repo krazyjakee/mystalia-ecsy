@@ -9,11 +9,10 @@ import { guiAssetPath } from "../../cssUtilities";
 import { createUseStyles } from "react-jss";
 import { Section } from "../Section";
 import { useGameEvent } from "../../Hooks/useGameEvent";
-import itemsData from "utilities/data/items.json";
-import { InventoryItems } from "types/TileMap/ItemTiles";
 import InventoryItem from "./InventoryItem";
 import InventoryState from "@server/components/inventory";
 import gameState from "../../../gameState";
+import inventoryStateToArray from "./inventoryStateToArray";
 
 const useStyles = createUseStyles({
   plank: {
@@ -56,9 +55,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const [iState, setiState] = useState<MapSchema<InventoryState>>();
 
   useEffect(() => {
-    //if (!iState) {
     setiState(inventoryState || propsInventoryState);
-    //}
   });
 
   const onDrop = (from: number, to: number) => {
@@ -81,26 +78,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
     }
   };
 
-  const inventoryItems: Array<InventoryItems> = [];
-  if (iState) {
-    for (let key in iState) {
-      const item = iState[key] as InventoryState;
-      const { itemId, position, quantity } = item;
-      const itemData = itemsData.find((data) => data.id === itemId);
-      if (itemData) {
-        const { spritesheet, spriteId, name } = itemData;
-
-        inventoryItems[position] = {
-          itemId,
-          position,
-          quantity,
-          spritesheet,
-          spriteId,
-          name,
-        };
-      }
-    }
-  }
+  const inventoryItems = inventoryStateToArray(iState);
 
   const slotRows = 6;
   const emptySlots = new Array(slotRows * 5).fill(0);

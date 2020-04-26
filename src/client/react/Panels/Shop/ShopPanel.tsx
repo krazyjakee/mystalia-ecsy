@@ -6,6 +6,8 @@ import { createUseStyles } from "react-jss";
 import { Section } from "../Section";
 import { ShopSpec } from "types/shops";
 import ShopItem from "./ShopItem";
+import { useGameEvent } from "@client/react/Hooks/useGameEvent";
+import inventoryStateToArray from "../Inventory/inventoryStateToArray";
 
 const useStyles = createUseStyles({
   plank: {
@@ -21,17 +23,38 @@ type Props = {
   shop?: ShopSpec;
 };
 
-// TODO need player inventory to figure out acceptable trades.
 // TODO need to initiate a trade on click
 // TODO need to show the panel when a shop is clicked and the player is next to it
 
 export default ({ forceEnable = false, shop: propShop }: Props) => {
   const classes = useStyles();
 
+  const [inventoryState] = useGameEvent("localPlayer:inventory:response");
   const [shop, setShop] = useState(propShop);
   if (!shop) return null;
 
+  const inventoryArray = inventoryStateToArray(inventoryState);
   const { trades } = shop;
+
+  let validTrades: boolean[] = [];
+  if (inventoryArray) {
+    const inventoryItemCounts = inventoryArray.reduce((accumulator, item) => {
+      const existingItem = accumulator.findIndex((a) => a[0] === item.itemId);
+      if (existingItem > -1) {
+        accumulator[existingItem][1] += item.quantity;
+      } else {
+        accumulator.push([item.itemId, item.quantity]);
+      }
+      return accumulator;
+    }, [] as number[][]);
+
+    validTrades = trades.map((trade) => {
+      const itemCount = inventoryItemCounts.find(
+        (ic) => itemCount[0] === trade.buy
+      );
+      return itemCount ? itemCount[1] >= trade.buyAmount : false;
+    });
+  }
 
   return forceEnable ? (
     <BasePanel
@@ -59,8 +82,8 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
             <Section>
               <Grid fluid>
                 <Row>
-                  {trades.map((trade) => (
-                    <ShopItem trade={trade} />
+                  {trades.map((trade, index) => (
+                    <ShopItem trade={trade} valid={validTrades[index]} />
                   ))}
                 </Row>
               </Grid>
