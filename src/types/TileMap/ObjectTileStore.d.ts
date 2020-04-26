@@ -37,6 +37,9 @@ export type ObjectTileType = {
     south?: string;
     west?: string;
   };
+  shop: {
+    shopId: number;
+  };
 };
 
 export type ObjectTileTypeString = keyof ObjectTileType;

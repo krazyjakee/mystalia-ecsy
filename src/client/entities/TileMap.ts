@@ -6,6 +6,7 @@ import User from "types/User";
 import { getWorld } from "../ecsy";
 import { mapAssetPath } from "../utilities/assets";
 import Weather from "@client/components/Weather";
+import Shop from "@client/components/Shop";
 
 export default function CreateTileMap(user: User) {
   getWorld()
@@ -16,5 +17,6 @@ export default function CreateTileMap(user: User) {
     .addComponent(Drawable)
     .addComponent(AnimatedTile)
     .addComponent(Weather)
-    .addComponent(TileMap);
+    .addComponent(TileMap)
+    .addComponent(Shop);
 }

@@ -122,6 +122,19 @@ export class ObjectTileStore {
     return null;
   }
 
+  getAllByType<T extends ObjectTileTypeString>(type: T): ObjectTile<T>[] {
+    let tiles: ObjectTile<T>[] = [];
+    for (let key in this.store) {
+      const tiles = this.store[key] as ObjectTile<T>[];
+      tiles.forEach((tile) => {
+        if (tile.type === type) {
+          tiles.push(tile);
+        }
+      });
+    }
+    return tiles;
+  }
+
   getTypes(tileId: number) {
     const tiles = this.get(tileId);
     if (tiles) {

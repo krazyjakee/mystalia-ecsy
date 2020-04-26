@@ -21,6 +21,7 @@ import { Remove } from "@client/components/Tags";
 import Enemy from "@client/components/Enemy";
 import Weather from "@client/components/Weather";
 import config from "@client/config.json";
+import Shop from "@client/components/Shop";
 
 const { allowableOffMapDistance } = config;
 
@@ -134,6 +135,11 @@ export default class TileMapChanger extends System {
         } else {
           tileMapEntity.addComponent(Weather);
         }
+
+        tileMapEntity.removeComponent(Shop);
+        tileMapEntity.addComponent(Shop, {
+          shopTiles: tileMap.objectTileStore.getAllByType("shop"),
+        });
 
         this.queries.networkRoom.results.forEach(
           (networkRoomEntity: Entity) => {

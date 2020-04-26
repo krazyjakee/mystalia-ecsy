@@ -49,9 +49,7 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
     }, [] as number[][]);
 
     validTrades = trades.map((trade) => {
-      const itemCount = inventoryItemCounts.find(
-        (ic) => itemCount[0] === trade.buy
-      );
+      const itemCount = inventoryItemCounts.find((ic) => ic[0] === trade.buy);
       return itemCount ? itemCount[1] >= trade.buyAmount : false;
     });
   }
