@@ -54,12 +54,7 @@ export const distanceBetweenTiles = (
   const minY = Math.min(fromY, toY);
   const y = Math.round(maxY - minY);
 
-  let result = x + y;
-  if (x && y) {
-    result -= 1;
-  }
-  // TODO fix failing tests
-  return result;
+  return Math.max(x, y);
 };
 
 export const shortestPathTo = (
