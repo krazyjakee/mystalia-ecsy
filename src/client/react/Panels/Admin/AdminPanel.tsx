@@ -30,6 +30,7 @@ export default ({ forceEnable }: Props) => {
           minWidth: 619,
         }}
         isDraggable={true}
+        onCloseClick={() => setEnabled(false)}
       >
         <Grid fluid>
           <Row>

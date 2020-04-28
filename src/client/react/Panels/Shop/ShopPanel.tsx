@@ -85,6 +85,7 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
         },
       }}
       isDraggable={true}
+      onCloseClick={() => setShop(undefined)}
     >
       <Grid fluid>
         <Row>

@@ -13,6 +13,7 @@ import InventoryItem from "./InventoryItem";
 import InventoryState from "@server/components/inventory";
 import gameState from "../../../gameState";
 import inventoryStateToArray from "./inventoryStateToArray";
+import { triggerGlobalKeypress } from "utilities/input";
 
 const useStyles = createUseStyles({
   plank: {
@@ -102,6 +103,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
           },
         }}
         isDraggable={true}
+        onCloseClick={() => triggerGlobalKeypress("I")}
       >
         <Grid fluid>
           <Row>

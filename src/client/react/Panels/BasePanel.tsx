@@ -89,6 +89,16 @@ const useStyles = createUseStyles({
       transform: "scaleX(-1)",
     },
   },
+  closeBtn: {
+    position: "absolute",
+    right: 5,
+    top: 10,
+    zIndex: 1,
+    width: 37,
+    height: 37,
+    backgroundImage: guiAssetPath("panel/close-btn.png"),
+    cursor: "pointer",
+  },
   content: {
     flex: 1,
     padding: 25,
@@ -156,6 +166,7 @@ const makeRnd = (children: React.ReactNode, rndOptions: Props) => {
 type PanelProps = {
   isDraggable?: boolean;
   rndOptions?: Props;
+  onCloseClick?: VoidFunction;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export const BasePanel = (props: PanelProps) => {
@@ -166,7 +177,9 @@ export const BasePanel = (props: PanelProps) => {
       <div className={classes.labelContainer}>
         {props.title && <span className={classes.label}>{props.title}</span>}
       </div>
-      <div className={classnames(classes.header, "panelDragHandle")}></div>
+      <div className={classnames(classes.header, "panelDragHandle")}>
+        <div className={classes.closeBtn} onClick={props.onCloseClick}></div>
+      </div>
       <div className={classes.border}>
         <div className={classes.content}>{props.children}</div>
       </div>
