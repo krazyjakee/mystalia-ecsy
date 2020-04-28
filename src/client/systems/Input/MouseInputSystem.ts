@@ -16,6 +16,7 @@ import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
 import { Direction } from "types/Grid";
+import gameState from "@client/gameState";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -140,6 +141,22 @@ export default class MouseInputSystem extends System {
         offsetClickedPosition,
         tileMapComponent.width
       );
+
+      const clickedTileObjects = tileMapComponent.objectTileStore.get(
+        clickedTile
+      );
+
+      if (clickedTileObjects && clickedTileObjects.length) {
+        clickedTileObjects.forEach((tileObject) => {
+          if (tileObject.type === "shop") {
+            const { shopId } = tileObject.value;
+            // TODO only open the shop window if the user is stood next to it
+            gameState.trigger("localPlayer:shop:open", {
+              shopId,
+            });
+          }
+        });
+      }
 
       if (isWalkable(tileMapComponent, clickedTile)) {
         this.queries.mouseEnabledEntities.results.forEach((entity) => {

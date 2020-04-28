@@ -51,5 +51,5 @@ export type ObjectTile<T extends ObjectTileTypeString = any> = {
 };
 
 export type ObjectTileStoreType = {
-  [key: number]: ObjectTile[];
+  [key: number]: ObjectTile[] | undefined;
 };

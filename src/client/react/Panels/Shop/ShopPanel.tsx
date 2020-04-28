@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
 import { guiAssetPath } from "../../cssUtilities";
@@ -8,6 +8,8 @@ import { ShopSpec } from "types/shops";
 import ShopItem from "./ShopItem";
 import { useGameEvent } from "@client/react/Hooks/useGameEvent";
 import inventoryStateToArray from "../Inventory/inventoryStateToArray";
+import gameState from "@client/gameState";
+import shops from "utilities/data/shop.json";
 
 const useStyles = createUseStyles({
   plank: {
@@ -31,6 +33,17 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
 
   const [inventoryState] = useGameEvent("localPlayer:inventory:response");
   const [shop, setShop] = useState(propShop);
+
+  useEffect(() => {
+    const shopOpen = ({ shopId }) => {
+      const shopSpec = shops.find((s) => s.id === shopId);
+      setShop(shopSpec);
+    };
+
+    gameState.subscribe("localPlayer:shop:open", shopOpen);
+    return () => gameState.unsubscribe("localPlayer:shop:open", shopOpen);
+  }, []);
+
   if (!shop) return null;
 
   const inventoryArray = inventoryStateToArray(inventoryState);
@@ -54,7 +67,7 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
     });
   }
 
-  return forceEnable ? (
+  return forceEnable || shop ? (
     <BasePanel
       title={shop.name}
       rndOptions={{

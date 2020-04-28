@@ -8,6 +8,7 @@ import InventoryPanel from "./react/Panels/Inventory/InventoryPanel";
 import TopMenu from "./react/Panels/TopMenu";
 import gameState from "./gameState";
 import { EnemyStatus } from "./react/Panels/EnemyStatus";
+import ShopPanel from "./react/Panels/Shop/ShopPanel";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -40,6 +41,7 @@ const App = () => {
           <InventoryPanel />
           <TopMenu />
           <EnemyStatus />
+          <ShopPanel />
         </>
       ) : null}
     </>

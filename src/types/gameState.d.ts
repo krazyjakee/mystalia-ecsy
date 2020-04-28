@@ -23,6 +23,9 @@ export interface GameStateEvents {
     map: string;
     tileId: number;
   };
+  "localPlayer:shop:open": {
+    shopId: number;
+  };
   "localPlayer:movement:report": {
     targetTile: number;
   };

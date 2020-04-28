@@ -19,25 +19,25 @@ export default () => {
   }, []);
 
   const toMe = () => {
-    gameState.subscribe("localPlayer:movement:response", movement => {
+    gameState.subscribe("localPlayer:movement:response", (movement) => {
       const roomName = gameState.rooms["map"].name;
       if (selectedUser && roomName && movement.currentTile) {
         gameState.send("admin", "admin:teleport:request", {
           username: selectedUser,
           map: roomName,
-          tileId: movement.currentTile
+          tileId: movement.currentTile,
         });
       }
       return false;
     });
 
-    gameState.trigger("localPlayer:movement:request");
+    gameState.trigger("localPlayer:movement:request", undefined);
   };
 
   const meTo = () => {
     if (selectedUser) {
       gameState.send("admin", "admin:teleport:request", {
-        username: selectedUser
+        username: selectedUser,
       });
     }
   };
@@ -48,7 +48,7 @@ export default () => {
       gameState.send("admin", "admin:teleport:request", {
         username: selectedUser,
         map: selectedMap,
-        tileId: parseInt(tileIdRef.current.value)
+        tileId: parseInt(tileIdRef.current.value),
       });
     }
     return false;
@@ -64,16 +64,16 @@ export default () => {
     <SubSection label="Teleport">
       <form onSubmit={onSubmit}>
         <Select
-          onChange={e => {
+          onChange={(e) => {
             setSelectedMap(e.value);
           }}
           placeholder="Select Map"
           isLoading={!allMaps}
           options={
             allMaps &&
-            allMaps.all.map(map => ({
+            allMaps.all.map((map) => ({
               label: map,
-              value: map
+              value: map,
             }))
           }
         />
