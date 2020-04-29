@@ -1,6 +1,11 @@
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { readMapFiles } from "@server/utilities/mapFiles";
-import { tilesInRadiusOf, distanceBetweenTiles } from "./surroundings";
+import {
+  tilesInRadiusOf,
+  distanceBetweenTiles,
+  tilesAtRadiusOf,
+  findClosestPath,
+} from "./surroundings";
 
 const createObjectTileStore = () => {
   const maps = readMapFiles();
@@ -51,6 +56,26 @@ describe("surroundings", () => {
     test("correctly list valid surrounding tiles with radius 2", () => {
       const tiles = tilesInRadiusOf(0, size, 2);
       expect(tiles).toStrictEqual([1, 2, 10, 11, 12, 20, 21, 22]);
+    });
+  });
+
+  describe("#tilesAtRadiusOf", () => {
+    test("correctly list tiles at the radius", () => {
+      const tiles = tilesAtRadiusOf(0, size, 2);
+      expect(tiles).toStrictEqual([2, 12, 20, 21, 22]);
+    });
+  });
+
+  describe("#findClosestPath", () => {
+    test("correctly find the shortest path", () => {
+      let path = findClosestPath(ots, 0, 3);
+      expect(path).toStrictEqual([1, 2]);
+
+      path = findClosestPath(ots, 0, 23);
+      expect(path).toStrictEqual([1, 2, 12]);
+
+      path = findClosestPath(ots, 76, 89);
+      expect(path).toStrictEqual([66, 67]);
     });
   });
 });

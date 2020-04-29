@@ -12,7 +12,6 @@ export default class PickUpSystem extends System {
   };
 
   execute() {
-    //@ts-ignore
     this.queries.pickUpAtDestination.results.forEach((entity: Entity) => {
       const movement = entity.getComponent(Movement);
       // don't do anything if we're still moving

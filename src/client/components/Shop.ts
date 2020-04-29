@@ -7,3 +7,7 @@ type ShopTiles = {
 export default class Shop extends Component {
   shopTiles: ShopTiles = {};
 }
+
+export class OpenShopAtDestination extends Component {
+  shopId?: number;
+}

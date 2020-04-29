@@ -1,5 +1,7 @@
 import { AStarFinder } from "astar-typescript";
 import { Size } from "types/TileMap/standard";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
+import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { isPresent } from "utilities/guards";
 
 export const tilesInRadiusOf = (
@@ -37,6 +39,17 @@ export const tilesInRadiusOf = (
   });
 };
 
+export const tilesAtRadiusOf = (
+  tileId: number,
+  mapSize: Size,
+  radius: number = 1
+) => {
+  const tilesInRadius = tilesInRadiusOf(tileId, mapSize, radius);
+  return tilesInRadius.filter(
+    (tile) => distanceBetweenTiles(tileId, tile, mapSize.width) === radius
+  );
+};
+
 export const distanceBetweenTiles = (
   from: number,
   to: number,
@@ -57,8 +70,40 @@ export const distanceBetweenTiles = (
   return Math.max(x, y);
 };
 
-export const shortestPathTo = (
-  aStar: AStarFinder,
+export const allowedTiles = (tiles: number[], blockList: number[]) =>
+  tiles.filter((tileId) => !blockList.includes(tileId));
+
+export const findClosestPath = (
+  ots: ObjectTileStore,
   from: number,
   to: number
-) => {};
+) => {
+  const { aStar, blockList, columns } = ots;
+  let totalRadius = 10;
+  let radius = 0;
+  const fromVector = tileIdToVector(from, columns);
+
+  while (totalRadius > 0) {
+    radius += 1;
+    const availablePaths: number[][] = allowedTiles(
+      tilesAtRadiusOf(to, { width: columns, height: ots.rows }, radius),
+      blockList
+    )
+      .map((tileId) => tileIdToVector(tileId, columns))
+      .map((tileVector) => aStar.findPath(fromVector, tileVector))
+      .filter((tilePath) => isPresent(tilePath) && tilePath.length)
+      .map((tilePath) =>
+        tilePath.map((vectorArray) =>
+          vectorToTileId({ x: vectorArray[0], y: vectorArray[1] }, columns)
+        )
+      );
+
+    availablePaths.sort((a, b) => a.length - b.length);
+    const shortestPath = availablePaths[0];
+
+    if (shortestPath) {
+      return shortestPath;
+    }
+    totalRadius -= 1;
+  }
+};
