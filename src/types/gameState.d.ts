@@ -26,6 +26,10 @@ export interface GameStateEvents {
   "localPlayer:shop:open": {
     shopId: number;
   };
+  "localPlayer:shop:trade": {
+    shopId: number;
+    tradeIndex: number;
+  };
   "localPlayer:movement:report": {
     targetTile: number;
   };

@@ -1,8 +1,11 @@
 import { RoomMessage } from "types/gameState";
-import { addItemToPlayer, moveInventoryItem } from "@server/components/player";
 import MapRoom from "../map";
 import { Command } from "@colyseus/command";
 import MapState from "@server/components/map";
+import {
+  addItemToPlayer,
+  moveInventoryItem,
+} from "@server/utilities/commandHandlers/inventory";
 
 export class MovementReportCommand extends Command<
   MapState,
@@ -37,5 +40,15 @@ export class InventoryMoveCommand extends Command<
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
     moveInventoryItem(data.from, data.to, player.inventory);
+  }
+}
+
+export class ShopTradeCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:shop:trade"> }
+> {
+  execute({ sessionId, data }) {
+    const player = this.state.players[sessionId];
+    // TODO: Use the shop commandHelper to check and perform the trade.
   }
 }

@@ -20,12 +20,17 @@ const useStyles = createUseStyles({
   },
 });
 
+const sendTrade = (shopId: number, tradeIndex: number, valid: boolean) => {
+  if (valid) {
+    gameState.send("map", "localPlayer:shop:trade", { shopId, tradeIndex });
+  }
+};
+
 type Props = {
   forceEnable?: boolean;
   shop?: ShopSpec;
 };
 
-// TODO need to initiate a trade on click
 // TODO need to show the panel when a shop is clicked and the player is next to it
 
 export default ({ forceEnable = false, shop: propShop }: Props) => {
@@ -95,7 +100,13 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
               <Grid fluid>
                 <Row>
                   {trades.map((trade, index) => (
-                    <ShopItem trade={trade} valid={validTrades[index]} />
+                    <div
+                      onClick={() =>
+                        sendTrade(shop.id, index, validTrades[index])
+                      }
+                    >
+                      <ShopItem trade={trade} valid={validTrades[index]} />
+                    </div>
                   ))}
                 </Row>
               </Grid>
