@@ -41,7 +41,8 @@ export const InventoryPanel = () => {
       quantity: 2,
     },
     c: {
-      itemId: -1,
+      itemId: 3,
+      equipped: true,
       position: 2,
     },
   });

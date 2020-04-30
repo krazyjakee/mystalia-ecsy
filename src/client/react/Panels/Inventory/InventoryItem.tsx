@@ -5,6 +5,7 @@ import { tileIdToVector } from "utilities/tileMap";
 import { whiteText } from "../../palette";
 import { useDrag, useDrop } from "react-dnd";
 import Sprite from "@client/react/Utilities/Sprite";
+import gameState from "@client/gameState";
 
 type Props = {
   item: InventoryItems;
@@ -28,6 +29,10 @@ const useStyles = createUseStyles({
     ...whiteText,
   },
 });
+
+const equip = (position: number) => {
+  gameState.send("map", "localPlayer:inventory:equip", { position });
+};
 
 export default (props: Props) => {
   const classes = useStyles();
@@ -56,6 +61,7 @@ export default (props: Props) => {
   const rootStyles: CSSProperties = {
     left: slotOffset.x * 60,
     top: slotOffset.y * 54,
+    border: item.equipped ? "1px solid red" : undefined,
   };
 
   return (
@@ -65,6 +71,7 @@ export default (props: Props) => {
         style={rootStyles}
         title={item.name}
         ref={drag}
+        onDoubleClick={() => equip(item.position)}
       >
         <Sprite
           spriteId={item.spriteId}

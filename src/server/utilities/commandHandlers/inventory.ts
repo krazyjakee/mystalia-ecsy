@@ -1,20 +1,20 @@
 import { MapSchema } from "@colyseus/schema";
 import InventoryState from "@server/components/inventory";
 import ItemState from "@server/components/item";
-import { safeMapSchemaIndex } from "../colyseusState";
+import { ItemSpec } from "types/TileMap/ItemTiles";
+import { randomHash } from "utilities/hash";
+import { searchState } from "../colyseusState";
+
+const items = require("utilities/data/items.json") as ItemSpec[];
 
 export const addItemToPlayer = (
   inventoryState: MapSchema<InventoryState>,
   item: ItemState
 ) => {
   // If item already in inventory, add quantity
-  for (let key in inventoryState) {
-    const inventoryItem = inventoryState[key] as InventoryState;
-    if (inventoryItem.itemId === item.itemId) {
-      inventoryState[key].quantity += item.quantity;
-      return;
-    }
-  }
+  searchState(inventoryState, { itemId: item.itemId }).forEach((key) => {
+    inventoryState[key].quantity += item.quantity;
+  });
 
   // Otherwise add the item
   const inventoryKeys = Object.keys(inventoryState);
@@ -38,11 +38,11 @@ export const addItemToPlayer = (
     }
   }
 
-  const safeIndex = safeMapSchemaIndex(missingPosition);
-  inventoryState[safeIndex] = new InventoryState({
+  inventoryState[randomHash()] = new InventoryState({
     itemId: item.itemId,
     position: missingPosition,
     quantity: item.quantity,
+    equipped: false,
   });
 };
 
@@ -57,6 +57,30 @@ export const moveInventoryItem = (
       inventoryState[key].position = to;
     } else if (item.position === to) {
       inventoryState[key].position = from;
+    }
+  }
+};
+
+export const getEquippedItemKey = (inventoryState: MapSchema<InventoryState>) =>
+  searchState(inventoryState, { equipped: true })[0];
+
+export const equipItem = (
+  inventoryState: MapSchema<InventoryState>,
+  position: number
+) => {
+  for (let key in inventoryState) {
+    const item = inventoryState[key] as InventoryState;
+    const spec = items.find((itemSpec) => itemSpec.id === item.itemId);
+    if (spec && item.position === position && spec.equippable) {
+      const equippedItemKey = getEquippedItemKey(inventoryState);
+      if (equippedItemKey) {
+        inventoryState[equippedItemKey].equipped = false;
+        if (inventoryState[equippedItemKey].position === position) {
+          return;
+        }
+      }
+
+      inventoryState[key].equipped = true;
     }
   }
 };

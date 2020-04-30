@@ -5,6 +5,7 @@ import MapState from "@server/components/map";
 import {
   addItemToPlayer,
   moveInventoryItem,
+  equipItem,
 } from "@server/utilities/commandHandlers/inventory";
 import { performTrade } from "@server/utilities/commandHandlers/shop";
 import { ShopSpec } from "types/shops";
@@ -43,6 +44,16 @@ export class InventoryMoveCommand extends Command<
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
     moveInventoryItem(data.from, data.to, player.inventory);
+  }
+}
+
+export class InventoryEquipCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:inventory:equip"> }
+> {
+  execute({ sessionId, data }) {
+    const player = this.state.players[sessionId];
+    equipItem(player.inventory, data.position);
   }
 }
 

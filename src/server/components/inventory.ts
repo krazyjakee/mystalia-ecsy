@@ -16,7 +16,7 @@ export default class InventoryState extends Schema {
   quantity: number;
 
   @type("boolean")
-  equipped?: boolean;
+  equipped: boolean;
 
   constructor({
     itemId,

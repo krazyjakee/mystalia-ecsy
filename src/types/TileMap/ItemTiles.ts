@@ -1,6 +1,6 @@
 import { InventoryStateProps } from "@server/components/inventory";
 
-export type ItemClass = "weapon" | "shield" | "consumable" | "other";
+export type ItemClass = "cast" | "melee" | "shield" | "consumable" | "other";
 
 export type ItemTags = "wood" | "string";
 

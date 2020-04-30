@@ -24,9 +24,9 @@
     "id": 3,
     "name": "Crude Spear",
     "spritesheet": "items",
-    "spriteId": 530,
+    "spriteId": 529,
     "equippable": true,
-    "class": "weapon",
+    "class": "melee",
     "tags": ["wood", "strength"],
     "damage": [4, 8]
   }

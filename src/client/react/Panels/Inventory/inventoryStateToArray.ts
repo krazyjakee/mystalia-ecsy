@@ -1,7 +1,8 @@
 import InventoryState from "@server/components/inventory";
-import { InventoryItems } from "types/TileMap/ItemTiles";
-import itemsData from "utilities/data/items.json";
+import { InventoryItems, ItemSpec } from "types/TileMap/ItemTiles";
 import { MapSchema } from "@colyseus/schema";
+
+const itemsData = require("utilities/data/items.json") as ItemSpec[];
 
 export default (iState?: MapSchema<InventoryState>) => {
   const inventoryItems: Array<InventoryItems> = [];
@@ -12,6 +13,7 @@ export default (iState?: MapSchema<InventoryState>) => {
       const itemData = itemsData.find((data) => data.id === itemId);
       if (itemData) {
         const { spritesheet, spriteId, name } = itemData;
+        const { equipped } = item;
 
         inventoryItems[position] = {
           itemId,
@@ -20,6 +22,7 @@ export default (iState?: MapSchema<InventoryState>) => {
           spritesheet,
           spriteId,
           name,
+          equipped,
         };
       }
     }

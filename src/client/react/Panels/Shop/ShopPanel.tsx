@@ -99,6 +99,7 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
                 <Row>
                   {trades.map((trade, index) => (
                     <ShopItem
+                      key={index}
                       trade={trade}
                       valid={validTrades[index]}
                       onClick={() =>

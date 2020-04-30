@@ -12,6 +12,7 @@ import pluralize from "pluralize";
 const useStyles = createUseStyles({
   root: {
     width: "100%",
+    marginBottom: 10,
   },
   iconContainer: {
     backgroundImage: guiAssetPath("panel/inventory/inventory-slot.png"),
@@ -45,7 +46,7 @@ type Props = {
   valid: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export default ({ trade, valid }: Props) => {
+export default ({ trade, valid, ...props }: Props) => {
   const classes = useStyles();
 
   const buyItem = itemsData.find((item) => item.id === trade.buy);
@@ -56,6 +57,7 @@ export default ({ trade, valid }: Props) => {
       <Col
         className={classes.root}
         style={{ opacity: valid ? undefined : 0.5 }}
+        {...props}
       >
         <Row>
           <Col xs={2}>

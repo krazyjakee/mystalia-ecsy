@@ -45,6 +45,9 @@ export interface GameStateEvents {
     from: number;
     to: number;
   };
+  "localPlayer:inventory:equip": {
+    position: number;
+  };
   "localPlayer:quit": undefined;
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
