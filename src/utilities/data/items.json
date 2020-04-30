@@ -3,18 +3,31 @@
     "id": 0,
     "name": "Apple",
     "spritesheet": "items",
-    "spriteId": 302
+    "spriteId": 302,
+    "class": "consumable"
   },
   {
     "id": 1,
     "name": "Stick",
     "spritesheet": "items",
-    "spriteId": 259
+    "spriteId": 259,
+    "class": "other"
   },
   {
     "id": 2,
     "name": "Apple Pulp",
     "spritesheet": "items",
-    "spriteId": 321
+    "spriteId": 321,
+    "class": "consumable"
+  },
+  {
+    "id": 3,
+    "name": "Crude Spear",
+    "spritesheet": "items",
+    "spriteId": 530,
+    "equippable": true,
+    "class": "weapon",
+    "tags": ["wood", "strength"],
+    "damage": [4, 8]
   }
 ]

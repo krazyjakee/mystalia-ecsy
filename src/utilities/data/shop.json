@@ -8,6 +8,12 @@
         "sellAmount": 1,
         "buy": 0,
         "buyAmount": 15
+      },
+      {
+        "sell": 3,
+        "sellAmount": 1,
+        "buy": 1,
+        "buyAmount": 10
       }
     ]
   }

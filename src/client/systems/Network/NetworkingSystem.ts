@@ -22,13 +22,15 @@ import gameState from "../../gameState";
 import CreateItem from "../../entities/Item";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
-import items from "utilities/data/items.json";
 import Item from "@client/components/Item";
 import { isPresent } from "utilities/guards";
 import CreateEnemy from "../../entities/Enemy";
 import enemySpecs from "utilities/data/enemies.json";
 import { EnemySpec } from "types/enemies";
 import Weather from "@client/components/Weather";
+import { ItemSpec } from "types/TileMap/ItemTiles";
+
+const items = require("utilities/data/items.json") as ItemSpec[];
 
 let connectionTimer: any;
 

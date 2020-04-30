@@ -43,7 +43,7 @@ const useStyles = createUseStyles({
 type Props = {
   trade: TradeSpec;
   valid: boolean;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export default ({ trade, valid }: Props) => {
   const classes = useStyles();

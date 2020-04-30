@@ -98,13 +98,13 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
               <Grid fluid>
                 <Row>
                   {trades.map((trade, index) => (
-                    <div
+                    <ShopItem
+                      trade={trade}
+                      valid={validTrades[index]}
                       onClick={() =>
                         sendTrade(shop.id, index, validTrades[index])
                       }
-                    >
-                      <ShopItem trade={trade} valid={validTrades[index]} />
-                    </div>
+                    />
                   ))}
                 </Row>
               </Grid>
