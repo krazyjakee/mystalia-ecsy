@@ -6,6 +6,9 @@ import {
   addItemToPlayer,
   moveInventoryItem,
 } from "@server/utilities/commandHandlers/inventory";
+import { performTrade } from "@server/utilities/commandHandlers/shop";
+import { ShopSpec } from "types/shops";
+const shops = require("utilities/data/shop.json") as ShopSpec[];
 
 export class MovementReportCommand extends Command<
   MapState,
@@ -48,7 +51,11 @@ export class ShopTradeCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:shop:trade"> }
 > {
   execute({ sessionId, data }) {
-    const player = this.state.players[sessionId];
-    // TODO: Use the shop commandHelper to check and perform the trade.
+    const shopId = data.shopId;
+    const shopSpec = shops.find((s) => s.id === shopId);
+    if (shopSpec) {
+      const trade = shopSpec.trades[data.tradeIndex];
+      performTrade(this.state.players[sessionId].inventory, trade);
+    }
   }
 }

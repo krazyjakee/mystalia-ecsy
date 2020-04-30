@@ -41,7 +41,7 @@ export const addItemToPlayer = (
   const safeIndex = safeMapSchemaIndex(inventoryKeys.length);
   inventoryState[safeIndex] = new InventoryState({
     itemId: item.itemId,
-    position: missingPosition || 0,
+    position: missingPosition,
     quantity: item.quantity,
   });
 };
