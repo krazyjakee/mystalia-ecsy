@@ -116,10 +116,24 @@ export class ObjectTileStore {
     tileId: number,
     type: T
   ): ObjectTile<T> | null {
-    if (this.store[tileId]) {
-      return this.store[tileId].find((tile) => tile.type === type) || null;
+    const objectTile = this.store[tileId];
+    if (objectTile) {
+      return objectTile.find((tile) => tile.type === type) || null;
     }
     return null;
+  }
+
+  getAllByType<T extends ObjectTileTypeString>(type: T): ObjectTile<T>[] {
+    let tiles: ObjectTile<T>[] = [];
+    for (let key in this.store) {
+      const tiles = this.store[key] as ObjectTile<T>[];
+      tiles.forEach((tile) => {
+        if (tile.type === type) {
+          tiles.push(tile);
+        }
+      });
+    }
+    return tiles;
   }
 
   getTypes(tileId: number) {
@@ -130,9 +144,8 @@ export class ObjectTileStore {
   }
 
   set<T extends ObjectTileTypeString>(tileId: number, data: ObjectTile<T>[]) {
-    this.store[tileId] = this.store[tileId]
-      ? this.store[tileId].concat(data)
-      : data;
+    const objectTile = this.store[tileId];
+    this.store[tileId] = objectTile ? objectTile?.concat(data) : data;
   }
 
   add(layer: Layer) {
@@ -144,7 +157,10 @@ export class ObjectTileStore {
       const tileData = mapObjectToTileTypes(object, this.columns);
       Object.keys(tileData).forEach((id) => {
         const tileId = parseInt(id);
-        this.set(tileId, tileData[tileId]);
+        const objectTile = tileData[tileId];
+        if (objectTile) {
+          this.set(tileId, objectTile);
+        }
       });
     });
   }

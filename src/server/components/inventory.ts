@@ -2,7 +2,7 @@ import { Schema, type } from "@colyseus/schema";
 
 export type InventoryStateProps = Pick<
   InventoryState,
-  "itemId" | "position" | "quantity"
+  "itemId" | "position" | "quantity" | "equipped"
 >;
 
 export default class InventoryState extends Schema {
@@ -15,10 +15,19 @@ export default class InventoryState extends Schema {
   @type("number")
   quantity: number;
 
-  constructor({ itemId, position, quantity = 1 }: InventoryStateProps) {
+  @type("boolean")
+  equipped: boolean;
+
+  constructor({
+    itemId,
+    position,
+    quantity = 1,
+    equipped = false,
+  }: InventoryStateProps) {
     super();
     this.itemId = itemId;
     this.position = position;
     this.quantity = quantity;
+    this.equipped = equipped;
   }
 }

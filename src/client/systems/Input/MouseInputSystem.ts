@@ -16,6 +16,10 @@ import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
 import { Direction } from "types/Grid";
+import gameState from "@client/gameState";
+import { OpenShopAtDestination } from "@client/components/Shop";
+import { findClosestPath } from "utilities/movement/surroundings";
+import Movement from "@client/components/Movement";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -77,7 +81,7 @@ export default class MouseInputSystem extends System {
     const tileMapDrawable = tileMap.getComponent(Drawable);
     const tileMapComponent = tileMap.getComponent(TileMap);
 
-    this.queries.localPlayer.results.forEach((entity) => {
+    this.queries.localPlayer.results.forEach((playerEntity) => {
       this.queries.mouseEnabledEntities.results.forEach((entity) => {
         if (!this.clickedPosition) return;
         const drawable = entity.getComponent(Drawable);
@@ -141,15 +145,41 @@ export default class MouseInputSystem extends System {
         tileMapComponent.width
       );
 
+      const clickedTileObjects = tileMapComponent.objectTileStore.get(
+        clickedTile
+      );
+
+      let targetTile: number | undefined;
+
       if (isWalkable(tileMapComponent, clickedTile)) {
+        targetTile = clickedTile;
+      }
+
+      if (clickedTileObjects && clickedTileObjects.length) {
+        clickedTileObjects.forEach((tileObject) => {
+          if (tileObject.type === "shop") {
+            const { shopId } = tileObject.value;
+            playerEntity.addComponent(OpenShopAtDestination, { shopId });
+            const movement = playerEntity.getComponent(Movement);
+            const closestPath = findClosestPath(
+              tileMapComponent.objectTileStore,
+              movement.currentTile,
+              clickedTile
+            );
+            targetTile = closestPath?.pop();
+          }
+        });
+      }
+
+      if (targetTile) {
         this.queries.mouseEnabledEntities.results.forEach((entity) => {
           entity.removeComponent(Focused);
         });
-        entity.addComponent(NewMovementTarget, {
-          targetTile: clickedTile,
+        playerEntity.addComponent(NewMovementTarget, {
+          targetTile,
           mapDir,
         });
-        if (this.doubleClicked) entity.addComponent(PickUpAtDestination);
+        if (this.doubleClicked) playerEntity.addComponent(PickUpAtDestination);
       }
 
       this.clickedPosition = undefined;

@@ -1,6 +1,7 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
 import { guiAssetPath } from "../cssUtilities";
+import { triggerGlobalKeypress } from "utilities/input";
 
 const useStyles = createUseStyles({
   container: {
@@ -75,18 +76,12 @@ const menuItems = [
 export default (props: Props) => {
   const classes = useStyles();
 
-  const trigger = (hotKey: string) => {
-    document.dispatchEvent(
-      new KeyboardEvent("keyup", { code: `Key${hotKey}` })
-    );
-  };
-
   return (
     <div {...props} className={classes.container}>
       <div className={classes.items}>
         {menuItems.map((item) => (
           <div
-            onClick={() => trigger(item.hotkey)}
+            onClick={() => triggerGlobalKeypress(item.hotkey)}
             className={classes.item}
             key={item.id}
             style={{

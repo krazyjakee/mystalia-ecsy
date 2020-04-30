@@ -5,6 +5,8 @@ import AdminPanelComponent from "./Admin/AdminPanel";
 import InventoryPanelComponent from "./Inventory/InventoryPanel";
 import TopMenuComponent from "./TopMenu";
 import { EnemyStatus as EnemyStatusComponent } from "./EnemyStatus";
+import { PlayerStatus as PlayerStatusComponent } from "./PlayerStatus";
+import ShopPanelComponent from "./Shop/ShopPanel";
 import { MapSchema } from "@colyseus/schema";
 
 export default {
@@ -39,7 +41,8 @@ export const InventoryPanel = () => {
       quantity: 2,
     },
     c: {
-      itemId: -1,
+      itemId: 3,
+      equipped: true,
       position: 2,
     },
   });
@@ -54,8 +57,8 @@ export const TopMenu = () => <TopMenuComponent />;
 export const EnemyStatus = () => (
   <EnemyStatusComponent
     enemy={{
-      index: "i1",
-      spec: {
+      key: "i1",
+      enemySpec: {
         id: 1,
         name: "Wild Boar",
         spritesheet: "",
@@ -66,6 +69,34 @@ export const EnemyStatus = () => (
         hp: [40, 60],
         abilities: [0],
       },
+      // @ts-ignore
+      enemyState: { enemyId: 0 },
+    }}
+  />
+);
+
+export const PlayerStatus = () => (
+  <>
+    <PlayerStatusComponent name="Player 1" large={true} />
+    <div style={{ height: 170 }} />
+    <PlayerStatusComponent name="Player 2" />
+  </>
+);
+
+export const ShopPanel = () => (
+  <ShopPanelComponent
+    forceEnable={true}
+    shop={{
+      id: 0,
+      name: "Polegreen Inn",
+      trades: [
+        {
+          sell: 2,
+          sellAmount: 1,
+          buy: 0,
+          buyAmount: 15,
+        },
+      ],
     }}
   />
 );

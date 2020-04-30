@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { guiAssetPath, spellAssetPath } from "../cssUtilities";
 import { whiteText } from "../palette";
-import { EnemyReference } from "types/enemies";
+import { EnemyReference, EnemySpec } from "types/enemies";
 import gameState from "@client/gameState";
 import abilitiesData from "utilities/data/abilities.json";
 import { tileIdToPixels } from "utilities/tileMap";
 import { AbilitySpec } from "types/types";
 import { isPresent } from "utilities/guards";
+import HealthBar from "./HealthBar";
 
 const useStyles = createUseStyles({
   root: {
@@ -22,19 +23,6 @@ const useStyles = createUseStyles({
     top: -2,
     fontSize: 11,
     ...whiteText,
-  },
-  healthBar: {
-    position: "absolute",
-    backgroundImage: guiAssetPath("panel/enemy-status/healthbar-empty.png"),
-    width: 124,
-    height: 13,
-    left: 79,
-    top: 23,
-  },
-  healthBarInner: {
-    backgroundImage: guiAssetPath("panel/enemy-status/healthbar.png"),
-    width: 124,
-    height: 13,
   },
   abilities: {
     position: "absolute",
@@ -60,10 +48,14 @@ const useStyles = createUseStyles({
   },
 });
 
-export const EnemyStatus = (props: React.HTMLAttributes<HTMLDivElement>) => {
+type Props = {
+  enemy?: EnemyReference;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+export const EnemyStatus = (props: Props) => {
   const classes = useStyles();
 
-  const [enemy, setEnemy] = useState<EnemyReference>({});
+  const [enemy, setEnemy] = useState<EnemyReference>(props.enemy || {});
   const { key } = enemy;
 
   useEffect(() => {
@@ -122,12 +114,11 @@ export const EnemyStatus = (props: React.HTMLAttributes<HTMLDivElement>) => {
     return null;
   };
 
+  // TODO show enemy portait
   return (
     <div {...props} id="enemyStateComponent" className={classes.root}>
       <div className={classes.label}>{name}</div>
-      <div className={classes.healthBar}>
-        <div className={classes.healthBarInner}> </div>
-      </div>
+      <HealthBar width={124} top={23} left={79} percentage={100} />
       <div className={classes.abilities}>
         {blankAbilities.map((_, index) => (
           <div className={classes.ability} key={index}>

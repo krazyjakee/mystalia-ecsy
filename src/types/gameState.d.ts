@@ -23,6 +23,13 @@ export interface GameStateEvents {
     map: string;
     tileId: number;
   };
+  "localPlayer:shop:open": {
+    shopId: number;
+  };
+  "localPlayer:shop:trade": {
+    shopId: number;
+    tradeIndex: number;
+  };
   "localPlayer:movement:report": {
     targetTile: number;
   };
@@ -37,6 +44,9 @@ export interface GameStateEvents {
   "localPlayer:inventory:move": {
     from: number;
     to: number;
+  };
+  "localPlayer:inventory:equip": {
+    position: number;
   };
   "localPlayer:quit": undefined;
   "enemy:change": EnemyReference;

@@ -10,3 +10,9 @@ export const makeHash = (input: string) => {
   }
   return hash;
 };
+
+export const randomHash = () => {
+  const date = new Date().getTime() + new Date().getUTCMilliseconds();
+  const randomNumber = Math.floor(Math.random() * 1000000);
+  return makeHash(`${date}${randomNumber}`);
+};

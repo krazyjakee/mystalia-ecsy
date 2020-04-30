@@ -19,9 +19,11 @@ export default class WeatherSpawner {
     const mapData = this.room.mapData;
     if (mapData) {
       const mapProperties = serializeProperties<"mapProps">(mapData.properties);
-      this.biome = mapProperties?.biome || "forest";
-      this.presenceKey = `weatherWorker:${this.biome}`;
-      this.tick();
+      this.biome = mapProperties?.biome;
+      if (this.biome) {
+        this.presenceKey = `weatherWorker:${this.biome}`;
+        this.tick();
+      }
     }
   }
 
@@ -47,6 +49,9 @@ export default class WeatherSpawner {
       "i"
     );
     if (!biomeWorkerExists) {
+      console.log(
+        `${this.room.roomName} became weather master for the ${this.biome} biome.`
+      );
       this.master = true;
       this.room.presence.hset(`${this.presenceKey}:enabled`, "i", "i");
       this.loadFromDB();
@@ -69,9 +74,12 @@ export default class WeatherSpawner {
         (weather) =>
           Math.floor(Math.random() * weatherChance[weather]) + 1 === 1
       );
-      const duration = Math.floor(Math.random() * 25) + 5;
+
       // TODO: Set to 60000 after testing
-      this.setWeather(weathers, duration * 2000);
+      const duration = (Math.floor(Math.random() * 25) + 5) * 2000;
+
+      this.setWeather(weathers, duration);
+      this.publish(weathers, duration);
     }
   }
 
@@ -90,12 +98,16 @@ export default class WeatherSpawner {
         this.room.state.weather[this.biome].duration = duration;
       }
 
-      this.room.presence.publish(this.presenceKey, { weathers, duration });
-
       // @ts-ignore
       this.timer = setTimeout(() => {
         this.tick();
       }, duration);
+    }
+  }
+
+  publish(weathers: Weather[], duration: number) {
+    if (this.presenceKey) {
+      this.room.presence.publish(this.presenceKey, { weathers, duration });
     }
   }
 

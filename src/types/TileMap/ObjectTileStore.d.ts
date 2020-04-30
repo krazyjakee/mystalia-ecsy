@@ -37,6 +37,9 @@ export type ObjectTileType = {
     south?: string;
     west?: string;
   };
+  shop: {
+    shopId: number;
+  };
 };
 
 export type ObjectTileTypeString = keyof ObjectTileType;
@@ -48,5 +51,5 @@ export type ObjectTile<T extends ObjectTileTypeString = any> = {
 };
 
 export type ObjectTileStoreType = {
-  [key: number]: ObjectTile[];
+  [key: number]: ObjectTile[] | undefined;
 };

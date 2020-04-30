@@ -19,10 +19,10 @@ export default class AdminNetworkSystem extends System {
         if (role && role > 0) {
           client.joinOrCreate("admin").then((room) => {
             gameState.addRoom("admin", room);
-            gameState.trigger("admin:enable");
+            gameState.trigger("admin:enable", undefined);
             room.onLeave(() => {
               console.log("Admin access denied");
-              gameState.trigger("admin:disable");
+              gameState.trigger("admin:disable", undefined);
               gameState.removeRoom("admin");
             });
           });

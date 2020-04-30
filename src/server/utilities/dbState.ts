@@ -19,13 +19,18 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
         inventory = Object.keys(player.inventory)
           .filter((key) => isPresent(player.inventory[key].itemId))
           .map((key) => {
-            const { itemId, position, quantity } = player.inventory[key];
-            return { itemId, position, quantity };
+            const { itemId, position, quantity, equipped } = player.inventory[
+              key
+            ];
+            return { itemId, position, quantity, equipped };
           });
       }
 
       const newData: Partial<IUser> = {
         metadata: {
+          xp: 0,
+          damage: 0,
+          energyUsed: 0,
           ...user.metadata,
           inventory,
           room,

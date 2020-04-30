@@ -1,8 +1,15 @@
 import { RoomMessage } from "types/gameState";
-import { addItemToPlayer, moveInventoryItem } from "@server/components/player";
 import MapRoom from "../map";
 import { Command } from "@colyseus/command";
 import MapState from "@server/components/map";
+import {
+  addItemToPlayer,
+  moveInventoryItem,
+  equipItem,
+} from "@server/utilities/commandHandlers/inventory";
+import { performTrade } from "@server/utilities/commandHandlers/shop";
+import { ShopSpec } from "types/shops";
+const shops = require("utilities/data/shop.json") as ShopSpec[];
 
 export class MovementReportCommand extends Command<
   MapState,
@@ -37,5 +44,29 @@ export class InventoryMoveCommand extends Command<
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
     moveInventoryItem(data.from, data.to, player.inventory);
+  }
+}
+
+export class InventoryEquipCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:inventory:equip"> }
+> {
+  execute({ sessionId, data }) {
+    const player = this.state.players[sessionId];
+    equipItem(player.inventory, data.position);
+  }
+}
+
+export class ShopTradeCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:shop:trade"> }
+> {
+  execute({ sessionId, data }) {
+    const shopId = data.shopId;
+    const shopSpec = shops.find((s) => s.id === shopId);
+    if (shopSpec) {
+      const trade = shopSpec.trades[data.tradeIndex];
+      performTrade(this.state.players[sessionId].inventory, trade);
+    }
   }
 }

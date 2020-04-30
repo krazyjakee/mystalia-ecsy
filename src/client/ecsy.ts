@@ -32,7 +32,8 @@ import WeatherSystem from "./systems/Rendering/WeatherSystem";
 
 import "./entities";
 import EnemyStatusSystem from "./systems/HUD/EnemyStatusSystem";
-import PickUpSystem from "./systems/PickUpSystem";
+import PickUpSystem from "./systems/MovementSystem/PickUpSystem";
+import ShopOpenSystem from "./systems/MovementSystem/ShopOpenSystem";
 
 let world = new World();
 
@@ -49,6 +50,7 @@ export default (user: User) => {
     .registerSystem(MapEventSystem)
     .registerSystem(MovementSystem)
     .registerSystem(PickUpSystem)
+    .registerSystem(ShopOpenSystem)
     .registerSystem(MapChangeSystem)
     .registerSystem(AnimationSystem)
     .registerSystem(ItemSystem)

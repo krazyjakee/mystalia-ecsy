@@ -1,9 +1,10 @@
 import ItemState from "@server/components/item";
-import { safeMapSchemaIndex } from "@server/utilities/colyseusState";
 import { SerializedObjectTile, getTilesByType } from "utilities/tileMap";
 import { mongoose } from "@colyseus/social";
 import ItemSchema from "@server/db/ItemSchema";
 import MapRoom from "@server/rooms/map";
+import { randomHash } from "utilities/hash";
+import { searchState } from "@server/utilities/colyseusState";
 
 export default class ItemSpawner {
   room: MapRoom;
@@ -38,15 +39,19 @@ export default class ItemSpawner {
   }
 
   tick() {
-    this.mapItems.forEach((objectTile, index) => {
+    this.mapItems.forEach((objectTile) => {
       const item = objectTile.properties;
-      const safeIndex = safeMapSchemaIndex(index);
+      const safeIndex = randomHash();
       const chance = Math.floor(Math.random() * item.chance);
       const quantity = item.maximumQuantity
         ? Math.floor(Math.random() * item.maximumQuantity) + 1
         : item.quantity;
       if (chance === 1) {
-        if (!this.room.state.items[safeIndex]) {
+        const isTileVacant =
+          searchState(this.room.state.items, { tileId: objectTile.tileId })
+            .length === 0;
+
+        if (isTileVacant) {
           this.room.state.items[safeIndex] = new ItemState(
             item.id,
             objectTile.tileId,
@@ -58,16 +63,15 @@ export default class ItemSpawner {
   }
 
   getItem(tileId: number, itemId?: number) {
-    for (let key in this.room.state.items) {
+    let foundItem: ItemState | null = null;
+    searchState(this.room.state.items, { tileId }).forEach((key) => {
       const item = this.room.state.items[key] as ItemState;
-      if (item && item.tileId && item.tileId === tileId) {
-        if ((itemId && itemId === item.itemId) || !itemId) {
-          delete this.room.state.items[key];
-          return item;
-        }
+      if (itemId === item.itemId || !itemId) {
+        delete this.room.state.items[key];
+        foundItem = item;
       }
-    }
-    return null;
+    });
+    return foundItem;
   }
 
   dispose() {

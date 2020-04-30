@@ -81,7 +81,7 @@ class GameState {
 
   trigger<T extends RoomMessageType>(
     eventName: T,
-    options?: GameStateEvents[T]
+    options: GameStateEvents[T]
   ) {
     if (this.callbacks[eventName]) {
       this.callbacks[eventName].forEach((callbackObject) => {
