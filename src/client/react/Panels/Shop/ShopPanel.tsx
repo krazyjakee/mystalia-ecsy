@@ -31,8 +31,6 @@ type Props = {
   shop?: ShopSpec;
 };
 
-// TODO need to show the panel when a shop is clicked and the player is next to it
-
 export default ({ forceEnable = false, shop: propShop }: Props) => {
   const classes = useStyles();
 

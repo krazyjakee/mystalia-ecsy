@@ -33,11 +33,13 @@ export const performTrade = (
       if (inventoryItem.itemId === trade.buy) {
         if (quantity - inventoryItem.quantity >= 0) {
           keysToDelete.push(key);
+          quantity -= inventoryItem.quantity;
         } else {
           inventoryState[key].quantity -= quantity;
         }
       }
     }
+
     keysToDelete.forEach((key) => {
       delete inventoryState[key];
     });
