@@ -10,6 +10,9 @@ export default class EnemyState extends Schema {
   @type("number")
   currentTile: number;
 
+  @type("string")
+  target?: string;
+
   constructor(enemyId: number, currentTile: number, zoneId?: number) {
     super();
     this.currentTile = currentTile;

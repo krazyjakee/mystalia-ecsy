@@ -5,6 +5,8 @@ import {
   InventoryMoveCommand,
   ShopTradeCommand,
   InventoryEquipCommand,
+  BattleTargetEnemyCommand,
+  BattleUnTargetCommand,
 } from "./localplayer";
 
 export type RoomCommandsAvailable = Extract<
@@ -14,6 +16,8 @@ export type RoomCommandsAvailable = Extract<
   | "localPlayer:inventory:move"
   | "localPlayer:inventory:equip"
   | "localPlayer:shop:trade"
+  | "localPlayer:battle:targetEnemy"
+  | "localPlayer:battle:unTarget"
 >;
 
 export const roomCommands: { [key in RoomCommandsAvailable]: any } = {
@@ -22,4 +26,6 @@ export const roomCommands: { [key in RoomCommandsAvailable]: any } = {
   "localPlayer:inventory:move": InventoryMoveCommand,
   "localPlayer:inventory:equip": InventoryEquipCommand,
   "localPlayer:shop:trade": ShopTradeCommand,
+  "localPlayer:battle:targetEnemy": BattleTargetEnemyCommand,
+  "localPlayer:battle:unTarget": BattleUnTargetCommand,
 };

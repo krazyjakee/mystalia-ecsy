@@ -18,4 +18,6 @@ export class Disable extends TagComponent {}
 
 export class Focused extends TagComponent {}
 
+export class BattleTarget extends TagComponent {}
+
 export class PickUpAtDestination extends TagComponent {}

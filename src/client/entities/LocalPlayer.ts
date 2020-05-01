@@ -7,6 +7,7 @@ import LocalPlayer, {
   RoleCheckPending,
   CommandsPending,
 } from "@client/components/LocalPlayer";
+import Inventory from "@client/components/Inventory";
 
 export default function CreateLocalPlayer(user: User) {
   return BaseCharacter({ currentTile: user.metadata.currentTile })
@@ -18,5 +19,6 @@ export default function CreateLocalPlayer(user: User) {
     .addComponent(MouseInput)
     .addComponent(LocalPlayer, { user })
     .addComponent(RoleCheckPending)
-    .addComponent(CommandsPending);
+    .addComponent(CommandsPending)
+    .addComponent(Inventory);
 }

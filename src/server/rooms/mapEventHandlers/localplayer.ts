@@ -9,6 +9,7 @@ import {
 } from "@server/utilities/commandHandlers/inventory";
 import { performTrade } from "@server/utilities/commandHandlers/shop";
 import { ShopSpec } from "types/shops";
+import PlayerState from "@server/components/player";
 const shops = require("utilities/data/shop.json") as ShopSpec[];
 
 export class MovementReportCommand extends Command<
@@ -68,5 +69,23 @@ export class ShopTradeCommand extends Command<
       const trade = shopSpec.trades[data.tradeIndex];
       performTrade(this.state.players[sessionId].inventory, trade);
     }
+  }
+}
+
+export class BattleTargetEnemyCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:battle:targetEnemy"> }
+> {
+  execute({ sessionId, data }) {
+    (this.state.players[sessionId] as PlayerState).targetEnemy = data.key;
+  }
+}
+
+export class BattleUnTargetCommand extends Command<
+  MapState,
+  { sessionId: string }
+> {
+  execute({ sessionId }) {
+    (this.state.players[sessionId] as PlayerState).targetEnemy = undefined;
   }
 }

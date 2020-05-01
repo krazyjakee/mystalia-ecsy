@@ -34,6 +34,8 @@ import "./entities";
 import EnemyStatusSystem from "./systems/HUD/EnemyStatusSystem";
 import PickUpSystem from "./systems/MovementSystem/PickUpSystem";
 import ShopOpenSystem from "./systems/MovementSystem/ShopOpenSystem";
+import BattleSystem from "./systems/BattleSystem";
+import InventorySystem from "./systems/InventorySystem";
 
 let world = new World();
 
@@ -61,6 +63,8 @@ export default (user: User) => {
     .registerSystem(FlameSystem)
     .registerSystem(TileAnimationSystem)
     .registerSystem(EnemyStatusSystem)
+    .registerSystem(BattleSystem)
+    .registerSystem(InventorySystem)
     .registerSystem(GraySystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)

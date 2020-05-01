@@ -48,10 +48,17 @@ export interface GameStateEvents {
   "localPlayer:inventory:equip": {
     position: number;
   };
+  "localPlayer:battle:targetEnemy": {
+    key: string;
+  };
+  "localPlayer:battle:unTarget": undefined;
   "localPlayer:quit": undefined;
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
   "enemy:unfocused": EnemyReference;
+  "enemy:battle:targetPlayer": {
+    username: string;
+  };
 }
 
 export type RoomMessageType = keyof GameStateEvents;

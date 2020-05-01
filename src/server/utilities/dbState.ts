@@ -41,6 +41,10 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
         newData.metadata.currentTile = player.targetTile;
       }
 
+      if (player.targetEnemy) {
+        newData.metadata.targetEnemy = player.targetEnemy;
+      }
+
       await user.updateOne({
         $set: newData,
       });
