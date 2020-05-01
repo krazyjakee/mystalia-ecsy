@@ -63,6 +63,8 @@ export default class BattleSystem extends System {
     this.queries.targettedEnemies.results.forEach((enemyEntity) => {
       const playerMovement = localPlayerEntity.getComponent(Movement);
 
+      // TODO: Check if the enemy tile is accessable by the player and return if not.
+
       if (!playerMovement.tileQueue.length) {
         const movement = enemyEntity.getComponent(Movement);
         const { inventory } = localPlayerEntity.getComponent(Inventory);

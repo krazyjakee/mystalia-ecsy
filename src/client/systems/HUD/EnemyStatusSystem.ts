@@ -85,6 +85,8 @@ export default class EnemyStatusSystem extends System {
       const drawable = enemyEntity.getComponent(Drawable);
       positionEnemyState(position.value, offset);
 
+      // TODO: The following effect should be in it's own highlight system
+
       const drawableProperties = drawableToDrawableProperties(drawable);
 
       const dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1];
