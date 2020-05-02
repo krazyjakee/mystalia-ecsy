@@ -12,7 +12,15 @@ export default (iState?: MapSchema<InventoryState>) => {
       const { itemId, position, quantity } = item;
       const itemData = itemsData.find((data) => data.id === itemId);
       if (itemData) {
-        const { spritesheet, spriteId, name } = itemData;
+        const {
+          spritesheet,
+          spriteId,
+          name,
+          type,
+          equippable,
+          tags,
+          damage,
+        } = itemData;
         const { equipped } = item;
 
         inventoryItems[position] = {
@@ -23,6 +31,10 @@ export default (iState?: MapSchema<InventoryState>) => {
           spriteId,
           name,
           equipped,
+          type,
+          equippable,
+          tags,
+          damage,
         };
       }
     }

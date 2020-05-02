@@ -46,6 +46,10 @@ export default class Enemy {
   }
 
   tick() {
+    if (!this.room.state.enemies[this.stateId]) {
+      return;
+    }
+
     if (this.tilePath.length) {
       setTimeout(() => {
         const targetTile = this.tilePath.shift();

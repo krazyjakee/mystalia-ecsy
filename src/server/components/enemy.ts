@@ -11,7 +11,10 @@ export default class EnemyState extends Schema {
   currentTile: number;
 
   @type("string")
-  target?: string;
+  targetPlayer?: string;
+
+  @type("number")
+  damage: number = 0;
 
   constructor(enemyId: number, currentTile: number, zoneId?: number) {
     super();

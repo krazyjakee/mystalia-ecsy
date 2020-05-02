@@ -59,7 +59,7 @@ const schemas = {
   },
   Enemy: {
     schema: EnemySchema,
-    fields: ["enemyId", "zoneId", "currentTile"],
+    fields: ["enemyId", "zoneId", "currentTile", "damage"],
   },
   Weather: {
     schema: WeatherSchema,

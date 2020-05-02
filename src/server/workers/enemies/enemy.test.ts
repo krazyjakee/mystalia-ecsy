@@ -41,7 +41,7 @@ const enemySpec = {
   },
   speed: 1,
   maxDistance: 1,
-  hp: [40, 60],
+  hp: 40,
   abilities: [0],
 };
 

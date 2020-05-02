@@ -29,6 +29,7 @@ import enemySpecs from "utilities/data/enemies.json";
 import { EnemySpec } from "types/enemies";
 import Weather from "@client/components/Weather";
 import { ItemSpec } from "types/TileMap/ItemTiles";
+import Enemy from "@client/components/Enemy";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -44,6 +45,9 @@ export default class NetworkingSystem extends System {
     },
     remoteEntities: {
       components: [RemotePlayer],
+    },
+    enemies: {
+      components: [Enemy],
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)],
@@ -129,6 +133,15 @@ export default class NetworkingSystem extends System {
               });
             });
           };
+
+          enemy.onRemove = () => {
+            this.queries.enemies.results.forEach((enemyEntity) => {
+              const enemy = enemyEntity.getComponent(Enemy);
+              if (enemy.key === key) {
+                enemyEntity.remove();
+              }
+            });
+          };
         };
 
         networkRoom.room.state.players.onAdd = (player, key) => {
@@ -189,7 +202,6 @@ export default class NetworkingSystem extends System {
 
         networkRoom.room.state.players.onRemove = (_, key) => {
           if (myKey !== key) {
-            //@ts-ignore
             this.queries.remoteEntities.results.forEach(
               (remotePlayerEntity: Entity) => {
                 const remotePlayerComponent = remotePlayerEntity.getComponent(

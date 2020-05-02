@@ -79,7 +79,7 @@ export default class BattleSystem extends System {
         const equippedItem = inventory.find((item) => item.equipped);
 
         let weaponRange = 1;
-        if (equippedItem && equippedItem.class === "cast") {
+        if (equippedItem && equippedItem.type === "cast") {
           // TODO: Change the range
         }
 
