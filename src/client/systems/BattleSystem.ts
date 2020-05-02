@@ -13,8 +13,7 @@ import {
   distanceBetweenTiles,
 } from "utilities/movement/surroundings";
 import { BattleTarget } from "@client/components/Tags";
-import Position from "@client/components/Position";
-import { vectorToTileId } from "utilities/tileMap";
+import { tileIdToVector } from "utilities/tileMap";
 
 export default class BattleSystem extends System {
   static queries = {
@@ -62,11 +61,19 @@ export default class BattleSystem extends System {
 
     this.queries.targettedEnemies.results.forEach((enemyEntity) => {
       const playerMovement = localPlayerEntity.getComponent(Movement);
+      const movement = enemyEntity.getComponent(Movement);
 
-      // TODO: Check if the enemy tile is accessable by the player and return if not.
+      const path = tileMap.objectTileStore.aStar.findPath(
+        tileIdToVector(playerMovement.currentTile, tileMap.width),
+        tileIdToVector(movement.currentTile, tileMap.width)
+      );
+
+      if (!path.length) {
+        enemyEntity.removeComponent(BattleTarget);
+        return;
+      }
 
       if (!playerMovement.tileQueue.length) {
-        const movement = enemyEntity.getComponent(Movement);
         const { inventory } = localPlayerEntity.getComponent(Inventory);
 
         const equippedItem = inventory.find((item) => item.equipped);
