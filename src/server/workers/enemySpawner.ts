@@ -27,6 +27,12 @@ export default class EnemySpawner {
     this.enemyZones.forEach((enemyZone) => enemyZone.tick());
   }
 
+  destroy(stateId: string) {
+    this.enemyZones.forEach((enemyZone) => {
+      enemyZone.destroy(stateId);
+    });
+  }
+
   dispose() {
     clearInterval(this.timer);
     this.enemyZones.forEach((enemyZone) => enemyZone.dispose());

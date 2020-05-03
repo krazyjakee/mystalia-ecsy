@@ -1,6 +1,6 @@
 import { InventoryStateProps } from "@server/components/inventory";
 
-export type ItemClass = "cast" | "melee" | "shield" | "consumable" | "other";
+export type ItemType = "cast" | "melee" | "shield" | "consumable" | "other";
 
 export type ItemTags = "wood" | "string";
 
@@ -9,7 +9,7 @@ export type ItemSpec = {
   name: string;
   spritesheet: string;
   spriteId: number;
-  class?: ItemClass;
+  type?: ItemType;
   equippable?: boolean;
   tags?: ItemTags[];
   damage?: [number, number];

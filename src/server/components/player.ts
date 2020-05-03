@@ -32,6 +32,9 @@ export default class PlayerState extends Schema {
   @type("string")
   currentRoom: string;
 
+  @type("string")
+  targetEnemy?: string;
+
   @type({ map: InventoryState })
   inventory: MapSchema<InventoryState>;
 

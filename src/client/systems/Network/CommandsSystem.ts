@@ -1,19 +1,21 @@
-import { System, Not, Entity } from "ecsy";
-import { Loadable, Unloadable } from "@client/components/Loadable";
-import LocalPlayer, {
-  RoleCheckPending,
-  CommandsPending,
-} from "@client/components/LocalPlayer";
+import { System } from "ecsy";
+import { Unloadable } from "@client/components/Loadable";
+import LocalPlayer, { CommandsPending } from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
 import TileMap from "@client/components/TileMap";
 import Drawable from "@client/components/Drawable";
 import Movement from "@client/components/Movement";
 import { mapAssetPath } from "../../utilities/assets";
+import Enemy from "@client/components/Enemy";
+import { AddCharacterHighlight } from "@client/components/CharacterHighlight";
 
 export default class CommandsSystem extends System {
   static queries = {
     localPlayer: {
       components: [LocalPlayer, CommandsPending],
+    },
+    enemies: {
+      components: [Enemy, CommandsPending],
     },
     tileMap: {
       components: [TileMap],
@@ -22,7 +24,7 @@ export default class CommandsSystem extends System {
 
   execute() {
     this.queries.tileMap.results.forEach((tileMapEntity) => {
-      this.queries.localPlayer.results.forEach((localPlayerEntity: Entity) => {
+      this.queries.localPlayer.results.forEach((localPlayerEntity) => {
         const drawable = tileMapEntity.getMutableComponent(Drawable);
         const movement = localPlayerEntity.getMutableComponent(Movement);
 
@@ -43,6 +45,17 @@ export default class CommandsSystem extends System {
         });
 
         localPlayerEntity.removeComponent(CommandsPending);
+      });
+
+      this.queries.enemies.results.forEach((enemyEntity) => {
+        const enemy = enemyEntity.getComponent(Enemy);
+        gameState.subscribe("enemy:battle:damageTaken", (data) => {
+          if (data.enemyKey === enemy.key) {
+            enemyEntity.addComponent(AddCharacterHighlight, { type: "damage" });
+          }
+          // TODO: Show number of damage
+        });
+        enemyEntity.removeComponent(CommandsPending);
       });
     });
   }

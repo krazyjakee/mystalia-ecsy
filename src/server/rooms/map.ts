@@ -12,12 +12,14 @@ import { TMJ } from "types/TMJ";
 import EnemySpawner from "@server/workers/enemySpawner";
 import WeatherSpawner from "@server/workers/weatherSpawner";
 import { roomCommands, RoomCommandsAvailable } from "./mapEventHandlers";
+import Battle from "@server/workers/battle";
 
 export default class MapRoom extends Room<MapState> {
   dispatcher = new Dispatcher(this);
   itemSpawner?: ItemSpawner;
   enemySpawner?: EnemySpawner;
   weatherSpawner?: WeatherSpawner;
+  battleWorker?: Battle;
 
   objectTileStore?: ObjectTileStore;
   mapData?: TMJ;
@@ -41,6 +43,7 @@ export default class MapRoom extends Room<MapState> {
     this.itemSpawner = new ItemSpawner(this);
     this.enemySpawner = new EnemySpawner(this);
     this.weatherSpawner = new WeatherSpawner(this);
+    this.battleWorker = new Battle(this);
 
     const roomCommandsAvailable = Object.keys(
       roomCommands
@@ -107,6 +110,10 @@ export default class MapRoom extends Room<MapState> {
         await saveStateToDb("Weather", this.roomName, this.state.weather);
       }
       this.weatherSpawner.dispose();
+    }
+
+    if (this.battleWorker) {
+      this.battleWorker.dispose();
     }
 
     await saveStateToDb("Item", this.roomName, this.state.items);

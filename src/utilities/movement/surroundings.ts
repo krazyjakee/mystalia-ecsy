@@ -1,4 +1,3 @@
-import { AStarFinder } from "astar-typescript";
 import { Size } from "types/TileMap/standard";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
@@ -76,11 +75,12 @@ export const allowedTiles = (tiles: number[], blockList: number[]) =>
 export const findClosestPath = (
   ots: ObjectTileStore,
   from: number,
-  to: number
+  to: number,
+  startingRadius: number = 1
 ) => {
   const { aStar, blockList, columns } = ots;
-  let totalRadius = 10;
-  let radius = 0;
+  let totalRadius = 20;
+  let radius = startingRadius - 1;
   const fromVector = tileIdToVector(from, columns);
 
   while (totalRadius > 0) {

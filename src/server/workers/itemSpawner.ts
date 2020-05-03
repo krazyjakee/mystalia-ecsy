@@ -62,7 +62,7 @@ export default class ItemSpawner {
     });
   }
 
-  getItem(tileId: number, itemId?: number) {
+  getItem(tileId: number, itemId?: number): ItemState | null {
     let foundItem: ItemState | null = null;
     searchState(this.room.state.items, { tileId }).forEach((key) => {
       const item = this.room.state.items[key] as ItemState;

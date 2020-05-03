@@ -4937,7 +4937,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":500
+                         "value":10
                         }, 
                         {
                          "name":"enemy",

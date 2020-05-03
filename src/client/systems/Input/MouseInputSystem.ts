@@ -1,8 +1,9 @@
-import { System, Not } from "ecsy";
+import { System, Not, Entity } from "ecsy";
 import {
   MouseInput,
   Focused,
   PickUpAtDestination,
+  BattleTarget,
 } from "@client/components/Tags";
 import { Vector } from "types/TMJ";
 import TileMap from "@client/components/TileMap";
@@ -16,10 +17,10 @@ import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
 import { Direction } from "types/Grid";
-import gameState from "@client/gameState";
 import { OpenShopAtDestination } from "@client/components/Shop";
 import { findClosestPath } from "utilities/movement/surroundings";
 import Movement from "@client/components/Movement";
+import Enemy from "@client/components/Enemy";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -82,11 +83,15 @@ export default class MouseInputSystem extends System {
     const tileMapComponent = tileMap.getComponent(TileMap);
 
     this.queries.localPlayer.results.forEach((playerEntity) => {
+      let entityClicked = false;
+
       this.queries.mouseEnabledEntities.results.forEach((entity) => {
         if (!this.clickedPosition) return;
         const drawable = entity.getComponent(Drawable);
         const { value } = entity.getComponent(Position);
         const isFocused = entity.hasComponent(Focused);
+        const isEnemy = entity.hasComponent(Enemy);
+        const isBattleTarget = entity.hasComponent(BattleTarget);
 
         const enemyPosition = addOffset(
           { x: value.x * 32, y: value.y * 32 },
@@ -107,13 +112,28 @@ export default class MouseInputSystem extends System {
           tileMapDrawable.offset
         );
 
-        if (isClicked && !isFocused) {
-          entity.addComponent(Focused);
-          this.clickedPosition = undefined;
-        } else if (!isClicked && isFocused) {
-          entity.removeComponent(Focused);
+        if (isEnemy && isClicked) {
+          if (this.doubleClicked && isEnemy && !isBattleTarget) {
+            entity.addComponent(BattleTarget);
+            entity.removeComponent(Focused);
+            entityClicked = true;
+          } else if (!isFocused) {
+            entity.addComponent(Focused);
+            entityClicked = true;
+          }
+        } else if (isEnemy && !isClicked) {
+          if (isFocused) {
+            entity.removeComponent(Focused);
+          }
+          if (isBattleTarget) {
+            entity.removeComponent(BattleTarget);
+          }
         }
       });
+
+      if (entityClicked) {
+        this.clickedPosition = undefined;
+      }
 
       if (!this.clickedPosition) return;
 

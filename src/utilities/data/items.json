@@ -4,21 +4,21 @@
     "name": "Apple",
     "spritesheet": "items",
     "spriteId": 302,
-    "class": "consumable"
+    "type": "consumable"
   },
   {
     "id": 1,
     "name": "Stick",
     "spritesheet": "items",
     "spriteId": 259,
-    "class": "other"
+    "type": "other"
   },
   {
     "id": 2,
     "name": "Apple Pulp",
     "spritesheet": "items",
     "spriteId": 321,
-    "class": "consumable"
+    "type": "consumable"
   },
   {
     "id": 3,
@@ -26,7 +26,7 @@
     "spritesheet": "items",
     "spriteId": 529,
     "equippable": true,
-    "class": "melee",
+    "type": "melee",
     "tags": ["wood", "strength"],
     "damage": [4, 8]
   }

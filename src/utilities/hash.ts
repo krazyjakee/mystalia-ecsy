@@ -1,14 +1,14 @@
-export const makeHash = (input: string) => {
+export const makeHash = (input: string): string => {
   var hash = 0,
     i,
     chr;
-  if (input.length === 0) return hash;
+  if (input.length === 0) return `i${hash}`;
   for (i = 0; i < input.length; i++) {
     chr = input.charCodeAt(i);
     hash = (hash << 5) - hash + chr;
     hash |= 0;
   }
-  return hash;
+  return `i${hash}`;
 };
 
 export const randomHash = () => {

@@ -48,6 +48,26 @@ export interface GameStateEvents {
   "localPlayer:inventory:equip": {
     position: number;
   };
+  "localPlayer:battle:targetEnemy": {
+    key: string;
+  };
+  "localPlayer:battle:unTarget": undefined;
+  "enemy:battle:targetPlayer": {
+    username: string;
+  };
+  "enemy:battle:damageTaken": {
+    fromUsername: string;
+    enemyKey: string;
+    damage: number;
+    itemId?: number;
+    spellId?: number;
+  };
+  "enemy:battle:damageGiven": {
+    toUsername: string;
+    enemyKey: string;
+    damage: number;
+    spellId: number;
+  };
   "localPlayer:quit": undefined;
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;

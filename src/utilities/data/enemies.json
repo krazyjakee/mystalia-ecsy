@@ -12,7 +12,7 @@
     },
     "speed": 1,
     "maxDistance": 6,
-    "hp": [40, 60],
+    "hp": 120,
     "abilities": [0]
   },
   {
@@ -28,7 +28,7 @@
         "chance": 2
       }
     },
-    "hp": [40, 60],
+    "hp": 20,
     "abilities": []
   }
 ]

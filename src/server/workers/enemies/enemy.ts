@@ -28,7 +28,7 @@ export default class Enemy {
     this.allowedTiles = allowedTiles;
     this.stateId =
       stateId ||
-      `i${makeHash(`${new Date().getTime() + new Date().getMilliseconds()}`)}`;
+      makeHash(`${new Date().getTime() + new Date().getMilliseconds()}`);
     this.mapColumns = this.room.mapData?.width || 0;
     this.speedMs = (10 - this.spec.speed) * 1000;
 
@@ -46,10 +46,14 @@ export default class Enemy {
   }
 
   tick() {
+    if (!this.room.state.enemies[this.stateId]) {
+      return;
+    }
+
     if (this.tilePath.length) {
       setTimeout(() => {
         const targetTile = this.tilePath.shift();
-        if (targetTile) {
+        if (targetTile && this.room.state.enemies[this.stateId]) {
           this.currentTile = targetTile;
           (this.room.state.enemies[
             this.stateId
