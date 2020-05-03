@@ -53,7 +53,7 @@ export default class Enemy {
     if (this.tilePath.length) {
       setTimeout(() => {
         const targetTile = this.tilePath.shift();
-        if (targetTile) {
+        if (targetTile && this.room.state.enemies[this.stateId]) {
           this.currentTile = targetTile;
           (this.room.state.enemies[
             this.stateId

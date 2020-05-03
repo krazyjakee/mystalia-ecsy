@@ -9,6 +9,7 @@ import { drawBorderAroundCharacter } from "./border";
 import { drawableToDrawableProperties } from "@client/utilities/drawing";
 import TileMap from "@client/components/TileMap";
 import { Loadable } from "@client/components/Loadable";
+import { drawFlashOnCharacter } from "./flash";
 
 export type CharacterHighlightType = "focus" | "battle" | "damage" | "heal";
 
@@ -102,6 +103,23 @@ export default class CharacterHighlightSystem extends System {
           "#ffffff",
           80
         );
+      }
+
+      if (highlights.types.includes("damage")) {
+        drawFlashOnCharacter(
+          drawableProperties,
+          position.value,
+          offset,
+          "#ff0000",
+          highlights.opacityPercent
+        );
+        highlights.opacityPercent -= 2;
+        if (highlights.opacityPercent <= 0) {
+          characterEntity.addComponent(RemoveCharacterHighlight, {
+            type: "damage",
+          });
+          highlights.opacityPercent = 80;
+        }
       }
     });
   }

@@ -9,7 +9,7 @@ import { Loadable } from "@client/components/Loadable";
 import { Focused } from "@client/components/Tags";
 import Position from "@client/components/Position";
 import addOffset from "@client/utilities/Vector/addOffset";
-import CharacterHighlight, {
+import {
   AddCharacterHighlight,
   RemoveCharacterHighlight,
 } from "@client/components/CharacterHighlight";
@@ -46,6 +46,17 @@ export default class EnemyStatusSystem extends System {
     const { offset } = tileMapDrawable;
 
     // @ts-ignore
+    this.queries.focusedEnemies.removed.forEach((enemyEntity) => {
+      const enemy = enemyEntity.getComponent(Enemy);
+      if (enemy.key) {
+        gameState.trigger("enemy:unfocused", {
+          key: enemy.key,
+        });
+        enemyEntity.addComponent(RemoveCharacterHighlight, { type: "focus" });
+      }
+    });
+
+    // @ts-ignore
     this.queries.focusedEnemies.added.forEach((enemyEntity) => {
       const enemy = enemyEntity.getComponent(Enemy);
       const position = enemyEntity.getComponent(Position);
@@ -61,17 +72,6 @@ export default class EnemyStatusSystem extends System {
         positionEnemyState(position.value, offset);
         enemyEntity.addComponent(AddCharacterHighlight, { type: "focus" });
       }
-    });
-
-    // @ts-ignore
-    this.queries.focusedEnemies.removed.forEach((enemyEntity) => {
-      const enemy = enemyEntity.getComponent(Enemy);
-      if (enemy.key) {
-        gameState.trigger("enemy:unfocused", {
-          key: enemy.key,
-        });
-      }
-      enemyEntity.addComponent(RemoveCharacterHighlight, { type: "focus" });
     });
 
     this.queries.focusedEnemies.results.forEach((enemyEntity) => {

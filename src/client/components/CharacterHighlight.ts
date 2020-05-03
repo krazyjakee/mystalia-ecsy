@@ -3,7 +3,7 @@ import { CharacterHighlightType } from "@client/systems/Rendering/CharacterHighl
 
 export default class CharacterHighlight extends Component {
   types: CharacterHighlightType[] = [];
-  opacityPercent: number = 100;
+  opacityPercent: number = 80;
 }
 
 export class AddCharacterHighlight extends Component {

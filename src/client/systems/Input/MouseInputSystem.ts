@@ -1,4 +1,4 @@
-import { System, Not } from "ecsy";
+import { System, Not, Entity } from "ecsy";
 import {
   MouseInput,
   Focused,
@@ -83,6 +83,8 @@ export default class MouseInputSystem extends System {
     const tileMapComponent = tileMap.getComponent(TileMap);
 
     this.queries.localPlayer.results.forEach((playerEntity) => {
+      let entityClicked = false;
+
       this.queries.mouseEnabledEntities.results.forEach((entity) => {
         if (!this.clickedPosition) return;
         const drawable = entity.getComponent(Drawable);
@@ -110,16 +112,16 @@ export default class MouseInputSystem extends System {
           tileMapDrawable.offset
         );
 
-        if (isClicked && this.doubleClicked && isEnemy && !isBattleTarget) {
-          entity.addComponent(BattleTarget);
-          if (isFocused) {
+        if (isEnemy && isClicked) {
+          if (this.doubleClicked && isEnemy && !isBattleTarget) {
+            entity.addComponent(BattleTarget);
             entity.removeComponent(Focused);
+            entityClicked = true;
+          } else if (!isFocused) {
+            entity.addComponent(Focused);
+            entityClicked = true;
           }
-          this.clickedPosition = undefined;
-        } else if (isClicked && !isFocused) {
-          entity.addComponent(Focused);
-          this.clickedPosition = undefined;
-        } else if (!isClicked) {
+        } else if (isEnemy && !isClicked) {
           if (isFocused) {
             entity.removeComponent(Focused);
           }
@@ -128,6 +130,10 @@ export default class MouseInputSystem extends System {
           }
         }
       });
+
+      if (entityClicked) {
+        this.clickedPosition = undefined;
+      }
 
       if (!this.clickedPosition) return;
 

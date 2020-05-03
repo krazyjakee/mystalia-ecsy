@@ -52,13 +52,26 @@ export interface GameStateEvents {
     key: string;
   };
   "localPlayer:battle:unTarget": undefined;
+  "enemy:battle:targetPlayer": {
+    username: string;
+  };
+  "enemy:battle:damageTaken": {
+    fromUsername: string;
+    enemyKey: string;
+    damage: number;
+    itemId?: number;
+    spellId?: number;
+  };
+  "enemy:battle:damageGiven": {
+    toUsername: string;
+    enemyKey: string;
+    damage: number;
+    spellId: number;
+  };
   "localPlayer:quit": undefined;
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
   "enemy:unfocused": EnemyReference;
-  "enemy:battle:targetPlayer": {
-    username: string;
-  };
 }
 
 export type RoomMessageType = keyof GameStateEvents;

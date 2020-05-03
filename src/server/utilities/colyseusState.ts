@@ -1,7 +1,5 @@
 import { MapSchema, Schema } from "@colyseus/schema";
 import { randomHash } from "utilities/hash";
-import InventoryState from "@server/components/inventory";
-import ItemState from "@server/components/item";
 
 export const arrayToMapSchema = <T extends Schema>(
   array: Array<Partial<T>>,

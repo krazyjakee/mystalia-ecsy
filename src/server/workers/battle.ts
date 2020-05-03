@@ -5,6 +5,7 @@ import inventoryStateToArray from "@client/react/Panels/Inventory/inventoryState
 import { distanceBetweenTiles } from "utilities/movement/surroundings";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import { EnemySpec } from "types/enemies";
+import { RoomMessage } from "types/gameState";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -70,7 +71,7 @@ export default class Battle {
                   this.room.mapData.width
                 );
                 if (distance <= weaponRange) {
-                  this.damageEnemy(enemyKey, item);
+                  this.damageEnemy(playerKey, enemyKey, item);
                 }
               }
             } else if (enemyKey && !this.room.state.enemies[enemyKey]) {
@@ -88,7 +89,7 @@ export default class Battle {
     // TODO: Perform attacks
   }
 
-  damageEnemy(enemyKey: string, item: InventoryItems) {
+  damageEnemy(playerKey: string, enemyKey: string, item: InventoryItems) {
     if (item.damage) {
       const [from, to] = item.damage;
       const inflicted = Math.floor(Math.random() * to) + from;
@@ -96,6 +97,12 @@ export default class Battle {
       const enemy = this.room.state.enemies[enemyKey] as EnemyState;
       const enemySpec = enemySpecs.find((e) => e.id === enemy.enemyId);
       if (enemySpec) {
+        this.room.broadcast("enemy:battle:damageTaken", {
+          fromUsername: this.room.state.players[playerKey].username,
+          enemyKey,
+          damage: inflicted,
+          itemId: item.itemId,
+        } as RoomMessage<"enemy:battle:damageTaken">);
         if (enemySpec.hp - enemy.damage <= 0) {
           this.room.enemySpawner?.destroy(enemyKey);
         }

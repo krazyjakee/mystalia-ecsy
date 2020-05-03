@@ -25,7 +25,7 @@ export default class GraySystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       if (grayScale <= 100) {
         context2d.filter = `grayscale(${grayScale}%)`;
-        grayScale += 0.5;
+        grayScale += 1;
       } else {
         tileMapEntity.removeComponent(Gray);
       }
@@ -35,7 +35,7 @@ export default class GraySystem extends System {
       (window as any).ecsyError = true;
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 2000);
     });
   }
 }
