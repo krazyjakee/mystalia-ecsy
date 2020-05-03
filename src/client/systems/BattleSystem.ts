@@ -14,6 +14,10 @@ import {
 } from "utilities/movement/surroundings";
 import { BattleTarget } from "@client/components/Tags";
 import { tileIdToVector } from "utilities/tileMap";
+import {
+  AddCharacterHighlight,
+  RemoveCharacterHighlight,
+} from "@client/components/CharacterHighlight";
 
 export default class BattleSystem extends System {
   static queries = {
@@ -53,10 +57,12 @@ export default class BattleSystem extends System {
           key: enemy.key,
         });
       }
+      enemyEntity.addComponent(AddCharacterHighlight, { type: "battle" });
     });
 
-    this.queries.targettedEnemies.removed?.forEach(() => {
+    this.queries.targettedEnemies.removed?.forEach((enemyEntity) => {
       gameState.send("map", "localPlayer:battle:unTarget", undefined);
+      enemyEntity.addComponent(RemoveCharacterHighlight, { type: "battle" });
     });
 
     this.queries.targettedEnemies.results.forEach((enemyEntity) => {

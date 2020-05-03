@@ -9,18 +9,10 @@ import { Loadable } from "@client/components/Loadable";
 import { Focused } from "@client/components/Tags";
 import Position from "@client/components/Position";
 import addOffset from "@client/utilities/Vector/addOffset";
-import {
-  drawImage,
-  drawableToDrawableProperties,
-  createShadowCanvas,
-  drawableWithOffset,
-} from "@client/utilities/drawing";
-import { vectorToPixels } from "utilities/tileMap";
-import context2d from "@client/canvas";
-
-const [shadowCanvas, shadowContext] = createShadowCanvas();
-shadowCanvas.width = 32;
-shadowCanvas.height = 32;
+import CharacterHighlight, {
+  AddCharacterHighlight,
+  RemoveCharacterHighlight,
+} from "@client/components/CharacterHighlight";
 
 const positionEnemyState = (position: Vector, offset: Vector) => {
   const elem = document.getElementById(`enemyStateComponent`);
@@ -67,6 +59,7 @@ export default class EnemyStatusSystem extends System {
         });
 
         positionEnemyState(position.value, offset);
+        enemyEntity.addComponent(AddCharacterHighlight, { type: "focus" });
       }
     });
 
@@ -78,70 +71,12 @@ export default class EnemyStatusSystem extends System {
           key: enemy.key,
         });
       }
+      enemyEntity.addComponent(RemoveCharacterHighlight, { type: "focus" });
     });
 
     this.queries.focusedEnemies.results.forEach((enemyEntity) => {
       const position = enemyEntity.getComponent(Position);
-      const drawable = enemyEntity.getComponent(Drawable);
       positionEnemyState(position.value, offset);
-
-      // TODO: The following effect should be in it's own highlight system
-
-      const drawableProperties = drawableToDrawableProperties(drawable);
-
-      const dArr = [-1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1];
-
-      shadowContext.clearRect(0, 0, 32, 32);
-
-      const positionPixels = vectorToPixels(position.value);
-
-      // draw images at offsets from the array scaled by s
-      for (let i = 0; i < dArr.length; i += 2) {
-        drawImage(
-          {
-            ...drawableProperties,
-            x: dArr[i],
-            y: dArr[i + 1],
-            offset: { x: 0, y: 0 },
-          },
-          shadowContext
-        );
-      }
-
-      shadowContext.save();
-      // fill with color
-      shadowContext.globalCompositeOperation = "source-in";
-      shadowContext.fillStyle = "rgba(255,0,0,0.8)";
-      shadowContext.fillRect(0, 0, 32, 32);
-
-      // draw original image in dest-out mode to keep only the outline
-      shadowContext.globalCompositeOperation = "destination-out";
-
-      drawImage(
-        {
-          ...drawableProperties,
-          x: 0,
-          y: 0,
-          offset: { x: 0, y: 0 },
-        },
-        shadowContext
-      );
-
-      shadowContext.restore();
-
-      drawImage(
-        drawableWithOffset(
-          {
-            ...drawableProperties,
-            image: shadowCanvas,
-            sourceX: 0,
-            sourceY: 0,
-          },
-          offset,
-          positionPixels.x,
-          positionPixels.y
-        )
-      );
     });
   }
 }
