@@ -48,38 +48,59 @@ export default class Battle {
             item.equipped && item.type && ["melee", "cast"].includes(item.type)
         );
 
-        if (equippedItems.length) {
-          equippedItems.forEach((item) => {
-            const weaponRange = item.type === "melee" ? 1 : 1; // TODO: Add range to itemspec for cast class.
-            const enemyKey = (this.room.state.players[playerKey] as PlayerState)
-              .targetEnemy;
-            if (
-              enemyKey &&
-              this.room.state.enemies[enemyKey] &&
-              this.room.mapData
-            ) {
-              const enemyPosition = (this.room.state.enemies[
-                enemyKey
-              ] as EnemyState).currentTile;
-              const playerPosition = (this.room.state.players[
-                playerKey
-              ] as PlayerState).targetTile;
-              if (playerPosition) {
-                const distance = distanceBetweenTiles(
-                  playerPosition,
-                  enemyPosition,
-                  this.room.mapData.width
-                );
-                if (distance <= weaponRange) {
-                  this.damageEnemy(playerKey, enemyKey, item);
+        const enemyKey = (this.room.state.players[playerKey] as PlayerState)
+          .targetEnemy;
+
+        if (enemyKey && this.room.state.enemies[enemyKey]) {
+          const enemyPosition = (this.room.state.enemies[
+            enemyKey
+          ] as EnemyState).currentTile;
+          const playerPosition = (this.room.state.players[
+            playerKey
+          ] as PlayerState).targetTile;
+
+          if (equippedItems.length) {
+            equippedItems.forEach((item) => {
+              const weaponRange = item.type === "melee" ? 1 : 1; // TODO: Add range to itemspec for cast class.
+              if (
+                enemyKey &&
+                this.room.state.enemies[enemyKey] &&
+                this.room.mapData
+              ) {
+                const enemyPosition = (this.room.state.enemies[
+                  enemyKey
+                ] as EnemyState).currentTile;
+                const playerPosition = (this.room.state.players[
+                  playerKey
+                ] as PlayerState).targetTile;
+                if (playerPosition) {
+                  const distance = distanceBetweenTiles(
+                    playerPosition,
+                    enemyPosition,
+                    this.room.mapData.width
+                  );
+                  if (distance <= weaponRange) {
+                    this.damageEnemy(playerKey, enemyKey, item);
+                  }
                 }
+              } else if (enemyKey && !this.room.state.enemies[enemyKey]) {
+                (this.room.state.players[
+                  playerKey
+                ] as PlayerState).targetEnemy = undefined;
               }
-            } else if (enemyKey && !this.room.state.enemies[enemyKey]) {
-              (this.room.state.players[
-                playerKey
-              ] as PlayerState).targetEnemy = undefined;
+            });
+          } else {
+            if (playerPosition && this.room.mapData) {
+              const distance = distanceBetweenTiles(
+                playerPosition,
+                enemyPosition,
+                this.room.mapData.width
+              );
+              if (distance <= 1) {
+                this.damageEnemy(playerKey, enemyKey);
+              }
             }
-          });
+          }
         }
       }
     });
@@ -89,23 +110,21 @@ export default class Battle {
     // TODO: Perform attacks
   }
 
-  damageEnemy(playerKey: string, enemyKey: string, item: InventoryItems) {
-    if (item.damage) {
-      const [from, to] = item.damage;
-      const inflicted = Math.floor(Math.random() * to) + from;
-      (this.room.state.enemies[enemyKey] as EnemyState).damage += inflicted;
-      const enemy = this.room.state.enemies[enemyKey] as EnemyState;
-      const enemySpec = enemySpecs.find((e) => e.id === enemy.enemyId);
-      if (enemySpec) {
-        this.room.broadcast("enemy:battle:damageTaken", {
-          fromUsername: this.room.state.players[playerKey].username,
-          enemyKey,
-          damage: inflicted,
-          itemId: item.itemId,
-        } as RoomMessage<"enemy:battle:damageTaken">);
-        if (enemySpec.hp - enemy.damage <= 0) {
-          this.room.enemySpawner?.destroy(enemyKey);
-        }
+  damageEnemy(playerKey: string, enemyKey: string, item?: InventoryItems) {
+    const [from, to] = item?.damage || [0, 2];
+    const inflicted = Math.floor(Math.random() * to) + from;
+    (this.room.state.enemies[enemyKey] as EnemyState).damage += inflicted;
+    const enemy = this.room.state.enemies[enemyKey] as EnemyState;
+    const enemySpec = enemySpecs.find((e) => e.id === enemy.enemyId);
+    if (enemySpec) {
+      this.room.broadcast("enemy:battle:damageTaken", {
+        fromUsername: this.room.state.players[playerKey].username,
+        enemyKey,
+        damage: inflicted,
+        itemId: item?.itemId,
+      } as RoomMessage<"enemy:battle:damageTaken">);
+      if (enemySpec.hp - enemy.damage <= 0) {
+        this.room.enemySpawner?.destroy(enemyKey);
       }
     }
   }

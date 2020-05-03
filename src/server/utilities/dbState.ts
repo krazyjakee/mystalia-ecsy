@@ -76,6 +76,7 @@ export const saveStateToDb = async (
   const indexIds = Object.keys(state);
   if (indexIds.length) {
     const Model = mongoose.model(key, schema);
+    await Model.remove({});
     try {
       const savePromises = indexIds.map((index) => {
         const fieldsToSave = {};

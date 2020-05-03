@@ -12,7 +12,7 @@ type CallbackFunction<T extends RoomMessageType> = (
 
 type CallbackObject<T extends RoomMessageType> = {
   callback: CallbackFunction<T>;
-  hash: number;
+  hash: string;
 };
 
 type RoomTypes = "admin" | "map";

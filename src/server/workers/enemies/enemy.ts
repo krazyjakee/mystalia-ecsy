@@ -28,7 +28,7 @@ export default class Enemy {
     this.allowedTiles = allowedTiles;
     this.stateId =
       stateId ||
-      `i${makeHash(`${new Date().getTime() + new Date().getMilliseconds()}`)}`;
+      makeHash(`${new Date().getTime() + new Date().getMilliseconds()}`);
     this.mapColumns = this.room.mapData?.width || 0;
     this.speedMs = (10 - this.spec.speed) * 1000;
 
