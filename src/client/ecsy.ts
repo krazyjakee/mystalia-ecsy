@@ -37,6 +37,7 @@ import ShopOpenSystem from "./systems/MovementSystem/ShopOpenSystem";
 import BattleSystem from "./systems/BattleSystem";
 import InventorySystem from "./systems/InventorySystem";
 import CharacterHighlightSystem from "./systems/Rendering/CharacterHighlightSystem";
+import TextBurstSystem from "./systems/Rendering/TextBurstSystem";
 
 let world = new World();
 
@@ -70,6 +71,7 @@ export default (user: User) => {
     .registerSystem(GraySystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)
+    .registerSystem(TextBurstSystem)
     .registerSystem(CommandsSystem)
     .registerSystem(AdminNetworkSystem)
     .registerSystem(LoadingSystem)

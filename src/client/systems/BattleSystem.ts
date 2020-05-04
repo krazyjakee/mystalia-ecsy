@@ -83,7 +83,7 @@ export default class BattleSystem extends System {
       if (!playerMovement.tileQueue.length) {
         const { inventory } = localPlayerEntity.getComponent(Inventory);
 
-        const equippedItem = inventory.find((item) => item.equipped);
+        const equippedItem = inventory.find((item) => item && item.equipped);
 
         let weaponRange = 1;
         if (equippedItem && equippedItem.type === "cast") {

@@ -8,6 +8,7 @@ import Movement from "@client/components/Movement";
 import { mapAssetPath } from "../../utilities/assets";
 import Enemy from "@client/components/Enemy";
 import { AddCharacterHighlight } from "@client/components/CharacterHighlight";
+import TextBurst from "@client/components/TextBurst";
 
 export default class CommandsSystem extends System {
   static queries = {
@@ -52,8 +53,11 @@ export default class CommandsSystem extends System {
         gameState.subscribe("enemy:battle:damageTaken", (data) => {
           if (data.enemyKey === enemy.key) {
             enemyEntity.addComponent(AddCharacterHighlight, { type: "damage" });
+            enemyEntity.addComponent(TextBurst, {
+              text: data.damage,
+              colorHex: "#FF0000",
+            });
           }
-          // TODO: Show number of damage
         });
         enemyEntity.removeComponent(CommandsPending);
       });

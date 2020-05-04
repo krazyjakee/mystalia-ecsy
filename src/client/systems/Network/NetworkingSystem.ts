@@ -192,7 +192,7 @@ export default class NetworkingSystem extends System {
                 if (change.field === "inventory") {
                   gameState.trigger(
                     "localPlayer:inventory:response",
-                    player.inventory
+                    change.value
                   );
                 }
               });
