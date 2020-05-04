@@ -13,6 +13,7 @@ export type ItemSpec = {
   equippable?: boolean;
   tags?: ItemTags[];
   damage?: [number, number];
+  effect?: number;
 };
 
 export type InventoryItems = InventoryStateProps & Omit<ItemSpec, "id">;

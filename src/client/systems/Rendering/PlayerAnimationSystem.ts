@@ -2,7 +2,7 @@ import { System, Entity, Not } from "ecsy";
 import Movement from "@client/components/Movement";
 import { Loadable } from "@client/components/Loadable";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
-import { generateAnimationSteps } from "../../utilities/Animation/character";
+import { generateCharacterAnimationSteps } from "../../utilities/Animation/character";
 import Drawable from "@client/components/Drawable";
 
 export default class PlayerAnimationSystem extends System {
@@ -24,7 +24,7 @@ export default class PlayerAnimationSystem extends System {
         animation.playing = false;
       } else {
         animation.playing = true;
-        animation.steps = generateAnimationSteps(direction, {
+        animation.steps = generateCharacterAnimationSteps(direction, {
           width: drawable.width,
           height: drawable.height,
         });

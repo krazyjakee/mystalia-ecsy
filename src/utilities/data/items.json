@@ -28,6 +28,7 @@
     "equippable": true,
     "type": "melee",
     "tags": ["wood", "strength"],
-    "damage": [4, 8]
+    "damage": [4, 8],
+    "effect": 0
   }
 ]

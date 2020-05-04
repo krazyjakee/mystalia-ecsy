@@ -1,0 +1,9 @@
+[
+  {
+    "id": 0,
+    "spritesheet": "dagger",
+    "frames": 6,
+    "frameWidth": 64,
+    "frameHeight": 64
+  }
+]

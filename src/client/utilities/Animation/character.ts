@@ -1,7 +1,7 @@
 import { Direction } from "types/Grid";
 import { Size } from "types/TileMap/standard";
 
-export const generateAnimationSteps = (
+export const generateCharacterAnimationSteps = (
   direction: Direction = "s",
   { width, height }: Size = {
     width: 24,
