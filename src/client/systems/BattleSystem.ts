@@ -75,7 +75,7 @@ export default class BattleSystem extends System {
         tileIdToVector(movement.currentTile, tileMap.width)
       );
 
-      if (!path.length) {
+      if (!path) {
         enemyEntity.removeComponent(BattleTarget);
         return;
       }
