@@ -58,29 +58,35 @@ export default class CommandsSystem extends System {
       this.queries.enemies.results.forEach((enemyEntity) => {
         const enemy = enemyEntity.getComponent(Enemy);
         const drawable = enemyEntity.getComponent(Drawable);
+        const positionComponent = enemyEntity.getComponent(Position);
 
-        gameState.subscribe("enemy:battle:damageTaken", (data) => {
-          const positionComponent = enemyEntity.getComponent(Position);
-          const position = vectorToPixels(positionComponent.value);
-          if (data.enemyKey === enemy.key) {
-            enemyEntity.addComponent(AddCharacterHighlight, { type: "damage" });
-            enemyEntity.addComponent(TextBurst, {
-              text: data.damage,
-              colorHex: "#FF0000",
-            });
-            const item = itemsData.find((item) => item.id === data.itemId);
-            if (item && isPresent(item.effect)) {
-              CreateEffect({
-                position,
-                effectId: item.effect,
-                destinationSize: {
-                  width: drawable.width,
-                  height: drawable.height,
-                },
+        gameState.subscribe(
+          "enemy:battle:damageTaken",
+          (data) => {
+            const position = vectorToPixels(positionComponent.value);
+            if (data.enemyKey === enemy.key) {
+              enemyEntity.addComponent(AddCharacterHighlight, {
+                type: "damage",
               });
+              enemyEntity.addComponent(TextBurst, {
+                text: data.damage,
+                colorHex: "#FF0000",
+              });
+              const item = itemsData.find((item) => item.id === data.itemId);
+              if (item && isPresent(item.effect)) {
+                CreateEffect({
+                  position,
+                  effectId: item.effect,
+                  destinationSize: {
+                    width: drawable.width,
+                    height: drawable.height,
+                  },
+                });
+              }
             }
-          }
-        });
+          },
+          enemy.key
+        );
         enemyEntity.removeComponent(CommandsPending);
       });
     });

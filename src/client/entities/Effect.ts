@@ -45,6 +45,7 @@ export default function CreateEffect({
     .addComponent(SpriteSheetAnimation, {
       speed: effectSpec.speed || 6,
       playing: true,
+      loopAround: false,
     })
     .addComponent(Position, { value: position })
     .addComponent(GenerateSpriteSheetAnimationSteps);

@@ -51,9 +51,10 @@ class GameState {
 
   subscribe<T extends RoomMessageType>(
     eventName: T,
-    callback: CallbackFunction<T>
+    callback: CallbackFunction<T>,
+    key = ""
   ) {
-    const hash = makeHash(callback.toString());
+    const hash = makeHash(key + callback.toString());
     const callbackObject: CallbackObject<T> = {
       callback,
       hash,
@@ -66,7 +67,8 @@ class GameState {
 
   unsubscribe<T extends RoomMessageType>(
     eventName: T,
-    callback: CallbackFunction<T>
+    callback: CallbackFunction<T>,
+    key = ""
   ) {
     if (this.callbacks[eventName]) {
       const hash = makeHash(callback.toString());

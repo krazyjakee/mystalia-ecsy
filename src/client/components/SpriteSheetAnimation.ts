@@ -9,7 +9,7 @@ export default class SpriteSheetAnimation extends Component {
   playing: boolean = false;
   timeSinceLastAnimation: number = 0;
   increment: boolean = true; // Whether to step forward or backward in animation steps
-  loopAround: boolean = false; // When finished, decrement step back down again
+  loopAround = false; // When finished, decrement step back down again
 
   reset() {
     this.step = 0;
@@ -19,5 +19,6 @@ export default class SpriteSheetAnimation extends Component {
     this.playing = false;
     this.timeSinceLastAnimation = 0;
     this.increment = true;
+    this.loopAround = false;
   }
 }
