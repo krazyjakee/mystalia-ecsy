@@ -111,7 +111,7 @@ export default class Battle {
   }
 
   damageEnemy(playerKey: string, enemyKey: string, item?: InventoryItems) {
-    const [from, to] = item?.damage || [0, 2];
+    const [from, to] = item?.damage || [1, 3];
     const inflicted = Math.floor(Math.random() * to) + from;
     (this.room.state.enemies[enemyKey] as EnemyState).damage += inflicted;
     const enemy = this.room.state.enemies[enemyKey] as EnemyState;

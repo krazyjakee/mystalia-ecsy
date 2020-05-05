@@ -1,6 +1,6 @@
 import BaseCharacter from "./BaseCharacter";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
-import { generateAnimationSteps } from "../utilities/Animation/character";
+import { generateCharacterAnimationSteps } from "../utilities/Animation/character";
 import Enemy from "@client/components/Enemy";
 import { EnemySpec } from "types/enemies";
 import EnemyState from "@server/components/enemy";
@@ -28,7 +28,8 @@ export default function CreateEnemy(
   })
     .addComponent(SpriteSheetAnimation, {
       speed: enemySpec.speed,
-      steps: generateAnimationSteps("s", size),
+      steps: generateCharacterAnimationSteps("s", size),
+      loopAround: true,
     })
     .addComponent(Enemy, { key, state: enemy })
     .addComponent(MouseInput)

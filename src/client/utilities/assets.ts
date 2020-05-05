@@ -33,3 +33,5 @@ export const itemAssetPath = (name: string) => `/assets/items/${name}.png`;
 
 export const characterAssetPath = (name: string) =>
   `/assets/characters/${name}.png`;
+
+export const effectAssetPath = (name: string) => `/assets/effects/${name}.png`;
