@@ -12,9 +12,11 @@ export const addItemToPlayer = (
   item: ItemState
 ) => {
   // If item already in inventory, add quantity
-  searchState(inventoryState, { itemId: item.itemId }).forEach((key) => {
+  const matches = searchState(inventoryState, { itemId: item.itemId });
+  matches.forEach((key) => {
     inventoryState[key].quantity += item.quantity;
   });
+  if (matches.length) return;
 
   // Otherwise add the item
   const inventoryKeys = Object.keys(inventoryState);

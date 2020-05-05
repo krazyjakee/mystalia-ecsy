@@ -36,6 +36,8 @@ describe("InventoryCommandHandler", () => {
           equipped: false,
         })
       ).toHaveLength(1);
+
+      expect(Object.keys(inventoryState)).toHaveLength(3);
     });
 
     test("correctly add existing item", () => {
@@ -49,6 +51,8 @@ describe("InventoryCommandHandler", () => {
           equipped: false,
         })
       ).toHaveLength(1);
+
+      expect(Object.keys(inventoryState)).toHaveLength(3);
     });
   });
 });
