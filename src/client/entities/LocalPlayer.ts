@@ -14,6 +14,7 @@ export default function CreateLocalPlayer(user: User) {
     .addComponent(SpriteSheetAnimation, {
       speed: 10,
       steps: generateCharacterAnimationSteps("s"),
+      loopAround: true,
     })
     .addComponent(KeyboardInput)
     .addComponent(MouseInput)

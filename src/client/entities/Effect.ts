@@ -39,11 +39,12 @@ export default function CreateEffect({
     .addComponent(Drawable, {
       width,
       height,
-      sourceWidth: width,
-      sourceHeight: height,
+      sourceWidth: effectSpec.frameWidth,
+      sourceHeight: effectSpec.frameHeight,
     })
     .addComponent(SpriteSheetAnimation, {
       speed: effectSpec.speed || 6,
+      playing: true,
     })
     .addComponent(Position, { value: position })
     .addComponent(GenerateSpriteSheetAnimationSteps);

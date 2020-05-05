@@ -13,6 +13,7 @@ import CreateEffect from "@client/entities/Effect";
 import Position from "@client/components/Position";
 import { vectorToPixels } from "utilities/tileMap";
 import { ItemSpec } from "types/TileMap/ItemTiles";
+import { isPresent } from "utilities/guards";
 
 const itemsData = require("utilities/data/items.json") as ItemSpec[];
 
@@ -56,12 +57,11 @@ export default class CommandsSystem extends System {
 
       this.queries.enemies.results.forEach((enemyEntity) => {
         const enemy = enemyEntity.getComponent(Enemy);
-        const positionComponent = enemyEntity.getComponent(Position);
         const drawable = enemyEntity.getComponent(Drawable);
 
-        const position = vectorToPixels(positionComponent.value);
-
         gameState.subscribe("enemy:battle:damageTaken", (data) => {
+          const positionComponent = enemyEntity.getComponent(Position);
+          const position = vectorToPixels(positionComponent.value);
           if (data.enemyKey === enemy.key) {
             enemyEntity.addComponent(AddCharacterHighlight, { type: "damage" });
             enemyEntity.addComponent(TextBurst, {
@@ -69,7 +69,7 @@ export default class CommandsSystem extends System {
               colorHex: "#FF0000",
             });
             const item = itemsData.find((item) => item.id === data.itemId);
-            if (item && item.effect) {
+            if (item && isPresent(item.effect)) {
               CreateEffect({
                 position,
                 effectId: item.effect,

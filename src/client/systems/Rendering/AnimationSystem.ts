@@ -24,7 +24,10 @@ export default class AnimationSystem extends System {
         if (animation.increment) {
           animation.step += 1;
 
-          if (animation.step >= animation.steps.length - 1) {
+          if (
+            animation.loopAround &&
+            animation.step >= animation.steps.length - 1
+          ) {
             animation.step = animation.steps.length - 1;
             animation.increment = false;
           }
@@ -42,9 +45,11 @@ export default class AnimationSystem extends System {
         animation.timeSinceLastAnimation += delta;
       }
 
-      const { x, y } = animation.steps[animation.step];
-      drawable.sourceX = x;
-      drawable.sourceY = y;
+      const step = animation.steps[animation.step];
+      if (step) {
+        drawable.sourceX = step.x;
+        drawable.sourceY = step.y;
+      }
     });
   }
 }

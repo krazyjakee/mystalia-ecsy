@@ -29,6 +29,7 @@ export default function CreateEnemy(
     .addComponent(SpriteSheetAnimation, {
       speed: enemySpec.speed,
       steps: generateCharacterAnimationSteps("s", size),
+      loopAround: true,
     })
     .addComponent(Enemy, { key, state: enemy })
     .addComponent(MouseInput)

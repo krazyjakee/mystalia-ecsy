@@ -69,23 +69,16 @@ export default class SpriteSheetAnimationSystem extends System {
         SpriteSheetAnimation
       );
 
-      if (drawable.image) {
+      if (
+        drawable.image &&
+        spriteSheetAnimation.step < spriteSheetAnimation.steps.length
+      ) {
         const effectSpec = effects.find((e) => e.id === effect.effectId);
         if (effectSpec) {
-          const currentStep =
-            spriteSheetAnimation.steps[spriteSheetAnimation.step];
           const drawableProperties = drawableToDrawableProperties(drawable);
+
           drawImage(
-            drawableWithOffset(
-              {
-                ...drawableProperties,
-                sourceX: currentStep.x,
-                sourceY: currentStep.y,
-              },
-              offset,
-              value.x,
-              value.y
-            )
+            drawableWithOffset(drawableProperties, offset, value.x, value.y)
           );
           return;
         }

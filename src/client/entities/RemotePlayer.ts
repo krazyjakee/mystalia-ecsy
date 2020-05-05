@@ -8,6 +8,7 @@ export default function CreateRemotePlayer(opts: RemotePlayer) {
     .addComponent(SpriteSheetAnimation, {
       speed: 10,
       steps: generateCharacterAnimationSteps("s"),
+      loopAround: true,
     })
     .addComponent(RemotePlayer, opts);
 }
