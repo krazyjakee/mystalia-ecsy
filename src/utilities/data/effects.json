@@ -4,6 +4,7 @@
     "spritesheet": "dagger",
     "frames": 6,
     "frameWidth": 64,
-    "frameHeight": 64
+    "frameHeight": 64,
+    "speed": 12
   }
 ]

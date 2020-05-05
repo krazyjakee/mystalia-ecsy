@@ -6,30 +6,36 @@ import Position from "@client/components/Position";
 import { effectAssetPath } from "@client/utilities/assets";
 import { Vector } from "types/TMJ";
 import { Size } from "types/TileMap/standard";
-import { Effect } from "@client/components/Tags";
+import { GenerateSpriteSheetAnimationSteps } from "@client/components/Tags";
+import Effect from "@client/components/Effect";
+import { EffectSpec } from "utilities/effect";
+
+const effects = require("utilities/data/effects") as EffectSpec[];
 
 type CreateEffectProps = {
-  imageName: string;
   position: Vector;
   effectId: number;
   destinationSize: Size;
 };
 
 export default function CreateEffect({
-  imageName,
   position,
   effectId,
   destinationSize,
 }: CreateEffectProps) {
   const { width, height } = destinationSize;
 
-  // TODO: Read effect source Size from effects.json
+  const effectSpec = effects.find((e) => e.id === effectId);
+
+  if (!effectSpec) return;
 
   getWorld()
     .createEntity()
-    .addComponent(Effect)
+    .addComponent(Effect, { effectId })
     .addComponent(SimpleLoadable)
-    .addComponent(Loadable, { imagePath: effectAssetPath(imageName) })
+    .addComponent(Loadable, {
+      imagePath: effectAssetPath(effectSpec.spritesheet),
+    })
     .addComponent(Drawable, {
       width,
       height,
@@ -37,10 +43,8 @@ export default function CreateEffect({
       sourceHeight: height,
     })
     .addComponent(SpriteSheetAnimation, {
-      speed: 5,
+      speed: effectSpec.speed || 6,
     })
     .addComponent(Position, { value: position })
-    .addComponent(GenerateSpriteSheetAnimationSteps, { size }); // TODO: Create a SpriteSheetAnimation system to generate steps for SpriteSheetAnimation after loading the image.
+    .addComponent(GenerateSpriteSheetAnimationSteps);
 }
-
-// TODO: Create effect system to render effects

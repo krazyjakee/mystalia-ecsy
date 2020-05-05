@@ -9,6 +9,12 @@ import { mapAssetPath } from "../../utilities/assets";
 import Enemy from "@client/components/Enemy";
 import { AddCharacterHighlight } from "@client/components/CharacterHighlight";
 import TextBurst from "@client/components/TextBurst";
+import CreateEffect from "@client/entities/Effect";
+import Position from "@client/components/Position";
+import { vectorToPixels } from "utilities/tileMap";
+import { ItemSpec } from "types/TileMap/ItemTiles";
+
+const itemsData = require("utilities/data/items.json") as ItemSpec[];
 
 export default class CommandsSystem extends System {
   static queries = {
@@ -50,6 +56,11 @@ export default class CommandsSystem extends System {
 
       this.queries.enemies.results.forEach((enemyEntity) => {
         const enemy = enemyEntity.getComponent(Enemy);
+        const positionComponent = enemyEntity.getComponent(Position);
+        const drawable = enemyEntity.getComponent(Drawable);
+
+        const position = vectorToPixels(positionComponent.value);
+
         gameState.subscribe("enemy:battle:damageTaken", (data) => {
           if (data.enemyKey === enemy.key) {
             enemyEntity.addComponent(AddCharacterHighlight, { type: "damage" });
@@ -57,6 +68,17 @@ export default class CommandsSystem extends System {
               text: data.damage,
               colorHex: "#FF0000",
             });
+            const item = itemsData.find((item) => item.id === data.itemId);
+            if (item && item.effect) {
+              CreateEffect({
+                position,
+                effectId: item.effect,
+                destinationSize: {
+                  width: drawable.width,
+                  height: drawable.height,
+                },
+              });
+            }
           }
         });
         enemyEntity.removeComponent(CommandsPending);
