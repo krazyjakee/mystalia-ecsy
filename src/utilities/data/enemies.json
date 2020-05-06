@@ -13,7 +13,14 @@
     "speed": 1,
     "maxDistance": 6,
     "hp": 120,
-    "abilities": [0]
+    "abilities": [0],
+    "drop": [
+      {
+        "itemId": 5,
+        "quantity": [1, 3],
+        "chance": 2
+      }
+    ]
   },
   {
     "id": 1,

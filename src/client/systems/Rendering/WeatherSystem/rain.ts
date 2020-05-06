@@ -1,5 +1,6 @@
 import context2d from "../../../canvas";
 import { Vector } from "types/TMJ";
+import { randomNumberBetween } from "utilities/math";
 
 type RainParticle = {
   x: number;
@@ -11,12 +12,12 @@ type RainParticle = {
 };
 
 const newParticle = (w: number, h: number, heavy: boolean): RainParticle => ({
-  x: Math.random() * w,
-  y: Math.random() * h,
-  l: Math.random() * (heavy ? 3 : 2),
-  life: Math.random() * 30,
-  xs: -1 + Math.random() * 1 + 0.5,
-  ys: Math.random() * 4 + 4,
+  x: randomNumberBetween(w),
+  y: randomNumberBetween(h),
+  l: randomNumberBetween(heavy ? 3 : 2),
+  life: randomNumberBetween(30),
+  xs: -1 + randomNumberBetween(1 + 0.5),
+  ys: randomNumberBetween(4 + 4),
 });
 
 const init: RainParticle[] = [];
@@ -53,7 +54,7 @@ export default (offset: Vector, heavy: boolean = false) => {
     p.y += p.ys + offset.y;
 
     if (p.x > w || p.y > h) {
-      p.x = Math.random() * w;
+      p.x = randomNumberBetween(w);
       p.y = -20;
     }
 

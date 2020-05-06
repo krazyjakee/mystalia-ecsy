@@ -2,7 +2,6 @@ import { System, Not } from "ecsy";
 import Drawable from "@client/components/Drawable";
 import Enemy from "@client/components/Enemy";
 import gameState from "@client/gameState";
-import enemyData from "utilities/data/enemies.json";
 import { Vector } from "types/TMJ";
 import TileMap from "@client/components/TileMap";
 import { Loadable } from "@client/components/Loadable";
@@ -13,6 +12,9 @@ import {
   AddCharacterHighlight,
   RemoveCharacterHighlight,
 } from "@client/components/CharacterHighlight";
+import { EnemySpec } from "types/enemies";
+
+const enemyData = require("utilities/data/enemies.json") as EnemySpec[];
 
 const positionEnemyState = (position: Vector, offset: Vector) => {
   const elem = document.getElementById(`enemyStateComponent`);

@@ -1,3 +1,5 @@
+import { randomNumberBetween } from "./math";
+
 export const makeHash = (input: string): string => {
   var hash = 0,
     i,
@@ -13,6 +15,6 @@ export const makeHash = (input: string): string => {
 
 export const randomHash = () => {
   const date = new Date().getTime() + new Date().getUTCMilliseconds();
-  const randomNumber = Math.floor(Math.random() * 1000000);
+  const randomNumber = randomNumberBetween(1000000);
   return makeHash(`${date}${randomNumber}`);
 };

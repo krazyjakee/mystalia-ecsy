@@ -9,6 +9,7 @@ import MapRoom from "../../rooms/map";
 import { EnemySpec } from "types/enemies";
 import EnemySchema from "../../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
+import { randomNumberBetween } from "utilities/math";
 
 const robustPointInPolygon = require("robust-point-in-polygon");
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
@@ -40,7 +41,7 @@ export default class EnemyZone {
   tick() {
     const { chance, max } = this.objectTile.properties;
     if (this.enemies.length < max) {
-      const roll = Math.floor(Math.random() * chance) + 1;
+      const roll = randomNumberBetween(chance);
       if (roll === 1) {
         this.spawn();
       }

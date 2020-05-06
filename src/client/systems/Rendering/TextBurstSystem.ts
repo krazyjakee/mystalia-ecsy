@@ -7,6 +7,7 @@ import { Loadable } from "@client/components/Loadable";
 import context2d from "@client/canvas";
 import addOffset from "@client/utilities/Vector/addOffset";
 import { vectorToPixels } from "utilities/tileMap";
+import { randomNumberBetween } from "utilities/math";
 
 export default class TextBurstSystem extends System {
   static queries = {
@@ -31,7 +32,7 @@ export default class TextBurstSystem extends System {
     this.queries.textBurstEntities.added?.forEach((entity) => {
       const textBurst = entity.getMutableComponent(TextBurst);
       if (textBurst) {
-        textBurst.x += Math.floor(Math.random() * 24);
+        textBurst.x += randomNumberBetween(24, 0);
       }
     });
 

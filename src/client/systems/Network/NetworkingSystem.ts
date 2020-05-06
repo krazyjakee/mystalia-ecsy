@@ -20,7 +20,11 @@ import compassToVector from "../../utilities/Compass/compassToVector";
 import LocalPlayer from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
 import CreateItem from "../../entities/Item";
-import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
+import {
+  tileIdToVector,
+  vectorToTileId,
+  vectorToPixels,
+} from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
 import Item from "@client/components/Item";
 import { isPresent } from "utilities/guards";
@@ -30,6 +34,7 @@ import { EnemySpec } from "types/enemies";
 import Weather from "@client/components/Weather";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import Enemy from "@client/components/Enemy";
+import CreateEffect from "@client/entities/Effect";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -137,7 +142,18 @@ export default class NetworkingSystem extends System {
           enemy.onRemove = () => {
             this.queries.enemies.results.forEach((enemyEntity) => {
               const enemy = enemyEntity.getComponent(Enemy);
+              const positionComponent = enemyEntity.getComponent(Position);
+              const position = vectorToPixels(positionComponent.value);
+
               if (enemy.key === key) {
+                CreateEffect({
+                  position,
+                  effectId: 1,
+                  destinationSize: {
+                    width: 32,
+                    height: 32,
+                  },
+                });
                 enemyEntity.remove();
               }
             });

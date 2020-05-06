@@ -6,6 +6,7 @@ import { distanceBetweenTiles } from "utilities/movement/surroundings";
 import { InventoryItems } from "types/TileMap/ItemTiles";
 import { EnemySpec } from "types/enemies";
 import { RoomMessage } from "types/gameState";
+import { randomNumberBetween } from "utilities/math";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -112,7 +113,7 @@ export default class Battle {
 
   damageEnemy(playerKey: string, enemyKey: string, item?: InventoryItems) {
     const [from, to] = item?.damage || [1, 3];
-    const inflicted = Math.floor(Math.random() * to) + from;
+    const inflicted = randomNumberBetween(to, from);
     (this.room.state.enemies[enemyKey] as EnemyState).damage += inflicted;
     const enemy = this.room.state.enemies[enemyKey] as EnemyState;
     const enemySpec = enemySpecs.find((e) => e.id === enemy.enemyId);

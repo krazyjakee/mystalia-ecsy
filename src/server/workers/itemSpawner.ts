@@ -5,6 +5,7 @@ import ItemSchema from "@server/db/ItemSchema";
 import MapRoom from "@server/rooms/map";
 import { randomHash } from "utilities/hash";
 import { searchState } from "@server/utilities/colyseusState";
+import { randomNumberBetween } from "utilities/math";
 
 export default class ItemSpawner {
   room: MapRoom;
@@ -41,10 +42,9 @@ export default class ItemSpawner {
   tick() {
     this.mapItems.forEach((objectTile) => {
       const item = objectTile.properties;
-      const safeIndex = randomHash();
-      const chance = Math.floor(Math.random() * item.chance);
+      const chance = randomNumberBetween(item.chance);
       const quantity = item.maximumQuantity
-        ? Math.floor(Math.random() * item.maximumQuantity) + 1
+        ? randomNumberBetween(item.maximumQuantity)
         : item.quantity;
       if (chance === 1) {
         const isTileVacant =
@@ -52,7 +52,7 @@ export default class ItemSpawner {
             .length === 0;
 
         if (isTileVacant) {
-          this.room.state.items[safeIndex] = new ItemState(
+          this.room.state.items[randomHash()] = new ItemState(
             item.id,
             objectTile.tileId,
             quantity
