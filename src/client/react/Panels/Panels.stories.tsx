@@ -66,7 +66,7 @@ export const EnemyStatus = () => (
         behavior: {},
         speed: 0,
         maxDistance: 0,
-        hp: [40, 60],
+        hp: 40,
         abilities: [0],
       },
       // @ts-ignore
