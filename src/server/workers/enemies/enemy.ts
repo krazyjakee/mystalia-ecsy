@@ -1,8 +1,12 @@
-import { makeHash } from "utilities/hash";
+import { makeHash, randomHash } from "utilities/hash";
 import EnemyState from "@server/components/enemy";
 import MapRoom from "src/server/rooms/map";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
+import ItemState from "@server/components/item";
+import { randomNumberBetween } from "utilities/math";
+
+const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
 export default class Enemy {
   stateId: string;
@@ -34,7 +38,7 @@ export default class Enemy {
 
     this.currentTile =
       currentTile ||
-      allowedTiles[Math.floor(Math.random() * allowedTiles.length)] + 1;
+      allowedTiles[randomNumberBetween(allowedTiles.length, 0)] + 1;
 
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
@@ -106,7 +110,7 @@ export default class Enemy {
     let targetTile = this.currentTile;
     while (targetTile === this.currentTile) {
       targetTile =
-        tilesWithinRadius[Math.floor(Math.random() * tilesWithinRadius.length)];
+        tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
     }
 
     if (this.room.objectTileStore) {
@@ -132,6 +136,24 @@ export default class Enemy {
 
   destroy() {
     this.dispose();
+    const enemy = this.room.state.enemies[this.stateId] as EnemyState;
+    const spec = enemySpecs.find((enemySpec) => enemySpec.id === enemy.enemyId);
+    if (spec?.drop) {
+      spec.drop.forEach((drop) => {
+        const roll = randomNumberBetween(drop.chance) === 1;
+        if (roll) {
+          const quantity = randomNumberBetween(
+            drop.quantity[0],
+            drop.quantity[1]
+          );
+          this.room.state.items[randomHash()] = new ItemState(
+            drop.itemId,
+            enemy.currentTile,
+            quantity
+          );
+        }
+      });
+    }
     delete this.room.state.enemies[this.stateId];
   }
 

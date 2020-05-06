@@ -40,6 +40,22 @@ describe("InventoryCommandHandler", () => {
       expect(Object.keys(inventoryState)).toHaveLength(3);
     });
 
+    test("correctly add new item 2", () => {
+      const newItem = new ItemState(5, 0, 1);
+      addItemToPlayer(inventoryState, newItem);
+
+      expect(
+        searchState(inventoryState, {
+          itemId: 5,
+          position: 3,
+          quantity: 1,
+          equipped: false,
+        })
+      ).toHaveLength(1);
+
+      expect(Object.keys(inventoryState)).toHaveLength(4);
+    });
+
     test("correctly add existing item", () => {
       const newItem = new ItemState(0, 0, 2);
       addItemToPlayer(inventoryState, newItem);
@@ -52,7 +68,7 @@ describe("InventoryCommandHandler", () => {
         })
       ).toHaveLength(1);
 
-      expect(Object.keys(inventoryState)).toHaveLength(3);
+      expect(Object.keys(inventoryState)).toHaveLength(4);
     });
   });
 });

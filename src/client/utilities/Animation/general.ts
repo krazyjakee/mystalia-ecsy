@@ -8,7 +8,6 @@ export const generateAnimationSteps = (
   totalFrames: number
 ) => {
   const columns = Math.floor(imageSize.width / frameSize.width);
-  const rows = Math.floor(imageSize.height / frameSize.height);
 
   let frames: Vector[] = [];
   for (let i = 0; i < totalFrames; i += 1) {

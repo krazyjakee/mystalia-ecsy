@@ -13,6 +13,12 @@ type EnemyBehaviour = {
 
 type EnemyBehaviourNames = keyof EnemyBehaviour;
 
+type EnemyDrop = {
+  itemId: number;
+  quantity: [number, number];
+  chance: number;
+};
+
 export type EnemySpec = {
   id: number;
   name: string;
@@ -23,6 +29,7 @@ export type EnemySpec = {
   maxDistance: number;
   hp: number;
   abilities: number[];
+  drop?: EnemyDrop[];
 };
 
 export type EnemyReference = {

@@ -3,12 +3,14 @@ import Cloudgen from "./vendor/cloudgen";
 import context2d from "@client/canvas";
 import addOffset from "@client/utilities/Vector/addOffset";
 import { Size } from "types/TileMap/standard";
+import { randomNumberBetween } from "utilities/math";
 
 const cloudCount = 10;
 const cloudWidth = 800;
 const cloudHeight = 600;
 
-const randomSpeed = () => (Math.floor(Math.random() * 20) + 10) / 10;
+const randomSpeed = () => randomNumberBetween(20, 10) / 10;
+
 let randomClouds: {
   x: number;
   y: number;
@@ -32,9 +34,10 @@ const generateRandomClouds = ({
       const cloudCanvasContext = cloudCanvas.getContext(
         "2d"
       ) as CanvasRenderingContext2D;
-      const radius =
-        Math.floor((Math.random() * Math.min(cloudWidth, cloudHeight)) / 3) +
-        100;
+      const radius = randomNumberBetween(
+        Math.min(cloudWidth, cloudHeight) / 3,
+        100
+      );
 
       // TODO: Find a different way to render clouds than this crappy library
       Cloudgen.drawCloud(
@@ -47,8 +50,8 @@ const generateRandomClouds = ({
         8
       );
       return {
-        x: Math.floor(Math.random() * width),
-        y: Math.floor(Math.random() * height),
+        x: randomNumberBetween(width),
+        y: randomNumberBetween(height),
         speed: randomSpeed(),
         canvas: cloudCanvas,
       };
@@ -68,7 +71,7 @@ export default (offset: Vector, size: Size) => {
     }
     if (randomClouds[i].x === width) {
       randomClouds[i].y =
-        Math.floor(Math.random() * (height + cloudWidth)) - cloudHeight;
+        randomNumberBetween(height + cloudWidth) - cloudHeight;
     }
     randomClouds[i].x -= randomClouds[i].speed;
 

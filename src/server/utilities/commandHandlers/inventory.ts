@@ -21,12 +21,11 @@ export const addItemToPlayer = (
   // Otherwise add the item
   const inventoryKeys = Object.keys(inventoryState);
   const positions = inventoryKeys.map((key: string) => {
-    const item = inventoryState[key] as InventoryState;
-    return item.position;
+    return inventoryState[key].position;
   });
   positions.sort();
 
-  const highestPosition = positions[0];
+  const highestPosition = positions[positions.length - 1];
   let missingPosition = 0;
   while (missingPosition <= highestPosition) {
     if (missingPosition === highestPosition) {

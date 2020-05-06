@@ -5,6 +5,7 @@ import { Weather, Biome, biomeWeather, weatherChance } from "utilities/weather";
 import { serializeProperties } from "utilities/tileMap";
 import WeatherState from "@server/components/weather";
 import { ArraySchema } from "@colyseus/schema";
+import { randomNumberBetween } from "utilities/math";
 
 export default class WeatherSpawner {
   room: MapRoom;
@@ -71,12 +72,11 @@ export default class WeatherSpawner {
     if (this.biome) {
       const allWeathers = biomeWeather[this.biome];
       const weathers = allWeathers.filter(
-        (weather) =>
-          Math.floor(Math.random() * weatherChance[weather]) + 1 === 1
+        (weather) => randomNumberBetween(weatherChance[weather]) === 1
       );
 
       // TODO: Set to 60000 after testing
-      const duration = (Math.floor(Math.random() * 25) + 5) * 2000;
+      const duration = randomNumberBetween(25, 5) * 2000;
 
       this.setWeather(weathers, duration);
       this.publish(weathers, duration);
