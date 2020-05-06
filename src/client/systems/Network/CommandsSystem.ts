@@ -8,12 +8,12 @@ import Movement from "@client/components/Movement";
 import { mapAssetPath } from "../../utilities/assets";
 import Enemy from "@client/components/Enemy";
 import { AddCharacterHighlight } from "@client/components/CharacterHighlight";
-import TextBurst from "@client/components/TextBurst";
 import CreateEffect from "@client/entities/Effect";
 import Position from "@client/components/Position";
 import { vectorToPixels } from "utilities/tileMap";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { isPresent } from "utilities/guards";
+import CreateTextBurst from "@client/entities/TextBurst";
 
 const itemsData = require("utilities/data/items.json") as ItemSpec[];
 
@@ -68,10 +68,7 @@ export default class CommandsSystem extends System {
               enemyEntity.addComponent(AddCharacterHighlight, {
                 type: "damage",
               });
-              enemyEntity.addComponent(TextBurst, {
-                text: data.damage,
-                colorHex: "#FF0000",
-              });
+              CreateTextBurst(data.damage, "#FF0000", position);
               const item = itemsData.find((item) => item.id === data.itemId);
               if (item && isPresent(item.effect)) {
                 CreateEffect({

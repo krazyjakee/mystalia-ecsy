@@ -7,7 +7,6 @@ import { Loadable } from "@client/components/Loadable";
 import context2d from "@client/canvas";
 import addOffset from "@client/utilities/Vector/addOffset";
 import { vectorToPixels } from "utilities/tileMap";
-import { hexToRgb } from "utilities/color";
 
 export default class TextBurstSystem extends System {
   static queries = {
@@ -15,7 +14,7 @@ export default class TextBurstSystem extends System {
       components: [TileMap, Not(Loadable)],
     },
     textBurstEntities: {
-      components: [TextBurst, Position],
+      components: [TextBurst],
       listen: {
         added: true,
       },
@@ -32,17 +31,15 @@ export default class TextBurstSystem extends System {
     this.queries.textBurstEntities.added?.forEach((entity) => {
       const textBurst = entity.getMutableComponent(TextBurst);
       if (textBurst) {
-        textBurst.x = Math.floor(Math.random() * 24);
+        textBurst.x += Math.floor(Math.random() * 24);
       }
     });
 
     this.queries.textBurstEntities.results.forEach((entity) => {
-      const position = entity.getComponent(Position);
-      const positionPixels = vectorToPixels(position.value);
       const textBurst = entity.getMutableComponent(TextBurst);
       if (!textBurst.text) return;
 
-      textBurst.y += 0.3;
+      textBurst.y -= 0.3;
       textBurst.opacityPercentage -= 2;
 
       context2d.save();
@@ -51,15 +48,13 @@ export default class TextBurstSystem extends System {
       context2d.fillStyle = textBurst.colorHex;
       context2d.lineWidth = 1;
 
-      positionPixels.x += textBurst.x;
-      positionPixels.y -= textBurst.y;
-      const textPosition = addOffset(offset, positionPixels);
+      const textPosition = addOffset(offset, textBurst);
       context2d.strokeText(textBurst.text, textPosition.x, textPosition.y);
       context2d.fillText(textBurst.text, textPosition.x, textPosition.y);
       context2d.restore();
 
       if (textBurst.opacityPercentage <= 0) {
-        entity.removeComponent(TextBurst);
+        entity.remove();
       }
     });
   }
