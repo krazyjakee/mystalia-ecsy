@@ -40,7 +40,8 @@
     "type": "cast",
     "tags": ["magic"],
     "damage": [9999, 99999],
-    "effect": 2
+    "effect": 2,
+    "range": 4
   },
   {
     "id": 5,

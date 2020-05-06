@@ -87,7 +87,7 @@ export default class BattleSystem extends System {
 
         let weaponRange = 1;
         if (equippedItem && equippedItem.type === "cast") {
-          // TODO: Change the range
+          weaponRange = equippedItem.range || 1;
         }
 
         const currentRange = distanceBetweenTiles(
@@ -95,6 +95,8 @@ export default class BattleSystem extends System {
           movement.currentTile,
           tileMap.width
         );
+
+        console.log(weaponRange);
 
         if (currentRange > weaponRange) {
           const path = findClosestPath(

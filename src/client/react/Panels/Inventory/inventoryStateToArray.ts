@@ -20,6 +20,7 @@ export default (iState?: MapSchema<InventoryState>) => {
           equippable,
           tags,
           damage,
+          range,
         } = itemData;
         const { equipped } = item;
 
@@ -35,6 +36,7 @@ export default (iState?: MapSchema<InventoryState>) => {
           equippable,
           tags,
           damage,
+          range,
         };
       }
     }

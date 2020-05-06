@@ -14,6 +14,7 @@ export type ItemSpec = {
   tags?: ItemTags[];
   damage?: [number, number];
   effect?: number;
+  range?: number;
 };
 
 export type InventoryItems = InventoryStateProps & Omit<ItemSpec, "id">;

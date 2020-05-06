@@ -62,7 +62,8 @@ export default class Battle {
 
           if (equippedItems.length) {
             equippedItems.forEach((item) => {
-              const weaponRange = item.type === "melee" ? 1 : 1; // TODO: Add range to itemspec for cast class.
+              const weaponRange = item.range || 1;
+
               if (
                 enemyKey &&
                 this.room.state.enemies[enemyKey] &&
