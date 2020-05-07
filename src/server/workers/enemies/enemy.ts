@@ -5,6 +5,7 @@ import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
 import ItemState from "@server/components/item";
 import { randomNumberBetween } from "utilities/math";
+import { isPresent } from "utilities/guards";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -18,6 +19,7 @@ export default class Enemy {
   timer?: NodeJS.Timeout;
   mapColumns: number;
   speedMs: number;
+  kill: boolean = false;
 
   constructor(
     spec: EnemySpec,
@@ -112,8 +114,8 @@ export default class Enemy {
         tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
     }
 
-    if (!targetTile) {
-      this.destroy();
+    if (!isPresent(targetTile)) {
+      this.kill = true;
       return;
     }
 

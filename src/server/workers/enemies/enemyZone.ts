@@ -46,6 +46,12 @@ export default class EnemyZone {
         this.spawn();
       }
     }
+
+    this.enemies
+      .filter((enemy) => enemy.kill)
+      .forEach((enemy) => {
+        this.destroy(enemy.stateId);
+      });
   }
 
   loadFromDB() {
