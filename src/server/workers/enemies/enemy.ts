@@ -114,6 +114,7 @@ export default class Enemy {
 
     if (!targetTile) {
       this.destroy();
+      return;
     }
 
     if (this.room.objectTileStore) {
