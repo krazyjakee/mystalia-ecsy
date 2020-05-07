@@ -116,6 +116,8 @@ export default class Enemy {
       const currentTileVector = tileIdToVector(this.currentTile, columns);
       const targetTileVector = tileIdToVector(targetTile, columns);
 
+      console.log(currentTileVector, targetTileVector, columns);
+
       const aStarPath = this.room.objectTileStore.aStar.findPath(
         currentTileVector,
         targetTileVector
