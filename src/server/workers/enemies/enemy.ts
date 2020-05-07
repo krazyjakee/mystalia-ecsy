@@ -37,8 +37,7 @@ export default class Enemy {
     this.speedMs = (10 - this.spec.speed) * 1000;
 
     this.currentTile =
-      currentTile ||
-      allowedTiles[randomNumberBetween(allowedTiles.length, 0)] + 1;
+      currentTile || allowedTiles[randomNumberBetween(allowedTiles.length, 0)];
 
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
