@@ -112,11 +112,13 @@ export default class Enemy {
         tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
     }
 
+    if (!targetTile) {
+      this.destroy();
+    }
+
     if (this.room.objectTileStore) {
       const currentTileVector = tileIdToVector(this.currentTile, columns);
       const targetTileVector = tileIdToVector(targetTile, columns);
-
-      console.log(tilesWithinRadius.length, targetTile);
 
       const aStarPath = this.room.objectTileStore.aStar.findPath(
         currentTileVector,
