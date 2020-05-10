@@ -3,6 +3,7 @@
     "id": 0,
     "name": "Woodland Boar",
     "spritesheet": "wildlife/boar",
+    "portrait": "wild-boar",
     "spriteId": 0,
     "behavior": {
       "escape": {
@@ -26,6 +27,7 @@
     "id": 1,
     "name": "Freshwater Perch",
     "spritesheet": "wildlife/fish",
+    "portrait": "freshwater-perch",
     "spriteId": 0,
     "speed": 1,
     "maxDistance": 6,

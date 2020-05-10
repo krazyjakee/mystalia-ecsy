@@ -50,7 +50,7 @@ export default class EnemyStatusSystem extends System {
     // @ts-ignore
     this.queries.focusedEnemies.removed.forEach((enemyEntity) => {
       const enemy = enemyEntity.getComponent(Enemy);
-      if (enemy.key) {
+      if (enemy && enemy.key) {
         gameState.trigger("enemy:unfocused", {
           key: enemy.key,
         });

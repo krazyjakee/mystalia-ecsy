@@ -12,3 +12,8 @@ export const spellAssetPath = (path: string) => {
   new Image().src = result;
   return `url(${result})`;
 };
+
+export const portraitPath = (portrait: string) => {
+  const result = `/assets/portrait/${portrait}.png`;
+  return `url(${result})`;
+};

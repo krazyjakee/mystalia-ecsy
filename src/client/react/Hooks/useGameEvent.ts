@@ -21,3 +21,26 @@ export const useGameEvent = <T extends RoomMessageType>(
   }, []);
   return [data, setData];
 };
+
+export const useEnemyChangeEvent = (
+  key?: string
+): [
+  GameStateEvents["enemy:change"] | undefined,
+  React.Dispatch<
+    React.SetStateAction<GameStateEvents["enemy:change"] | undefined>
+  >
+] => {
+  const [data, setData] = useState<GameStateEvents["enemy:change"]>();
+  useEffect(() => {
+    gameState.subscribe(
+      "enemy:change",
+      (data) => {
+        if (data.key === key) {
+          setData(data);
+        }
+      },
+      key
+    );
+  }, [key]);
+  return [data, setData];
+};

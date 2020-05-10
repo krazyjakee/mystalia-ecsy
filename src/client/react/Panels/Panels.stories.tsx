@@ -5,7 +5,7 @@ import AdminPanelComponent from "./Admin/AdminPanel";
 import InventoryPanelComponent from "./Inventory/InventoryPanel";
 import TopMenuComponent from "./TopMenu";
 import { EnemyStatus as EnemyStatusComponent } from "./EnemyStatus";
-import { PlayerStatus as PlayerStatusComponent } from "./PlayerStatus";
+import { Status as StatusComponent } from "./Status";
 import ShopPanelComponent from "./Shop/ShopPanel";
 import { MapSchema } from "@colyseus/schema";
 
@@ -61,6 +61,7 @@ export const EnemyStatus = () => (
       enemySpec: {
         id: 1,
         name: "Wild Boar",
+        portrait: "wild-boar",
         spritesheet: "",
         spriteId: 0,
         behavior: {},
@@ -75,11 +76,11 @@ export const EnemyStatus = () => (
   />
 );
 
-export const PlayerStatus = () => (
+export const Status = () => (
   <>
-    <PlayerStatusComponent name="Player 1" large={true} />
+    <StatusComponent name="Player 1" large={true} portrait="wild-boar" />
     <div style={{ height: 170 }} />
-    <PlayerStatusComponent name="Player 2" />
+    <StatusComponent name="Player 2" portrait="freshwater-perch" />
   </>
 );
 

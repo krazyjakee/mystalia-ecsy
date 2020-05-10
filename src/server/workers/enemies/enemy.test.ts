@@ -32,6 +32,7 @@ const enemySpec = {
   id: 0,
   name: "Woodland Boar",
   spritesheet: "wildlife/boar",
+  portrait: "wild-board",
   spriteId: 0,
   behavior: {
     escape: {

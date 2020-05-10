@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { guiAssetPath, spellAssetPath } from "../cssUtilities";
+import { guiAssetPath, spellAssetPath, portraitPath } from "../cssUtilities";
 import { whiteText } from "../palette";
 import { EnemyReference, EnemySpec } from "types/enemies";
 import gameState from "@client/gameState";
@@ -9,6 +9,7 @@ import { tileIdToPixels } from "utilities/tileMap";
 import { AbilitySpec } from "types/types";
 import { isPresent } from "utilities/guards";
 import HealthBar from "./HealthBar";
+import { percentageCalculator } from "utilities/math";
 
 const useStyles = createUseStyles({
   root: {
@@ -46,6 +47,26 @@ const useStyles = createUseStyles({
     width: 21,
     height: 21,
   },
+  portrait: {
+    position: "absolute",
+    left: 10,
+    top: 8,
+  },
+  portraitImage: {
+    position: "absolute",
+    left: 2,
+    top: 2,
+    backgroundSize: "55px 55px",
+    width: 55,
+    height: 55,
+    borderRadius: "50%",
+  },
+  portraitGlare: {
+    position: "absolute",
+    width: 59,
+    height: 59,
+    backgroundImage: guiAssetPath("panel/enemy-status/portrait.png"),
+  },
 });
 
 type Props = {
@@ -76,15 +97,17 @@ export const EnemyStatus = (props: Props) => {
     gameState.subscribe("enemy:change", enemyUpdate);
     gameState.subscribe("enemy:focused", enemyFocused);
     gameState.subscribe("enemy:unfocused", enemyUnFocused);
+    gameState.subscribe("localPlayer:battle:unTarget", enemyUnFocused);
     return () => {
       gameState.unsubscribe("enemy:change", enemyUpdate);
       gameState.unsubscribe("enemy:focused", enemyFocused);
       gameState.unsubscribe("enemy:unfocused", enemyUnFocused);
+      gameState.unsubscribe("localPlayer:battle:unTarget", enemyUnFocused);
     };
   }, [key]);
 
   if (!enemy.enemySpec) return null;
-  const { name, abilities: specAbilities } = enemy.enemySpec;
+  const { name, portrait, abilities: specAbilities } = enemy.enemySpec;
 
   const abilities: AbilitySpec[] = specAbilities
     .map((specAbility) =>
@@ -118,7 +141,25 @@ export const EnemyStatus = (props: Props) => {
   return (
     <div {...props} id="enemyStateComponent" className={classes.root}>
       <div className={classes.label}>{name}</div>
-      <HealthBar width={124} top={23} left={79} percentage={100} />
+      <div className={classes.portrait}>
+        <div
+          className={classes.portraitImage}
+          style={{ backgroundImage: portraitPath(portrait) }}
+        />
+        <div className={classes.portraitGlare} />
+      </div>
+      <HealthBar
+        width={124}
+        top={23}
+        left={79}
+        percentage={
+          100 -
+          percentageCalculator(
+            enemy.enemySpec.hp,
+            enemy.enemyState?.damage || 0
+          )
+        }
+      />
       <div className={classes.abilities}>
         {blankAbilities.map((_, index) => (
           <div className={classes.ability} key={index}>

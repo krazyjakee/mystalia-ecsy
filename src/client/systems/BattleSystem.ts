@@ -18,6 +18,9 @@ import {
   AddCharacterHighlight,
   RemoveCharacterHighlight,
 } from "@client/components/CharacterHighlight";
+import { EnemySpec } from "types/enemies";
+
+const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
 export default class BattleSystem extends System {
   static queries = {
@@ -52,9 +55,15 @@ export default class BattleSystem extends System {
 
     this.queries.targettedEnemies.added?.forEach((enemyEntity) => {
       const enemy = enemyEntity.getComponent(Enemy);
+
       if (enemy.key) {
         gameState.send("map", "localPlayer:battle:targetEnemy", {
           key: enemy.key,
+        });
+        gameState.trigger("localPlayer:battle:targetEnemy", {
+          key: enemy.key,
+          enemySpec: enemySpecs.find((e) => e.id === enemy.state?.enemyId),
+          enemyState: enemy.state,
         });
       }
       enemyEntity.addComponent(AddCharacterHighlight, { type: "battle" });
@@ -63,6 +72,7 @@ export default class BattleSystem extends System {
 
     this.queries.targettedEnemies.removed?.forEach((enemyEntity) => {
       gameState.send("map", "localPlayer:battle:unTarget", undefined);
+      gameState.trigger("localPlayer:battle:unTarget", undefined);
       enemyEntity.addComponent(RemoveCharacterHighlight, { type: "battle" });
     });
 
@@ -95,8 +105,6 @@ export default class BattleSystem extends System {
           movement.currentTile,
           tileMap.width
         );
-
-        console.log(weaponRange);
 
         if (currentRange > weaponRange) {
           const path = findClosestPath(
