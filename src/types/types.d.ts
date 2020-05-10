@@ -6,6 +6,8 @@ export type AbilitySpec = {
   type: AbilityType;
   damage: number[];
   energy: number;
+  range: number;
+  effect: number;
 };
 
 export type AbilityType = "physical";

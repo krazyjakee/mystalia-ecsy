@@ -1,4 +1,4 @@
-import { System } from "ecsy";
+import { System, Not } from "ecsy";
 import { Unloadable } from "@client/components/Loadable";
 import LocalPlayer, { CommandsPending } from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
@@ -14,11 +14,17 @@ import { vectorToPixels } from "utilities/tileMap";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { isPresent } from "utilities/guards";
 import CreateTextBurst from "@client/entities/TextBurst";
+import RemotePlayer from "@client/components/RemotePlayer";
+import { AbilitySpec } from "types/types";
 
 const itemsData = require("utilities/data/items.json") as ItemSpec[];
+const abilitySpecs = require("utilities/data/abilities") as AbilitySpec[];
 
 export default class CommandsSystem extends System {
   static queries = {
+    remotePlayers: {
+      components: [RemotePlayer, CommandsPending],
+    },
     localPlayer: {
       components: [LocalPlayer, CommandsPending],
     },
@@ -32,9 +38,44 @@ export default class CommandsSystem extends System {
 
   execute() {
     this.queries.tileMap.results.forEach((tileMapEntity) => {
+      this.queries.remotePlayers.results.forEach((playerEntity) => {
+        const remotePlayer = playerEntity.getComponent(RemotePlayer);
+        const positionComponent = playerEntity.getComponent(Position);
+
+        gameState.subscribe(
+          "remotePlayer:battle:damageTaken",
+          ({ playerUsername, damage, ability }) => {
+            const position = vectorToPixels(positionComponent.value);
+            if (playerUsername === remotePlayer.state?.username) {
+              playerEntity.addComponent(AddCharacterHighlight, {
+                type: "damage",
+              });
+              CreateTextBurst(damage, "#FF0000", position);
+              const abilitySpec = abilitySpecs.find(
+                (abilitySpec) => abilitySpec.id === ability
+              );
+              if (abilitySpec && isPresent(abilitySpec.effect)) {
+                CreateEffect({
+                  position,
+                  effectId: abilitySpec.effect,
+                  destinationSize: {
+                    width: 32,
+                    height: 32,
+                  },
+                });
+              }
+            }
+          }
+        );
+
+        playerEntity.removeComponent(CommandsPending);
+      });
+
       this.queries.localPlayer.results.forEach((localPlayerEntity) => {
+        const localPlayer = localPlayerEntity.getComponent(LocalPlayer);
         const drawable = tileMapEntity.getMutableComponent(Drawable);
         const movement = localPlayerEntity.getMutableComponent(Movement);
+        const positionComponent = localPlayerEntity.getComponent(Position);
 
         gameState.subscribe("admin:teleport:response", ({ map, tileId }) => {
           drawable.data = undefined;
@@ -51,6 +92,32 @@ export default class CommandsSystem extends System {
             currentTile: movement.currentTile,
           });
         });
+
+        gameState.subscribe(
+          "remotePlayer:battle:damageTaken",
+          ({ playerUsername, damage, ability }) => {
+            const position = vectorToPixels(positionComponent.value);
+            if (playerUsername === localPlayer.user?.username) {
+              localPlayerEntity.addComponent(AddCharacterHighlight, {
+                type: "damage",
+              });
+              CreateTextBurst(damage, "#FF0000", position);
+              const abilitySpec = abilitySpecs.find(
+                (abilitySpec) => abilitySpec.id === ability
+              );
+              if (abilitySpec && isPresent(abilitySpec.effect)) {
+                CreateEffect({
+                  position,
+                  effectId: abilitySpec.effect,
+                  destinationSize: {
+                    width: 32,
+                    height: 32,
+                  },
+                });
+              }
+            }
+          }
+        );
 
         localPlayerEntity.removeComponent(CommandsPending);
       });
