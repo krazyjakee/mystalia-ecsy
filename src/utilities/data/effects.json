@@ -22,5 +22,13 @@
     "frameWidth": 64,
     "frameHeight": 64,
     "speed": 15
+  },
+  {
+    "id": 3,
+    "spritesheet": "bite1",
+    "frames": 8,
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "speed": 8
   }
 ]

@@ -6,6 +6,11 @@ import { EnemySpec } from "types/enemies";
 import ItemState from "@server/components/item";
 import { randomNumberBetween } from "utilities/math";
 import { isPresent } from "utilities/guards";
+import {
+  distanceBetweenTiles,
+  findClosestPath,
+} from "utilities/movement/surroundings";
+import PlayerState from "@server/components/player";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -67,10 +72,25 @@ export default class Enemy {
         this.tick();
       }, 1000 / this.spec.speed);
     } else {
-      setTimeout(() => {
-        this.findNewTargetTile();
-        this.tick();
-      }, this.speedMs);
+      const enemyState = this.room.state.enemies[this.stateId] as EnemyState;
+      setTimeout(
+        () => {
+          if (enemyState.targetPlayer) {
+            if (
+              this.room.state.enemies[this.stateId] &&
+              !this.findClosestTileToTargetPlayer()
+            ) {
+              (this.room.state.enemies[
+                this.stateId
+              ] as EnemyState).targetPlayer = undefined;
+            }
+          } else {
+            this.findNewTargetTile();
+          }
+          this.tick();
+        },
+        enemyState.targetPlayer ? 0 : this.speedMs
+      );
     }
   }
 
@@ -103,21 +123,8 @@ export default class Enemy {
   }
 
   findNewTargetTile() {
-    // TODO: Add "awayFrom" and "towards" to force direction of movement
     const columns = this.mapColumns;
-
-    const tilesWithinRadius = this.findTilesInRadius();
-
-    let targetTile = this.currentTile;
-    while (targetTile === this.currentTile) {
-      targetTile =
-        tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
-    }
-
-    if (!isPresent(targetTile)) {
-      this.kill = true;
-      return;
-    }
+    const targetTile = this.findRandomTile();
 
     if (this.room.objectTileStore) {
       const currentTileVector = tileIdToVector(this.currentTile, columns);
@@ -137,6 +144,44 @@ export default class Enemy {
           columns
         )
       );
+    }
+  }
+
+  findRandomTile() {
+    const tilesWithinRadius = this.findTilesInRadius();
+    let targetTile = this.currentTile;
+    while (targetTile === this.currentTile) {
+      targetTile =
+        tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
+    }
+    return targetTile;
+  }
+
+  findClosestTileToTargetPlayer() {
+    if (!this.room.mapData || !this.room.objectTileStore) return;
+    const columns = this.room.mapData.width;
+
+    const enemyState = this.room.state.enemies[this.stateId] as EnemyState;
+    if (!enemyState) return;
+    const targetPlayer = enemyState.targetPlayer;
+    if (!targetPlayer) return;
+    const playerState = this.room.state.players[targetPlayer] as PlayerState;
+    if (!playerState || !playerState.targetTile) return;
+    const distance = distanceBetweenTiles(
+      enemyState.currentTile,
+      playerState.targetTile,
+      columns
+    );
+    if (distance <= this.spec.maxDistance) {
+      const path = findClosestPath(
+        this.room.objectTileStore,
+        enemyState.currentTile,
+        playerState.targetTile
+      );
+      if (path) {
+        this.tilePath = path;
+      }
+      return true;
     }
   }
 

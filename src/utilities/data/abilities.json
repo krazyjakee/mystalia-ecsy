@@ -6,6 +6,8 @@
     "spriteId": 104,
     "type": "physical",
     "damage": [6, 12],
-    "energy": 1
+    "energy": 1,
+    "range": 1,
+    "effect": 3
   }
 ]

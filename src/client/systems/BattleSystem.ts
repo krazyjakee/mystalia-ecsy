@@ -67,7 +67,6 @@ export default class BattleSystem extends System {
         });
       }
       enemyEntity.addComponent(AddCharacterHighlight, { type: "battle" });
-      // TODO: Pin enemy status panel in top left
     });
 
     this.queries.targettedEnemies.removed?.forEach((enemyEntity) => {
