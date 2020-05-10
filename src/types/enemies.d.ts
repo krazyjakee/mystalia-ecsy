@@ -22,6 +22,7 @@ type EnemyDrop = {
 export type EnemySpec = {
   id: number;
   name: string;
+  portrait: string;
   spritesheet: string;
   spriteId: number;
   behavior: EnemyBehaviour;

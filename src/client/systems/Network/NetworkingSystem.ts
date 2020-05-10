@@ -166,7 +166,6 @@ export default class NetworkingSystem extends System {
 
             player.onChange = function(changes) {
               changes.forEach((change) => {
-                // const newPosition = newRemotePlayer.getComponent(Position);
                 if (change.field === "targetTile") {
                   const movement = newRemotePlayer.getComponent(Movement);
                   const awaitingPosition = newRemotePlayer.hasComponent(
@@ -211,6 +210,10 @@ export default class NetworkingSystem extends System {
                     change.value
                   );
                 }
+              });
+              gameState.trigger("localPlayer:change", {
+                key: player.dbId,
+                playerState: player,
               });
             };
           }

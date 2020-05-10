@@ -2,6 +2,7 @@ import User from "./User";
 import InventoryState from "@server/components/inventory";
 import { MapSchema } from "@colyseus/schema";
 import { EnemyReference } from "./enemies";
+import PlayerState from "@server/components/player";
 
 export interface GameStateEvents {
   "admin:list:allPlayers": {
@@ -22,6 +23,10 @@ export interface GameStateEvents {
   "admin:teleport:response": {
     map: string;
     tileId: number;
+  };
+  "localPlayer:change": {
+    key: string;
+    playerState: PlayerState;
   };
   "localPlayer:shop:open": {
     shopId: number;
@@ -48,9 +53,7 @@ export interface GameStateEvents {
   "localPlayer:inventory:equip": {
     position: number;
   };
-  "localPlayer:battle:targetEnemy": {
-    key: string;
-  };
+  "localPlayer:battle:targetEnemy": EnemyReference;
   "localPlayer:battle:unTarget": undefined;
   "enemy:battle:targetPlayer": {
     username: string;
