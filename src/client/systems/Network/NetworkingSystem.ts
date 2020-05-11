@@ -154,7 +154,7 @@ export default class NetworkingSystem extends System {
                     height: 32,
                   },
                 });
-                enemyEntity.remove();
+                enemyEntity.addComponent(Remove);
               }
             });
           };

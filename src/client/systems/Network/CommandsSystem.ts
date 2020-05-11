@@ -94,7 +94,7 @@ export default class CommandsSystem extends System {
         });
 
         gameState.subscribe(
-          "remotePlayer:battle:damageTaken",
+          "localPlayer:battle:damageTaken",
           ({ playerUsername, damage, ability }) => {
             const position = vectorToPixels(positionComponent.value);
             if (playerUsername === localPlayer.user?.username) {

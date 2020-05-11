@@ -2,7 +2,10 @@ import { System, Not } from "ecsy";
 import { Loadable } from "@client/components/Loadable";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
 import Position from "@client/components/Position";
-import { GenerateSpriteSheetAnimationSteps } from "@client/components/Tags";
+import {
+  GenerateSpriteSheetAnimationSteps,
+  Remove,
+} from "@client/components/Tags";
 import Drawable from "@client/components/Drawable";
 import { EffectSpec } from "utilities/effect";
 import Effect from "@client/components/Effect";
@@ -58,7 +61,7 @@ export default class SpriteSheetAnimationSystem extends System {
           return;
         }
       }
-      entity.remove();
+      entity.addComponent(Remove);
     });
 
     this.queries.readySpritesheets.results.forEach((entity) => {
@@ -83,7 +86,7 @@ export default class SpriteSheetAnimationSystem extends System {
           return;
         }
       }
-      entity.remove();
+      entity.addComponent(Remove);
     });
   }
 }

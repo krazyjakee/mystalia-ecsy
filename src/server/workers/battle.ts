@@ -177,13 +177,27 @@ export default class Battle {
     const inflicted = randomNumberBetween(to, from);
     (this.room.state.players[playerKey] as PlayerState).damage += inflicted;
     const player = this.room.state.players[playerKey] as PlayerState;
-    if (player) {
-      this.room.broadcast("remotePlayer:battle:damageTaken", {
-        fromEnemyKey: enemyKey,
-        playerUsername: player.username,
-        damage: inflicted,
-        ability: ability.id,
-      } as RoomMessage<"remotePlayer:battle:damageTaken">);
+    const damageTakenMessage = {
+      fromEnemyKey: enemyKey,
+      playerUsername: player.username,
+      damage: inflicted,
+      ability: ability.id,
+    } as RoomMessage<"remotePlayer:battle:damageTaken">;
+
+    const client = this.room.clients.find((c) => c.sessionId === playerKey);
+    if (player && client) {
+      this.room.broadcast(
+        "remotePlayer:battle:damageTaken",
+        damageTakenMessage,
+        {
+          except: client,
+        }
+      );
+      this.room.send(
+        client,
+        "localPlayer:battle:damageTaken",
+        damageTakenMessage
+      );
       if (player.damage >= 100) {
         // TODO: Kill player
       }

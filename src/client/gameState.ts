@@ -67,10 +67,10 @@ class GameState {
 
   unsubscribe<T extends RoomMessageType>(
     eventName: T,
-    callback: CallbackFunction<T>,
+    callback?: CallbackFunction<T>,
     key = ""
   ) {
-    if (this.callbacks[eventName]) {
+    if (this.callbacks[eventName] && callback) {
       const hash = makeHash(callback.toString());
       const index = this.callbacks[eventName].findIndex(
         (cb) => cb.hash === hash
@@ -78,6 +78,8 @@ class GameState {
       if (index > -1) {
         this.callbacks[eventName].splice(index, 1);
       }
+    } else {
+      delete this.callbacks[eventName];
     }
   }
 

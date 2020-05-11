@@ -22,6 +22,7 @@ import Enemy from "@client/components/Enemy";
 import Weather from "@client/components/Weather";
 import config from "@client/config.json";
 import Shop from "@client/components/Shop";
+import gameState from "@client/gameState";
 
 const { allowableOffMapDistance } = config;
 
@@ -90,6 +91,9 @@ export default class TileMapChanger extends System {
         if (weather) {
           weather.reset();
         }
+
+        gameState.unsubscribe("enemy:battle:damageTaken");
+        gameState.unsubscribe("remotePlayer:battle:damageTaken");
 
         await loadTileMap(loadable.dataPath, drawable, tileMap);
 

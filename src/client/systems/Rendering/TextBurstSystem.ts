@@ -8,6 +8,7 @@ import context2d from "@client/canvas";
 import addOffset from "@client/utilities/Vector/addOffset";
 import { vectorToPixels } from "utilities/tileMap";
 import { randomNumberBetween } from "utilities/math";
+import { Remove } from "@client/components/Tags";
 
 export default class TextBurstSystem extends System {
   static queries = {
@@ -55,7 +56,7 @@ export default class TextBurstSystem extends System {
       context2d.restore();
 
       if (textBurst.opacityPercentage <= 0) {
-        entity.remove();
+        entity.addComponent(Remove);
       }
     });
   }

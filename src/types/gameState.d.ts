@@ -78,6 +78,12 @@ export interface GameStateEvents {
     damage: number;
     ability: number;
   };
+  "localPlayer:battle:damageTaken": {
+    fromEnemyKey: string;
+    playerUsername: string;
+    damage: number;
+    ability: number;
+  };
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
   "enemy:unfocused": EnemyReference;
