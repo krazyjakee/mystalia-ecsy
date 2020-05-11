@@ -193,11 +193,7 @@ export default class Battle {
           except: client,
         }
       );
-      this.room.send(
-        client,
-        "localPlayer:battle:damageTaken",
-        damageTakenMessage
-      );
+      client.send("localPlayer:battle:damageTaken", damageTakenMessage);
       if (player.damage >= 100) {
         // TODO: Kill player
       }

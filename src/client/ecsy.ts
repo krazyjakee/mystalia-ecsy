@@ -85,6 +85,10 @@ export default (user: User) => {
 
   let prevTime = performance.now();
 
+  const worker = new Worker("worker.js");
+
+  let gameInFocus = true;
+
   function update() {
     const time = performance.now();
     const dt = time - prevTime;
@@ -98,8 +102,26 @@ export default (user: User) => {
       world = new World();
       (window as any).ecsyError = false;
     } else {
-      requestAnimationFrame(update);
+      if (gameInFocus) {
+        requestAnimationFrame(update);
+      }
     }
   }
+
+  worker.onmessage = function() {
+    if (!gameInFocus) {
+      update();
+    }
+  };
+
+  window.onblur = function() {
+    gameInFocus = false;
+    update();
+  };
+  window.onfocus = function() {
+    gameInFocus = true;
+    update();
+  };
+
   requestAnimationFrame(update);
 };

@@ -72,6 +72,7 @@ export default class BattleSystem extends System {
     this.queries.targettedEnemies.removed?.forEach((enemyEntity) => {
       gameState.send("map", "localPlayer:battle:unTarget", undefined);
       gameState.trigger("localPlayer:battle:unTarget", undefined);
+      if (!enemyEntity) return;
       enemyEntity.addComponent(RemoveCharacterHighlight, { type: "battle" });
     });
 
