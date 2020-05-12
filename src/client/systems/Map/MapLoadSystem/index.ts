@@ -119,8 +119,14 @@ export default class TileMapChanger extends System {
           };
         } else {
           const centeredVector = {
-            x: tilePixels.x - Math.round(windowWidth / 2),
-            y: tilePixels.y - Math.round(windowHeight / 2),
+            x:
+              tilePixels.x -
+              Math.round(windowWidth / 2) +
+              allowableOffMapDistance,
+            y:
+              tilePixels.y -
+              Math.round(windowHeight / 2) +
+              allowableOffMapDistance,
           };
 
           drawable.offset = setOffset(
