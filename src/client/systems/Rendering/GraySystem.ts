@@ -35,7 +35,7 @@ export default class GraySystem extends System {
     });
 
     this.queries.loadedTileMaps.removed?.forEach(() => {
-      (window as any).ecsyError = true;
+      window.ecsyError = true;
       setTimeout(() => {
         window.location.reload();
       }, 2000);
