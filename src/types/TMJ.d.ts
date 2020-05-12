@@ -47,7 +47,6 @@ interface SpecialTiles {
 }
 
 export interface TileSet {
-  firstgid: number;
   image: string;
   imageheight: number;
   imagewidth: number;
@@ -66,6 +65,11 @@ export type Property = {
   value: string;
 };
 
+export type ExternalTileSet = {
+  firstgid: number;
+  source: string;
+};
+
 export interface TMJ {
   height: number;
   layers: Layer[];
@@ -73,7 +77,7 @@ export interface TMJ {
   properties: Property[];
   renderorder: string;
   tileheight: number;
-  tilesets: TileSet[];
+  tilesets: ExternalTileSet[];
   tilewidth: number;
   version: number;
   width: number;

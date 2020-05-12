@@ -10,8 +10,7 @@ export default async (
   drawable: Drawable,
   tileMap: TileMap
 ) => {
-  const result = await loadData(dataPath);
-  const data = result.data as TMJ;
+  const data = (await loadData(dataPath)) as TMJ;
   drawable.data = data;
 
   // Handy map size in tiles
@@ -44,10 +43,17 @@ export default async (
   const { tilesets } = data;
   tilesets.sort((a, b) => b.firstgid - a.firstgid);
   for (let i = 0; i < tilesets.length; i += 1) {
-    const tileset = tilesets[i];
+    const externalTileSet = tilesets[i];
+    const dataPath = externalTileSet.source.slice(
+      externalTileSet.source.lastIndexOf("/") + 1
+    );
+    const tileset = await loadData(`/assets/tilesets/${dataPath}`);
     const tileSetImage = await loadImage(`/assets/tilesets/${tileset.image}`);
     if (tileSetImage) {
-      tileMap.tileSetStore[tileset.image] = tileSetImage;
+      tileMap.tileSetStore[externalTileSet.source] = {
+        ...tileset,
+        image: tileSetImage,
+      };
     }
   }
 };

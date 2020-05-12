@@ -23,8 +23,8 @@ export const loadImage = async (
 };
 
 export const loadData = async (path: string): Promise<any> => {
-  const data = await axios.get(path);
-  return data;
+  const result = await axios.get(path);
+  return result.data;
 };
 
 export const mapAssetPath = (name: string) => `/assets/maps/${name}.json`;

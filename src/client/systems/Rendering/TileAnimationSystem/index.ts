@@ -34,18 +34,20 @@ export default class TileAnimationSystem extends System {
 
       const data: TMJ = drawable.data;
       const { tilesets } = data;
+      const tileSetStore = tileMap.tileSetStore;
 
       animatedTiles.reset();
 
       for (let i = 0; i < tilesets.length; i += 1) {
-        const tileset = tilesets[i];
+        const externalTileSet = tilesets[i];
+        const tileset = tileSetStore[externalTileSet.source];
 
         if (tileset.tiles) {
           animatedTiles.tiles = {
             ...animatedTiles.tiles,
             ...createAnimatedTiles(
               tileset.tiles,
-              tileset.firstgid,
+              externalTileSet.firstgid,
               tileset.imagewidth,
               tileMap.tileSetStore,
               data

@@ -1,3 +1,7 @@
+import { TileSet } from "types/TMJ";
+
 export type TileSetStore = {
-  [key: string]: HTMLImageElement | null;
+  [key: string]: Omit<TileSet, "image"> & {
+    image: HTMLImageElement | null;
+  };
 };
