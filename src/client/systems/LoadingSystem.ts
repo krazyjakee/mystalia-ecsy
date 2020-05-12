@@ -27,7 +27,7 @@ export default class Loader extends System {
 
         if (dataPath) {
           loadable.loading = true;
-          const { data } = await loadData(dataPath);
+          const data = await loadData(dataPath);
           drawable.data = data;
         }
 

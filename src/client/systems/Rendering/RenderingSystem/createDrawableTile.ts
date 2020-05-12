@@ -10,31 +10,32 @@ export default (
   data: TMJ
 ) => {
   const { tilesets, width } = data;
-  const tileset = tilesets.find(tileset => tileset.firstgid < sourceTileId);
+  const externalTileSet = tilesets.find(
+    (tileset) => tileset.firstgid < sourceTileId
+  );
+  if (!externalTileSet) return null;
+  const tileset = tileSetStore[externalTileSet?.source];
+  if (!tileset) return null;
 
-  if (tileset) {
-    const sourceVector = tileIdToVector(
-      sourceTileId - tileset.firstgid,
-      tileset.imagewidth / 32
-    );
+  const sourceVector = tileIdToVector(
+    sourceTileId - externalTileSet.firstgid,
+    tileset.imagewidth / 32
+  );
 
-    const destinationVector = tileIdToVector(destinationTileId, width);
+  const destinationVector = tileIdToVector(destinationTileId, width);
 
-    const tile: DrawableProperties = {
-      image: tileSetStore[tileset.image],
-      sourceHeight: 32,
-      sourceWidth: 32,
-      sourceX: sourceVector.x * 32,
-      sourceY: sourceVector.y * 32,
-      x: destinationVector.x * 32,
-      y: destinationVector.y * 32,
-      width: 32,
-      height: 32,
-      offset: { x: 0, y: 0 }
-    };
+  const tile: DrawableProperties = {
+    image: tileset.image,
+    sourceHeight: 32,
+    sourceWidth: 32,
+    sourceX: sourceVector.x * 32,
+    sourceY: sourceVector.y * 32,
+    x: destinationVector.x * 32,
+    y: destinationVector.y * 32,
+    width: 32,
+    height: 32,
+    offset: { x: 0, y: 0 },
+  };
 
-    return tile;
-  }
-
-  return null;
+  return tile;
 };

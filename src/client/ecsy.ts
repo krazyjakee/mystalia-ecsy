@@ -87,7 +87,7 @@ export default (user: User) => {
 
   const worker = new Worker("worker.js");
 
-  let gameInFocus = true;
+  window.gameInFocus = true;
 
   function update() {
     const time = performance.now();
@@ -97,29 +97,29 @@ export default (user: User) => {
     context2d.clearRect(0, 0, context2d.canvas.width, context2d.canvas.height);
     world.execute(dt, time);
 
-    if ((window as any).ecsyError) {
+    if (window.ecsyError) {
       world.stop();
       world = new World();
-      (window as any).ecsyError = false;
+      window.ecsyError = false;
     } else {
-      if (gameInFocus) {
+      if (window.gameInFocus) {
         requestAnimationFrame(update);
       }
     }
   }
 
-  worker.onmessage = function() {
-    if (!gameInFocus) {
+  worker.onmessage = () => {
+    if (!window.gameInFocus && !window.ecsyError) {
       update();
     }
   };
 
-  window.onblur = function() {
-    gameInFocus = false;
+  window.onblur = () => {
+    window.gameInFocus = false;
     update();
   };
-  window.onfocus = function() {
-    gameInFocus = true;
+  window.onfocus = () => {
+    window.gameInFocus = true;
     update();
   };
 

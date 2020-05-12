@@ -1,0 +1,15 @@
+{
+  "columns": 30,
+  "image": "hyptosis_til-art-batch-2.png",
+  "imageheight": 960,
+  "imagewidth": 960,
+  "margin": 0,
+  "name": "hyptosis_til-art-batch-2",
+  "spacing": 0,
+  "tilecount": 900,
+  "tiledversion": "1.3.3",
+  "tileheight": 32,
+  "tilewidth": 32,
+  "type": "tileset",
+  "version": 1.2
+}
