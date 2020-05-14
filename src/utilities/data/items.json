@@ -49,5 +49,12 @@
     "spritesheet": "items",
     "spriteId": 323,
     "type": "consumable"
+  },
+  {
+    "id": 6,
+    "name": "Poison Ivy",
+    "spritesheet": "items",
+    "spriteId": 270,
+    "type": "other"
   }
 ]

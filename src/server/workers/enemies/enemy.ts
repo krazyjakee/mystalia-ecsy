@@ -188,22 +188,26 @@ export default class Enemy {
   destroy() {
     this.dispose();
     const enemy = this.room.state.enemies[this.stateId] as EnemyState;
-    const spec = enemySpecs.find((enemySpec) => enemySpec.id === enemy.enemyId);
-    if (spec?.drop) {
-      spec.drop.forEach((drop) => {
-        const roll = randomNumberBetween(drop.chance) === 1;
-        if (roll) {
-          const quantity = randomNumberBetween(
-            drop.quantity[0],
-            drop.quantity[1]
-          );
-          this.room.state.items[randomHash()] = new ItemState(
-            drop.itemId,
-            enemy.currentTile,
-            quantity
-          );
-        }
-      });
+    if (enemy) {
+      const spec = enemySpecs.find(
+        (enemySpec) => enemySpec.id === enemy.enemyId
+      );
+      if (spec?.drop) {
+        spec.drop.forEach((drop) => {
+          const roll = randomNumberBetween(drop.chance) === 1;
+          if (roll) {
+            const quantity = randomNumberBetween(
+              drop.quantity[0],
+              drop.quantity[1]
+            );
+            this.room.state.items[randomHash()] = new ItemState(
+              drop.itemId,
+              enemy.currentTile,
+              quantity
+            );
+          }
+        });
+      }
     }
     delete this.room.state.enemies[this.stateId];
   }

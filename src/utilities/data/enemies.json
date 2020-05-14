@@ -39,5 +39,22 @@
     },
     "hp": 20,
     "abilities": []
+  },
+  {
+    "id": 2,
+    "name": "Cave Rat",
+    "spritesheet": "wildlife/rat",
+    "portrait": "cave-rat",
+    "spriteId": 7,
+    "speed": 2,
+    "maxDistance": 6,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "hp": 95,
+    "abilities": [0]
   }
 ]

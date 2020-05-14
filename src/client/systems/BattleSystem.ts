@@ -111,7 +111,7 @@ export default class BattleSystem extends System {
             tileMap.objectTileStore,
             playerMovement.currentTile,
             movement.currentTile,
-            weaponRange
+            weaponRange > 1 ? weaponRange - 1 : 1
           );
 
           const lastTile = path?.pop();
