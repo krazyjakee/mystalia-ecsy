@@ -1,0 +1,20 @@
+{
+    "maps": [
+        {
+            "fileName": "first.json",
+            "x": 0,
+            "y": 0
+        },
+        {
+            "fileName": "south.json",
+            "x": 0,
+            "y": 2176
+        },
+        {
+            "fileName": "north.json",
+            "x": 0,
+            "y": -2176
+        }
+    ],
+    "type": "world"
+}
