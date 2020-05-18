@@ -7,11 +7,13 @@ import {
   InventoryEquipCommand,
   BattleTargetEnemyCommand,
   BattleUnTargetCommand,
+  MovementWalkOffCommand,
 } from "./localplayer";
 
 export type RoomCommandsAvailable = Extract<
   RoomMessageType,
   | "localPlayer:movement:report"
+  | "localPlayer:movement:walkOff"
   | "localPlayer:inventory:pickup"
   | "localPlayer:inventory:move"
   | "localPlayer:inventory:equip"
@@ -22,6 +24,7 @@ export type RoomCommandsAvailable = Extract<
 
 export const roomCommands: { [key in RoomCommandsAvailable]: any } = {
   "localPlayer:movement:report": MovementReportCommand,
+  "localPlayer:movement:walkOff": MovementWalkOffCommand,
   "localPlayer:inventory:pickup": InventoryPickupCommand,
   "localPlayer:inventory:move": InventoryMoveCommand,
   "localPlayer:inventory:equip": InventoryEquipCommand,

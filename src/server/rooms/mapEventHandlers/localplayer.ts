@@ -10,6 +10,7 @@ import {
 import { performTrade } from "@server/utilities/commandHandlers/shop";
 import { ShopSpec } from "types/shops";
 import PlayerState from "@server/components/player";
+import { movementWalkOff } from "@server/utilities/commandHandlers/map";
 const shops = require("utilities/data/shop.json") as ShopSpec[];
 
 export class MovementReportCommand extends Command<
@@ -19,6 +20,17 @@ export class MovementReportCommand extends Command<
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
     player.targetTile = data.targetTile;
+  }
+}
+
+export class MovementWalkOffCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:movement:walkOff"> }
+> {
+  execute({ sessionId }) {
+    const player = this.state.players[sessionId];
+    const nextMapPosition = movementWalkOff(player, this.room.roomName);
+    // TODO: Send the next map and position to the client "localPlayer:movement:nextMap"
   }
 }
 

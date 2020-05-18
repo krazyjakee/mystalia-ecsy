@@ -42,6 +42,11 @@ export interface GameStateEvents {
   "localPlayer:movement:response": {
     currentTile: number;
   };
+  "localPlayer:movement:walkOff": undefined;
+  "localPlayer:movement:nextMap": {
+    name: string;
+    tile: number;
+  };
   "localPlayer:inventory:pickup": {
     itemId?: number;
   };
