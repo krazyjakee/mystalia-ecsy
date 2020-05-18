@@ -52656,8 +52656,8 @@
       "y": 0
     }
   ],
-  "nextlayerid": 37,
-  "nextobjectid": 458,
+  "nextlayerid": 38,
+  "nextobjectid": 461,
   "orientation": "orthogonal",
   "properties": [
     {
@@ -52669,6 +52669,11 @@
       "name": "name",
       "type": "string",
       "value": "south"
+    },
+    {
+      "name": "north",
+      "type": "string",
+      "value": "first"
     }
   ],
   "renderorder": "right-down",
