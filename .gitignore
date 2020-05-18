@@ -3,3 +3,4 @@ node_modules/
 public/
 assets/maps/*.png
 .env
+assets/maps/project.tiled-session

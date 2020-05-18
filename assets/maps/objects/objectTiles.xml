@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="door" color="#a0a0a4">
+  <property name="map" type="string"/>
+  <property name="tile" type="int" default="0"/>
+ </objecttype>
+ <objecttype name="enemyZone" color="#b50000">
+  <property name="chance" type="int" default="0"/>
+  <property name="enemy" type="int" default="0"/>
+  <property name="max" type="int" default="0"/>
+ </objecttype>
+ <objecttype name="flame" color="#f8f7ff"/>
+ <objecttype name="item" color="#3c3ef9">
+  <property name="chance" type="int" default="0"/>
+  <property name="id" type="int" default="0"/>
+ </objecttype>
+ <objecttype name="light" color="#f3e121">
+  <property name="radius" type="int" default="0"/>
+ </objecttype>
+</objecttypes>

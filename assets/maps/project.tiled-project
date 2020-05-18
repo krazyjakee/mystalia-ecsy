@@ -1,0 +1,8 @@
+{
+    "automappingRulesFile": "rules.txt",
+    "extensionsPath": "extensions",
+    "folders": [
+        "../"
+    ],
+    "objectTypesFile": "objects/objectTiles.xml"
+}
