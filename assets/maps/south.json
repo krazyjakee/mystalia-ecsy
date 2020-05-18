@@ -3648,8 +3648,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":37,
- "nextobjectid":458,
+ "nextlayerid":38,
+ "nextobjectid":461,
  "orientation":"orthogonal",
  "properties":[
         {
@@ -3668,7 +3668,7 @@
          "value":"first"
         }],
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"2020.05.07",
  "tileheight":32,
  "tilesets":[
         {
