@@ -295,12 +295,12 @@
         {
          "name":"light",
          "type":"int",
-         "value":70
+         "value":90
         }, 
         {
          "name":"name",
          "type":"string",
-         "value":"start shop"
+         "value":"lakehouse"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
