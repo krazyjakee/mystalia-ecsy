@@ -179,7 +179,7 @@
                         {
                          "name":"map",
                          "type":"string",
-                         "value":"shop floor 0"
+                         "value":"first"
                         }, 
                         {
                          "name":"tile",
@@ -205,15 +205,9 @@
                  "y":160.666666666667
                 }, 
                 {
-                 "height":31.4242424242424,
+                 "height":28.3333333333333,
                  "id":18,
                  "name":"Third Floor Door",
-                 "properties":[
-                        {
-                         "name":"map",
-                         "type":"string",
-                         "value":"shop floor 2"
-                        }],
                  "rotation":0,
                  "type":"door",
                  "visible":true,
@@ -222,7 +216,7 @@
                  "y":96
                 }, 
                 {
-                 "height":31.5757575757576,
+                 "height":16.6666666666667,
                  "id":20,
                  "name":"",
                  "properties":[
@@ -237,14 +231,14 @@
                          "value":8
                         }],
                  "rotation":0,
-                 "type":"light",
+                 "type":"",
                  "visible":true,
-                 "width":31.939393939394,
-                 "x":447.939393939394,
-                 "y":96.3030303030306
+                 "width":22.6666666666667,
+                 "x":452.666666666667,
+                 "y":106.666666666667
                 }, 
                 {
-                 "height":31.875,
+                 "height":16,
                  "id":21,
                  "name":"",
                  "properties":[
@@ -259,11 +253,11 @@
                          "value":8
                         }],
                  "rotation":0,
-                 "type":"light",
+                 "type":"",
                  "visible":true,
-                 "width":31.9583333333333,
-                 "x":191.833333333333,
-                 "y":96.166666666667
+                 "width":27.3333333333333,
+                 "x":193.333333333333,
+                 "y":106.666666666667
                 }, 
                 {
                  "height":32.6666666666666,
@@ -275,72 +269,6 @@
                  "width":30,
                  "x":480.666666666667,
                  "y":352
-                }, 
-                {
-                 "height":7,
-                 "id":23,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":4.875,
-                 "x":451.875,
-                 "y":106.375
-                }, 
-                {
-                 "height":7,
-                 "id":24,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":4.375,
-                 "x":461.125,
-                 "y":115
-                }, 
-                {
-                 "height":7.75,
-                 "id":25,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":4.25,
-                 "x":470.625,
-                 "y":106
-                }, 
-                {
-                 "height":6.125,
-                 "id":26,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":4,
-                 "x":196.625,
-                 "y":107.375
-                }, 
-                {
-                 "height":6.75,
-                 "id":27,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":3.875,
-                 "x":205.375,
-                 "y":114.75
-                }, 
-                {
-                 "height":7.125,
-                 "id":28,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":4.25,
-                 "x":214.5,
-                 "y":106.625
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -361,21 +289,21 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":29,
+ "nextobjectid":23,
  "orientation":"orthogonal",
  "properties":[
         {
          "name":"light",
          "type":"int",
-         "value":70
+         "value":90
         }, 
         {
          "name":"name",
          "type":"string",
-         "value":"start shop"
+         "value":"lakehouse"
         }],
  "renderorder":"right-down",
- "tiledversion":"2020.05.07",
+ "tiledversion":"1.3.4",
  "tileheight":32,
  "tilesets":[
         {
