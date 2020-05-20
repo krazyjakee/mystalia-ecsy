@@ -1,14 +1,11 @@
-import { System, Entity, Not } from "ecsy";
-import TileMap from "@client/components/TileMap";
+import { System } from "ecsy";
 import LocalPlayer from "@client/components/LocalPlayer";
-import ChangeMap from "@client/components/ChangeMap";
-import { Unloadable, Loadable } from "@client/components/Loadable";
-import { mapAssetPath } from "../../utilities/assets";
 import Movement from "@client/components/Movement";
+import gameState from "@client/gameState";
+import { ChangeMap } from "@client/components/TileMap";
 
 export default class MapChangeSystem extends System {
   static queries = {
-    tileMap: { components: [TileMap, Not(Unloadable), Not(Loadable)] },
     localPlayer: { components: [LocalPlayer, ChangeMap, Movement] },
   };
 
@@ -16,15 +13,14 @@ export default class MapChangeSystem extends System {
     //@ts-ignore
     this.queries.localPlayer.results.forEach((entity) => {
       const movement = entity.getComponent(Movement);
-      // don't change map until the player has stopped moving
+      const { direction } = entity.getComponent(ChangeMap);
       if (movement.tileQueue.length || movement.direction) return;
-      const changeMap = entity.getComponent(ChangeMap);
-      //@ts-ignore
-      this.queries.tileMap.results.forEach((entity) => {
-        entity.addComponent(Unloadable, {
-          dataPath: mapAssetPath(changeMap.nextMap),
+      if (direction) {
+        gameState.send("map", "localPlayer:movement:walkOff", {
+          direction,
         });
-      });
+      }
+      entity.removeComponent(ChangeMap);
     });
   }
 }

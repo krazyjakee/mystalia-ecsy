@@ -15,34 +15,19 @@ export default (
 
   switch (direction) {
     case "e": {
-      return {
-        isEdge: edge.includes(direction),
-        compass: "east",
-      };
+      return edge.includes(direction);
     }
     case "w": {
-      return {
-        isEdge: edge.includes(direction),
-        compass: "west",
-      };
+      return edge.includes(direction);
     }
     case "n": {
-      return {
-        isEdge: edge.includes(direction),
-        compass: "north",
-      };
+      return edge.includes(direction);
     }
     case "s": {
-      return {
-        isEdge: edge.includes(direction),
-        compass: "south",
-      };
+      return edge.includes(direction);
     }
     default: {
-      return {
-        isEdge: false,
-        compass: "south",
-      };
+      return false;
     }
   }
 };

@@ -3,7 +3,7 @@ import Movement from "@client/components/Movement";
 import { Loadable } from "@client/components/Loadable";
 import TileMap from "@client/components/TileMap";
 import LocalPlayer from "@client/components/LocalPlayer";
-import ChangeMap from "@client/components/ChangeMap";
+import gameState from "@client/gameState";
 
 export default class TileMapObjectListener extends System {
   static queries = {
@@ -18,7 +18,7 @@ export default class TileMapObjectListener extends System {
   execute() {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
-      const { width: columns, height: rows } = tileMap;
+      // const { width: columns, height: rows } = tileMap;
 
       this.queries.localPlayer.results.forEach((playerEntity: Entity) => {
         const movement = playerEntity.getComponent(Movement);
@@ -32,7 +32,7 @@ export default class TileMapObjectListener extends System {
         if (door) {
           movement.tileQueue = [];
           movement.direction = undefined;
-          playerEntity.addComponent(ChangeMap, { nextMap: door.value.map });
+          gameState.send("map", "localPlayer:movement:walkOff");
         }
       });
     });

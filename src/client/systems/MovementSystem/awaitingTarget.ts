@@ -5,10 +5,9 @@ import NewMovementTarget from "@client/components/NewMovementTarget";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import tileInDirection from "../../utilities/TileMap/tileInDirection";
 import roundVector from "../../utilities/Vector/roundVector";
-import TileMap from "@client/components/TileMap";
+import TileMap, { ChangeMap } from "@client/components/TileMap";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 import getNextTileData from "@client/utilities/TileMap/getNextTileData";
-import ChangeMap from "@client/components/ChangeMap";
 import gameState from "@client/gameState";
 
 export default (entity: Entity, tileMap: TileMap) => {
@@ -54,20 +53,10 @@ export default (entity: Entity, tileMap: TileMap) => {
         movement.targetTile = newTarget;
 
         if (mapDir) {
-          const { isEdge, compass } = getNextTileData(
-            newTarget,
-            rows,
-            columns,
-            mapDir
-          );
+          const isEdge = getNextTileData(newTarget, rows, columns, mapDir);
 
           if (isEdge) {
-            const nextMap = tileMap.properties[compass];
-            if (nextMap) {
-              gameState.send("map", "localPlayer:movement:walkOff", {
-                direction: mapDir,
-              });
-            }
+            entity.addComponent(ChangeMap, { direction: mapDir });
           }
         }
       }

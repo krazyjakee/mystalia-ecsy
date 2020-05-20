@@ -14,7 +14,6 @@ import AnimatedTile, {
   AnimatedTilesInitiated,
 } from "@client/components/AnimatedTile";
 import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
-import ChangeMap from "@client/components/ChangeMap";
 import Item from "@client/components/Item";
 import { Remove } from "@client/components/Tags";
 import Enemy from "@client/components/Enemy";
@@ -71,13 +70,6 @@ export default class TileMapChanger extends System {
         const movement = playerEntity.getMutableComponent(Movement);
         const playerPosition = playerEntity.getMutableComponent(Position);
         let tileId = movement.currentTile;
-
-        // Do we have data from a previous map?
-        const changeMap = playerEntity.getComponent(ChangeMap);
-        if (drawable.data && changeMap.tileId) {
-          tileId = changeMap.tileId;
-          playerEntity.removeComponent(ChangeMap);
-        }
 
         tileMap.reset();
         drawable.reset();

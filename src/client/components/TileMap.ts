@@ -1,8 +1,9 @@
-import { Component } from "ecsy";
+import { Component, TagComponent } from "ecsy";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { DrawableProperties } from "types/drawable";
 import { TileSetStore } from "types/TileMap/TileSetStore";
 import { TileMapProperties } from "types/TileMap/standard";
+import { Direction } from "types/Grid";
 
 export default class TileMap extends Component {
   properties: TileMapProperties = {};
@@ -28,4 +29,8 @@ export default class TileMap extends Component {
     this.canvasCache = [];
     this.properties = {};
   }
+}
+
+export class ChangeMap extends Component {
+  direction?: Direction;
 }

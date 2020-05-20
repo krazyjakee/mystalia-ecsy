@@ -84,7 +84,7 @@ export default class KeyboardInputSystem extends System {
         );
 
         if (target === undefined) {
-          const { isEdge, compass } = getNextTileData(
+          const isEdge = getNextTileData(
             movement.currentTile,
             rows,
             columns,
@@ -92,12 +92,9 @@ export default class KeyboardInputSystem extends System {
           );
 
           if (isEdge) {
-            const nextMap = tileMap.properties[compass];
-            if (nextMap) {
-              gameState.send("map", "localPlayer:movement:walkOff", {
-                direction,
-              });
-            }
+            gameState.send("map", "localPlayer:movement:walkOff", {
+              direction,
+            });
           }
         }
 

@@ -34,6 +34,9 @@ export class MovementWalkOffCommand extends Command<
       data.direction,
       this.room.roomName
     );
+
+    // TODO: If nextMapPosition is undefined, check if the player is on a door.
+
     const client = this.room.clients.find((c) => c.sessionId === sessionId);
     if (nextMapPosition && client) {
       const response: RoomMessage<"localPlayer:movement:nextMap"> = {
