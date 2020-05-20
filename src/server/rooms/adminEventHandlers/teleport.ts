@@ -18,9 +18,9 @@ export class TeleportRequestCommand extends Command<
 
       // Teleport to me or teleport to specific map
       if (map && tileId) {
-        const response: PresenceMessage<"admin:teleport:response"> = {
-          command: "admin:teleport:response",
-          ...(teleportRequestData as GameStateEvents["admin:teleport:response"]),
+        const response: PresenceMessage<"localPlayer:movement:nextMap"> = {
+          command: "localPlayer:movement:nextMap",
+          ...(teleportRequestData as GameStateEvents["localPlayer:movement:nextMap"]),
         };
         this.room.presence.publish(`${username}:commands`, response);
       } else {
@@ -29,11 +29,11 @@ export class TeleportRequestCommand extends Command<
           `${username}:state`,
           ({ currentRoom, targetTile }: PlayerState) => {
             if (currentRoom && targetTile) {
-              const response: RoomMessage<"admin:teleport:response"> = {
+              const response: RoomMessage<"localPlayer:movement:nextMap"> = {
                 map: currentRoom,
                 tileId: targetTile,
               };
-              client.send("admin:teleport:response", response);
+              client.send("localPlayer:movement:nextMap", response);
             }
             this.room.presence.unsubscribe(`${username}:state`);
           }

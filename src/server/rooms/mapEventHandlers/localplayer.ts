@@ -27,10 +27,21 @@ export class MovementWalkOffCommand extends Command<
   MapState,
   { sessionId: string; data: RoomMessage<"localPlayer:movement:walkOff"> }
 > {
-  execute({ sessionId }) {
+  execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
-    const nextMapPosition = movementWalkOff(player, this.room.roomName);
-    // TODO: Send the next map and position to the client "localPlayer:movement:nextMap"
+    const nextMapPosition = movementWalkOff(
+      player,
+      data.direction,
+      this.room.roomName
+    );
+    const client = this.room.clients.find((c) => c.sessionId === sessionId);
+    if (nextMapPosition && client) {
+      const response: RoomMessage<"localPlayer:movement:nextMap"> = {
+        map: nextMapPosition.map,
+        tileId: nextMapPosition.tileId,
+      };
+      client.send("localPlayer:movement:nextMap", response);
+    }
   }
 }
 

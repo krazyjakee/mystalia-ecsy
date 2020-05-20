@@ -12,7 +12,6 @@ import Drawable from "@client/components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import NewMovementTarget from "@client/components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
-import { areColliding } from "@client/utilities/Vector/collision";
 import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
@@ -21,6 +20,7 @@ import { OpenShopAtDestination } from "@client/components/Shop";
 import { findClosestPath } from "utilities/movement/surroundings";
 import Movement from "@client/components/Movement";
 import Enemy from "@client/components/Enemy";
+import { areColliding } from "utilities/math";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -108,8 +108,7 @@ export default class MouseInputSystem extends System {
             ...enemyPosition,
             width: drawable.width,
             height: drawable.height,
-          },
-          tileMapDrawable.offset
+          }
         );
 
         if (isEnemy && isClicked) {

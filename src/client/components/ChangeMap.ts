@@ -3,10 +3,10 @@ import { Direction } from "types/Grid";
 
 export default class ChangeMap extends Component {
   nextMap: string = "";
-  direction?: Direction;
+  tileId?: number;
 
   reset() {
     this.nextMap = "";
-    this.direction = undefined;
+    this.tileId = undefined;
   }
 }

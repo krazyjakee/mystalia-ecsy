@@ -3,6 +3,7 @@ import InventoryState from "@server/components/inventory";
 import { MapSchema } from "@colyseus/schema";
 import { EnemyReference } from "./enemies";
 import PlayerState from "@server/components/player";
+import { Direction } from "./Grid";
 
 export interface GameStateEvents {
   "admin:list:allPlayers": {
@@ -19,10 +20,6 @@ export interface GameStateEvents {
     username: string;
     map?: string;
     tileId?: number;
-  };
-  "admin:teleport:response": {
-    map: string;
-    tileId: number;
   };
   "localPlayer:change": {
     key: string;
@@ -42,10 +39,12 @@ export interface GameStateEvents {
   "localPlayer:movement:response": {
     currentTile: number;
   };
-  "localPlayer:movement:walkOff": undefined;
+  "localPlayer:movement:walkOff": {
+    direction: Direction;
+  };
   "localPlayer:movement:nextMap": {
-    name: string;
-    tile: number;
+    map: string;
+    tileId: number;
   };
   "localPlayer:inventory:pickup": {
     itemId?: number;

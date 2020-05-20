@@ -9,6 +9,7 @@ import TileMap from "@client/components/TileMap";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 import getNextTileData from "@client/utilities/TileMap/getNextTileData";
 import ChangeMap from "@client/components/ChangeMap";
+import gameState from "@client/gameState";
 
 export default (entity: Entity, tileMap: TileMap) => {
   const columns = tileMap.width;
@@ -42,7 +43,6 @@ export default (entity: Entity, tileMap: TileMap) => {
     isWalkable(tileMap, newTarget)
   ) {
     movement.pathingTo = newTarget;
-    entity.removeComponent(ChangeMap);
 
     try {
       const path = tileMap.objectTileStore.aStar.findPath(
@@ -64,7 +64,9 @@ export default (entity: Entity, tileMap: TileMap) => {
           if (isEdge) {
             const nextMap = tileMap.properties[compass];
             if (nextMap) {
-              entity.addComponent(ChangeMap, { nextMap, direction: mapDir });
+              gameState.send("map", "localPlayer:movement:walkOff", {
+                direction: mapDir,
+              });
             }
           }
         }

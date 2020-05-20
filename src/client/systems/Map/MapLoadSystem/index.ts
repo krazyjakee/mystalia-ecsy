@@ -3,7 +3,6 @@ import { Loadable } from "@client/components/Loadable";
 import Fade from "@client/components/Fade";
 import TileMap from "@client/components/TileMap";
 import loadTileMap from "./loadTileMap";
-import getMapChangePosition from "./getMapChangePosition";
 import Drawable from "@client/components/Drawable";
 import Movement from "@client/components/Movement";
 import setOffset from "@client/utilities/Vector/setOffset";
@@ -75,14 +74,8 @@ export default class TileMapChanger extends System {
 
         // Do we have data from a previous map?
         const changeMap = playerEntity.getComponent(ChangeMap);
-        if (drawable.data) {
-          tileId = getMapChangePosition(
-            changeMap?.direction,
-            movement.currentTile,
-            drawable.data.width,
-            drawable.data.height,
-            tileMap.objectTileStore
-          );
+        if (drawable.data && changeMap.tileId) {
+          tileId = changeMap.tileId;
           playerEntity.removeComponent(ChangeMap);
         }
 

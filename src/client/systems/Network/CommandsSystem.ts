@@ -16,6 +16,7 @@ import { isPresent } from "utilities/guards";
 import CreateTextBurst from "@client/entities/TextBurst";
 import RemotePlayer from "@client/components/RemotePlayer";
 import { AbilitySpec } from "types/types";
+import ChangeMap from "@client/components/ChangeMap";
 
 const itemsData = require("utilities/data/items.json") as ItemSpec[];
 const abilitySpecs = require("utilities/data/abilities") as AbilitySpec[];
@@ -77,21 +78,31 @@ export default class CommandsSystem extends System {
         const movement = localPlayerEntity.getMutableComponent(Movement);
         const positionComponent = localPlayerEntity.getComponent(Position);
 
-        gameState.subscribe("admin:teleport:response", ({ map, tileId }) => {
-          drawable.data = undefined;
-          movement.currentTile = tileId;
-          movement.tileQueue = [];
-          movement.direction = undefined;
-          tileMapEntity.addComponent(Unloadable, {
-            dataPath: mapAssetPath(map),
-          });
-        });
+        gameState.subscribe(
+          "localPlayer:movement:nextMap",
+          ({ map, tileId }) => {
+            drawable.data = undefined;
+            movement.currentTile = tileId;
+            movement.tileQueue = [];
+            movement.direction = undefined;
+            tileMapEntity.addComponent(Unloadable, {
+              dataPath: mapAssetPath(map),
+            });
+          }
+        );
 
         gameState.subscribe("localPlayer:movement:request", () => {
           gameState.trigger("localPlayer:movement:response", {
             currentTile: movement.currentTile,
           });
         });
+
+        gameState.subscribe(
+          "localPlayer:movement:nextMap",
+          ({ map, tileId }) => {
+            tileMapEntity.addComponent(ChangeMap, { nextMap: map, tileId });
+          }
+        );
 
         gameState.subscribe(
           "localPlayer:battle:damageTaken",

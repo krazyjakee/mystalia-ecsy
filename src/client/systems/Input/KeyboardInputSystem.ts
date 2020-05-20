@@ -1,4 +1,4 @@
-import { System, Entity, Not } from "ecsy";
+import { System, Not } from "ecsy";
 import { KeyboardInput } from "@client/components/Tags";
 import Movement from "@client/components/Movement";
 import Position from "@client/components/Position";
@@ -12,7 +12,6 @@ import NewMovementTarget from "@client/components/NewMovementTarget";
 import { vectorToTileId } from "utilities/tileMap";
 import gameState from "../../gameState";
 import getNextTileData from "../../utilities/TileMap/getNextTileData";
-import ChangeMap from "@client/components/ChangeMap";
 
 const movementKeys: { [key in Direction]: string[] } = {
   n: ["KeyW", "ArrowUp"],
@@ -95,7 +94,9 @@ export default class KeyboardInputSystem extends System {
           if (isEdge) {
             const nextMap = tileMap.properties[compass];
             if (nextMap) {
-              entity.addComponent(ChangeMap, { nextMap, direction });
+              gameState.send("map", "localPlayer:movement:walkOff", {
+                direction,
+              });
             }
           }
         }
