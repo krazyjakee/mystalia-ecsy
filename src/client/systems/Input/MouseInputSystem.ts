@@ -6,7 +6,7 @@ import {
   BattleTarget,
 } from "@client/components/Tags";
 import { Vector } from "types/TMJ";
-import TileMap from "@client/components/TileMap";
+import TileMap, { ChangingMap } from "@client/components/TileMap";
 import { Loadable } from "@client/components/Loadable";
 import Drawable from "@client/components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
@@ -31,7 +31,7 @@ export default class MouseInputSystem extends System {
 
   static queries = {
     localPlayer: {
-      components: [MouseInput, LocalPlayer],
+      components: [MouseInput, LocalPlayer, Not(ChangingMap)],
     },
     mouseEnabledEntities: {
       components: [MouseInput, Position, Drawable, Not(LocalPlayer)],

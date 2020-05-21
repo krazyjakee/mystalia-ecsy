@@ -2,7 +2,7 @@ import { System, Not } from "ecsy";
 import { KeyboardInput } from "@client/components/Tags";
 import Movement from "@client/components/Movement";
 import Position from "@client/components/Position";
-import TileMap from "@client/components/TileMap";
+import TileMap, { ChangingMap } from "@client/components/TileMap";
 import { Direction } from "types/Grid";
 import { Loadable } from "@client/components/Loadable";
 import { compassDirections } from "../../utilities/Compass/compassDirections";
@@ -26,7 +26,7 @@ export default class KeyboardInputSystem extends System {
 
   static queries = {
     keyboardEnabledEntities: {
-      components: [KeyboardInput, Movement, Position],
+      components: [KeyboardInput, Movement, Position, Not(ChangingMap)],
     },
     tileMaps: {
       components: [TileMap, Not(Loadable)],
@@ -92,6 +92,7 @@ export default class KeyboardInputSystem extends System {
           );
 
           if (isEdge) {
+            entity.addComponent(ChangingMap);
             gameState.send("map", "localPlayer:movement:walkOff", {
               direction,
             });

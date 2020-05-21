@@ -30,6 +30,8 @@ export class MovementWalkOffCommand extends Command<
   execute({ sessionId, data }) {
     const getNextMapPosition = () => {
       const player = this.state.players[sessionId];
+      if (!player) return;
+
       const mapRoom = this.room as MapRoom;
       const nextMapPosition = movementWalkOff(
         player,

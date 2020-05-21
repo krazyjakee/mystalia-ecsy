@@ -1,9 +1,10 @@
 import { System, Entity, Not } from "ecsy";
 import Movement from "@client/components/Movement";
 import { Loadable } from "@client/components/Loadable";
-import TileMap from "@client/components/TileMap";
+import TileMap, { ChangeMap, ChangingMap } from "@client/components/TileMap";
 import LocalPlayer from "@client/components/LocalPlayer";
 import gameState from "@client/gameState";
+import { SendData } from "@client/components/Tags";
 
 export default class TileMapObjectListener extends System {
   static queries = {
@@ -11,7 +12,7 @@ export default class TileMapObjectListener extends System {
       components: [Not(Loadable), TileMap],
     },
     localPlayer: {
-      components: [Not(Loadable), Movement, LocalPlayer],
+      components: [Not(Loadable), Movement, LocalPlayer, Not(ChangingMap)],
     },
   };
 
@@ -32,6 +33,8 @@ export default class TileMapObjectListener extends System {
         if (door) {
           movement.tileQueue = [];
           movement.direction = undefined;
+          playerEntity.addComponent(SendData);
+          playerEntity.addComponent(ChangingMap);
           gameState.send("map", "localPlayer:movement:walkOff");
         }
       });

@@ -2,7 +2,7 @@ import { System, Not } from "ecsy";
 import { Unloadable } from "@client/components/Loadable";
 import LocalPlayer, { CommandsPending } from "@client/components/LocalPlayer";
 import gameState from "../../gameState";
-import TileMap from "@client/components/TileMap";
+import TileMap, { ChangingMap } from "@client/components/TileMap";
 import Drawable from "@client/components/Drawable";
 import Movement from "@client/components/Movement";
 import { mapAssetPath } from "../../utilities/assets";
@@ -87,6 +87,7 @@ export default class CommandsSystem extends System {
             tileMapEntity.addComponent(Unloadable, {
               dataPath: mapAssetPath(map),
             });
+            localPlayerEntity.removeComponent(ChangingMap);
           }
         );
 

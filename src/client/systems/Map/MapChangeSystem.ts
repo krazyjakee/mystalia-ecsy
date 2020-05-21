@@ -1,12 +1,14 @@
-import { System } from "ecsy";
+import { System, Not } from "ecsy";
 import LocalPlayer from "@client/components/LocalPlayer";
 import Movement from "@client/components/Movement";
 import gameState from "@client/gameState";
-import { ChangeMap } from "@client/components/TileMap";
+import { ChangeMap, ChangingMap } from "@client/components/TileMap";
 
 export default class MapChangeSystem extends System {
   static queries = {
-    localPlayer: { components: [LocalPlayer, ChangeMap, Movement] },
+    localPlayer: {
+      components: [LocalPlayer, ChangeMap, Movement, Not(ChangingMap)],
+    },
   };
 
   execute() {
@@ -16,6 +18,7 @@ export default class MapChangeSystem extends System {
       const { direction } = entity.getComponent(ChangeMap);
       if (movement.tileQueue.length || movement.direction) return;
       if (direction) {
+        entity.addComponent(ChangingMap);
         gameState.send("map", "localPlayer:movement:walkOff", {
           direction,
         });

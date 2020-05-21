@@ -34,3 +34,5 @@ export default class TileMap extends Component {
 export class ChangeMap extends Component {
   direction?: Direction;
 }
+
+export class ChangingMap extends TagComponent {}

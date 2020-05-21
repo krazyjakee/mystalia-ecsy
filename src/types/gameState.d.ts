@@ -40,7 +40,7 @@ export interface GameStateEvents {
     currentTile: number;
   };
   "localPlayer:movement:walkOff": {
-    direction: Direction;
+    direction?: Direction;
   };
   "localPlayer:movement:nextMap": {
     map: string;
