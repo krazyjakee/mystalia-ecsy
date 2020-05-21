@@ -28,25 +28,31 @@ export class MovementWalkOffCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:movement:walkOff"> }
 > {
   execute({ sessionId, data }) {
-    const player = this.state.players[sessionId];
-    const mapRoom = this.room as MapRoom;
+    const getNextMapPosition = () => {
+      const player = this.state.players[sessionId];
+      const mapRoom = this.room as MapRoom;
+      const nextMapPosition = movementWalkOff(
+        player,
+        this.room.roomName,
+        data.direction,
+        mapRoom.objectTileStore
+      );
 
-    if (!mapRoom.objectTileStore) return;
+      const client = this.room.clients.find((c) => c.sessionId === sessionId);
+      if (nextMapPosition && client) {
+        const response: RoomMessage<"localPlayer:movement:nextMap"> = {
+          map: nextMapPosition.map,
+          tileId: nextMapPosition.tileId,
+        };
+        client.send("localPlayer:movement:nextMap", response);
+        return true;
+      }
+      return false;
+    };
 
-    const nextMapPosition = movementWalkOff(
-      player,
-      this.room.roomName,
-      data.direction,
-      mapRoom.objectTileStore
-    );
-
-    const client = this.room.clients.find((c) => c.sessionId === sessionId);
-    if (nextMapPosition && client) {
-      const response: RoomMessage<"localPlayer:movement:nextMap"> = {
-        map: nextMapPosition.map,
-        tileId: nextMapPosition.tileId,
-      };
-      client.send("localPlayer:movement:nextMap", response);
+    const nextPositionFound = getNextMapPosition();
+    if (!nextPositionFound) {
+      setTimeout(() => getNextMapPosition(), 1000);
     }
   }
 }
