@@ -6,7 +6,7 @@ import EnemyZone from "./enemyZone";
 import { getTilesByType } from "utilities/tileMap";
 import { TMJ } from "types/TMJ";
 
-const createMapRoom = () => {
+export const createMapRoom = () => {
   const room = new MapRoom();
   const maps = readMapFiles();
   const data = maps["test"];

@@ -5,6 +5,7 @@ import {
 } from "./map";
 import PlayerState from "@server/components/player";
 import { User } from "@colyseus/social";
+import { createMapRoom } from "@server/workers/enemies/enemyZone.test";
 
 const createPlayerState = (targetTile: number) => {
   const playerState = new PlayerState(new User({ metadata: {} }), "first");
@@ -39,6 +40,8 @@ describe("MapCommandHandler", () => {
   const mapG = generateMap(64, 128);
   const mapH = generateMap(-64, 0);
   const mapI = generateMap(-64, 64);
+
+  const mapRoom = createMapRoom();
 
   describe("#calculateNextMap", () => {
     test("correctly resolve next map", () => {
@@ -77,8 +80,20 @@ describe("MapCommandHandler", () => {
 
   describe("#movementWalkOff", () => {
     test("correctly resolve next map and position", () => {
-      const nextMap = movementWalkOff(createPlayerState(8128), "s", "first");
+      if (!mapRoom.objectTileStore) return;
+      const nextMap = movementWalkOff(createPlayerState(8128), "first", "s");
       expect(nextMap).toStrictEqual({ map: "south", tileId: 88 });
+    });
+
+    test("correctly detect a player is on a door", () => {
+      if (!mapRoom.objectTileStore) return;
+      const nextMap = movementWalkOff(
+        createPlayerState(36),
+        "test",
+        undefined,
+        mapRoom.objectTileStore
+      );
+      expect(nextMap).toStrictEqual({ map: "first", tileId: 4 });
     });
   });
 });

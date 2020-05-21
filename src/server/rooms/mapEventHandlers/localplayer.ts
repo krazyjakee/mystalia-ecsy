@@ -29,13 +29,16 @@ export class MovementWalkOffCommand extends Command<
 > {
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
+    const mapRoom = this.room as MapRoom;
+
+    if (!mapRoom.objectTileStore) return;
+
     const nextMapPosition = movementWalkOff(
       player,
+      this.room.roomName,
       data.direction,
-      this.room.roomName
+      mapRoom.objectTileStore
     );
-
-    // TODO: If nextMapPosition is undefined, check if the player is on a door.
 
     const client = this.room.clients.find((c) => c.sessionId === sessionId);
     if (nextMapPosition && client) {

@@ -7,6 +7,7 @@ import { pixelsToTileId, tileIdToPixels } from "utilities/tileMap";
 import { Vector } from "types/TMJ";
 import addOffset from "@client/utilities/Vector/addOffset";
 import { areColliding } from "utilities/math";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
 
 type WorldMapData = {
   fileName: string;
@@ -45,13 +46,15 @@ const worldMapItems: WorldMapItem[] = worldData.maps.map((worldMapData) => {
 
 export const movementWalkOff = (
   player: PlayerState,
-  direction: Direction,
-  mapName: string
+  mapName: string,
+  direction?: Direction,
+  objectTileStore?: ObjectTileStore
 ) => {
   const playerTile = player.targetTile;
+
   if (isPresent(playerTile)) {
     const mapItem = worldMapItems.find((m) => m.name === mapName);
-    if (mapItem) {
+    if (mapItem && direction) {
       const nextMap = calculateNextMap(
         mapItem,
         worldMapItems,
@@ -67,6 +70,10 @@ export const movementWalkOff = (
           tileId: nextTile,
         };
       }
+    }
+
+    if (objectTileStore) {
+      return isOnDoor(objectTileStore, playerTile);
     }
   }
 };
@@ -127,4 +134,17 @@ export const calculateNextPosition = (
     y: worldPosition.y - destinationMap.y,
   };
   return Math.abs(pixelsToTileId(newPosition, destinationMap.width / 32));
+};
+
+export const isOnDoor = (
+  objectTileStore: ObjectTileStore,
+  playerTile: number
+) => {
+  const door = objectTileStore.getByType<"door">(playerTile, "door");
+  if (door) {
+    return {
+      map: door.value.map,
+      tileId: door.value.tile,
+    };
+  }
 };
