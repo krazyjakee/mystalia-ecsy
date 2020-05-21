@@ -5,10 +5,35 @@ type EnemyBehaviourProperty = {
   distance: number;
 };
 
+type ScheduledWorldLocation = {
+  mapName: string;
+  tileId: number;
+  departureTime: number;
+};
+
 type EnemyBehaviour = {
   skeptical?: EnemyBehaviourProperty;
   escape?: EnemyBehaviourProperty;
   attack?: EnemyBehaviourProperty;
+  static?: {
+    lookAround: boolean;
+    lookAtPlayer: boolean;
+    distance?: number; // Distance of player before looking at them
+  };
+  patrol?: {
+    tiles: number[]; // Tiles to walk between
+    standTime: [number, number]; // Random time in ms to stand on a defined tile.
+  };
+  biomeWanderer?: {
+    campAtNight: boolean;
+  };
+  traveler?: {
+    campAtNight: boolean;
+  };
+  scheduled?: {
+    campAtNight: boolean;
+    schedule: ScheduledWorldLocation[];
+  };
 };
 
 type EnemyBehaviourNames = keyof EnemyBehaviour;
@@ -31,6 +56,9 @@ export type EnemySpec = {
   hp: number;
   abilities: number[];
   drop?: EnemyDrop[];
+  customName?: string;
+  shopId?: number;
+  personalityId?: number;
 };
 
 export type EnemyReference = {
