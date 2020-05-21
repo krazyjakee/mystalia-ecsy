@@ -126,6 +126,10 @@ export default class Enemy {
     const columns = this.mapColumns;
     const targetTile = this.findRandomTile();
 
+    if (!isPresent(targetTile)) {
+      return this.destroy();
+    }
+
     if (this.room.objectTileStore) {
       const currentTileVector = tileIdToVector(this.currentTile, columns);
       const targetTileVector = tileIdToVector(targetTile, columns);

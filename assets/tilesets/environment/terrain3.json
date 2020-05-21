@@ -1,0 +1,131 @@
+{
+  "columns": 24,
+  "image": "terrain3.png",
+  "imageheight": 1599,
+  "imagewidth": 768,
+  "margin": 0,
+  "name": "terrain3",
+  "spacing": 0,
+  "terrains": [
+    {
+      "name": "Wet Grass",
+      "tile": 381
+    },
+    {
+      "name": "Stone Path",
+      "tile": 12
+    }
+  ],
+  "tilecount": 1176,
+  "tiledversion": "1.3.3",
+  "tileheight": 32,
+  "tiles": [
+    {
+      "id": 13,
+      "terrain": [1, 1, 1, -1]
+    },
+    {
+      "id": 14,
+      "terrain": [1, 1, -1, 1]
+    },
+    {
+      "id": 37,
+      "terrain": [1, -1, 1, 1]
+    },
+    {
+      "id": 38,
+      "terrain": [-1, 1, 1, 1]
+    },
+    {
+      "id": 60,
+      "terrain": [-1, -1, -1, 1]
+    },
+    {
+      "id": 61,
+      "terrain": [-1, -1, 1, 1]
+    },
+    {
+      "id": 62,
+      "terrain": [-1, -1, 1, -1]
+    },
+    {
+      "id": 84,
+      "terrain": [-1, 1, -1, 1]
+    },
+    {
+      "id": 85,
+      "terrain": [1, 1, 1, 1]
+    },
+    {
+      "id": 86,
+      "terrain": [1, -1, 1, -1]
+    },
+    {
+      "id": 108,
+      "terrain": [-1, 1, -1, -1]
+    },
+    {
+      "id": 109,
+      "terrain": [1, 1, -1, -1]
+    },
+    {
+      "id": 110,
+      "terrain": [1, -1, -1, -1]
+    },
+    {
+      "id": 382,
+      "terrain": [0, 0, 0, -1]
+    },
+    {
+      "id": 383,
+      "terrain": [0, 0, -1, 0]
+    },
+    {
+      "id": 406,
+      "terrain": [0, -1, 0, 0]
+    },
+    {
+      "id": 407,
+      "terrain": [-1, 0, 0, 0]
+    },
+    {
+      "id": 429,
+      "terrain": [-1, -1, -1, 0]
+    },
+    {
+      "id": 430,
+      "terrain": [-1, -1, 0, 0]
+    },
+    {
+      "id": 431,
+      "terrain": [-1, -1, 0, -1]
+    },
+    {
+      "id": 453,
+      "terrain": [-1, 0, -1, 0]
+    },
+    {
+      "id": 454,
+      "terrain": [0, 0, 0, 0]
+    },
+    {
+      "id": 455,
+      "terrain": [0, -1, 0, -1]
+    },
+    {
+      "id": 477,
+      "terrain": [-1, 0, -1, -1]
+    },
+    {
+      "id": 478,
+      "terrain": [0, 0, -1, -1]
+    },
+    {
+      "id": 479,
+      "terrain": [0, -1, -1, -1]
+    }
+  ],
+  "tilewidth": 32,
+  "type": "tileset",
+  "version": 1.2
+}

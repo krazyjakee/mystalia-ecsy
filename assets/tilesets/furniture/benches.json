@@ -1,0 +1,14 @@
+{ "columns":6,
+ "image":"benches.png",
+ "imageheight":160,
+ "imagewidth":192,
+ "margin":0,
+ "name":"benches",
+ "spacing":0,
+ "tilecount":30,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

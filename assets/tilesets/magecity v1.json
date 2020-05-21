@@ -1,0 +1,14 @@
+{ "columns":8,
+ "image":"magecity v1.png",
+ "imageheight":1450,
+ "imagewidth":256,
+ "margin":0,
+ "name":"magecity v1",
+ "spacing":0,
+ "tilecount":360,
+ "tiledversion":"1.3.4",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

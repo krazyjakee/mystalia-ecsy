@@ -1,0 +1,75 @@
+{
+  "columns": 18,
+  "image": "indoorfloors2.png",
+  "imageheight": 319,
+  "imagewidth": 576,
+  "margin": 0,
+  "name": "indoorfloors2",
+  "spacing": 0,
+  "terrains": [
+    {
+      "name": "Carpet",
+      "tile": 0
+    }
+  ],
+  "tilecount": 13,
+  "tiledversion": "1.3.3",
+  "tileheight": 32,
+  "tiles": [
+    {
+      "id": 1,
+      "terrain": [0, 0, 0, -1]
+    },
+    {
+      "id": 2,
+      "terrain": [0, 0, -1, 0]
+    },
+    {
+      "id": 19,
+      "terrain": [0, -1, 0, 0]
+    },
+    {
+      "id": 20,
+      "terrain": [-1, 0, 0, 0]
+    },
+    {
+      "id": 36,
+      "terrain": [-1, -1, -1, 0]
+    },
+    {
+      "id": 37,
+      "terrain": [-1, -1, 0, 0]
+    },
+    {
+      "id": 38,
+      "terrain": [-1, -1, 0, -1]
+    },
+    {
+      "id": 54,
+      "terrain": [-1, 0, -1, 0]
+    },
+    {
+      "id": 55,
+      "terrain": [0, 0, 0, 0]
+    },
+    {
+      "id": 56,
+      "terrain": [0, -1, 0, -1]
+    },
+    {
+      "id": 72,
+      "terrain": [-1, 0, -1, -1]
+    },
+    {
+      "id": 73,
+      "terrain": [0, 0, -1, -1]
+    },
+    {
+      "id": 74,
+      "terrain": [0, -1, -1, -1]
+    }
+  ],
+  "tilewidth": 32,
+  "type": "tileset",
+  "version": 1.2
+}
