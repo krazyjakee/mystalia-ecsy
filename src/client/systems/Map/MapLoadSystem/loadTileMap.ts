@@ -42,10 +42,14 @@ export default async (
   for (let i = 0; i < tilesets.length; i += 1) {
     const externalTileSet = tilesets[i];
     const dataPath = externalTileSet.source.slice(
-      externalTileSet.source.lastIndexOf("/") + 1
+      externalTileSet.source.indexOf("tilesets/") + 9
     );
     const tileset = await loadData(`/assets/tilesets/${dataPath}`);
-    const tileSetImage = await loadImage(`/assets/tilesets/${tileset.image}`);
+    const tileSetImage = await loadImage(
+      `/assets/tilesets/${dataPath.slice(0, dataPath.lastIndexOf("/") + 1)}${
+        tileset.image
+      }`
+    );
     if (tileSetImage) {
       tileMap.tileSetStore[externalTileSet.source] = {
         ...tileset,
