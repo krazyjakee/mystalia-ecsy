@@ -179,7 +179,7 @@
                         {
                          "name":"map",
                          "type":"string",
-                         "value":"first"
+                         "value":"shop floor 0"
                         }, 
                         {
                          "name":"tile",
@@ -208,6 +208,12 @@
                  "height":31.4242424242424,
                  "id":18,
                  "name":"Third Floor Door",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"shop floor 2"
+                        }],
                  "rotation":0,
                  "type":"door",
                  "visible":true,

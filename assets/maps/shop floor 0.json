@@ -219,6 +219,12 @@
                  "height":28.3333333333333,
                  "id":18,
                  "name":"second floor door",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"shop floor 1"
+                        }],
                  "rotation":0,
                  "type":"door",
                  "visible":true,
