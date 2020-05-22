@@ -1,4 +1,12 @@
 { "columns":16,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"Castle2.png",
  "imageheight":512,
  "imagewidth":512,

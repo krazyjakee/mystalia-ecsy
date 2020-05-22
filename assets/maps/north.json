@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":68,
  "infinite":false,
  "layers":[
@@ -126,32 +133,12 @@
         {
          "name":"biome",
          "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"east",
-         "type":"string",
-         "value":""
+         "value":"forest"
         }, 
         {
          "name":"name",
          "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"north",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"south",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"west",
-         "type":"string",
-         "value":""
+         "value":"north"
         }],
  "renderorder":"right-down",
  "tiledversion":"2020.05.07",
