@@ -57,7 +57,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":386.666666666666,
+                 "width":384.333333333333,
                  "x":95.6666666666667,
                  "y":96
                 }, 
@@ -73,18 +73,18 @@
                  "y":160.666666666667
                 }, 
                 {
-                 "height":31,
+                 "height":32,
                  "id":3,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":481.666666666667,
-                 "x":95.3333333333333,
-                 "y":385
+                 "width":480,
+                 "x":96,
+                 "y":384
                 }, 
                 {
-                 "height":318.5,
+                 "height":319.833333333333,
                  "id":5,
                  "name":"",
                  "rotation":0,
@@ -92,28 +92,28 @@
                  "visible":true,
                  "width":32,
                  "x":544,
-                 "y":97.3333333333333
+                 "y":96
                 }, 
                 {
-                 "height":62.6666666666667,
+                 "height":63.9999999999997,
                  "id":9,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
-                 "x":511.333333333333,
-                 "y":321.333333333333
+                 "width":31.333333333333,
+                 "x":512,
+                 "y":320
                 }, 
                 {
-                 "height":63.3333333333333,
+                 "height":63.9999999999997,
                  "id":10,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":33.3333333333333,
-                 "x":510.666666666667,
+                 "width":32.0000000000003,
+                 "x":512,
                  "y":96.0000000000003
                 }, 
                 {
@@ -123,7 +123,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64.6666666666667,
+                 "width":64,
                  "x":384,
                  "y":160
                 }, 
@@ -139,40 +139,40 @@
                  "y":160
                 }, 
                 {
-                 "height":63,
+                 "height":65,
                  "id":13,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":63.3333333333334,
-                 "x":320.333333333333,
-                 "y":223
+                 "width":64,
+                 "x":320,
+                 "y":224
                 }, 
                 {
-                 "height":15.9999999999999,
+                 "height":32,
                  "id":14,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":62,
+                 "width":64,
                  "x":224,
-                 "y":328
+                 "y":320
                 }, 
                 {
-                 "height":84.0000000000001,
+                 "height":96.0000000000001,
                  "id":15,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":29.3333333333333,
+                 "width":32,
                  "x":128,
-                 "y":300
+                 "y":288
                 }, 
                 {
-                 "height":32,
+                 "height":33,
                  "id":16,
                  "name":"entrance",
                  "properties":[
@@ -184,28 +184,28 @@
                         {
                          "name":"tile",
                          "type":"int",
-                         "value":6274
+                         "value":377
                         }],
                  "rotation":0,
                  "type":"door",
                  "visible":true,
                  "width":32,
                  "x":512,
-                 "y":161
+                 "y":160
                 }, 
                 {
-                 "height":30,
+                 "height":32,
                  "id":17,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":124.666666666667,
-                 "x":194.666666666667,
-                 "y":160.666666666667
+                 "width":128,
+                 "x":192,
+                 "y":160
                 }, 
                 {
-                 "height":31.4242424242424,
+                 "height":32,
                  "id":18,
                  "name":"Third Floor Door",
                  "properties":[
@@ -213,12 +213,17 @@
                          "name":"map",
                          "type":"string",
                          "value":"shop floor 2"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":615
                         }],
                  "rotation":0,
                  "type":"door",
                  "visible":true,
-                 "width":30.6666666666666,
-                 "x":479.666666666667,
+                 "width":32,
+                 "x":480,
                  "y":96
                 }, 
                 {
@@ -266,14 +271,14 @@
                  "y":96.166666666667
                 }, 
                 {
-                 "height":32.6666666666666,
+                 "height":32,
                  "id":22,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":30,
-                 "x":480.666666666667,
+                 "width":32,
+                 "x":480,
                  "y":352
                 }, 
                 {
