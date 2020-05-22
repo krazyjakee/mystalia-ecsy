@@ -1,8 +1,7 @@
-import { System, Entity, Not } from "ecsy";
+import { System, Entity } from "ecsy";
 import { Loadable, SimpleLoadable } from "@client/components/Loadable";
 import Drawable from "@client/components/Drawable";
 import { loadImage, loadData } from "../utilities/assets";
-import { GenerateSpriteSheetAnimationSteps } from "@client/components/Tags";
 
 export default class Loader extends System {
   static queries = {

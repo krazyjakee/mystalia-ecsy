@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":15,
  "infinite":false,
  "layers":[
@@ -188,7 +195,7 @@
                         {
                          "name":"tile",
                          "type":"int",
-                         "value":6274
+                         "value":2646
                         }],
                  "rotation":0,
                  "type":"door",
@@ -296,7 +303,7 @@
          "value":"lakehouse"
         }],
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"2020.05.07",
  "tileheight":32,
  "tilesets":[
         {
