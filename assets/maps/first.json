@@ -7888,29 +7888,9 @@
          "value":"forest"
         }, 
         {
-         "name":"east",
-         "type":"string",
-         "value":"east"
-        }, 
-        {
          "name":"name",
          "type":"string",
          "value":"first"
-        }, 
-        {
-         "name":"north",
-         "type":"string",
-         "value":"north"
-        }, 
-        {
-         "name":"south",
-         "type":"string",
-         "value":"south"
-        }, 
-        {
-         "name":"west",
-         "type":"string",
-         "value":"west"
         }],
  "renderorder":"right-down",
  "tiledversion":"2020.05.07",
