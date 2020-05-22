@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":68,
  "infinite":false,
  "layers":[
@@ -129,32 +136,12 @@
          "value":""
         }, 
         {
-         "name":"east",
-         "type":"string",
-         "value":""
-        }, 
-        {
          "name":"name",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"north",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"south",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"west",
          "type":"string",
          "value":""
         }],
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"2020.05.07",
  "tileheight":32,
  "tilesets":[
         {
