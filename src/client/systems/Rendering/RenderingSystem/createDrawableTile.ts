@@ -3,6 +3,10 @@ import { TMJ } from "types/TMJ";
 import { TileSetStore } from "types/TileMap/TileSetStore";
 import { tileIdToVector } from "utilities/tileMap";
 
+const flippedHorizontallyFlag = 0x80000000;
+const flippedVerticallyFlag = 0x40000000;
+const flippedDiagonallyFlag = 0x20000000;
+
 export default (
   sourceTileId: number,
   destinationTileId: number,
@@ -10,15 +14,27 @@ export default (
   data: TMJ
 ) => {
   const { tilesets, width } = data;
-  const externalTileSet = tilesets.find(
-    (tileset) => tileset.firstgid < sourceTileId
-  );
+
+  let tileId = sourceTileId;
+  let flipHorizontal = false;
+  let flipVertical = false;
+  let flipDiagonal = false;
+
+  if (tileId > flippedDiagonallyFlag) {
+    const flippedProperties = flipTile(tileId);
+    tileId = flippedProperties.tileId;
+    flipHorizontal = flippedProperties.flipHorizontal || false;
+    flipVertical = flippedProperties.flipVertical || false;
+    flipDiagonal = flippedProperties.flipDiagonally || false;
+  }
+
+  const externalTileSet = tilesets.find((tileset) => tileset.firstgid < tileId);
   if (!externalTileSet) return null;
   const tileset = tileSetStore[externalTileSet?.source];
   if (!tileset) return null;
 
   const sourceVector = tileIdToVector(
-    sourceTileId - externalTileSet.firstgid,
+    tileId - externalTileSet.firstgid,
     tileset.imagewidth / 32
   );
 
@@ -35,7 +51,43 @@ export default (
     width: 32,
     height: 32,
     offset: { x: 0, y: 0 },
+    flipHorizontal,
+    flipVertical,
+    flipDiagonal,
   };
 
   return tile;
+};
+
+export const flipTile = (tileId) => {
+  let flipHorizontal = false;
+  let flipVertical = false;
+  let flipDiagonally = false;
+
+  while (tileId > flippedDiagonallyFlag) {
+    if (tileId > flippedHorizontallyFlag) {
+      tileId -= flippedHorizontallyFlag;
+      flipHorizontal = true;
+      continue;
+    }
+
+    if (tileId > flippedVerticallyFlag) {
+      tileId -= flippedVerticallyFlag;
+      flipVertical = true;
+      continue;
+    }
+
+    if (tileId > flippedDiagonallyFlag) {
+      tileId -= flippedDiagonallyFlag;
+      flipDiagonally = true;
+      continue;
+    }
+  }
+
+  return {
+    tileId,
+    flipDiagonally,
+    flipVertical,
+    flipHorizontal,
+  };
 };

@@ -20,21 +20,49 @@ export const drawImage = (
     width,
     height,
     offset = { x: 0, y: 0 },
+    flipDiagonal,
+    flipHorizontal,
+    flipVertical,
   } = drawable;
 
   if (image) {
+    const flipped = Boolean(flipDiagonal || flipHorizontal || flipVertical);
     const targetContext = customContext ? customContext : context2d;
+    let newX = x;
+    let newY = y;
+
+    if (flipped) {
+      targetContext.save();
+      if (flipDiagonal) {
+        targetContext.rotate(45);
+      }
+      if (flipHorizontal) {
+        targetContext.scale(-1, 1);
+        newX *= -1;
+        newX -= width;
+      }
+      if (flipVertical) {
+        targetContext.scale(1, -1);
+        newY *= -1;
+        newY -= height;
+      }
+    }
+
     targetContext.drawImage(
       image,
       sourceX,
       sourceY,
       sourceWidth,
       sourceHeight,
-      offset.x + x,
-      offset.y + y,
+      offset.x + newX,
+      offset.y + newY,
       width,
       height
     );
+
+    if (flipped) {
+      targetContext.restore();
+    }
   }
 };
 
