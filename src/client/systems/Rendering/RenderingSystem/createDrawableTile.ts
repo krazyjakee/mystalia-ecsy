@@ -25,7 +25,7 @@ export default (
     tileId = flippedProperties.tileId;
     flipHorizontal = flippedProperties.flipHorizontal || false;
     flipVertical = flippedProperties.flipVertical || false;
-    flipDiagonal = flippedProperties.flipDiagonally || false;
+    flipDiagonal = flippedProperties.flipDiagonal || false;
   }
 
   const externalTileSet = tilesets.find((tileset) => tileset.firstgid < tileId);
@@ -62,7 +62,7 @@ export default (
 export const flipTile = (tileId) => {
   let flipHorizontal = false;
   let flipVertical = false;
-  let flipDiagonally = false;
+  let flipDiagonal = false;
 
   while (tileId > flippedDiagonallyFlag) {
     if (tileId > flippedHorizontallyFlag) {
@@ -79,14 +79,14 @@ export const flipTile = (tileId) => {
 
     if (tileId > flippedDiagonallyFlag) {
       tileId -= flippedDiagonallyFlag;
-      flipDiagonally = true;
+      flipDiagonal = true;
       continue;
     }
   }
 
   return {
     tileId,
-    flipDiagonally,
+    flipDiagonal,
     flipVertical,
     flipHorizontal,
   };

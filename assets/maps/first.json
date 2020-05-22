@@ -4682,7 +4682,7 @@
                         {
                          "name":"raduis",
                          "type":"int",
-                         "value":8
+                         "value":12
                         }],
                  "rotation":0,
                  "type":"light",
@@ -4709,31 +4709,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":242.666666666667,
+                 "width":256,
                  "x":960,
                  "y":192
-                }, 
-                {
-                 "height":84,
-                 "id":579,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":10.6666666666667,
-                 "x":1066.66666666667,
-                 "y":196
-                }, 
-                {
-                 "height":192,
-                 "id":581,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":8,
-                 "x":1196,
-                 "y":193.333333333333
                 }, 
                 {
                  "height":32,
@@ -4742,53 +4720,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":371.333333333333,
-                 "x":832,
+                 "width":448,
+                 "x":768,
                  "y":384
-                }, 
-                {
-                 "height":32,
-                 "id":583,
-                 "name":"Stable Gate 1",
-                 "rotation":0,
-                 "type":"gate",
-                 "visible":true,
-                 "width":31.333333333333,
-                 "x":800.666666666667,
-                 "y":384
-                }, 
-                {
-                 "height":32.666666666667,
-                 "id":584,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":30.666666666667,
-                 "x":769.333333333333,
-                 "y":383.333333333333
-                }, 
-                {
-                 "height":32,
-                 "id":585,
-                 "name":"Stable Gate 2",
-                 "rotation":0,
-                 "type":"gate",
-                 "visible":true,
-                 "width":32,
-                 "x":992,
-                 "y":256
-                }, 
-                {
-                 "height":32,
-                 "id":586,
-                 "name":"Stable Gate 3",
-                 "rotation":0,
-                 "type":"gate",
-                 "visible":true,
-                 "width":31.3333333333301,
-                 "x":1120,
-                 "y":256
                 }, 
                 {
                  "height":32,
@@ -4797,31 +4731,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":96,
-                 "x":1024,
+                 "width":224,
+                 "x":960,
                  "y":256
-                }, 
-                {
-                 "height":32,
-                 "id":588,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1152,
-                 "y":256
-                }, 
-                {
-                 "height":26,
-                 "id":589,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":31,
-                 "x":959.5,
-                 "y":255.5
                 }, 
                 {
                  "height":32,
@@ -5988,6 +5900,39 @@
                  "width":96,
                  "x":672,
                  "y":384
+                }, 
+                {
+                 "height":64,
+                 "id":721,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1056,
+                 "y":192
+                }, 
+                {
+                 "height":192,
+                 "id":722,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1184,
+                 "y":224
+                }, 
+                {
+                 "height":32,
+                 "id":723,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":767.833,
+                 "y":352.167
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -7738,17 +7683,6 @@
                  "y":1088
                 }, 
                 {
-                 "height":14.5,
-                 "id":603,
-                 "name":"post box",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":22.5,
-                 "x":676.5,
-                 "y":392
-                }, 
-                {
                  "height":32,
                  "id":706,
                  "name":"",
@@ -7911,7 +7845,7 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":721,
+ "nextobjectid":724,
  "orientation":"orthogonal",
  "properties":[
         {

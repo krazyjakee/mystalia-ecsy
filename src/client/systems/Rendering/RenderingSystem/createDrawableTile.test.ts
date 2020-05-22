@@ -8,7 +8,17 @@ describe("createDrawableTile", () => {
         tileId: 5499,
         flipHorizontal: true,
         flipVertical: false,
-        flipDiagonally: false,
+        flipDiagonal: false,
+      });
+    });
+
+    test("should return the correct tileId diagonal", () => {
+      const output = flipTile(2684354909);
+      expect(output).toStrictEqual({
+        tileId: 349,
+        flipHorizontal: true,
+        flipVertical: false,
+        flipDiagonal: true,
       });
     });
   });

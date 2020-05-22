@@ -28,42 +28,84 @@ export const drawImage = (
   if (image) {
     const flipped = Boolean(flipDiagonal || flipHorizontal || flipVertical);
     const targetContext = customContext ? customContext : context2d;
-    let newX = x;
-    let newY = y;
 
     if (flipped) {
-      targetContext.save();
-      if (flipDiagonal) {
-        targetContext.rotate(45);
-      }
-      if (flipHorizontal) {
-        targetContext.scale(-1, 1);
-        newX *= -1;
-        newX -= width;
-      }
-      if (flipVertical) {
-        targetContext.scale(1, -1);
-        newY *= -1;
-        newY -= height;
-      }
-    }
-
-    targetContext.drawImage(
-      image,
-      sourceX,
-      sourceY,
-      sourceWidth,
-      sourceHeight,
-      offset.x + newX,
-      offset.y + newY,
-      width,
-      height
-    );
-
-    if (flipped) {
-      targetContext.restore();
+      const flippedImage = flipOrRotateImage(drawable);
+      if (!flippedImage) return;
+      targetContext.drawImage(
+        flippedImage,
+        0,
+        0,
+        width,
+        height,
+        offset.x + x,
+        offset.y + y,
+        width,
+        height
+      );
+    } else {
+      targetContext.drawImage(
+        image,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        offset.x + x,
+        offset.y + y,
+        width,
+        height
+      );
     }
   }
+};
+
+export const flipOrRotateImage = (drawable: DrawableProperties) => {
+  const [canvas, context] = createShadowCanvas();
+  const {
+    image,
+    sourceWidth,
+    sourceHeight,
+    sourceX,
+    sourceY,
+    width,
+    height,
+    flipDiagonal,
+    flipHorizontal,
+    flipVertical,
+  } = drawable;
+
+  if (!image) return image;
+
+  let x = 0;
+  let y = 0;
+
+  if (flipHorizontal) {
+    context.scale(-1, 1);
+    x -= width;
+  }
+  if (flipVertical) {
+    context.scale(1, -1);
+    y -= height;
+  }
+  if (flipDiagonal) {
+    context.rotate(Math.PI / 2);
+    x = 0;
+    y = 0;
+  }
+
+  context.drawImage(
+    image,
+    sourceX,
+    sourceY,
+    sourceWidth,
+    sourceHeight,
+    x,
+    y,
+    width,
+    height
+  );
+
+  return canvas;
 };
 
 export const drawToShadowCanvas = (
