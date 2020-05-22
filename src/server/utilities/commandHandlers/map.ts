@@ -1,6 +1,5 @@
 import PlayerState from "@server/components/player";
-import { readJSONFile } from "../files";
-import { readMapFiles } from "../mapFiles";
+import { getWorldMapItems, WorldMapItem } from "@server/utilities/mapFiles";
 import { Direction } from "types/Grid";
 import { isPresent } from "utilities/guards";
 import { pixelsToTileId, tileIdToPixels } from "utilities/tileMap";
@@ -8,41 +7,6 @@ import { Vector } from "types/TMJ";
 import addOffset from "@client/utilities/Vector/addOffset";
 import { areColliding } from "utilities/math";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
-
-type WorldMapData = {
-  fileName: string;
-  x: number;
-  y: number;
-};
-
-type WorldMapDataFile = {
-  maps: WorldMapData[];
-  type: string;
-};
-
-type WorldMapItem = {
-  name: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
-const worldData = readJSONFile("./assets/maps/maps.world") as WorldMapDataFile;
-const mapData = readMapFiles();
-
-const worldMapItems: WorldMapItem[] = worldData.maps.map((worldMapData) => {
-  const { fileName, x, y } = worldMapData;
-  const name = fileName.split(".")[0];
-  const map = mapData[name];
-  return {
-    name,
-    x,
-    y,
-    width: map.width * 32,
-    height: map.height * 32,
-  };
-});
 
 export const movementWalkOff = (
   player: PlayerState,
@@ -53,11 +17,12 @@ export const movementWalkOff = (
   const playerTile = player.targetTile;
 
   if (isPresent(playerTile)) {
-    const mapItem = worldMapItems.find((m) => m.name === mapName);
+    const mapItems = getWorldMapItems();
+    const mapItem = mapItems.find((m) => m.name === mapName);
     if (mapItem && direction) {
       const nextMap = calculateNextMap(
         mapItem,
-        worldMapItems,
+        mapItems,
         playerTile,
         direction
       );

@@ -10,7 +10,7 @@ import socialRoutes from "@colyseus/social/express";
 import healthCheck from "./utilities/healthChecks";
 import MapRoom from "./rooms/map";
 import AdminRoom from "./rooms/admin";
-import { readMapFiles } from "./utilities/mapFiles";
+import { readMapFiles } from "@server/utilities/mapFiles";
 
 const port = parseInt(process.env.PORT || "8080");
 const app = express();

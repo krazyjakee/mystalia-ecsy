@@ -1,4 +1,4 @@
-import { readMapFiles } from "../server/utilities/mapFiles";
+import { readMapFiles } from "@server/utilities/mapFiles";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 
 const createObjectTileStore = () => {

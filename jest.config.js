@@ -7,4 +7,5 @@ module.exports = {
     "^types(.*)$": "<rootDir>/src/types$1",
     "^utilities(.*)$": "<rootDir>/src/utilities$1",
   },
+  setupFiles: ["<rootDir>/src/setupTests.js"],
 };

@@ -1,6 +1,6 @@
 import Enemy from "./enemy";
 import MapRoom from "../../rooms/map";
-import { readMapFiles } from "../../utilities/mapFiles";
+import { readMapFiles } from "@server/utilities/mapFiles";
 import MapState from "@server/components/map";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 
