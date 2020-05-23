@@ -15,14 +15,7 @@
             "y": -2176
         },
         {
-            "fileName": "north_1.json",
-            "height": 2176,
-            "width": 3840,
-            "x": 0,
-            "y": -2176
-        },
-        {
-            "fileName": "first_v1.json",
+            "fileName": "first.json",
             "height": 2176,
             "width": 3840,
             "x": 0,
