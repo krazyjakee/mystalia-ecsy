@@ -2,10 +2,12 @@ import * as fs from "fs";
 import { readJSONFile } from "@server/utilities/files";
 import { getMapProperties } from "@server/utilities/tmjTools";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
+import { TMJ } from "types/TMJ";
 
 const errors: string[] = [];
 const roomFileNames: string[] = [];
 const objectTileStores: { [key: string]: ObjectTileStore } = {};
+const mapJsons: { [key: string]: TMJ } = {};
 
 const dir = fs.opendirSync("./assets/maps");
 
@@ -27,6 +29,7 @@ while ((file = dir.readSync()) !== null) {
     }
     roomFileNames.push(filename);
     objectTileStores[filename] = new ObjectTileStore(json);
+    mapJsons[filename] = json;
   }
 }
 
@@ -51,6 +54,21 @@ Object.keys(objectTileStores).forEach((key) => {
       errors.push(
         `door on map "${key}" goes to an invalid map (${door.value.map})`
       );
+    }
+  });
+});
+
+Object.keys(mapJsons).forEach((key) => {
+  const tmj = mapJsons[key];
+  tmj.layers.forEach((layer) => {
+    if (layer.objects) {
+      layer.objects.forEach((tile) => {
+        if (tile.type === "flame" && !tile.polygon) {
+          errors.push(
+            `Flame on map "${key}" is not a polygon. Always use the polygon tool when making flame objects.`
+          );
+        }
+      });
     }
   });
 });
