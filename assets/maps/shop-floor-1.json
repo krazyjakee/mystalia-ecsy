@@ -959,12 +959,12 @@
      "rotation": 0,
      "type": "",
      "visible": true,
-     "width": 384.333333333333,
-     "x": 95.6666666666667,
+     "width": 384,
+     "x": 96,
      "y": 96
     },
     {
-     "height": 223.333333333333,
+     "height": 224,
      "id": 2,
      "name": "",
      "rotation": 0,
@@ -972,7 +972,7 @@
      "visible": true,
      "width": 32,
      "x": 96,
-     "y": 160.666666666667
+     "y": 160
     },
     {
      "height": 32,
@@ -986,7 +986,7 @@
      "y": 384
     },
     {
-     "height": 319.833333333333,
+     "height": 320,
      "id": 5,
      "name": "",
      "rotation": 0,
@@ -997,26 +997,26 @@
      "y": 96
     },
     {
-     "height": 63.9999999999997,
+     "height": 64,
      "id": 9,
      "name": "",
      "rotation": 0,
      "type": "",
      "visible": true,
-     "width": 31.333333333333,
+     "width": 32,
      "x": 512,
      "y": 320
     },
     {
-     "height": 63.9999999999997,
+     "height": 64,
      "id": 10,
      "name": "",
      "rotation": 0,
      "type": "",
      "visible": true,
-     "width": 32.0000000000003,
+     "width": 32,
      "x": 512,
-     "y": 96.0000000000003
+     "y": 96
     },
     {
      "height": 32,
@@ -1030,7 +1030,7 @@
      "y": 160
     },
     {
-     "height": 75.3333333333333,
+     "height": 64,
      "id": 12,
      "name": "",
      "rotation": 0,
@@ -1041,7 +1041,7 @@
      "y": 160
     },
     {
-     "height": 65,
+     "height": 64,
      "id": 13,
      "name": "",
      "rotation": 0,
@@ -1063,7 +1063,7 @@
      "y": 320
     },
     {
-     "height": 96.0000000000001,
+     "height": 96,
      "id": 15,
      "name": "",
      "rotation": 0,
@@ -1074,7 +1074,7 @@
      "y": 288
     },
     {
-     "height": 33,
+     "height": 32,
      "id": 16,
      "name": "entrance",
      "properties": [
@@ -1131,7 +1131,7 @@
      "y": 96
     },
     {
-     "height": 31.5757575757576,
+     "height": 32,
      "id": 20,
      "name": "",
      "properties": [
@@ -1149,12 +1149,12 @@
      "rotation": 0,
      "type": "light",
      "visible": true,
-     "width": 31.939393939394,
-     "x": 447.939393939394,
-     "y": 96.3030303030306
+     "width": 32,
+     "x": 448,
+     "y": 96
     },
     {
-     "height": 31.875,
+     "height": 32,
      "id": 21,
      "name": "",
      "properties": [
@@ -1172,9 +1172,9 @@
      "rotation": 0,
      "type": "light",
      "visible": true,
-     "width": 31.9583333333333,
-     "x": 191.833333333333,
-     "y": 96.166666666667
+     "width": 32,
+     "x": 192,
+     "y": 96
     },
     {
      "height": 32,
@@ -1188,70 +1188,70 @@
      "y": 352
     },
     {
-     "height": 7,
+     "height": 0,
      "id": 23,
      "name": "",
      "rotation": 0,
      "type": "flame",
      "visible": true,
-     "width": 4.875,
-     "x": 451.875,
-     "y": 106.375
+     "width": 0,
+     "x": 448,
+     "y": 96
     },
     {
-     "height": 7,
+     "height": 0,
      "id": 24,
      "name": "",
      "rotation": 0,
      "type": "flame",
      "visible": true,
-     "width": 4.375,
-     "x": 461.125,
-     "y": 115
+     "width": 0,
+     "x": 448,
+     "y": 128
     },
     {
-     "height": 7.75,
+     "height": 0,
      "id": 25,
      "name": "",
      "rotation": 0,
      "type": "flame",
      "visible": true,
-     "width": 4.25,
-     "x": 470.625,
-     "y": 106
+     "width": 0,
+     "x": 480,
+     "y": 96
     },
     {
-     "height": 6.125,
+     "height": 0,
      "id": 26,
      "name": "",
      "rotation": 0,
      "type": "flame",
      "visible": true,
-     "width": 4,
-     "x": 196.625,
-     "y": 107.375
+     "width": 0,
+     "x": 192,
+     "y": 96
     },
     {
-     "height": 6.75,
+     "height": 0,
      "id": 27,
      "name": "",
      "rotation": 0,
      "type": "flame",
      "visible": true,
-     "width": 3.875,
-     "x": 205.375,
-     "y": 114.75
+     "width": 0,
+     "x": 192,
+     "y": 128
     },
     {
-     "height": 7.125,
+     "height": 0,
      "id": 28,
      "name": "",
      "rotation": 0,
      "type": "flame",
      "visible": true,
-     "width": 4.25,
-     "x": 214.5,
-     "y": 106.625
+     "width": 0,
+     "x": 224,
+     "y": 96
     }
    ],
    "opacity": 1,
