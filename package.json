@@ -10,7 +10,7 @@
     "build": "webpack --config src/server/webpack.config.ts",
     "storybook": "start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
-    "test": "npm run testMaps && jest",
+    "test": "npm run testMaps && jest --forceExit",
     "test:watch": "jest --watch",
     "testMaps": "ts-node -r tsconfig-paths/register src/scripts/testMaps.ts",
     "testMaps:watch": "nodemon --config configs/testMaps.nodemon.json",

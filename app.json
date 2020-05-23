@@ -2,7 +2,7 @@
   "environments": {
     "test": {
       "scripts": {
-        "test": "jest --forceExit"
+        "test": "npm run test"
       }
     }
   }
