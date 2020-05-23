@@ -190,7 +190,7 @@
                         {
                          "name":"map",
                          "type":"string",
-                         "value":"first_v1"
+                         "value":"first"
                         }, 
                         {
                          "name":"tile",
@@ -223,7 +223,7 @@
                         {
                          "name":"map",
                          "type":"string",
-                         "value":"shop floor 1"
+                         "value":"shop-floor-1"
                         }, 
                         {
                          "name":"tile",

@@ -4616,7 +4616,7 @@
                         {
                          "name":"map",
                          "type":"string",
-                         "value":"shop floor 0"
+                         "value":"shop-floor-0"
                         }, 
                         {
                          "name":"tile",

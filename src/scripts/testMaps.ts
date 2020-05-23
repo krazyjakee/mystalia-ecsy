@@ -76,3 +76,10 @@ Object.keys(mapJsons).forEach((key) => {
 errors.forEach((error) => {
   console.error(error);
 });
+
+if (errors.length) {
+  console.error(`Found ${errors.length} map errors.`);
+  process.exit(1);
+} else {
+  console.log("All map tests passed!");
+}
