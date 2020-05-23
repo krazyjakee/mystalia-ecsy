@@ -18,7 +18,7 @@ export type WorldMapDataFile = {
 };
 
 export type WorldMapItem = {
-  name: string;
+  fileName: string;
   x: number;
   y: number;
   width: number;
@@ -38,7 +38,13 @@ export const readMapFiles = () => {
     if (file.name.includes(".json")) {
       const json = readJSONFile(`./assets/maps/${file.name}`);
       const properties = getMapProperties(json);
-      maps[properties.name] = json;
+      const filename = file.name.replace(".json", "");
+      maps[filename] = json;
+      maps[filename].properties.push({
+        name: "fileName",
+        type: "string",
+        value: filename,
+      });
     }
   }
 
@@ -64,7 +70,7 @@ export const getWorldMapItems = () => {
     const name = fileName.split(".")[0];
     const map = mapData[name];
     worldMapItems.push({
-      name,
+      fileName: name,
       x,
       y,
       width: map.width * 32,

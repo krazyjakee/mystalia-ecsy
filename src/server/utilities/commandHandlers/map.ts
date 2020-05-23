@@ -10,7 +10,7 @@ import { ObjectTileStore } from "utilities/ObjectTileStore";
 
 export const movementWalkOff = (
   player: PlayerState,
-  mapName: string,
+  mapFileName: string,
   direction?: Direction,
   objectTileStore?: ObjectTileStore
 ) => {
@@ -18,7 +18,7 @@ export const movementWalkOff = (
 
   if (isPresent(playerTile)) {
     const mapItems = getWorldMapItems();
-    const mapItem = mapItems.find((m) => m.name === mapName);
+    const mapItem = mapItems.find((m) => m.fileName === mapFileName);
     if (mapItem && direction) {
       const nextMap = calculateNextMap(
         mapItem,
@@ -31,7 +31,7 @@ export const movementWalkOff = (
         const nextTile = calculateNextPosition(nextMap.map, nextMap.position);
 
         return {
-          map: nextMap.map.name,
+          fileName: nextMap.map.fileName,
           tileId: nextTile,
         };
       }
@@ -72,7 +72,7 @@ export const calculateNextMap = (
   }
 
   const nextMap = destinations.find((destination) => {
-    if (destination.name === source.name) return false;
+    if (destination.fileName === source.fileName) return false;
 
     return areColliding(
       {
@@ -108,7 +108,7 @@ export const isOnDoor = (
   const door = objectTileStore.getByType<"door">(playerTile, "door");
   if (door) {
     return {
-      map: door.value.map,
+      fileName: door.value.map,
       tileId: door.value.tile,
     };
   }

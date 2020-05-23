@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":20,
  "infinite":false,
  "layers":[
@@ -136,7 +143,7 @@
         {
          "name":"name",
          "type":"string",
-         "value":""
+         "value":"CHANGEME"
         }],
  "renderorder":"right-down",
  "tiledversion":"2020.05.07",

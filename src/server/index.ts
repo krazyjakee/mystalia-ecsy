@@ -11,6 +11,7 @@ import healthCheck from "./utilities/healthChecks";
 import MapRoom from "./rooms/map";
 import AdminRoom from "./rooms/admin";
 import { readMapFiles } from "@server/utilities/mapFiles";
+import mapRoutes from "./routes/maps";
 
 const port = parseInt(process.env.PORT || "8080");
 const app = express();
@@ -40,6 +41,7 @@ app.use(express.static(path.resolve(__dirname, "..", "..", "public")));
 
 app.use("/colyseus", monitor());
 app.use("/", socialRoutes);
+app.use("/maps", mapRoutes);
 
 const server = http.createServer(app);
 const gameServer = new Server({

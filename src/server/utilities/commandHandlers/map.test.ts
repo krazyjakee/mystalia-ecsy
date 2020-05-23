@@ -17,7 +17,7 @@ describe("MapCommandHandler", () => {
   let mapCount = 0;
 
   const mapA = {
-    name: "0",
+    fileName: "0",
     width: 128,
     height: 128,
     x: 0,
@@ -25,7 +25,7 @@ describe("MapCommandHandler", () => {
   };
 
   const generateMap = (x, y) => ({
-    name: `${(mapCount += 1)}`,
+    fileName: `${(mapCount += 1)}`,
     width: 64,
     height: 64,
     x,

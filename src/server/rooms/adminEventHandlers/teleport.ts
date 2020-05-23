@@ -30,7 +30,7 @@ export class TeleportRequestCommand extends Command<
           ({ currentRoom, targetTile }: PlayerState) => {
             if (currentRoom && targetTile) {
               const response: RoomMessage<"localPlayer:movement:nextMap"> = {
-                map: currentRoom,
+                fileName: currentRoom,
                 tileId: targetTile,
               };
               client.send("localPlayer:movement:nextMap", response);
