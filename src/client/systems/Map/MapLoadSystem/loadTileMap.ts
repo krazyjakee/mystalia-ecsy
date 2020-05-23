@@ -24,17 +24,15 @@ export default async (
   // Create an object store from the object tiles
   tileMap.objectTileStore = new ObjectTileStore(data);
 
-  // Set the map name
-  tileMap.name =
-    data.properties.find((property) => property.name === "name")?.value ||
-    "first";
-
   // Set the map properties
   const properties: TileMapProperties = {};
   data.properties.forEach(
     (property) => (properties[property.name] = property.value)
   );
   tileMap.properties = properties;
+
+  // Set the map name
+  tileMap.fileName = tileMap.properties.fileName || "first";
 
   // Save tileset data and download assets
   const { tilesets } = data;

@@ -79,13 +79,13 @@ export default class CommandsSystem extends System {
 
         gameState.subscribe(
           "localPlayer:movement:nextMap",
-          ({ map, tileId }) => {
+          ({ fileName, tileId }) => {
             drawable.data = undefined;
             movement.currentTile = tileId;
             movement.tileQueue = [];
             movement.direction = undefined;
             tileMapEntity.addComponent(Unloadable, {
-              dataPath: mapAssetPath(map),
+              dataPath: mapAssetPath(fileName),
             });
             localPlayerEntity.removeComponent(ChangingMap);
           }

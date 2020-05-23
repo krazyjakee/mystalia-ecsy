@@ -3,15 +3,18 @@
   "author": "krazyjakee@gmail.com",
   "version": "0.0.1",
   "scripts": {
-    "server": "cross-env NODE_ENV=development nodemon --watch src/server --watch src/utilities --watch assets --exec ts-node -r tsconfig-paths/register ./src/server/index.ts",
-    "client": "cross-env NODE_ENV=development webpack-dev-server --config src/server/webpack.config.ts",
+    "server": "nodemon --config configs/debugServer.nodemon.json",
+    "client": "nodemon --config configs/debugClient.nodemon.json",
     "start": "concurrently \"npm:server\" \"npm:client\"",
     "start:prod": "ts-node -r tsconfig-paths/register ./src/server/index.ts",
     "build": "webpack --config src/server/webpack.config.ts",
     "storybook": "start-storybook -s ./ -p 6006",
     "build-storybook": "build-storybook",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "npm run testMaps && jest --forceExit",
+    "test:watch": "jest --watch",
+    "testMaps": "ts-node -r tsconfig-paths/register src/scripts/testMaps.ts",
+    "testMaps:watch": "nodemon --config configs/testMaps.nodemon.json",
+    "lintMaps": "ts-node -r tsconfig-paths/register src/scripts/lintMaps.ts"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
@@ -68,11 +71,10 @@
     "babel-loader": "^8.1.0",
     "concurrently": "^5.1.0",
     "copy-webpack-plugin": "^5.1.1",
-    "cross-env": "^5.2.0",
     "css-loader": "^3.5.1",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^25.3.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "nodemon": "^2.0.3",
     "prettier": "^1.17.1",
     "react-docgen-typescript-loader": "^3.7.2",
@@ -85,7 +87,7 @@
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.0",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   },
   "engines": {
     "node": "12.x"

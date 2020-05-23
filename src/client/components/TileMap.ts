@@ -14,7 +14,7 @@ export default class TileMap extends Component {
   canvasCache: HTMLCanvasElement[] = [];
   width: number = 0;
   height: number = 0;
-  name: string = "";
+  fileName: string = "";
   targetTile: number | null = null;
 
   reset() {
@@ -24,7 +24,7 @@ export default class TileMap extends Component {
     this.objectTileStore = new ObjectTileStore();
     this.width = 0;
     this.height = 0;
-    this.name = "";
+    this.fileName = "first";
     this.targetTile = null;
     this.canvasCache = [];
     this.properties = {};

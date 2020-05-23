@@ -43,7 +43,7 @@ export interface GameStateEvents {
     direction?: Direction;
   };
   "localPlayer:movement:nextMap": {
-    map: string;
+    fileName: string;
     tileId: number;
   };
   "localPlayer:inventory:pickup": {

@@ -70,7 +70,7 @@ export default class NetworkingSystem extends System {
       this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMapEntity) return;
     const tileMap = (tileMapEntity as Entity).getComponent(TileMap);
-    const { name, width } = tileMap;
+    const { fileName, width } = tileMap;
 
     const networkRoomEntity = this.queries.networkRoom.results[0] as Entity;
 
@@ -80,7 +80,7 @@ export default class NetworkingSystem extends System {
 
     if (!networkRoom.room) {
       networkRoom.joining = true;
-      client.joinOrCreate(name).then((room) => {
+      client.joinOrCreate(fileName).then((room) => {
         tileMapEntity.removeComponent(Gray);
         clearTimeout(connectionTimer);
         gameState.addRoom("map", room);
