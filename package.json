@@ -12,7 +12,8 @@
     "build-storybook": "build-storybook",
     "test": "jest",
     "test:watch": "jest --watch",
-    "testMaps": "ts-node -r tsconfig-paths/register src/scripts/testMaps.ts"
+    "testMaps": "ts-node -r tsconfig-paths/register src/scripts/testMaps.ts",
+    "lintMaps": "ts-node -r tsconfig-paths/register src/scripts/lintMaps.ts"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",

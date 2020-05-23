@@ -34,7 +34,6 @@ dir.closeSync();
 
 Object.keys(objectTileStores).forEach((key) => {
   const ots = objectTileStores[key];
-  console.log(ots.getAllByType("door").length);
   ots.getAllByType("door").forEach((door) => {
     if (!door.value) {
       errors.push(
