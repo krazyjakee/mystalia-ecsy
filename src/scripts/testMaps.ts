@@ -82,4 +82,5 @@ if (errors.length) {
   process.exit(1);
 } else {
   console.log("All map tests passed!");
+  process.exit(0);
 }

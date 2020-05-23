@@ -82,7 +82,7 @@ describe("MapCommandHandler", () => {
     test("correctly resolve next map and position", () => {
       if (!mapRoom.objectTileStore) return;
       const nextMap = movementWalkOff(createPlayerState(8128), "first", "s");
-      expect(nextMap).toStrictEqual({ map: "south", tileId: 88 });
+      expect(nextMap).toStrictEqual({ fileName: "south", tileId: 88 });
     });
 
     test("correctly detect a player is on a door", () => {
@@ -93,7 +93,7 @@ describe("MapCommandHandler", () => {
         undefined,
         mapRoom.objectTileStore
       );
-      expect(nextMap).toStrictEqual({ map: "first", tileId: 4 });
+      expect(nextMap).toStrictEqual({ fileName: "first", tileId: 4 });
     });
   });
 });
