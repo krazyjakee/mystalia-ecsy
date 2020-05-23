@@ -4,6 +4,7 @@ import Drawable from "@client/components/Drawable";
 import Fade from "@client/components/Fade";
 import { Vector } from "types/TMJ";
 import addOffset from "./Vector/addOffset";
+import { degreeToRadian } from "utilities/math";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -79,18 +80,22 @@ export const flipOrRotateImage = (drawable: DrawableProperties) => {
   let x = 0;
   let y = 0;
 
-  if (flipHorizontal) {
-    context.scale(-1, 1);
+  if (flipDiagonal && flipVertical) {
+    context.rotate(degreeToRadian(90));
+    y -= height;
+    context.rotate(degreeToRadian(180));
     x -= width;
-  }
-  if (flipVertical) {
-    context.scale(1, -1);
+    y += height;
+  } else if (flipDiagonal) {
+    context.rotate(degreeToRadian(90));
+    y -= height;
+  } else if (flipVertical) {
+    context.rotate(degreeToRadian(180));
+    x -= width;
     y -= height;
   }
-  if (flipDiagonal) {
-    context.rotate(Math.PI / 2);
-    x = 0;
-    y = 0;
+  if (flipHorizontal) {
+    context.scale(-1, 1);
   }
 
   context.drawImage(

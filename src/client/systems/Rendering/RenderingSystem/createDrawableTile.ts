@@ -60,32 +60,16 @@ export default (
 };
 
 export const flipTile = (tileId) => {
-  let flipHorizontal = false;
-  let flipVertical = false;
-  let flipDiagonal = false;
+  const flipHorizontal = (tileId & flippedHorizontallyFlag) > 0;
+  const flipVertical = (tileId & flippedVerticallyFlag) > 0;
+  const flipDiagonal = (tileId & flippedDiagonallyFlag) > 0;
 
-  while (tileId > flippedDiagonallyFlag) {
-    if (tileId > flippedHorizontallyFlag) {
-      tileId -= flippedHorizontallyFlag;
-      flipHorizontal = true;
-      continue;
-    }
-
-    if (tileId > flippedVerticallyFlag) {
-      tileId -= flippedVerticallyFlag;
-      flipVertical = true;
-      continue;
-    }
-
-    if (tileId > flippedDiagonallyFlag) {
-      tileId -= flippedDiagonallyFlag;
-      flipDiagonal = true;
-      continue;
-    }
-  }
+  const tile =
+    tileId &
+    ~(flippedHorizontallyFlag | flippedVerticallyFlag | flippedDiagonallyFlag);
 
   return {
-    tileId,
+    tileId: tile,
     flipDiagonal,
     flipVertical,
     flipHorizontal,
