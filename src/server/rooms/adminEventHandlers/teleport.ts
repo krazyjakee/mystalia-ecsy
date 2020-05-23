@@ -14,10 +14,10 @@ export class TeleportRequestCommand extends Command<
         "admin:teleport:request"
       >;
 
-      const { map, tileId } = teleportRequestData;
+      const { fileName, tileId } = teleportRequestData;
 
       // Teleport to me or teleport to specific map
-      if (map && tileId) {
+      if (fileName && tileId) {
         const response: PresenceMessage<"localPlayer:movement:nextMap"> = {
           command: "localPlayer:movement:nextMap",
           ...(teleportRequestData as GameStateEvents["localPlayer:movement:nextMap"]),

@@ -18,7 +18,7 @@ export interface GameStateEvents {
   };
   "admin:teleport:request": {
     username: string;
-    map?: string;
+    fileName?: string;
     tileId?: number;
   };
   "localPlayer:change": {

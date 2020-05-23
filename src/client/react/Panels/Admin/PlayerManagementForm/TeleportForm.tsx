@@ -24,7 +24,7 @@ export default () => {
       if (selectedUser && roomName && movement.currentTile) {
         gameState.send("admin", "admin:teleport:request", {
           username: selectedUser,
-          map: roomName,
+          fileName: roomName,
           tileId: movement.currentTile,
         });
       }
@@ -47,7 +47,7 @@ export default () => {
     if (selectedMap && tileIdRef.current && selectedUser) {
       gameState.send("admin", "admin:teleport:request", {
         username: selectedUser,
-        map: selectedMap,
+        fileName: selectedMap,
         tileId: parseInt(tileIdRef.current.value),
       });
     }
