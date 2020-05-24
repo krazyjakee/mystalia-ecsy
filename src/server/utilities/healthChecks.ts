@@ -8,7 +8,7 @@ export default (callback: Function) => {
 
   const timeout = setTimeout(() => {
     throw Error("could not connect to MongoDB. Connection timed out.");
-  }, 5000);
+  }, 10000);
 
   mongoose.connection.on("connected", () => {
     clearTimeout(timeout);

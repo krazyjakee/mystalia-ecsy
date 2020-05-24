@@ -12,7 +12,6 @@ export type DrawableProperties = {
   width: number;
   height: number;
   offset?: Vector;
-  flipHorizontal?: boolean;
   flipVertical?: boolean;
-  flipDiagonal?: boolean;
+  flipDiagonal?: number;
 };

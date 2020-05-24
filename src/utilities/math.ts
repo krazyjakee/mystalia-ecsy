@@ -17,3 +17,7 @@ export const areColliding = (input1: Rect, input2: Rect) => {
     input1.y + input1.height > input2.y
   );
 };
+
+export const degreeToRadian = (degree: number) => (degree * Math.PI) / 180;
+
+export const radianToDegree = (radians: number) => radians * (180 / Math.PI);

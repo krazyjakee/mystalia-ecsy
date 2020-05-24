@@ -1,0 +1,14 @@
+{ "columns":24,
+ "image":"terrain3 hue darker.png",
+ "imageheight":1599,
+ "imagewidth":768,
+ "margin":0,
+ "name":"terrain3 hue darker",
+ "spacing":0,
+ "tilecount":1176,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

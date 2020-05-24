@@ -1,20 +1,27 @@
 {
-  "maps": [
-    {
-      "fileName": "first.json",
-      "x": 0,
-      "y": 0
-    },
-    {
-      "fileName": "south.json",
-      "x": 0,
-      "y": 2176
-    },
-    {
-      "fileName": "north.json",
-      "x": 0,
-      "y": -2176
-    }
-  ],
-  "type": "world"
+    "maps": [
+        {
+            "fileName": "south.json",
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 2176
+        },
+        {
+            "fileName": "north.json",
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": -2176
+        },
+        {
+            "fileName": "first.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 0,
+            "y": 0
+        }
+    ],
+    "onlyShowAdjacentMaps": false,
+    "type": "world"
 }
