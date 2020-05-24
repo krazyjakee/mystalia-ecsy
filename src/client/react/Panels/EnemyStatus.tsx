@@ -107,7 +107,7 @@ export const EnemyStatus = (props: Props) => {
   }, [key]);
 
   if (!enemy.enemySpec) return null;
-  const { name, portrait, abilities: specAbilities } = enemy.enemySpec;
+  const { name, portrait, abilities: specAbilities = [] } = enemy.enemySpec;
 
   const abilities: AbilitySpec[] = specAbilities
     .map((specAbility) =>
@@ -137,7 +137,6 @@ export const EnemyStatus = (props: Props) => {
     return null;
   };
 
-  // TODO show enemy portait
   return (
     <div {...props} id="enemyStateComponent" className={classes.root}>
       <div className={classes.label}>{name}</div>

@@ -1,14 +1,40 @@
 import EnemyState from "@server/components/enemy";
+import { Size } from "./TileMap/standard";
 
 type EnemyBehaviourProperty = {
   chance: number;
   distance: number;
 };
 
+type ScheduledWorldLocation = {
+  mapName: string;
+  tileId: number;
+  departureTime: number;
+};
+
 type EnemyBehaviour = {
   skeptical?: EnemyBehaviourProperty;
   escape?: EnemyBehaviourProperty;
   attack?: EnemyBehaviourProperty;
+  static?: {
+    lookAround: boolean;
+    lookAtPlayer: boolean;
+    distance?: number; // Distance of player before looking at them
+  };
+  patrol?: {
+    tiles: number[]; // Tiles to walk between
+    standTime: [number, number]; // Random time in ms to stand on a defined tile.
+  };
+  biomeWanderer?: {
+    campAtNight: boolean;
+  };
+  traveler?: {
+    campAtNight: boolean;
+  };
+  scheduled?: {
+    campAtNight: boolean;
+    schedule: ScheduledWorldLocation[];
+  };
 };
 
 type EnemyBehaviourNames = keyof EnemyBehaviour;
@@ -30,7 +56,11 @@ export type EnemySpec = {
   maxDistance: number;
   hp: number;
   abilities: number[];
+  spriteSize?: Size;
   drop?: EnemyDrop[];
+  customName?: string;
+  shopId?: number;
+  personalityId?: number;
 };
 
 export type EnemyReference = {

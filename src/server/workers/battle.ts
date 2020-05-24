@@ -118,9 +118,10 @@ export default class Battle {
 
       if (!enemySpec) return;
 
-      const abilities: AbilitySpec[] = enemySpec.abilities
-        .map((a) => abilitySpecs.find((as) => as.id === a))
-        .filter(isPresent);
+      const abilities: AbilitySpec[] =
+        enemySpec.abilities
+          ?.map((a) => abilitySpecs.find((as) => as.id === a))
+          .filter(isPresent) || [];
 
       const playerPosition = (this.room.state.players[
         enemyState.targetPlayer

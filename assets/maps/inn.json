@@ -912,6 +912,50 @@
                  "width":32,
                  "x":352,
                  "y":160
+                }, 
+                {
+                 "height":32,
+                 "id":73,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":3
+                        }],
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":32,
+                 "x":256,
+                 "y":192
+                }, 
+                {
+                 "height":32,
+                 "id":74,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":160,
+                 "x":224,
+                 "y":224
+                }, 
+                {
+                 "height":64,
+                 "id":75,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":352,
+                 "y":160
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -977,7 +1021,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":72,
+ "nextobjectid":76,
  "orientation":"orthogonal",
  "properties":[
         {

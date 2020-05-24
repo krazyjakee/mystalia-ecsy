@@ -11,6 +11,8 @@ import {
   findClosestPath,
 } from "utilities/movement/surroundings";
 import PlayerState from "@server/components/player";
+import { mongoose } from "@colyseus/social";
+import EnemySchema from "@server/db/EnemySchema";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -85,7 +87,9 @@ export default class Enemy {
               ] as EnemyState).targetPlayer = undefined;
             }
           } else {
-            this.findNewTargetTile();
+            if (!this.spec.behavior.static) {
+              this.findNewTargetTile();
+            }
           }
           this.tick();
         },
@@ -187,6 +191,19 @@ export default class Enemy {
       }
       return true;
     }
+  }
+
+  loadFromDB() {
+    const enemies = mongoose.model("Enemy", EnemySchema);
+    enemies.find({ room: this.room.roomName, zoneId: -1 }, (err, res) => {
+      if (err) return console.log(err.message);
+      res.forEach((doc) => {
+        if (this.allowedTiles) {
+          const obj = doc.toJSON();
+          this.currentTile = obj.currentTile;
+        }
+      });
+    });
   }
 
   destroy() {

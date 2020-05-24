@@ -23,6 +23,10 @@ export type ObjectTileType = {
     blur?: number;
     opacity?: number;
   };
+  enemy: {
+    id: number;
+    chance: number;
+  };
   enemyZone: {
     chance: number;
     enemy: number;

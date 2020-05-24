@@ -14,7 +14,7 @@ export default function CreateEnemy(
   enemySpec: EnemySpec,
   mapWidth: number
 ) {
-  const size = {
+  const size = enemySpec.spriteSize || {
     width: 32,
     height: 32,
   };
@@ -31,7 +31,7 @@ export default function CreateEnemy(
       steps: generateCharacterAnimationSteps("s", size),
       loopAround: true,
     })
-    .addComponent(Enemy, { key, state: enemy })
+    .addComponent(Enemy, { key, state: enemy, spec: enemySpec })
     .addComponent(MouseInput)
     .addComponent(CommandsPending);
 }
