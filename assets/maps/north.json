@@ -218,28 +218,6 @@
                  "y":448
                 }, 
                 {
-                 "height":32,
-                 "id":13,
-                 "name":"castle main 1",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":1568,
-                 "y":480
-                }, 
-                {
-                 "height":32,
-                 "id":14,
-                 "name":"castle main 2",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":2144,
-                 "y":480
-                }, 
-                {
                  "height":64,
                  "id":15,
                  "name":"",
@@ -493,17 +471,6 @@
                  "y":224
                 }, 
                 {
-                 "height":32,
-                 "id":38,
-                 "name":"castle wall north 2",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":2912,
-                 "y":352
-                }, 
-                {
                  "height":320,
                  "id":39,
                  "name":"",
@@ -568,17 +535,6 @@
                  "width":128,
                  "x":736,
                  "y":224
-                }, 
-                {
-                 "height":32,
-                 "id":45,
-                 "name":"castle wall north 1",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":800,
-                 "y":320
                 }, 
                 {
                  "height":192,
@@ -651,17 +607,6 @@
                  "width":32,
                  "x":512,
                  "y":2144
-                }, 
-                {
-                 "height":5.81818181818198,
-                 "id":52,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flame",
-                 "visible":true,
-                 "width":7.63636363636363,
-                 "x":523.636363636364,
-                 "y":2161.45454545455
                 }, 
                 {
                  "height":64,
@@ -739,6 +684,34 @@
                  "width":1088,
                  "x":736,
                  "y":192
+                }, 
+                {
+                 "height":0,
+                 "id":62,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":8.54545,
+                         "y":0.181818
+                        }, 
+                        {
+                         "x":8.18182,
+                         "y":4.54545
+                        }, 
+                        {
+                         "x":0.363636,
+                         "y":5.27273
+                        }],
+                 "rotation":0,
+                 "type":"flame",
+                 "visible":true,
+                 "width":0,
+                 "x":524.770942239546,
+                 "y":2160.50311552091
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -771,38 +744,18 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":62,
+ "nextobjectid":63,
  "orientation":"orthogonal",
  "properties":[
         {
          "name":"biome",
          "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"east",
-         "type":"string",
-         "value":""
+         "value":"forest"
         }, 
         {
          "name":"name",
          "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"north",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"south",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"west",
-         "type":"string",
-         "value":""
+         "value":"north"
         }],
  "renderorder":"right-down",
  "tiledversion":"2020.05.07",
