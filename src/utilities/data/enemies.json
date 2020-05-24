@@ -56,5 +56,21 @@
     },
     "hp": 95,
     "abilities": [0]
+  },
+  {
+    "id": 3,
+    "name": "Inn Keeper",
+    "spritesheet": "npcs/ark/service-worker-1",
+    "spriteSize": { "width": 24, "height": 32 },
+    "speed": 1,
+    "maxDistance": 4,
+    "hp": 55000,
+    "behavior": {
+      "static": {
+        "lookAround": true,
+        "lookAtPlayer": true,
+        "distance": 4
+      }
+    }
   }
 ]

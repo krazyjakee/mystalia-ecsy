@@ -4,6 +4,10 @@
   <property name="map" type="string"/>
   <property name="tile" type="int" default="0"/>
  </objecttype>
+ <objecttype name="enemy" color="#fc006f">
+  <property name="chance" type="int" default="0"/>
+  <property name="id" type="int" default="0"/>
+ </objecttype>
  <objecttype name="enemyZone" color="#b50000">
   <property name="chance" type="int" default="0"/>
   <property name="enemy" type="int" default="0"/>

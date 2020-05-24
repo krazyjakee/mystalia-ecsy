@@ -1,4 +1,5 @@
 import EnemyState from "@server/components/enemy";
+import { Size } from "./TileMap/standard";
 
 type EnemyBehaviourProperty = {
   chance: number;
@@ -55,6 +56,7 @@ export type EnemySpec = {
   maxDistance: number;
   hp: number;
   abilities: number[];
+  spriteSize?: Size;
   drop?: EnemyDrop[];
   customName?: string;
   shopId?: number;

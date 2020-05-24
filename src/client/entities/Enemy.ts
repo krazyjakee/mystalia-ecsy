@@ -14,7 +14,7 @@ export default function CreateEnemy(
   enemySpec: EnemySpec,
   mapWidth: number
 ) {
-  const size = {
+  const size = enemySpec.spriteSize || {
     width: 32,
     height: 32,
   };
