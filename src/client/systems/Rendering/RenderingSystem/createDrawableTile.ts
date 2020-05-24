@@ -2,6 +2,7 @@ import { DrawableProperties } from "types/drawable";
 import { TMJ } from "types/TMJ";
 import { TileSetStore } from "types/TileMap/TileSetStore";
 import { tileIdToVector } from "utilities/tileMap";
+import { degreeToRadian, radianToDegree } from "utilities/math";
 
 const flippedHorizontallyFlag = 0x80000000;
 const flippedVerticallyFlag = 0x40000000;
@@ -16,16 +17,14 @@ export default (
   const { tilesets, width } = data;
 
   let tileId = sourceTileId;
-  let flipHorizontal = false;
   let flipVertical = false;
-  let flipDiagonal = false;
+  let flipDiagonal = 0;
 
   if (tileId > flippedDiagonallyFlag) {
     const flippedProperties = flipTile(tileId);
     tileId = flippedProperties.tileId;
-    flipHorizontal = flippedProperties.flipHorizontal || false;
     flipVertical = flippedProperties.flipVertical || false;
-    flipDiagonal = flippedProperties.flipDiagonal || false;
+    flipDiagonal = flippedProperties.flipDiagonal || 0;
   }
 
   const externalTileSet = tilesets.find((tileset) => tileset.firstgid < tileId);
@@ -51,7 +50,6 @@ export default (
     width: 32,
     height: 32,
     offset: { x: 0, y: 0 },
-    flipHorizontal,
     flipVertical,
     flipDiagonal,
   };
@@ -60,18 +58,66 @@ export default (
 };
 
 export const flipTile = (tileId) => {
-  const flipHorizontal = (tileId & flippedHorizontallyFlag) > 0;
-  const flipVertical = (tileId & flippedVerticallyFlag) > 0;
-  const flipDiagonal = (tileId & flippedDiagonallyFlag) > 0;
+  let flippedVal = 0;
+  let flipped = false;
+  let rotation = 0;
 
   const tile =
     tileId &
     ~(flippedHorizontallyFlag | flippedVerticallyFlag | flippedDiagonallyFlag);
 
+  if (tileId > flippedHorizontallyFlag) {
+    tileId -= flippedHorizontallyFlag;
+    flippedVal += 4;
+  }
+
+  if (tileId > flippedVerticallyFlag) {
+    tileId -= flippedVerticallyFlag;
+    flippedVal += 2;
+  }
+
+  if (tileId > flippedDiagonallyFlag) {
+    tileId -= flippedDiagonallyFlag;
+    flippedVal += 1;
+  }
+
+  switch (flippedVal) {
+    case 5:
+      rotation = Math.PI / 2;
+      break;
+
+    case 6:
+      rotation = Math.PI;
+      break;
+
+    case 3:
+      rotation = (3 * Math.PI) / 2;
+      break;
+
+    case 4:
+      rotation = 0;
+      flipped = true;
+      break;
+
+    case 7:
+      rotation = Math.PI / 2;
+      flipped = true;
+      break;
+
+    case 2:
+      rotation = Math.PI;
+      flipped = true;
+      break;
+
+    case 1:
+      rotation = (3 * Math.PI) / 2;
+      flipped = true;
+      break;
+  }
+
   return {
     tileId: tile,
-    flipDiagonal,
-    flipVertical,
-    flipHorizontal,
+    flipDiagonal: radianToDegree(rotation),
+    flipVertical: flipped,
   };
 };

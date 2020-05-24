@@ -4,7 +4,7 @@ import Drawable from "@client/components/Drawable";
 import Fade from "@client/components/Fade";
 import { Vector } from "types/TMJ";
 import addOffset from "./Vector/addOffset";
-import { degreeToRadian } from "utilities/math";
+import { radianToDegree, degreeToRadian } from "utilities/math";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -22,12 +22,11 @@ export const drawImage = (
     height,
     offset = { x: 0, y: 0 },
     flipDiagonal,
-    flipHorizontal,
     flipVertical,
   } = drawable;
 
   if (image) {
-    const flipped = Boolean(flipDiagonal || flipHorizontal || flipVertical);
+    const flipped = Boolean(flipDiagonal || flipVertical || flipVertical);
     const targetContext = customContext ? customContext : context2d;
 
     if (flipped) {
@@ -71,7 +70,6 @@ export const flipOrRotateImage = (drawable: DrawableProperties) => {
     width,
     height,
     flipDiagonal,
-    flipHorizontal,
     flipVertical,
   } = drawable;
 
@@ -80,22 +78,30 @@ export const flipOrRotateImage = (drawable: DrawableProperties) => {
   let x = 0;
   let y = 0;
 
-  if (flipDiagonal && flipVertical) {
-    context.rotate(degreeToRadian(90));
-    y -= height;
-    context.rotate(degreeToRadian(180));
-    x -= width;
-    y += height;
-  } else if (flipDiagonal) {
-    context.rotate(degreeToRadian(90));
-    y -= height;
-  } else if (flipVertical) {
-    context.rotate(degreeToRadian(180));
-    x -= width;
-    y -= height;
+  if (flipDiagonal) {
+    context.rotate(degreeToRadian(flipDiagonal));
+    if (flipDiagonal === 90) {
+      y -= height;
+    } else if (flipDiagonal === 180) {
+      x -= width;
+      y -= height;
+    } else if (flipDiagonal === 270) {
+      if (flipVertical) {
+        x += width;
+      } else {
+        x -= width;
+      }
+    }
   }
-  if (flipHorizontal) {
+  if (flipVertical) {
     context.scale(-1, 1);
+    if (flipDiagonal === 180) {
+      x += width;
+    } else if (flipDiagonal === 270) {
+      x -= width;
+    } else {
+      x -= width;
+    }
   }
 
   context.drawImage(
