@@ -195,28 +195,6 @@
                  "y":448
                 }, 
                 {
-                 "height":32,
-                 "id":13,
-                 "name":"castle main 1",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":1568,
-                 "y":480
-                }, 
-                {
-                 "height":32,
-                 "id":14,
-                 "name":"castle main 2",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":2144,
-                 "y":480
-                }, 
-                {
                  "height":64,
                  "id":15,
                  "name":"",
@@ -470,17 +448,6 @@
                  "y":224
                 }, 
                 {
-                 "height":32,
-                 "id":38,
-                 "name":"castle wall north 2",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":2912,
-                 "y":352
-                }, 
-                {
                  "height":320,
                  "id":39,
                  "name":"",
@@ -545,17 +512,6 @@
                  "width":128,
                  "x":736,
                  "y":224
-                }, 
-                {
-                 "height":32,
-                 "id":45,
-                 "name":"castle wall north 1",
-                 "rotation":0,
-                 "type":"door",
-                 "visible":true,
-                 "width":32,
-                 "x":800,
-                 "y":320
                 }, 
                 {
                  "height":192,
