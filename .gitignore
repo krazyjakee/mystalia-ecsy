@@ -1,6 +1,7 @@
 node_modules/
 .DS_Store
-public/
+public/**/*
+!public/worker.js
 assets/maps/*.png
 .env
 assets/maps/project.tiled-session
