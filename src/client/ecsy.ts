@@ -39,6 +39,8 @@ import InventorySystem from "./systems/InventorySystem";
 import CharacterHighlightSystem from "./systems/Rendering/CharacterHighlightSystem";
 import TextBurstSystem from "./systems/Rendering/TextBurstSystem";
 import SpriteSheetAnimationSystem from "./systems/Rendering/SpriteSheetAnimationSystem";
+import BehaviourSystem from "./systems/MovementSystem/Behaviour";
+import StaticBehaviourSystem from "./systems/MovementSystem/Behaviour/StaticBehaviourSystem";
 
 let world = new World();
 
@@ -72,6 +74,8 @@ export default (user: User) => {
     .registerSystem(GraySystem)
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)
+    .registerSystem(BehaviourSystem)
+    .registerSystem(StaticBehaviourSystem)
     .registerSystem(TextBurstSystem)
     .registerSystem(SpriteSheetAnimationSystem)
     .registerSystem(CommandsSystem)

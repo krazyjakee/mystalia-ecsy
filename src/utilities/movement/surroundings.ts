@@ -2,6 +2,9 @@ import { Size } from "types/TileMap/standard";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
 import { isPresent } from "utilities/guards";
+import { Vector } from "types/TMJ";
+import { Direction } from "types/Grid";
+import { radianToDegree } from "utilities/math";
 
 export const tilesInRadiusOf = (
   tileId: number,
@@ -106,4 +109,31 @@ export const findClosestPath = (
     }
     totalRadius -= 1;
   }
+};
+
+export const facePosition = (
+  positionEyes: Vector,
+  positionTarget: Vector
+): Direction => {
+  let angle = Math.atan2(
+    positionEyes.y - positionTarget.y,
+    positionEyes.x - positionTarget.x
+  );
+
+  angle = radianToDegree(angle) - 90;
+
+  if (angle < 0) {
+    angle += 360;
+  }
+
+  if (angle > 30 && angle <= 165) {
+    return "e";
+  }
+  if (angle > 165 && angle <= 195) {
+    return "s";
+  }
+  if (angle > 195 && angle <= 345) {
+    return "w";
+  }
+  return "n";
 };

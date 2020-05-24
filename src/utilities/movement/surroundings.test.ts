@@ -5,6 +5,7 @@ import {
   distanceBetweenTiles,
   tilesAtRadiusOf,
   findClosestPath,
+  facePosition,
 } from "./surroundings";
 
 const createObjectTileStore = () => {
@@ -76,6 +77,24 @@ describe("surroundings", () => {
 
       path = findClosestPath(ots, 76, 89);
       expect(path).toStrictEqual([66, 67]);
+    });
+  });
+
+  describe("#facePosition", () => {
+    test("correctly returns direction", () => {
+      const eyes = {
+        x: 5,
+        y: 5,
+      };
+
+      let direction = facePosition(eyes, { x: 8, y: 4 });
+      expect(direction).toBe("e");
+
+      direction = facePosition(eyes, { x: 5, y: 1 });
+      expect(direction).toBe("n");
+
+      direction = facePosition(eyes, { x: 1, y: 4 });
+      expect(direction).toBe("w");
     });
   });
 });
