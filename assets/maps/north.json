@@ -6337,32 +6337,12 @@
         {
          "name":"biome",
          "type":"string",
-         "value":"foristy"
-        }, 
-        {
-         "name":"east",
-         "type":"string",
-         "value":""
+         "value":"forest"
         }, 
         {
          "name":"name",
          "type":"string",
          "value":"north"
-        }, 
-        {
-         "name":"north",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"south",
-         "type":"string",
-         "value":""
-        }, 
-        {
-         "name":"west",
-         "type":"string",
-         "value":""
         }],
  "renderorder":"right-down",
  "tiledversion":"2020.05.07",
