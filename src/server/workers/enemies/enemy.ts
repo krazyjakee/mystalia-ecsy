@@ -77,7 +77,8 @@ export default class Enemy {
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
       this.currentTile,
-      zoneId
+      zoneId,
+      this.objectTile?.name
     );
     this.tick();
   }
