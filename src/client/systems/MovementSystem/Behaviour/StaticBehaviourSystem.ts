@@ -7,7 +7,10 @@ import Movement from "@client/components/Movement";
 import { Loadable } from "@client/components/Loadable";
 import TileMap from "@client/components/TileMap";
 import { tileIdToVector } from "utilities/tileMap";
-import { facePosition } from "utilities/movement/surroundings";
+import {
+  facePosition,
+  distanceBetweenTiles,
+} from "utilities/movement/surroundings";
 import { randomNumberBetween } from "utilities/math";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
 import { generateCharacterAnimationSteps } from "@client/utilities/Animation/character";
@@ -50,26 +53,18 @@ export default class StaticBehaviourSystem extends System {
     if (!tileMap) return;
 
     const mapColumns = tileMap.width;
-    const aStar = new AStarFinder({
-      grid: { width: tileMap.width, height: tileMap.height },
-      diagonalAllowed: false,
-      includeStartNode: false,
-    });
+
     const remotePlayerPositions = this.queries.remotePlayers.results.map(
-      (entity) =>
-        tileIdToVector(entity.getComponent(Movement).currentTile, mapColumns)
+      (entity) => entity.getComponent(Movement).currentTile
     );
-    const localPlayerPosition = this.queries.localPlayer.results.map((entity) =>
-      tileIdToVector(entity.getComponent(Movement).currentTile, mapColumns)
+    const localPlayerPosition = this.queries.localPlayer.results.map(
+      (entity) => entity.getComponent(Movement).currentTile
     );
 
     this.queries.enemies.results.forEach((entity: Entity) => {
       const enemy = entity.getComponent(Enemy);
 
-      const currentPosition = tileIdToVector(
-        entity.getComponent(Movement).currentTile,
-        mapColumns
-      );
+      const currentPosition = entity.getComponent(Movement).currentTile;
 
       const spec = enemy.spec;
       let direction: Direction | undefined;
@@ -81,10 +76,17 @@ export default class StaticBehaviourSystem extends System {
 
           if (localPlayerPosition.length) {
             if (
-              aStar.findPath(currentPosition, localPlayerPosition[0]).length <=
-              specDistance
+              distanceBetweenTiles(
+                currentPosition,
+                localPlayerPosition[0],
+                mapColumns
+              ) <= specDistance
             ) {
-              direction = facePosition(currentPosition, localPlayerPosition[0]);
+              direction = facePosition(
+                currentPosition,
+                localPlayerPosition[0],
+                mapColumns
+              );
             }
           }
 
@@ -92,18 +94,26 @@ export default class StaticBehaviourSystem extends System {
             const distances = remotePlayerPositions
               .filter(
                 (position) =>
-                  aStar.findPath(currentPosition, position).length <=
+                  distanceBetweenTiles(currentPosition, position, mapColumns) <=
                   specDistance
               )
               .map((position) => ({
-                distance: aStar.findPath(currentPosition, position).length,
+                distance: distanceBetweenTiles(
+                  currentPosition,
+                  position,
+                  mapColumns
+                ),
                 position,
               }));
 
             distances.sort((a, b) => a.distance - b.distance);
 
             if (distances.length) {
-              direction = facePosition(currentPosition, distances[0].position);
+              direction = facePosition(
+                currentPosition,
+                distances[0].position,
+                mapColumns
+              );
             }
           }
         }

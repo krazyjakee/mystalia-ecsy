@@ -569,7 +569,7 @@
                         {
                          "name":"id",
                          "type":"int",
-                         "value":3
+                         "value":4
                         }, 
                         {
                          "name":"patrolId",
@@ -699,7 +699,7 @@
                  "type":"patrol",
                  "visible":true,
                  "width":32,
-                 "x":1152,
+                 "x":1088,
                  "y":512
                 }],
          "opacity":1,

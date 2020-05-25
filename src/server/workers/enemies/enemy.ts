@@ -1,10 +1,15 @@
 import { makeHash, randomHash } from "utilities/hash";
 import EnemyState from "@server/components/enemy";
 import MapRoom from "src/server/rooms/map";
-import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
+import {
+  tileIdToVector,
+  vectorToTileId,
+  SerializedObjectTile,
+  pathToTileIds,
+} from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
 import ItemState from "@server/components/item";
-import { randomNumberBetween } from "utilities/math";
+import { randomNumberBetween, randomItemFromArray } from "utilities/math";
 import { isPresent } from "utilities/guards";
 import {
   distanceBetweenTiles,
@@ -13,6 +18,7 @@ import {
 import PlayerState from "@server/components/player";
 import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
+import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -27,6 +33,8 @@ export default class Enemy {
   mapColumns: number;
   speedMs: number;
   kill: boolean = false;
+  frozen: boolean = false;
+  objectTile?: SerializedObjectTile<"enemy">;
 
   constructor(
     spec: EnemySpec,
@@ -34,9 +42,11 @@ export default class Enemy {
     allowedTiles: number[],
     zoneId?: number,
     currentTile?: number,
-    stateId?: string
+    stateId?: string,
+    objectTile?: SerializedObjectTile<"enemy">
   ) {
     this.spec = spec;
+    this.objectTile = objectTile;
     this.room = room;
     this.allowedTiles = allowedTiles;
     this.stateId =
@@ -45,8 +55,7 @@ export default class Enemy {
     this.mapColumns = this.room.mapData?.width || 0;
     this.speedMs = (10 - this.spec.speed) * 1000;
 
-    this.currentTile =
-      currentTile || allowedTiles[randomNumberBetween(allowedTiles.length, 0)];
+    this.currentTile = currentTile || randomItemFromArray(allowedTiles);
 
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
@@ -54,16 +63,40 @@ export default class Enemy {
       zoneId
     );
 
+    if (this.spec.behavior.static) {
+      this.frozen = true;
+    }
+
     this.tick();
   }
 
   tick() {
-    if (!this.room.state.enemies[this.stateId]) {
+    if (!this.room.state.enemies[this.stateId] || this.frozen) {
       return;
     }
 
+    const behavior = this.spec.behavior;
+
     if (this.tilePath.length) {
       setTimeout(() => {
+        if (behavior && behavior.patrol) {
+          const playerTiles = Object.keys(this.room.state.players)
+            .map((key) => {
+              const player = this.room.state.players[key] as PlayerState;
+              return player.targetTile;
+            })
+            .filter(isPresent);
+          const distances = playerTiles.map((tile) =>
+            distanceBetweenTiles(this.currentTile, tile, this.mapColumns)
+          );
+          const playerWithinDistance = distances.find(
+            (d) => d < (behavior.patrol?.distance || 0)
+          );
+          if (playerWithinDistance) {
+            return;
+          }
+        }
+
         const targetTile = this.tilePath.shift();
         if (targetTile && this.room.state.enemies[this.stateId]) {
           this.currentTile = targetTile;
@@ -86,10 +119,27 @@ export default class Enemy {
                 this.stateId
               ] as EnemyState).targetPlayer = undefined;
             }
-          } else {
-            if (!this.spec.behavior.static) {
-              this.findNewTargetTile();
+          } else if (behavior) {
+            if (behavior.patrol) {
+              this.frozen = true;
+              setTimeout(() => {
+                if (this.room.objectTileStore && this.objectTile) {
+                  const targetTile = selectRandomPatrolTile(
+                    this.room.objectTileStore,
+                    this.objectTile.properties.patrolId || 0
+                  );
+                  const path = this.room.objectTileStore.aStar.findPath(
+                    tileIdToVector(this.currentTile, this.mapColumns),
+                    tileIdToVector(targetTile, this.mapColumns)
+                  );
+                  // TODO: Fix bad path leading to non-patrol tiles
+                  this.tilePath = pathToTileIds(path, this.mapColumns);
+                }
+                this.frozen = false;
+              }, randomNumberBetween(behavior.patrol.standTime[1], behavior.patrol.standTime[0]));
             }
+          } else {
+            this.findNewTargetTile();
           }
           this.tick();
         },
@@ -143,15 +193,7 @@ export default class Enemy {
         targetTileVector
       );
 
-      this.tilePath = aStarPath.map((tileVector) =>
-        vectorToTileId(
-          {
-            x: tileVector[0],
-            y: tileVector[1],
-          },
-          columns
-        )
-      );
+      this.tilePath = pathToTileIds(aStarPath, this.mapColumns);
     }
   }
 
@@ -159,8 +201,7 @@ export default class Enemy {
     const tilesWithinRadius = this.findTilesInRadius();
     let targetTile = this.currentTile;
     while (targetTile === this.currentTile) {
-      targetTile =
-        tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
+      targetTile = randomItemFromArray(tilesWithinRadius);
     }
     return targetTile;
   }

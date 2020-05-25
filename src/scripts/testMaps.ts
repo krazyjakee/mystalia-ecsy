@@ -37,7 +37,8 @@ dir.closeSync();
 
 Object.keys(objectTileStores).forEach((key) => {
   const ots = objectTileStores[key];
-  ots.getAllByType("door").forEach((door) => {
+  ots.getAllByType("door").forEach((doorTiles) => {
+    const door = doorTiles.objectTile;
     if (!door.value) {
       errors.push(
         `door on map "${key}" has no values. Doors must have a map and tile value.`

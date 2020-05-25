@@ -34,7 +34,8 @@ export default class EnemySpawner {
               this.room.objectTileStore.blockList,
               -1,
               enemyConfig.tileId,
-              makeHash(`${enemyConfig.properties.id}_${index}`)
+              makeHash(`${enemyConfig.properties.id}_${index}`),
+              enemyConfig
             );
           }
           return new Enemy(spec, this.room, []);
