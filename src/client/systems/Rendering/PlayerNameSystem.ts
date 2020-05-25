@@ -7,6 +7,7 @@ import TileMap from "@client/components/TileMap";
 import Drawable from "@client/components/Drawable";
 import addOffset from "../../utilities/Vector/addOffset";
 import RemotePlayer from "@client/components/RemotePlayer";
+import Enemy from "@client/components/Enemy";
 
 export default class PlayerNameSystem extends System {
   static queries = {
@@ -19,6 +20,9 @@ export default class PlayerNameSystem extends System {
     remotePlayers: {
       components: [Not(Loadable), RemotePlayer, Position],
     },
+    enemies: {
+      components: [Not(Loadable), Enemy],
+    },
   };
 
   execute() {
@@ -26,11 +30,15 @@ export default class PlayerNameSystem extends System {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { offset } = tileMapDrawable;
 
-      const drawName = (name: string, position: Position) => {
+      const drawName = (
+        name: string,
+        position: Position,
+        color: string = "white"
+      ) => {
         context2d.save();
         context2d.font = "11px Tahoma";
         context2d.textAlign = "center";
-        context2d.fillStyle = "white";
+        context2d.fillStyle = color;
         context2d.lineWidth = 2;
 
         const textPosition = addOffset(offset, {
@@ -60,6 +68,14 @@ export default class PlayerNameSystem extends System {
           }
         }
       );
+
+      this.queries.enemies.results.forEach((enemyEntity: Entity) => {
+        const enemy = enemyEntity.getComponent(Enemy);
+        const position = enemyEntity.getComponent(Position);
+        if (enemy.state && enemy.state.displayName) {
+          drawName(enemy.state.displayName, position, "#ffff00");
+        }
+      });
     });
   }
 }
