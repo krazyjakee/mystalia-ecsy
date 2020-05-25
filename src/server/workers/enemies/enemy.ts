@@ -33,7 +33,6 @@ export default class Enemy {
   mapColumns: number;
   speedMs: number;
   kill: boolean = false;
-  frozen: boolean = false;
   objectTile?: SerializedObjectTile<"enemy">;
 
   constructor(
@@ -63,15 +62,11 @@ export default class Enemy {
       zoneId
     );
 
-    if (this.spec.behavior.static) {
-      this.frozen = true;
-    }
-
     this.tick();
   }
 
   tick() {
-    if (!this.room.state.enemies[this.stateId] || this.frozen) {
+    if (!this.room.state.enemies[this.stateId]) {
       return;
     }
 
@@ -104,47 +99,45 @@ export default class Enemy {
             this.stateId
           ] as EnemyState).currentTile = targetTile;
         }
+
         this.tick();
       }, 1000 / this.spec.speed);
     } else {
       const enemyState = this.room.state.enemies[this.stateId] as EnemyState;
-      setTimeout(
-        () => {
-          if (enemyState.targetPlayer) {
-            if (
-              this.room.state.enemies[this.stateId] &&
-              !this.findClosestTileToTargetPlayer()
-            ) {
-              (this.room.state.enemies[
-                this.stateId
-              ] as EnemyState).targetPlayer = undefined;
-            }
-          } else if (behavior) {
-            if (behavior.patrol) {
-              this.frozen = true;
-              setTimeout(() => {
-                if (this.room.objectTileStore && this.objectTile) {
-                  const targetTile = selectRandomPatrolTile(
-                    this.room.objectTileStore,
-                    this.objectTile.properties.patrolId || 0
-                  );
-                  const path = this.room.objectTileStore.aStar.findPath(
-                    tileIdToVector(this.currentTile, this.mapColumns),
-                    tileIdToVector(targetTile, this.mapColumns)
-                  );
-                  // TODO: Fix bad path leading to non-patrol tiles
-                  this.tilePath = pathToTileIds(path, this.mapColumns);
-                }
-                this.frozen = false;
-              }, randomNumberBetween(behavior.patrol.standTime[1], behavior.patrol.standTime[0]));
-            }
-          } else {
-            this.findNewTargetTile();
+      let delay = this.speedMs;
+      if (enemyState.targetPlayer) {
+        if (
+          this.room.state.enemies[this.stateId] &&
+          !this.findClosestTileToTargetPlayer()
+        ) {
+          (this.room.state.enemies[
+            this.stateId
+          ] as EnemyState).targetPlayer = undefined;
+        }
+      } else if (behavior) {
+        if (behavior.patrol) {
+          delay = randomNumberBetween(
+            behavior.patrol.standTime[1],
+            behavior.patrol.standTime[0]
+          );
+          if (this.room.objectTileStore && this.objectTile) {
+            const targetTile = selectRandomPatrolTile(
+              this.room.objectTileStore,
+              this.objectTile.properties.patrolId || 0
+            );
+            const path = this.room.objectTileStore.aStar.findPath(
+              tileIdToVector(this.currentTile, this.mapColumns),
+              tileIdToVector(targetTile, this.mapColumns)
+            );
+            this.tilePath = pathToTileIds(path, this.mapColumns);
           }
-          this.tick();
-        },
-        enemyState.targetPlayer ? 0 : this.speedMs
-      );
+        }
+      } else {
+        this.findNewTargetTile();
+      }
+      setTimeout(() => {
+        this.tick();
+      }, delay);
     }
   }
 
