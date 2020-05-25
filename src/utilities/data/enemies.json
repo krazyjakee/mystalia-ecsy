@@ -72,5 +72,21 @@
         "distance": 4
       }
     }
+  },
+  {
+    "id": 4,
+    "name": "Stable Hand",
+    "spritesheet": "npcs/ark/service-worker-2",
+    "spriteSize": { "width": 24, "height": 32 },
+    "speed": 2,
+    "maxDistance": 4,
+    "hp": 55000,
+    "behavior": {
+      "patrol": {
+        "standTime": [1000, 10000],
+        "lookAtPlayer": true,
+        "distance": 1
+      }
+    }
   }
 ]

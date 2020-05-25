@@ -22,8 +22,9 @@ type EnemyBehaviour = {
     distance?: number; // Distance of player before looking at them
   };
   patrol?: {
-    tiles: number[]; // Tiles to walk between
     standTime: [number, number]; // Random time in ms to stand on a defined tile.
+    lookAtPlayer: boolean;
+    distance?: number;
   };
   biomeWanderer?: {
     campAtNight: boolean;

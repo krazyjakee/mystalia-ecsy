@@ -26,6 +26,7 @@ export type ObjectTileType = {
   enemy: {
     id: number;
     chance: number;
+    patrolId?: number;
   };
   enemyZone: {
     chance: number;
@@ -43,6 +44,9 @@ export type ObjectTileType = {
   };
   shop: {
     shopId: number;
+  };
+  patrol: {
+    id: number;
   };
 };
 
