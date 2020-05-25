@@ -1,5 +1,5 @@
 import { System, Entity } from "ecsy";
-import Enemy, { StaticBehaviour } from "@client/components/Enemy";
+import Enemy, { LookAtPlayer } from "@client/components/Enemy";
 
 export default class BehaviourSystem extends System {
   static queries = {
@@ -16,8 +16,8 @@ export default class BehaviourSystem extends System {
       const enemy = entity.getComponent(Enemy);
       const spec = enemy.spec;
       if (spec) {
-        if (spec.behavior.static) {
-          entity.addComponent(StaticBehaviour);
+        if (spec.behavior.static || spec.behavior.patrol) {
+          entity.addComponent(LookAtPlayer);
         }
       }
     });

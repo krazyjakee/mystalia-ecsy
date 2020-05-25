@@ -1,6 +1,7 @@
 {
   "watch": ["src/server", "src/utilities", "assets/maps", "assets/tilesets"],
   "exec": "ts-node -r tsconfig-paths/register ./src/server/index.ts",
+  "ext": "ts,json,js",
   "env": {
     "NODE_ENV": "development"
   }

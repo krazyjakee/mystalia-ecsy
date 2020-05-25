@@ -22,6 +22,16 @@ import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
+type EnemyProps = {
+  spec: EnemySpec;
+  room: MapRoom;
+  allowedTiles: number[];
+  zoneId: number;
+  currentTile?: number;
+  stateId?: string;
+  objectTile?: SerializedObjectTile<"enemy">;
+};
+
 export default class Enemy {
   stateId: string;
   currentTile: number;
@@ -35,15 +45,15 @@ export default class Enemy {
   kill: boolean = false;
   objectTile?: SerializedObjectTile<"enemy">;
 
-  constructor(
-    spec: EnemySpec,
-    room: MapRoom,
-    allowedTiles: number[],
-    zoneId?: number,
-    currentTile?: number,
-    stateId?: string,
-    objectTile?: SerializedObjectTile<"enemy">
-  ) {
+  constructor({
+    spec,
+    room,
+    allowedTiles,
+    zoneId,
+    currentTile,
+    stateId,
+    objectTile,
+  }: EnemyProps) {
     this.spec = spec;
     this.objectTile = objectTile;
     this.room = room;
@@ -56,12 +66,19 @@ export default class Enemy {
 
     this.currentTile = currentTile || randomItemFromArray(allowedTiles);
 
+    if (zoneId === -1) {
+      this.loadFromDB();
+    } else {
+      this.addToState(zoneId);
+    }
+  }
+
+  addToState(zoneId: number) {
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
       this.currentTile,
       zoneId
     );
-
     this.tick();
   }
 
@@ -73,7 +90,7 @@ export default class Enemy {
     const behavior = this.spec.behavior;
 
     if (this.tilePath.length) {
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         if (behavior && behavior.patrol) {
           const playerTiles = Object.keys(this.room.state.players)
             .map((key) => {
@@ -85,9 +102,10 @@ export default class Enemy {
             distanceBetweenTiles(this.currentTile, tile, this.mapColumns)
           );
           const playerWithinDistance = distances.find(
-            (d) => d < (behavior.patrol?.distance || 0)
+            (d) => d <= (behavior.patrol?.distance || 0)
           );
           if (playerWithinDistance) {
+            this.tick();
             return;
           }
         }
@@ -114,28 +132,27 @@ export default class Enemy {
             this.stateId
           ] as EnemyState).targetPlayer = undefined;
         }
-      } else if (behavior) {
-        if (behavior.patrol) {
-          delay = randomNumberBetween(
-            behavior.patrol.standTime[1],
-            behavior.patrol.standTime[0]
+      } else if (behavior && behavior.patrol) {
+        delay = randomNumberBetween(
+          behavior.patrol.standTime[1],
+          behavior.patrol.standTime[0]
+        );
+        if (this.room.objectTileStore && this.objectTile) {
+          const targetTile = selectRandomPatrolTile(
+            this.room.objectTileStore,
+            this.objectTile.properties.patrolId || 0
           );
-          if (this.room.objectTileStore && this.objectTile) {
-            const targetTile = selectRandomPatrolTile(
-              this.room.objectTileStore,
-              this.objectTile.properties.patrolId || 0
-            );
-            const path = this.room.objectTileStore.aStar.findPath(
-              tileIdToVector(this.currentTile, this.mapColumns),
-              tileIdToVector(targetTile, this.mapColumns)
-            );
-            this.tilePath = pathToTileIds(path, this.mapColumns);
-          }
+          const path = this.room.objectTileStore.aStar.findPath(
+            tileIdToVector(this.currentTile, this.mapColumns),
+            tileIdToVector(targetTile, this.mapColumns)
+          );
+          this.tilePath = pathToTileIds(path, this.mapColumns);
         }
       } else {
         this.findNewTargetTile();
       }
-      setTimeout(() => {
+
+      this.timer = setTimeout(() => {
         this.tick();
       }, delay);
     }
@@ -229,21 +246,29 @@ export default class Enemy {
 
   loadFromDB() {
     const enemies = mongoose.model("Enemy", EnemySchema);
-    enemies.find({ room: this.room.roomName, zoneId: -1 }, (err, res) => {
-      if (err) return console.log(err.message);
-      res.forEach((doc) => {
-        if (this.allowedTiles) {
-          const obj = doc.toJSON();
-          this.currentTile = obj.currentTile;
+    enemies.find(
+      { room: this.room.roomName, zoneId: -1, index: this.stateId },
+      (err, res) => {
+        if (err) return console.log(err.message);
+        res.forEach((doc) => {
+          if (this.allowedTiles) {
+            const obj = doc.toJSON();
+            this.currentTile = obj.currentTile;
+            this.addToState(-1);
+          }
+        });
+        if (!res.length) {
+          this.addToState(-1);
         }
-      });
-    });
+      }
+    );
   }
 
   destroy() {
     this.dispose();
     const enemy = this.room.state.enemies[this.stateId] as EnemyState;
     if (enemy) {
+      console.log("destroy", this.stateId);
       const spec = enemySpecs.find(
         (enemySpec) => enemySpec.id === enemy.enemyId
       );
@@ -263,8 +288,8 @@ export default class Enemy {
           }
         });
       }
+      delete this.room.state.enemies[this.stateId];
     }
-    delete this.room.state.enemies[this.stateId];
   }
 
   dispose() {

@@ -40,7 +40,7 @@ import CharacterHighlightSystem from "./systems/Rendering/CharacterHighlightSyst
 import TextBurstSystem from "./systems/Rendering/TextBurstSystem";
 import SpriteSheetAnimationSystem from "./systems/Rendering/SpriteSheetAnimationSystem";
 import BehaviourSystem from "./systems/MovementSystem/Behaviour";
-import StaticBehaviourSystem from "./systems/MovementSystem/Behaviour/StaticBehaviourSystem";
+import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerSystem";
 
 let world = new World();
 
@@ -75,7 +75,7 @@ export default (user: User) => {
     .registerSystem(FadeSystem)
     .registerSystem(PlayerNameSystem)
     .registerSystem(BehaviourSystem)
-    .registerSystem(StaticBehaviourSystem)
+    .registerSystem(LookAtPlayerSystem)
     .registerSystem(TextBurstSystem)
     .registerSystem(SpriteSheetAnimationSystem)
     .registerSystem(CommandsSystem)

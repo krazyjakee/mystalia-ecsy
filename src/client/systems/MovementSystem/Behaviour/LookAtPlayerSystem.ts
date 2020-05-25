@@ -1,12 +1,11 @@
 import { System, Entity, Not } from "ecsy";
-import Enemy, { StaticBehaviour } from "@client/components/Enemy";
+import Enemy, { LookAtPlayer } from "@client/components/Enemy";
 import { Direction } from "types/Grid";
 import RemotePlayer from "@client/components/RemotePlayer";
 import LocalPlayer from "@client/components/LocalPlayer";
 import Movement from "@client/components/Movement";
 import { Loadable } from "@client/components/Loadable";
 import TileMap from "@client/components/TileMap";
-import { tileIdToVector } from "utilities/tileMap";
 import {
   facePosition,
   distanceBetweenTiles,
@@ -14,12 +13,11 @@ import {
 import { randomNumberBetween } from "utilities/math";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
 import { generateCharacterAnimationSteps } from "@client/utilities/Animation/character";
-import { AStarFinder } from "astar-typescript";
 
-export default class StaticBehaviourSystem extends System {
+export default class LookAtPlayerSystem extends System {
   static queries = {
     enemies: {
-      components: [Enemy, StaticBehaviour, Movement],
+      components: [Enemy, LookAtPlayer, Movement],
       listen: {
         added: true,
       },
@@ -67,12 +65,14 @@ export default class StaticBehaviourSystem extends System {
       const currentPosition = entity.getComponent(Movement).currentTile;
 
       const spec = enemy.spec;
+      if (!spec) return;
+
       let direction: Direction | undefined;
 
-      if (spec && spec.behavior.static) {
-        const staticSpec = spec.behavior.static;
-        if (staticSpec.lookAtPlayer) {
-          const specDistance = staticSpec.distance || 1;
+      const behaviour = spec.behavior.static || spec.behavior.patrol;
+      if (behaviour) {
+        if (behaviour.lookAtPlayer) {
+          const specDistance = behaviour.distance || 1;
 
           if (localPlayerPosition.length) {
             if (
@@ -118,7 +118,11 @@ export default class StaticBehaviourSystem extends System {
           }
         }
 
-        if (!direction && staticSpec.lookAround) {
+        if (
+          !direction &&
+          spec.behavior.static &&
+          spec.behavior.static.lookAround
+        ) {
           const directions: Array<false | Direction> = [
             false,
             false,
