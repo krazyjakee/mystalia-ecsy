@@ -9,4 +9,4 @@ export default class Enemy extends Component {
   spec?: EnemySpec;
 }
 
-export class StaticBehaviour extends TagComponent {}
+export class LookAtPlayer extends TagComponent {}

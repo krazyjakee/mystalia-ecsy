@@ -1,10 +1,15 @@
 import { makeHash, randomHash } from "utilities/hash";
 import EnemyState from "@server/components/enemy";
 import MapRoom from "src/server/rooms/map";
-import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
+import {
+  tileIdToVector,
+  vectorToTileId,
+  SerializedObjectTile,
+  pathToTileIds,
+} from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
 import ItemState from "@server/components/item";
-import { randomNumberBetween } from "utilities/math";
+import { randomNumberBetween, randomItemFromArray } from "utilities/math";
 import { isPresent } from "utilities/guards";
 import {
   distanceBetweenTiles,
@@ -13,8 +18,19 @@ import {
 import PlayerState from "@server/components/player";
 import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
+import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
+
+type EnemyProps = {
+  spec: EnemySpec;
+  room: MapRoom;
+  allowedTiles: number[];
+  zoneId: number;
+  currentTile?: number;
+  stateId?: string;
+  objectTile?: SerializedObjectTile<"enemy">;
+};
 
 export default class Enemy {
   stateId: string;
@@ -27,16 +43,19 @@ export default class Enemy {
   mapColumns: number;
   speedMs: number;
   kill: boolean = false;
+  objectTile?: SerializedObjectTile<"enemy">;
 
-  constructor(
-    spec: EnemySpec,
-    room: MapRoom,
-    allowedTiles: number[],
-    zoneId?: number,
-    currentTile?: number,
-    stateId?: string
-  ) {
+  constructor({
+    spec,
+    room,
+    allowedTiles,
+    zoneId,
+    currentTile,
+    stateId,
+    objectTile,
+  }: EnemyProps) {
     this.spec = spec;
+    this.objectTile = objectTile;
     this.room = room;
     this.allowedTiles = allowedTiles;
     this.stateId =
@@ -45,15 +64,21 @@ export default class Enemy {
     this.mapColumns = this.room.mapData?.width || 0;
     this.speedMs = (10 - this.spec.speed) * 1000;
 
-    this.currentTile =
-      currentTile || allowedTiles[randomNumberBetween(allowedTiles.length, 0)];
+    this.currentTile = currentTile || randomItemFromArray(allowedTiles);
 
+    if (zoneId === -1) {
+      this.loadFromDB();
+    } else {
+      this.addToState(zoneId);
+    }
+  }
+
+  addToState(zoneId: number) {
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
       this.currentTile,
       zoneId
     );
-
     this.tick();
   }
 
@@ -62,8 +87,29 @@ export default class Enemy {
       return;
     }
 
+    const behavior = this.spec.behavior;
+
     if (this.tilePath.length) {
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
+        if (behavior && behavior.patrol) {
+          const playerTiles = Object.keys(this.room.state.players)
+            .map((key) => {
+              const player = this.room.state.players[key] as PlayerState;
+              return player.targetTile;
+            })
+            .filter(isPresent);
+          const distances = playerTiles.map((tile) =>
+            distanceBetweenTiles(this.currentTile, tile, this.mapColumns)
+          );
+          const playerWithinDistance = distances.find(
+            (d) => d <= (behavior.patrol?.distance || 0)
+          );
+          if (playerWithinDistance) {
+            this.tick();
+            return;
+          }
+        }
+
         const targetTile = this.tilePath.shift();
         if (targetTile && this.room.state.enemies[this.stateId]) {
           this.currentTile = targetTile;
@@ -71,30 +117,44 @@ export default class Enemy {
             this.stateId
           ] as EnemyState).currentTile = targetTile;
         }
+
         this.tick();
       }, 1000 / this.spec.speed);
     } else {
       const enemyState = this.room.state.enemies[this.stateId] as EnemyState;
-      setTimeout(
-        () => {
-          if (enemyState.targetPlayer) {
-            if (
-              this.room.state.enemies[this.stateId] &&
-              !this.findClosestTileToTargetPlayer()
-            ) {
-              (this.room.state.enemies[
-                this.stateId
-              ] as EnemyState).targetPlayer = undefined;
-            }
-          } else {
-            if (!this.spec.behavior.static) {
-              this.findNewTargetTile();
-            }
-          }
-          this.tick();
-        },
-        enemyState.targetPlayer ? 0 : this.speedMs
-      );
+      let delay = this.speedMs;
+      if (enemyState.targetPlayer) {
+        if (
+          this.room.state.enemies[this.stateId] &&
+          !this.findClosestTileToTargetPlayer()
+        ) {
+          (this.room.state.enemies[
+            this.stateId
+          ] as EnemyState).targetPlayer = undefined;
+        }
+      } else if (behavior && behavior.patrol) {
+        delay = randomNumberBetween(
+          behavior.patrol.standTime[1],
+          behavior.patrol.standTime[0]
+        );
+        if (this.room.objectTileStore && this.objectTile) {
+          const targetTile = selectRandomPatrolTile(
+            this.room.objectTileStore,
+            this.objectTile.properties.patrolId || 0
+          );
+          const path = this.room.objectTileStore.aStar.findPath(
+            tileIdToVector(this.currentTile, this.mapColumns),
+            tileIdToVector(targetTile, this.mapColumns)
+          );
+          this.tilePath = pathToTileIds(path, this.mapColumns);
+        }
+      } else {
+        this.findNewTargetTile();
+      }
+
+      this.timer = setTimeout(() => {
+        this.tick();
+      }, delay);
     }
   }
 
@@ -143,15 +203,7 @@ export default class Enemy {
         targetTileVector
       );
 
-      this.tilePath = aStarPath.map((tileVector) =>
-        vectorToTileId(
-          {
-            x: tileVector[0],
-            y: tileVector[1],
-          },
-          columns
-        )
-      );
+      this.tilePath = pathToTileIds(aStarPath, this.mapColumns);
     }
   }
 
@@ -159,8 +211,7 @@ export default class Enemy {
     const tilesWithinRadius = this.findTilesInRadius();
     let targetTile = this.currentTile;
     while (targetTile === this.currentTile) {
-      targetTile =
-        tilesWithinRadius[randomNumberBetween(tilesWithinRadius.length, 0)];
+      targetTile = randomItemFromArray(tilesWithinRadius);
     }
     return targetTile;
   }
@@ -195,21 +246,29 @@ export default class Enemy {
 
   loadFromDB() {
     const enemies = mongoose.model("Enemy", EnemySchema);
-    enemies.find({ room: this.room.roomName, zoneId: -1 }, (err, res) => {
-      if (err) return console.log(err.message);
-      res.forEach((doc) => {
-        if (this.allowedTiles) {
-          const obj = doc.toJSON();
-          this.currentTile = obj.currentTile;
+    enemies.find(
+      { room: this.room.roomName, zoneId: -1, index: this.stateId },
+      (err, res) => {
+        if (err) return console.log(err.message);
+        res.forEach((doc) => {
+          if (this.allowedTiles) {
+            const obj = doc.toJSON();
+            this.currentTile = obj.currentTile;
+            this.addToState(-1);
+          }
+        });
+        if (!res.length) {
+          this.addToState(-1);
         }
-      });
-    });
+      }
+    );
   }
 
   destroy() {
     this.dispose();
     const enemy = this.room.state.enemies[this.stateId] as EnemyState;
     if (enemy) {
+      console.log("destroy", this.stateId);
       const spec = enemySpecs.find(
         (enemySpec) => enemySpec.id === enemy.enemyId
       );
@@ -229,8 +288,8 @@ export default class Enemy {
           }
         });
       }
+      delete this.room.state.enemies[this.stateId];
     }
-    delete this.room.state.enemies[this.stateId];
   }
 
   dispose() {

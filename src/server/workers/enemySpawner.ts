@@ -4,6 +4,8 @@ import MapRoom from "@server/rooms/map";
 import Enemy from "./enemies/enemy";
 import { EnemySpec } from "types/enemies";
 import { makeHash } from "utilities/hash";
+import { isPresent } from "utilities/guards";
+import { randomNumberBetween } from "utilities/math";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -23,40 +25,53 @@ export default class EnemySpawner {
         ) || [];
 
       this.enemyZones.forEach((zone) => zone.loadFromDB());
-
-      this.enemies =
-        getTilesByType("enemy", room.mapData).map((enemyConfig, index) => {
-          const spec = enemySpecs[enemyConfig.properties.id];
-          if (this.room?.objectTileStore?.blockList) {
-            return new Enemy(
-              spec,
-              this.room,
-              this.room.objectTileStore.blockList,
-              -1,
-              enemyConfig.tileId,
-              makeHash(`${enemyConfig.properties.id}_${index}`)
-            );
-          }
-          return new Enemy(spec, this.room, []);
-        }) || [];
-
-      this.enemies.forEach((enemy) => enemy.loadFromDB());
+      this.addEnemies();
     }
 
     // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000);
   }
 
+  addEnemies() {
+    if (!this.room.mapData) return;
+
+    getTilesByType("enemy", this.room.mapData).forEach((objectTile) => {
+      const roll = randomNumberBetween(objectTile.properties.chance);
+      if (roll != 1) return;
+
+      const spec = enemySpecs[objectTile.properties.id];
+      const stateId = makeHash(
+        `${objectTile.properties.id}_${objectTile.tileId}`
+      );
+      if (
+        this.room?.objectTileStore?.blockList &&
+        !this.room.state.enemies[stateId]
+      ) {
+        this.enemies.push(
+          new Enemy({
+            spec: spec,
+            room: this.room,
+            allowedTiles: this.room.objectTileStore.blockList,
+            currentTile: objectTile.tileId,
+            zoneId: -1,
+            stateId,
+            objectTile,
+          })
+        );
+      }
+    });
+  }
+
   tick() {
     this.enemyZones.forEach((enemyZone) => enemyZone.tick());
-    this.enemies.forEach((enemy) => enemy.tick());
+    this.addEnemies();
   }
 
   destroy(stateId: string) {
     this.enemyZones.forEach((enemyZone) => {
       enemyZone.destroy(stateId);
     });
-    this.enemies.forEach((enemy) => enemy.destroy());
+    this.enemies.forEach((enemy) => enemy.stateId && enemy.destroy());
   }
 
   dispose() {

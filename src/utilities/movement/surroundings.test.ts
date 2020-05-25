@@ -82,18 +82,16 @@ describe("surroundings", () => {
 
   describe("#facePosition", () => {
     test("correctly returns direction", () => {
-      const eyes = {
-        x: 5,
-        y: 5,
-      };
+      const mapColumns = 10;
+      const eyes = 54;
 
-      let direction = facePosition(eyes, { x: 8, y: 4 });
+      let direction = facePosition(eyes, 48, mapColumns);
       expect(direction).toBe("e");
 
-      direction = facePosition(eyes, { x: 5, y: 1 });
+      direction = facePosition(eyes, 4, mapColumns);
       expect(direction).toBe("n");
 
-      direction = facePosition(eyes, { x: 1, y: 4 });
+      direction = facePosition(eyes, 41, mapColumns);
       expect(direction).toBe("w");
     });
   });

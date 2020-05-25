@@ -64,14 +64,14 @@ export default class EnemyZone {
           if (this.allowedTiles) {
             const obj = doc.toJSON();
             this.enemies.push(
-              new Enemy(
-                this.spec,
-                this.room,
-                this.allowedTiles,
-                this.objectTile.tileId,
-                obj.currentTile,
-                obj.index
-              )
+              new Enemy({
+                spec: this.spec,
+                room: this.room,
+                allowedTiles: this.allowedTiles,
+                zoneId: this.objectTile.tileId,
+                currentTile: obj.currentTile,
+                stateId: obj.index,
+              })
             );
           }
         });
@@ -82,12 +82,12 @@ export default class EnemyZone {
   spawn() {
     if (this.allowedTiles?.length) {
       this.enemies.push(
-        new Enemy(
-          this.spec,
-          this.room,
-          this.allowedTiles,
-          this.objectTile.tileId
-        )
+        new Enemy({
+          spec: this.spec,
+          room: this.room,
+          allowedTiles: this.allowedTiles,
+          zoneId: this.objectTile.tileId,
+        })
       );
     }
   }
@@ -95,6 +95,7 @@ export default class EnemyZone {
   calculateAllowedTiles(mapData: TMJ) {
     const columns = mapData.width;
     const { x, y, polygon } = this.objectTile;
+    if (!polygon) return [];
     const mostNorthWesterlyPoint = {
       x: x + Math.min(...polygon.map((p) => p.x)),
       y: y + Math.min(...polygon.map((p) => p.y)),

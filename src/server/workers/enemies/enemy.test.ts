@@ -57,7 +57,12 @@ const createMapRoom = () => {
 };
 
 const createEnemy = () => {
-  const enemy = new Enemy(enemySpec, createMapRoom(), allowedTiles);
+  const enemy = new Enemy({
+    spec: enemySpec,
+    room: createMapRoom(),
+    allowedTiles,
+    zoneId: -1,
+  });
   enemy.dispose();
   return enemy;
 };

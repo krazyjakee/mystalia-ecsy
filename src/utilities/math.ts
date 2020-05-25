@@ -5,6 +5,10 @@ export const randomNumberBetween = (max: number, min: number = 1) => {
   return Math.floor(Math.random() * max) + min;
 };
 
+export const randomItemFromArray = (array: Array<any>) => {
+  return array[randomNumberBetween(array.length, 0)];
+};
+
 export const percentageCalculator = (max: number, input: number) =>
   (input / max) * 100;
 

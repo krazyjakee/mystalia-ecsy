@@ -133,7 +133,9 @@ export default class TileMapChanger extends System {
 
         tileMapEntity.removeComponent(Shop);
         tileMapEntity.addComponent(Shop, {
-          shopTiles: tileMap.objectTileStore.getAllByType("shop"),
+          shopTiles: tileMap.objectTileStore
+            .getAllByType("shop")
+            .map((shopTiles) => shopTiles.objectTile),
         });
 
         this.queries.networkRoom.results.forEach(

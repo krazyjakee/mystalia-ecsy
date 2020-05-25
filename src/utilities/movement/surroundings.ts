@@ -112,9 +112,13 @@ export const findClosestPath = (
 };
 
 export const facePosition = (
-  positionEyes: Vector,
-  positionTarget: Vector
+  sourceTile: number,
+  targetTile: number,
+  mapColumns: number
 ): Direction => {
+  const positionEyes = tileIdToVector(sourceTile, mapColumns);
+  const positionTarget = tileIdToVector(targetTile, mapColumns);
+
   let angle = Math.atan2(
     positionEyes.y - positionTarget.y,
     positionEyes.x - positionTarget.x

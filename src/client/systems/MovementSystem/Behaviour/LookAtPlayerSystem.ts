@@ -1,22 +1,23 @@
 import { System, Entity, Not } from "ecsy";
-import Enemy, { StaticBehaviour } from "@client/components/Enemy";
+import Enemy, { LookAtPlayer } from "@client/components/Enemy";
 import { Direction } from "types/Grid";
 import RemotePlayer from "@client/components/RemotePlayer";
 import LocalPlayer from "@client/components/LocalPlayer";
 import Movement from "@client/components/Movement";
 import { Loadable } from "@client/components/Loadable";
 import TileMap from "@client/components/TileMap";
-import { tileIdToVector } from "utilities/tileMap";
-import { facePosition } from "utilities/movement/surroundings";
+import {
+  facePosition,
+  distanceBetweenTiles,
+} from "utilities/movement/surroundings";
 import { randomNumberBetween } from "utilities/math";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
 import { generateCharacterAnimationSteps } from "@client/utilities/Animation/character";
-import { AStarFinder } from "astar-typescript";
 
-export default class StaticBehaviourSystem extends System {
+export default class LookAtPlayerSystem extends System {
   static queries = {
     enemies: {
-      components: [Enemy, StaticBehaviour, Movement],
+      components: [Enemy, LookAtPlayer, Movement],
       listen: {
         added: true,
       },
@@ -50,41 +51,42 @@ export default class StaticBehaviourSystem extends System {
     if (!tileMap) return;
 
     const mapColumns = tileMap.width;
-    const aStar = new AStarFinder({
-      grid: { width: tileMap.width, height: tileMap.height },
-      diagonalAllowed: false,
-      includeStartNode: false,
-    });
+
     const remotePlayerPositions = this.queries.remotePlayers.results.map(
-      (entity) =>
-        tileIdToVector(entity.getComponent(Movement).currentTile, mapColumns)
+      (entity) => entity.getComponent(Movement).currentTile
     );
-    const localPlayerPosition = this.queries.localPlayer.results.map((entity) =>
-      tileIdToVector(entity.getComponent(Movement).currentTile, mapColumns)
+    const localPlayerPosition = this.queries.localPlayer.results.map(
+      (entity) => entity.getComponent(Movement).currentTile
     );
 
     this.queries.enemies.results.forEach((entity: Entity) => {
       const enemy = entity.getComponent(Enemy);
 
-      const currentPosition = tileIdToVector(
-        entity.getComponent(Movement).currentTile,
-        mapColumns
-      );
+      const currentPosition = entity.getComponent(Movement).currentTile;
 
       const spec = enemy.spec;
+      if (!spec) return;
+
       let direction: Direction | undefined;
 
-      if (spec && spec.behavior.static) {
-        const staticSpec = spec.behavior.static;
-        if (staticSpec.lookAtPlayer) {
-          const specDistance = staticSpec.distance || 1;
+      const behaviour = spec.behavior.static || spec.behavior.patrol;
+      if (behaviour) {
+        if (behaviour.lookAtPlayer) {
+          const specDistance = behaviour.distance || 1;
 
           if (localPlayerPosition.length) {
             if (
-              aStar.findPath(currentPosition, localPlayerPosition[0]).length <=
-              specDistance
+              distanceBetweenTiles(
+                currentPosition,
+                localPlayerPosition[0],
+                mapColumns
+              ) <= specDistance
             ) {
-              direction = facePosition(currentPosition, localPlayerPosition[0]);
+              direction = facePosition(
+                currentPosition,
+                localPlayerPosition[0],
+                mapColumns
+              );
             }
           }
 
@@ -92,23 +94,35 @@ export default class StaticBehaviourSystem extends System {
             const distances = remotePlayerPositions
               .filter(
                 (position) =>
-                  aStar.findPath(currentPosition, position).length <=
+                  distanceBetweenTiles(currentPosition, position, mapColumns) <=
                   specDistance
               )
               .map((position) => ({
-                distance: aStar.findPath(currentPosition, position).length,
+                distance: distanceBetweenTiles(
+                  currentPosition,
+                  position,
+                  mapColumns
+                ),
                 position,
               }));
 
             distances.sort((a, b) => a.distance - b.distance);
 
             if (distances.length) {
-              direction = facePosition(currentPosition, distances[0].position);
+              direction = facePosition(
+                currentPosition,
+                distances[0].position,
+                mapColumns
+              );
             }
           }
         }
 
-        if (!direction && staticSpec.lookAround) {
+        if (
+          !direction &&
+          spec.behavior.static &&
+          spec.behavior.static.lookAround
+        ) {
           const directions: Array<false | Direction> = [
             false,
             false,

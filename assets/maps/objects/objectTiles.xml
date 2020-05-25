@@ -7,6 +7,7 @@
  <objecttype name="enemy" color="#fc006f">
   <property name="chance" type="int" default="0"/>
   <property name="id" type="int" default="0"/>
+  <property name="patrolId" type="int" default="0"/>
  </objecttype>
  <objecttype name="enemyZone" color="#b50000">
   <property name="chance" type="int" default="0"/>
@@ -20,5 +21,8 @@
  </objecttype>
  <objecttype name="light" color="#f3e121">
   <property name="radius" type="int" default="0"/>
+ </objecttype>
+ <objecttype name="patrol" color="#65a76f">
+  <property name="id" type="int" default="0"/>
  </objecttype>
 </objecttypes>
