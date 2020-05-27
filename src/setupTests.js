@@ -1,4 +1,5 @@
 const test = require("../assets/maps/test.json");
+test.properties.push({ name: "fileName", type: "string", value: "test" });
 
 jest.mock("@server/utilities/mapFiles", () => ({
   readMapFiles: () => ({ test }),

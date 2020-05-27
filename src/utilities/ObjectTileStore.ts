@@ -6,7 +6,8 @@ import {
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
 import { Attributes, Layer, Property, TMJ } from "types/TMJ";
-import { AStarFinder } from "astar-typescript";
+import aStar from "utilities/movement/aStar";
+import { makeHash } from "./hash";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -69,43 +70,32 @@ const mapObjectToTileTypes = (
 };
 
 export class ObjectTileStore {
-  store: ObjectTileStoreType;
+  store: ObjectTileStoreType = {};
   columns: number = 0;
-  rows: number = 0;
+  uid: string = "";
   blockList: number[] = [];
-  aStar: AStarFinder;
 
-  constructor(
-    mapData: TMJ | { width: number; height: number; layers: number[] } = {
-      width: 0,
-      height: 0,
-      layers: [],
-    }
-  ) {
+  constructor(mapData?: TMJ) {
+    if (!mapData) return;
+
     const { width, height, layers } = mapData;
     this.columns = width;
-    this.rows = height;
-    this.store = {};
 
     (layers as Layer[]).forEach((layer) => this.add(layer));
 
-    this.blockList = Array(width * height)
-      .fill(0)
-      .map((_, index) => index)
-      .filter((_, index) => {
-        const tileTypes = this.getTypes(index);
-        return tileTypes && tileTypes.includes("block");
-      });
+    const mapProperties = serializeProperties<"mapProps">(mapData.properties);
 
-    this.aStar = new AStarFinder({
-      grid: layers.length
-        ? {
-            matrix: this.getBlockGrid(),
-          }
-        : { width: 2, height: 2 },
-      diagonalAllowed: false,
-      includeStartNode: false,
-    });
+    if (mapProperties) {
+      this.uid = mapProperties.fileName;
+    }
+
+    if (!this.uid) {
+      this.uid = makeHash(JSON.stringify(mapData));
+    }
+
+    this.blockList = this.generateBlockList(height, width);
+
+    aStar.add(this.uid, mapData, this.blockList);
   }
 
   get(tileId: number) {
@@ -170,17 +160,13 @@ export class ObjectTileStore {
     });
   }
 
-  // Creates an array for A* pathfinding
-  getBlockGrid(): number[][] {
-    return Array(this.rows)
+  generateBlockList(rows: number, columns: number) {
+    return Array(rows * columns)
       .fill(0)
-      .map((_, index1) => {
-        return Array(this.columns)
-          .fill(0)
-          .map((_, index2) => {
-            const tileId = index1 * this.columns + index2;
-            return this.blockList.includes(tileId) ? 1 : 0;
-          });
+      .map((_, index) => index)
+      .filter((_, index) => {
+        const tileTypes = this.getTypes(index);
+        return tileTypes && tileTypes.includes("block");
       });
   }
 }

@@ -43,10 +43,7 @@ export default class EnemySpawner {
       const stateId = makeHash(
         `${objectTile.properties.id}_${objectTile.tileId}`
       );
-      if (
-        this.room?.objectTileStore?.blockList &&
-        !this.room.state.enemies[stateId]
-      ) {
+      if (this.room?.objectTileStore && !this.room.state.enemies[stateId]) {
         this.enemies.push(
           new Enemy({
             spec: spec,

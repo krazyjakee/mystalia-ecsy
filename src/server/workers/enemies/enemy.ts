@@ -1,12 +1,7 @@
 import { makeHash, randomHash } from "utilities/hash";
 import EnemyState from "@server/components/enemy";
 import MapRoom from "src/server/rooms/map";
-import {
-  tileIdToVector,
-  vectorToTileId,
-  SerializedObjectTile,
-  pathToTileIds,
-} from "utilities/tileMap";
+import { SerializedObjectTile } from "utilities/tileMap";
 import { EnemySpec } from "types/enemies";
 import ItemState from "@server/components/item";
 import { randomNumberBetween, randomItemFromArray } from "utilities/math";
@@ -19,6 +14,7 @@ import PlayerState from "@server/components/player";
 import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
 import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
+import aStar from "utilities/movement/aStar";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -91,6 +87,7 @@ export default class Enemy {
     const behavior = this.spec.behavior;
 
     if (this.tilePath.length) {
+      // @ts-ignore
       this.timer = setTimeout(() => {
         if (behavior && behavior.patrol) {
           const playerTiles = Object.keys(this.room.state.players)
@@ -143,16 +140,18 @@ export default class Enemy {
             this.room.objectTileStore,
             this.objectTile.properties.patrolId || 0
           );
-          const path = this.room.objectTileStore.aStar.findPath(
-            tileIdToVector(this.currentTile, this.mapColumns),
-            tileIdToVector(targetTile, this.mapColumns)
+          this.tilePath = aStar.findPath(
+            this.room.objectTileStore.uid,
+            this.currentTile,
+            targetTile,
+            this.mapColumns
           );
-          this.tilePath = pathToTileIds(path, this.mapColumns);
         }
       } else {
         this.findNewTargetTile();
       }
 
+      // @ts-ignore
       this.timer = setTimeout(() => {
         this.tick();
       }, delay);
@@ -196,15 +195,12 @@ export default class Enemy {
     }
 
     if (this.room.objectTileStore) {
-      const currentTileVector = tileIdToVector(this.currentTile, columns);
-      const targetTileVector = tileIdToVector(targetTile, columns);
-
-      const aStarPath = this.room.objectTileStore.aStar.findPath(
-        currentTileVector,
-        targetTileVector
+      this.tilePath = aStar.findPath(
+        this.room.objectTileStore.uid,
+        this.currentTile,
+        targetTile,
+        columns
       );
-
-      this.tilePath = pathToTileIds(aStarPath, this.mapColumns);
     }
   }
 

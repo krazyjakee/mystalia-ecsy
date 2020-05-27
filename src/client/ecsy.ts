@@ -91,7 +91,7 @@ export default (user: User) => {
 
   const worker = new Worker("worker.js");
 
-  window.gameInFocus = true;
+  let workerActive = false;
 
   function update() {
     const time = performance.now();
@@ -105,27 +105,26 @@ export default (user: User) => {
       world.stop();
       world = new World();
       window.ecsyError = false;
-    } else {
-      if (window.gameInFocus) {
-        requestAnimationFrame(update);
-      }
+    } else if (!workerActive) {
+      requestAnimationFrame(update);
     }
   }
 
-  worker.onmessage = () => {
-    if (!window.gameInFocus && !window.ecsyError) {
+  worker.onmessage = (e) => {
+    if (e.data === "stopped") {
+      workerActive = false;
+    }
+    if (workerActive && !window.ecsyError) {
       update();
     }
   };
 
   window.onblur = () => {
-    window.gameInFocus = false;
-    update();
+    worker.postMessage("start");
   };
   window.onfocus = () => {
-    window.gameInFocus = true;
-    update();
+    worker.postMessage("stop");
   };
 
-  requestAnimationFrame(update);
+  update();
 };
