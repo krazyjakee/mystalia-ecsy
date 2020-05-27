@@ -6,8 +6,9 @@ import isWalkable from "../../utilities/TileMap/isWalkable";
 import tileInDirection from "../../utilities/TileMap/tileInDirection";
 import roundVector from "../../utilities/Vector/roundVector";
 import TileMap, { ChangeMap } from "@client/components/TileMap";
-import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
+import { vectorToTileId } from "utilities/tileMap";
 import getNextTileData from "@client/utilities/TileMap/getNextTileData";
+import aStar from "utilities/movement/aStar";
 
 export default (entity: Entity, tileMap: TileMap) => {
   const columns = tileMap.width;
@@ -20,7 +21,6 @@ export default (entity: Entity, tileMap: TileMap) => {
 
   const roundPosition = roundVector(position.value);
   const currentRoundTile = vectorToTileId(roundPosition, columns);
-  const destinationTile = tileIdToVector(newTarget, columns);
 
   const allowed = allowedToMove(currentRoundTile, newTarget, movement, tileMap);
 
@@ -28,12 +28,15 @@ export default (entity: Entity, tileMap: TileMap) => {
     movement.pathingTo = newTarget;
 
     try {
-      const path = tileMap.objectTileStore.aStar.findPath(
-        roundPosition,
-        destinationTile
+      const path = aStar.findPath(
+        tileMap.fileName,
+        currentRoundTile,
+        newTarget,
+        columns
       );
+      console.log(path);
       if (path.length) {
-        movement.tileQueue = path.map((p) => p[0] + p[1] * columns);
+        movement.tileQueue = path;
         movement.targetTile = newTarget;
 
         if (mapDir) {

@@ -5,7 +5,7 @@ import { isPresent } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { Direction } from "types/Grid";
 import { radianToDegree } from "utilities/math";
-import aStar from "./aStar";
+import aStar from "utilities/movement/aStar";
 
 export const tilesInRadiusOf = (
   tileId: number,
@@ -73,6 +73,22 @@ export const distanceBetweenTiles = (
   return Math.max(x, y);
 };
 
+export const tilesAdjacent = (tileA: Vector, tileB: Vector) => {
+  if (
+    (tileA.x - 1 === tileB.x || tileA.x + 1 === tileB.x) &&
+    tileA.y === tileB.y
+  ) {
+    return true;
+  }
+  if (
+    (tileA.y - 1 === tileB.y || tileA.y + 1 === tileB.y) &&
+    tileA.x === tileB.x
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export const allowedTiles = (tiles: number[], blockList: number[]) =>
   tiles.filter((tileId) => !blockList.includes(tileId));
 
@@ -85,22 +101,15 @@ export const findClosestPath = (
   const { columns } = ots;
   let totalRadius = 20;
   let radius = startingRadius - 1;
-  const fromVector = tileIdToVector(from, columns);
 
   while (totalRadius > 0) {
     radius += 1;
     const availablePaths: number[][] = allowedTiles(
       tilesAtRadiusOf(to, { width: columns, height: 10 }, radius),
-      ots.generateBlockList(10, 10)
+      ots.blockList
     )
-      .map((tileId) => tileIdToVector(tileId, columns))
-      .map((tileVector) => aStar.findPath("test", fromVector, tileVector))
-      .filter((tilePath) => isPresent(tilePath) && tilePath.length)
-      .map((tilePath) =>
-        tilePath.map((vectorArray) =>
-          vectorToTileId({ x: vectorArray[0], y: vectorArray[1] }, columns)
-        )
-      );
+      .map((tileId) => aStar.findPath(ots.uid, from, tileId, columns))
+      .filter((tilePath) => isPresent(tilePath) && tilePath.length);
 
     availablePaths.sort((a, b) => a.length - b.length);
     const shortestPath = availablePaths[0];

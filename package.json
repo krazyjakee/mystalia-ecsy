@@ -46,7 +46,6 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "fantasy-name-generator": "^2.0.0",
-    "memoizee": "^0.4.14",
     "mongoose": "^5.9.7",
     "normalize.css": "^8.0.1",
     "pluralize": "^8.0.0",

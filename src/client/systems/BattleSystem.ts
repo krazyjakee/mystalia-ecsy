@@ -19,6 +19,7 @@ import {
   RemoveCharacterHighlight,
 } from "@client/components/CharacterHighlight";
 import { EnemySpec } from "types/enemies";
+import aStar from "utilities/movement/aStar";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -80,9 +81,11 @@ export default class BattleSystem extends System {
       const playerMovement = localPlayerEntity.getComponent(Movement);
       const movement = enemyEntity.getComponent(Movement);
 
-      const path = tileMap.objectTileStore.aStar.findPath(
-        tileIdToVector(playerMovement.currentTile, tileMap.width),
-        tileIdToVector(movement.currentTile, tileMap.width)
+      const path = aStar.findPath(
+        tileMap.fileName,
+        playerMovement.currentTile,
+        movement.currentTile,
+        tileMap.width
       );
 
       if (!path) {
@@ -106,7 +109,7 @@ export default class BattleSystem extends System {
           tileMap.width
         );
 
-        if (currentRange > weaponRange) {
+        if (currentRange > weaponRange && tileMap.objectTileStore) {
           const path = findClosestPath(
             tileMap.objectTileStore,
             playerMovement.currentTile,

@@ -1,6 +1,6 @@
 import { readMapFiles } from "@server/utilities/mapFiles";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
-import aStar from "./movement/aStar";
+import aStar from "utilities/movement/aStar";
 
 const createObjectTileStore = () => {
   const maps = readMapFiles();
@@ -13,7 +13,7 @@ describe("ObjectTileStore", () => {
   describe("#constructor", () => {
     const ots = createObjectTileStore();
     test("correctly populate blockedTiles", () => {
-      expect(ots.generateBlockList(10, 10)).toStrictEqual([
+      expect(ots.blockList).toStrictEqual([
         3,
         13,
         23,
@@ -36,8 +36,7 @@ describe("ObjectTileStore", () => {
     });
 
     test("correctly pathfind", () => {
-      const path = aStar.findPath("test", { x: 2, y: 0 }, { x: 4, y: 0 });
-      const tileIds = path.map((point) => point[0] + point[1] * ots.columns);
+      const tileIds = aStar.findPath("test", 2, 4, ots.columns);
       expect(tileIds).toStrictEqual([
         12,
         22,

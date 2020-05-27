@@ -48,7 +48,7 @@ export default class EnemySpawner {
           new Enemy({
             spec: spec,
             room: this.room,
-            allowedTiles: this.room.objectTileStore.generateBlockList(10, 10),
+            allowedTiles: this.room.objectTileStore.blockList,
             currentTile: objectTile.tileId,
             zoneId: -1,
             stateId,

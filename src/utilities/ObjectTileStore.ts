@@ -6,7 +6,7 @@ import {
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
 import { Attributes, Layer, Property, TMJ } from "types/TMJ";
-import aStar from "./movement/aStar";
+import aStar from "utilities/movement/aStar";
 import { makeHash } from "./hash";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
@@ -70,14 +70,16 @@ const mapObjectToTileTypes = (
 };
 
 export class ObjectTileStore {
-  store: ObjectTileStoreType;
+  store: ObjectTileStoreType = {};
   columns: number = 0;
   uid: string = "";
+  blockList: number[] = [];
 
-  constructor(mapData: TMJ) {
+  constructor(mapData?: TMJ) {
+    if (!mapData) return;
+
     const { width, height, layers } = mapData;
     this.columns = width;
-    this.store = {};
 
     (layers as Layer[]).forEach((layer) => this.add(layer));
 
@@ -91,7 +93,9 @@ export class ObjectTileStore {
       this.uid = makeHash(JSON.stringify(mapData));
     }
 
-    aStar.add(this.uid, mapData, this.generateBlockList(height, width));
+    this.blockList = this.generateBlockList(height, width);
+
+    aStar.add(this.uid, mapData, this.blockList);
   }
 
   get(tileId: number) {
