@@ -34,7 +34,7 @@ export default (entity: Entity, tileMap: TileMap) => {
         newTarget,
         columns
       );
-      console.log(path);
+
       if (path.length) {
         movement.tileQueue = path;
         movement.targetTile = newTarget;
