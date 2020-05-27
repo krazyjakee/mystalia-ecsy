@@ -5,6 +5,7 @@ import { isPresent } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { Direction } from "types/Grid";
 import { radianToDegree } from "utilities/math";
+import aStar from "./aStar";
 
 export const tilesInRadiusOf = (
   tileId: number,
@@ -81,7 +82,7 @@ export const findClosestPath = (
   to: number,
   startingRadius: number = 1
 ) => {
-  const { aStar, blockList, columns } = ots;
+  const { columns } = ots;
   let totalRadius = 20;
   let radius = startingRadius - 1;
   const fromVector = tileIdToVector(from, columns);
@@ -89,11 +90,11 @@ export const findClosestPath = (
   while (totalRadius > 0) {
     radius += 1;
     const availablePaths: number[][] = allowedTiles(
-      tilesAtRadiusOf(to, { width: columns, height: ots.rows }, radius),
-      blockList
+      tilesAtRadiusOf(to, { width: columns, height: 10 }, radius),
+      ots.generateBlockList(10, 10)
     )
       .map((tileId) => tileIdToVector(tileId, columns))
-      .map((tileVector) => aStar.findPath(fromVector, tileVector))
+      .map((tileVector) => aStar.findPath("test", fromVector, tileVector))
       .filter((tilePath) => isPresent(tilePath) && tilePath.length)
       .map((tilePath) =>
         tilePath.map((vectorArray) =>

@@ -19,6 +19,7 @@ import PlayerState from "@server/components/player";
 import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
 import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
+import aStar from "utilities/movement/aStar";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -143,7 +144,8 @@ export default class Enemy {
             this.room.objectTileStore,
             this.objectTile.properties.patrolId || 0
           );
-          const path = this.room.objectTileStore.aStar.findPath(
+          const path = aStar.findPath(
+            this.room.objectTileStore.uid,
             tileIdToVector(this.currentTile, this.mapColumns),
             tileIdToVector(targetTile, this.mapColumns)
           );
@@ -199,7 +201,8 @@ export default class Enemy {
       const currentTileVector = tileIdToVector(this.currentTile, columns);
       const targetTileVector = tileIdToVector(targetTile, columns);
 
-      const aStarPath = this.room.objectTileStore.aStar.findPath(
+      const aStarPath = aStar.findPath(
+        this.room.objectTileStore.uid,
         currentTileVector,
         targetTileVector
       );

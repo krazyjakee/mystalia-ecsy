@@ -8,7 +8,6 @@ import roundVector from "../../utilities/Vector/roundVector";
 import TileMap, { ChangeMap } from "@client/components/TileMap";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
 import getNextTileData from "@client/utilities/TileMap/getNextTileData";
-import gameState from "@client/gameState";
 
 export default (entity: Entity, tileMap: TileMap) => {
   const columns = tileMap.width;
@@ -23,24 +22,9 @@ export default (entity: Entity, tileMap: TileMap) => {
   const currentRoundTile = vectorToTileId(roundPosition, columns);
   const destinationTile = tileIdToVector(newTarget, columns);
 
-  const newTargetNotSameAsCurrent = newTarget !== currentRoundTile;
-  const movementDirectionDisabled = !movement.direction;
-  const targetNotInDirection =
-    newTarget !==
-    tileInDirection(movement.currentTile, movement.direction, rows, columns);
-  const notAlreadyMovingInTheDirection =
-    movement.pathingTo === undefined || movement.pathingTo !== newTarget;
-  const tileQueueEmptyOrDestinationIsTheSameAsTarget =
-    !movement.tileQueue.length ||
-    movement.tileQueue[movement.tileQueue.length - 1] !== newTarget;
+  const allowed = allowedToMove(currentRoundTile, newTarget, movement, tileMap);
 
-  if (
-    newTargetNotSameAsCurrent &&
-    (movementDirectionDisabled || targetNotInDirection) &&
-    notAlreadyMovingInTheDirection &&
-    tileQueueEmptyOrDestinationIsTheSameAsTarget &&
-    isWalkable(tileMap, newTarget)
-  ) {
+  if (allowed) {
     movement.pathingTo = newTarget;
 
     try {
@@ -65,4 +49,38 @@ export default (entity: Entity, tileMap: TileMap) => {
   }
 
   entity.removeComponent(NewMovementTarget);
+};
+
+const allowedToMove = (
+  currentTile: number,
+  targetTile: number,
+  movement: Movement,
+  tileMap: TileMap
+) => {
+  const newTargetNotSameAsCurrent = targetTile !== currentTile;
+  const movementDirectionDisabled = !movement.direction;
+  const targetNotInDirection =
+    targetTile !==
+    tileInDirection(
+      movement.currentTile,
+      movement.direction,
+      tileMap.height,
+      tileMap.width
+    );
+  const notAlreadyMovingInTheDirection =
+    movement.pathingTo === undefined || movement.pathingTo !== targetTile;
+  const tileQueueEmptyOrDestinationIsTheSameAsTarget =
+    !movement.tileQueue.length ||
+    movement.tileQueue[movement.tileQueue.length - 1] !== targetTile;
+
+  if (
+    newTargetNotSameAsCurrent &&
+    (movementDirectionDisabled || targetNotInDirection) &&
+    notAlreadyMovingInTheDirection &&
+    tileQueueEmptyOrDestinationIsTheSameAsTarget &&
+    isWalkable(tileMap, targetTile)
+  ) {
+    return true;
+  }
+  return false;
 };

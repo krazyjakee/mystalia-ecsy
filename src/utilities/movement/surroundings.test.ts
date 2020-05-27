@@ -17,7 +17,7 @@ const createObjectTileStore = () => {
 
 describe("surroundings", () => {
   const ots = createObjectTileStore();
-  const size = { width: ots.columns, height: ots.rows };
+  const size = { width: 10, height: 10 };
 
   describe("#distanceBetweenTiles", () => {
     test("correctly calculate distance", () => {

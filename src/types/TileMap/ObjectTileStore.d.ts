@@ -35,12 +35,9 @@ export type ObjectTileType = {
   };
   mapProps: {
     name: string;
+    fileName: string;
     biome: Biome;
     light?: number;
-    north?: string;
-    east?: string;
-    south?: string;
-    west?: string;
   };
   shop: {
     shopId: number;
