@@ -120,12 +120,10 @@ export default (user: User) => {
 
   window.onblur = () => {
     window.gameInFocus = false;
-    update();
   };
   window.onfocus = () => {
     window.gameInFocus = true;
-    update();
   };
 
-  requestAnimationFrame(update);
+  update();
 };
