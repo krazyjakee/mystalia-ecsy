@@ -37,6 +37,7 @@ export default class EnemyZone {
 
     // @ts-ignore
     this.timer = setInterval(() => this.tick(), 1000);
+    this.tick();
   }
 
   tick() {

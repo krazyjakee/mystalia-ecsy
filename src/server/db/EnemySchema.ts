@@ -4,6 +4,7 @@ export default new mongoose.Schema({
   enemyId: Number,
   zoneId: Number,
   currentTile: Number,
+  tilePath: [Number],
   room: String,
-  index: String
+  index: String,
 });

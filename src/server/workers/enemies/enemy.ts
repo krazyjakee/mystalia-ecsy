@@ -15,6 +15,7 @@ import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
 import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 import aStar from "utilities/movement/aStar";
+import { ArraySchema } from "@colyseus/schema";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -31,10 +32,10 @@ type EnemyProps = {
 export default class Enemy {
   stateId: string;
   currentTile: number;
-  tilePath: number[] = [];
   spec: EnemySpec;
   room: MapRoom;
   allowedTiles: number[];
+  tilePath: number[] = [];
   timer?: NodeJS.Timeout;
   mapColumns: number;
   speedMs: number;
@@ -69,13 +70,15 @@ export default class Enemy {
     }
   }
 
-  addToState(zoneId: number) {
+  addToState(zoneId: number, tilePath?: number[]) {
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
       this.currentTile,
       zoneId,
-      this.objectTile?.name
+      this.objectTile?.name,
+      tilePath
     );
+    this.tilePath = tilePath || [];
     this.tick();
   }
 
@@ -109,6 +112,8 @@ export default class Enemy {
         }
 
         const targetTile = this.tilePath.shift();
+        this.setTilePath(this.tilePath);
+
         if (targetTile && this.room.state.enemies[this.stateId]) {
           this.currentTile = targetTile;
           (this.room.state.enemies[
@@ -140,11 +145,13 @@ export default class Enemy {
             this.room.objectTileStore,
             this.objectTile.properties.patrolId || 0
           );
-          this.tilePath = aStar.findPath(
-            this.room.objectTileStore.uid,
-            this.currentTile,
-            targetTile,
-            this.mapColumns
+          this.setTilePath(
+            aStar.findPath(
+              this.room.objectTileStore.uid,
+              this.currentTile,
+              targetTile,
+              this.mapColumns
+            )
           );
         }
       } else {
@@ -195,11 +202,13 @@ export default class Enemy {
     }
 
     if (this.room.objectTileStore) {
-      this.tilePath = aStar.findPath(
-        this.room.objectTileStore.uid,
-        this.currentTile,
-        targetTile,
-        columns
+      this.setTilePath(
+        aStar.findPath(
+          this.room.objectTileStore.uid,
+          this.currentTile,
+          targetTile,
+          columns
+        )
       );
     }
   }
@@ -235,7 +244,7 @@ export default class Enemy {
         playerState.targetTile
       );
       if (path) {
-        this.tilePath = path;
+        this.setTilePath(path);
       }
       return true;
     }
@@ -251,7 +260,7 @@ export default class Enemy {
           if (this.allowedTiles) {
             const obj = doc.toJSON();
             this.currentTile = obj.currentTile;
-            this.addToState(-1);
+            this.addToState(-1, obj.tilePath);
           }
         });
         if (!res.length) {
@@ -259,6 +268,15 @@ export default class Enemy {
         }
       }
     );
+  }
+
+  setTilePath(tilePath: number[]) {
+    if (this.room.state.enemies[this.stateId]) {
+      this.tilePath = tilePath;
+      this.room.state.enemies[this.stateId].tilePath = new ArraySchema(
+        ...tilePath
+      );
+    }
   }
 
   destroy() {

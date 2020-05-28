@@ -4,7 +4,6 @@ import MapRoom from "@server/rooms/map";
 import Enemy from "./enemies/enemy";
 import { EnemySpec } from "types/enemies";
 import { makeHash } from "utilities/hash";
-import { isPresent } from "utilities/guards";
 import { randomNumberBetween } from "utilities/math";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
