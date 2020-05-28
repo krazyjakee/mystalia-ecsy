@@ -37,7 +37,7 @@ describe("world utilities", () => {
     });
 
     test("should get the correct local tile id above zero", () => {
-      const localTileId = getLocalTile(8161);
+      const localTileId = getLocalTile(8160);
       expect(localTileId).toStrictEqual({ tileId: 0, fileName: "south" });
     });
   });

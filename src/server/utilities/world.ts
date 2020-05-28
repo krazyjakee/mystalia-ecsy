@@ -59,7 +59,7 @@ export const getLocalTile = (tileId: number) => {
     const worldPosition = worldMap[i];
 
     const adjustedVector = {
-      x: vector.x + worldSize.width,
+      x: tileId > 0 ? vector.x : vector.x + worldSize.width,
       y: vector.y,
     };
     const colliding = areColliding(worldPosition, {
