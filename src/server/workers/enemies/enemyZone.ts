@@ -10,6 +10,7 @@ import { EnemySpec } from "types/enemies";
 import EnemySchema from "../../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
 import { randomNumberBetween } from "utilities/math";
+import memoize from "utilities/memoize";
 
 const robustPointInPolygon = require("robust-point-in-polygon");
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
@@ -92,7 +93,7 @@ export default class EnemyZone {
     }
   }
 
-  calculateAllowedTiles(mapData: TMJ) {
+  calculateAllowedTiles = memoize((mapData: TMJ) => {
     const columns = mapData.width;
     const { x, y, polygon } = this.objectTile;
     if (!polygon) return [];
@@ -139,7 +140,7 @@ export default class EnemyZone {
     });
 
     return allowedTiles;
-  }
+  });
 
   destroy(stateId: string) {
     const enemyIndex = this.enemies.findIndex(

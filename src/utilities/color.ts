@@ -1,4 +1,6 @@
-export const hexToRgb = (hex: string, opacity: number) => {
+import memoize from "./memoize";
+
+export const hexToRgb = memoize((hex: string, opacity: number) => {
   var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function(m, r, g, b) {
     return r + r + g + g + b + b;
@@ -11,4 +13,4 @@ export const hexToRgb = (hex: string, opacity: number) => {
         16
       )},${opacity})`
     : `rgba(255,255,255,${opacity})`;
-};
+});

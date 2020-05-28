@@ -8,6 +8,7 @@ import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
 import { Attributes, Layer, Property, TMJ } from "types/TMJ";
 import aStar from "utilities/movement/aStar";
 import { makeHash } from "./hash";
+import memoize from "./memoize";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -27,47 +28,46 @@ const serializeProperties = <T extends ObjectTileTypeString>(
   return property;
 };
 
-const mapObjectToTileTypes = (
-  object: Attributes,
-  tileMapColumns: number
-): ObjectTileStoreType => {
-  const objectTileType: ObjectTileStoreType = {};
+const mapObjectToTileTypes = memoize(
+  (object: Attributes, tileMapColumns: number): ObjectTileStoreType => {
+    const objectTileType: ObjectTileStoreType = {};
 
-  const { width, height, x, y, type, name } = object;
+    const { width, height, x, y, type, name } = object;
 
-  const gridLocked = !["flame"].includes(type);
+    const gridLocked = !["flame"].includes(type);
 
-  const startTileId = gridLocked
-    ? vectorToTileId({ x: x / 32, y: y / 32 }, tileMapColumns)
-    : pixelsToTileId({ x, y }, tileMapColumns);
-  const cols = Math.round(width / 32) || 1;
-  const rows = Math.round(height / 32) || 1;
-  const value = serializeProperties(object.properties);
-  const totalTiles = cols * rows;
+    const startTileId = gridLocked
+      ? vectorToTileId({ x: x / 32, y: y / 32 }, tileMapColumns)
+      : pixelsToTileId({ x, y }, tileMapColumns);
+    const cols = Math.round(width / 32) || 1;
+    const rows = Math.round(height / 32) || 1;
+    const value = serializeProperties(object.properties);
+    const totalTiles = cols * rows;
 
-  let col = 0;
-  let row = 0;
+    let col = 0;
+    let row = 0;
 
-  for (let tileId = 0; tileId < totalTiles; tileId += 1) {
-    const newTileId = startTileId + col + row * tileMapColumns;
-    const newObjectTile = {
-      name,
-      type: type || "block",
-      value,
-    };
+    for (let tileId = 0; tileId < totalTiles; tileId += 1) {
+      const newTileId = startTileId + col + row * tileMapColumns;
+      const newObjectTile = {
+        name,
+        type: type || "block",
+        value,
+      };
 
-    objectTileType[newTileId] = [newObjectTile];
+      objectTileType[newTileId] = [newObjectTile];
 
-    col += 1;
+      col += 1;
 
-    if (col === cols) {
-      col = 0;
-      row += 1;
+      if (col === cols) {
+        col = 0;
+        row += 1;
+      }
     }
-  }
 
-  return objectTileType;
-};
+    return objectTileType;
+  }
+);
 
 export class ObjectTileStore {
   store: ObjectTileStoreType = {};

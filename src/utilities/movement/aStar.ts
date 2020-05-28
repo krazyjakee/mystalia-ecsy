@@ -46,41 +46,36 @@ class AStar {
       });
   }
 
-  findPath = memoize(
-    (
-      fileName: string,
-      sourceTileId: number,
-      destinationTileId: number,
-      mapColumns: number
-    ) => {
-      if (sourceTileId === destinationTileId) return [];
+  findPath(
+    fileName: string,
+    sourceTileId: number,
+    destinationTileId: number,
+    mapColumns: number
+  ) {
+    if (sourceTileId === destinationTileId) return [];
 
-      const blockList = this.aStarStore[fileName].blockList;
-      const sourceTileVector = tileIdToVector(sourceTileId, mapColumns);
-      const destinationTileVector = tileIdToVector(
-        destinationTileId,
-        mapColumns
+    const blockList = this.aStarStore[fileName].blockList;
+    const sourceTileVector = tileIdToVector(sourceTileId, mapColumns);
+    const destinationTileVector = tileIdToVector(destinationTileId, mapColumns);
+
+    if (
+      tilesAdjacent(sourceTileVector, destinationTileVector) &&
+      blockList &&
+      !blockList.includes(destinationTileId)
+    ) {
+      return [destinationTileId];
+    } else {
+      const rawPath = this.aStarStore[fileName].findPath(
+        sourceTileVector,
+        destinationTileVector
       );
 
-      if (
-        tilesAdjacent(sourceTileVector, destinationTileVector) &&
-        blockList &&
-        !blockList.includes(destinationTileId)
-      ) {
-        return [destinationTileId];
-      } else {
-        const rawPath = this.aStarStore[fileName].findPath(
-          sourceTileVector,
-          destinationTileVector
-        );
-
-        if (!rawPath) return [];
-        return rawPath.map((pathItem) =>
-          vectorToTileId({ x: pathItem[0], y: pathItem[1] }, mapColumns)
-        );
-      }
+      if (!rawPath) return [];
+      return rawPath.map((pathItem) =>
+        vectorToTileId({ x: pathItem[0], y: pathItem[1] }, mapColumns)
+      );
     }
-  );
+  }
 }
 
 const aStar = new AStar();
