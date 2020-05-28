@@ -14,11 +14,16 @@
     "speed": 1,
     "maxDistance": 6,
     "hp": 120,
-    "abilities": [0],
+    "abilities": [
+      0
+    ],
     "drop": [
       {
         "itemId": 5,
-        "quantity": [1, 3],
+        "quantity": [
+          1,
+          3
+        ],
         "chance": 2
       }
     ]
@@ -55,13 +60,18 @@
       }
     },
     "hp": 95,
-    "abilities": [0]
+    "abilities": [
+      0
+    ]
   },
   {
     "id": 3,
     "name": "Inn Keeper",
     "spritesheet": "npcs/ark/service-worker-1",
-    "spriteSize": { "width": 24, "height": 32 },
+    "spriteSize": {
+      "width": 24,
+      "height": 32
+    },
     "speed": 1,
     "maxDistance": 4,
     "hp": 55000,
@@ -77,16 +87,109 @@
     "id": 4,
     "name": "Stable Hand",
     "spritesheet": "npcs/ark/service-worker-2",
-    "spriteSize": { "width": 24, "height": 32 },
+    "spriteSize": {
+      "width": 24,
+      "height": 32
+    },
     "speed": 2,
     "maxDistance": 4,
     "hp": 55000,
     "behavior": {
       "patrol": {
-        "standTime": [1000, 10000],
+        "standTime": [
+          1000,
+          10000
+        ],
         "lookAtPlayer": true,
         "distance": 1
       }
     }
+  },
+  {
+    "id": 5,
+    "name": "Wood Owl",
+    "spritesheet": "wildlife/owl",
+    "portrait": "wild-boar",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "speed": 2,
+    "maxDistance": 6,
+    "hp": 200,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 5,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 2
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Wild Geese",
+    "spritesheet": "wildlife/geese",
+    "portrait": "wild-boar",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "speed": 1,
+    "maxDistance": 6,
+    "hp": 30,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 5,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 2
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Infected Beetle",
+    "spritesheet": "wildlife/beetle",
+    "portrait": "wild-boar",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "speed": 3,
+    "maxDistance": 6,
+    "hp": 500,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 5,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 2
+      }
+    ]
   }
 ]
