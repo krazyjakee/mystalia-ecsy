@@ -6,6 +6,7 @@ import { isPresent, clone } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { AStarFinder } from "astar-typescript";
 import { getBlockGrid } from "utilities/movement/aStar";
+import { areColliding } from "utilities/math";
 
 export const getWorldSize = (): Size & Vector => {
   const worldMap = getWorldMapItems();
@@ -24,29 +25,61 @@ export const getWorldSize = (): Size & Vector => {
   const worldHeight = farthestSouth - minYPosition;
 
   return {
-    width: worldWidth / 32,
-    height: worldHeight / 32,
+    width: worldWidth,
+    height: worldHeight,
     x: minXPosition,
     y: minYPosition,
   };
 };
 
-export const getWorldTileId = (
-  fileName: string,
-  tileId: number,
-  mapColumns: number
-) => {
-  const vector = tileIdToPixels(tileId, mapColumns);
+export const getWorldTileId = (fileName: string, tileId: number) => {
   const worldMap = getWorldMapItems();
+  const worldSize = getWorldSize();
 
-  const worldMapPosition = worldMap.find(
-    (mapItem) => mapItem.fileName.replace(".json", "") === fileName
-  );
-  if (!worldMapPosition) return;
+  const worldMapPosition =
+    worldMap.find(
+      (mapItem) => mapItem.fileName.replace(".json", "") === fileName
+    ) || worldMap[0];
+
+  const mapColumns = worldMapPosition.width / 32;
+  const vector = tileIdToPixels(tileId, mapColumns);
   const x = worldMapPosition.x + vector.x;
   const y = worldMapPosition.y + vector.y;
 
-  return pixelsToTileId({ x, y }, mapColumns);
+  return pixelsToTileId({ x, y }, worldSize.width / 32);
+};
+
+export const getLocalTile = (tileId: number) => {
+  const worldMap = getWorldMapItems();
+  const worldSize = getWorldSize();
+
+  const vector = tileIdToPixels(tileId, worldSize.width / 32);
+
+  for (let i = 0; i < worldMap.length; i += 1) {
+    const worldPosition = worldMap[i];
+
+    const adjustedVector = {
+      x: vector.x + worldSize.width,
+      y: vector.y,
+    };
+    const colliding = areColliding(worldPosition, {
+      ...adjustedVector,
+      width: 32,
+      height: 32,
+    });
+
+    const relativeVector = {
+      x: 0 - (worldPosition.x - adjustedVector.x),
+      y: 0 - (worldPosition.y - adjustedVector.y),
+    };
+
+    if (colliding) {
+      return {
+        tileId: pixelsToTileId(relativeVector, worldPosition.width / 32),
+        fileName: worldPosition.fileName,
+      };
+    }
+  }
 };
 
 export const generateWorldBlockList = () => {
@@ -66,25 +99,21 @@ export const generateWorldBlockList = () => {
     .map((rawBlockList) =>
       rawBlockList.blockList
         .map((blockedTile) =>
-          getWorldTileId(
-            rawBlockList.fileName,
-            blockedTile,
-            rawBlockList.mapColumns
-          )
+          getWorldTileId(rawBlockList.fileName, blockedTile)
         )
         .filter(isPresent)
     )
     .flat();
 };
 
-const worldSize = getWorldSize();
-const worldBlockList = generateWorldBlockList();
+export const worldSize = getWorldSize();
+export const worldBlockList = generateWorldBlockList();
 export const worldAStar = new AStarFinder({
   grid: {
     matrix: getBlockGrid(
       worldBlockList,
-      worldSize.width,
-      worldSize.height,
+      worldSize.width / 32,
+      worldSize.height / 32,
       worldSize.x * worldSize.y
     ),
   },

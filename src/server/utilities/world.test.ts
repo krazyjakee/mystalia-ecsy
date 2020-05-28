@@ -1,12 +1,17 @@
-import { getWorldSize, getWorldTileId, generateWorldBlockList } from "./world";
+import {
+  getWorldSize,
+  getWorldTileId,
+  generateWorldBlockList,
+  getLocalTile,
+} from "./world";
 
 describe("world utilities", () => {
   describe("#getWorldSize", () => {
     test("gets the correct size of the world", () => {
       const worldSize = getWorldSize();
       expect(worldSize).toStrictEqual({
-        width: 120,
-        height: 146,
+        width: 3840,
+        height: 4672,
         x: 0,
         y: -320,
       });
@@ -15,13 +20,25 @@ describe("world utilities", () => {
 
   describe("#getWorldTileId", () => {
     test("should get the correct world tile id below zero", () => {
-      const worldTileId = getWorldTileId("test", 49, 10);
-      expect(worldTileId).toBe(-51);
+      const worldTileId = getWorldTileId("test", 49);
+      expect(worldTileId).toBe(-711);
     });
 
     test("should get the correct world tile id above zero", () => {
-      const worldTileId = getWorldTileId("south", 210, 120);
+      const worldTileId = getWorldTileId("south", 210);
       expect(worldTileId).toBe(8370);
+    });
+  });
+
+  describe("#getLocalTile", () => {
+    test("should get the correct local tile id below zero", () => {
+      const localTileId = getLocalTile(-711);
+      expect(localTileId).toStrictEqual({ tileId: 49, fileName: "test" });
+    });
+
+    test("should get the correct local tile id above zero", () => {
+      const localTileId = getLocalTile(8161);
+      expect(localTileId).toStrictEqual({ tileId: 0, fileName: "south" });
     });
   });
 
