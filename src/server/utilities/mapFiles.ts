@@ -2,9 +2,9 @@ import * as fs from "fs";
 import { getMapProperties } from "./tmjTools";
 import { TMJ } from "types/TMJ";
 import { readJSONFile } from "./files";
+import memoize from "utilities/memoize";
 
 type MapDataCache = { [key: string]: TMJ };
-let mapCache: MapDataCache;
 
 export type WorldMapData = {
   fileName: string;
@@ -25,11 +25,7 @@ export type WorldMapItem = {
   height: number;
 };
 
-export const readMapFiles = () => {
-  if (mapCache) {
-    return mapCache;
-  }
-
+export const readMapFiles = memoize(() => {
   const dir = fs.opendirSync("./assets/maps");
   let maps: MapDataCache = {};
 
@@ -50,14 +46,12 @@ export const readMapFiles = () => {
 
   dir.closeSync();
 
-  mapCache = maps;
-
   return maps;
-};
+});
 
 const worldMapItems: WorldMapItem[] = [];
 
-export const getWorldMapItems = () => {
+export const getWorldMapItems = memoize(() => {
   if (worldMapItems.length) return worldMapItems;
 
   const worldData = readJSONFile(
@@ -79,4 +73,4 @@ export const getWorldMapItems = () => {
   });
 
   return worldMapItems;
-};
+});

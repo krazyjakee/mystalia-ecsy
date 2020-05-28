@@ -271,8 +271,8 @@ export default class Enemy {
   }
 
   setTilePath(tilePath: number[]) {
+    this.tilePath = tilePath;
     if (this.room.state.enemies[this.stateId]) {
-      this.tilePath = tilePath;
       this.room.state.enemies[this.stateId].tilePath = new ArraySchema(
         ...tilePath
       );
