@@ -2,6 +2,7 @@ import { Vector, Attributes, TMJ } from "types/TMJ";
 import {
   ObjectTileTypeString,
   ObjectTileType,
+  ObjectTile,
 } from "types/TileMap/ObjectTileStore";
 import { Property } from "types/TMJ";
 import { isPresent } from "./guards";
@@ -61,6 +62,11 @@ export const serializeProperties = <
     return property;
   }
   return null;
+};
+
+export type ObjectTileAndTileId<T extends ObjectTileTypeString> = {
+  tileId: number;
+  objectTile: ObjectTile<T>;
 };
 
 export type SerializedObjectTile<T extends ObjectTileTypeString> = Omit<

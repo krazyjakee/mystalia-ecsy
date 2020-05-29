@@ -18,6 +18,13 @@
 - To run in production mode: `npm run start:prod`
 - Visit the production server at http://localhost:8080
 
+### Database migrations
+
+- When starting from scratch, mongodb wont need to run migrations and can ignore the following
+- If DB changes happen, make sure database migrations are up-to-date
+- Run `migrate-mongo up` to migrate to the latest
+- Run `migrate-mongo create` to create a new migration
+
 ### Contribution Etiquette
 
 - Please make a pull request for every contribution

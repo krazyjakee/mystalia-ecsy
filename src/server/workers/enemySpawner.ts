@@ -42,6 +42,9 @@ export default class EnemySpawner {
       const stateId = makeHash(
         `${objectTile.properties.id}_${objectTile.tileId}`
       );
+
+      // TODO: If traveler enemy, send request to WorldEnemySpawner and return
+
       if (this.room?.objectTileStore && !this.room.state.enemies[stateId]) {
         this.enemies.push(
           new Enemy({
