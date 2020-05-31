@@ -64,11 +64,6 @@ export const serializeProperties = <
   return null;
 };
 
-export type ObjectTileAndTileId<T extends ObjectTileTypeString> = {
-  tileId: number;
-  objectTile: ObjectTile<T>;
-};
-
 export type SerializedObjectTile<T extends ObjectTileTypeString> = Omit<
   Attributes,
   "properties"

@@ -5,6 +5,8 @@ import Enemy from "./enemies/enemy";
 import { EnemySpec } from "types/enemies";
 import { makeHash } from "utilities/hash";
 import { randomNumberBetween } from "utilities/math";
+import { matchMaker } from "colyseus";
+import { WorldEnemy } from "./enemies/worldEnemy";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -25,6 +27,7 @@ export default class EnemySpawner {
 
       this.enemyZones.forEach((zone) => zone.loadFromDB());
       this.addEnemies();
+      this.addListeners();
     }
 
     // @ts-ignore
@@ -33,6 +36,11 @@ export default class EnemySpawner {
 
   addEnemies() {
     if (!this.room.mapData) return;
+
+    matchMaker.presence.publish(
+      "worldEnemySpawner:mountRoom",
+      this.room.roomName
+    );
 
     getTilesByType("enemy", this.room.mapData).forEach((objectTile) => {
       const roll = randomNumberBetween(objectTile.properties.chance);
@@ -45,7 +53,11 @@ export default class EnemySpawner {
 
       // TODO: If traveler enemy, send request to WorldEnemySpawner and return
 
-      if (this.room?.objectTileStore && !this.room.state.enemies[stateId]) {
+      if (spec.behavior.traveler) {
+        return;
+      }
+
+      if (this.room.objectTileStore && !this.room.state.enemies[stateId]) {
         this.enemies.push(
           new Enemy({
             spec: spec,
@@ -59,6 +71,29 @@ export default class EnemySpawner {
         );
       }
     });
+  }
+
+  addListeners() {
+    matchMaker.presence.subscribe(
+      `worldEnemySpawner:roomMounted:${this.room.roomName}`,
+      (worldEnemies: WorldEnemy[]) => {
+        worldEnemies.forEach((worldEnemy) => {
+          if (this.room.objectTileStore) {
+            this.enemies.push(
+              new Enemy({
+                spec: worldEnemy.spec,
+                room: this.room,
+                allowedTiles: this.room.objectTileStore.blockList,
+                currentTile: worldEnemy.objectTile.tileId,
+                zoneId: -1,
+                stateId: worldEnemy.uid,
+                objectTile: worldEnemy.objectTile,
+              })
+            );
+          }
+        });
+      }
+    );
   }
 
   tick() {
@@ -77,5 +112,8 @@ export default class EnemySpawner {
     clearInterval(this.timer);
     this.enemyZones.forEach((enemyZone) => enemyZone.dispose());
     this.enemies.forEach((enemy) => enemy.dispose());
+    matchMaker.presence.unsubscribe(
+      `worldEnemySpawner:roomMounted:${this.room.roomName}`
+    );
   }
 }

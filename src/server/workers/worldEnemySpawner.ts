@@ -3,18 +3,20 @@ import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
 import { EnemySpec } from "types/enemies";
 import { readMapFiles } from "@server/utilities/mapFiles";
-import { ObjectTileStore } from "utilities/ObjectTileStore";
-import { ObjectTileAndTileId } from "utilities/tileMap";
+import { getTilesByType, SerializedObjectTile } from "utilities/tileMap";
 import { makeHash } from "utilities/hash";
 import { matchMaker } from "colyseus";
+import MapRoom from "@server/rooms/map";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
 export default class WorldEnemySpawner {
+  room: MapRoom;
   master: boolean = false;
   enemies: WorldEnemy[] = [];
 
-  constructor() {
+  constructor(room: MapRoom) {
+    this.room = room;
     this.checkForMaster();
   }
 
@@ -26,6 +28,8 @@ export default class WorldEnemySpawner {
     if (!worldEnemySpawnerMasterExists) {
       this.master = true;
       matchMaker.presence.hset(`worldEnemySpawner:master`, "i", "i");
+      this.loadFromDB();
+      this.startListeners();
     }
   }
 
@@ -57,24 +61,43 @@ export default class WorldEnemySpawner {
     });
   }
 
+  startListeners() {
+    matchMaker.presence.subscribe(
+      "worldEnemySpawner:mountRoom",
+      (roomName: string) => {
+        const worldEnemies = this.mountRoom(roomName);
+        matchMaker.presence.publish(
+          `worldEnemySpawner:roomMounted:${roomName}`,
+          worldEnemies
+        );
+      }
+    );
+
+    matchMaker.presence.subscribe(
+      "worldEnemySpawner:unmountRoom",
+      (roomName: string) => {
+        this.mountRoom(roomName, true);
+      }
+    );
+  }
+
   getObjectTile({
     roomName,
     stateId,
   }: {
     roomName: string;
     stateId: string;
-  }): (ObjectTileAndTileId<"enemy"> & { uid: string }) | undefined {
+  }): (SerializedObjectTile<"enemy"> & { uid: string }) | undefined {
     const maps = readMapFiles();
     const map = maps[roomName];
-    const ots = new ObjectTileStore(map);
-    const enemyObjects = ots.getAllByType("enemy");
+    const enemyObjects = getTilesByType("enemy", map);
     const objectTile = enemyObjects.find(
       (enemyObject) =>
-        makeHash(`${enemyObject.objectTile.value.id}_${enemyObject.tileId}`) ===
+        makeHash(`${enemyObject.properties.id}_${enemyObject.tileId}`) ===
         stateId
     );
     if (objectTile) {
-      const uid = `${objectTile.objectTile.value.id}_${objectTile.tileId}`;
+      const uid = `${objectTile.properties.id}_${objectTile.tileId}`;
       return {
         ...objectTile,
         uid,
@@ -88,10 +111,10 @@ export default class WorldEnemySpawner {
     }
   }
 
-  mount(stateId: string) {
+  mount(stateId: string, unmount = false) {
     const index = this.enemies.findIndex((enemy) => enemy.uid === stateId);
     if (index > -1) {
-      this.enemies[index].mapTick = true;
+      this.enemies[index].mapTick = !unmount;
     }
   }
 
@@ -99,12 +122,14 @@ export default class WorldEnemySpawner {
     return this.enemies.findIndex((enemy) => enemy.uid === stateId) > -1;
   }
 
-  requestByRoom(roomName: string) {
-    const enemies = this.enemies.filter(
-      (enemy) => enemy.roomName === roomName && !enemy.mapTick
+  mountRoom(roomName: string, unmount = false) {
+    const enemies = this.enemies.filter((enemy) =>
+      unmount
+        ? enemy.roomName === roomName && enemy.mapTick
+        : enemy.roomName === roomName && !enemy.mapTick
     );
     enemies.forEach((enemy) => {
-      this.mount(enemy.uid);
+      this.mount(enemy.uid, unmount);
     });
     return enemies;
   }
@@ -112,6 +137,8 @@ export default class WorldEnemySpawner {
   dispose() {
     if (this.master) {
       matchMaker.presence.del("worldEnemySpawner:master");
+      matchMaker.presence.unsubscribe("worldEnemySpawner:unmountRoom");
+      matchMaker.presence.unsubscribe("worldEnemySpawner:mountRoom");
     }
   }
 }

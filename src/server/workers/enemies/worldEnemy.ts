@@ -1,11 +1,11 @@
 import { EnemySpec } from "types/enemies";
-import { ObjectTileAndTileId } from "utilities/tileMap";
+import { SerializedObjectTile } from "utilities/tileMap";
 import { getWorldTileId } from "@server/utilities/world";
 
 export type WorldEnemyProps = {
   uid: string;
   spec: EnemySpec;
-  objectTile: ObjectTileAndTileId<"enemy">;
+  objectTile: SerializedObjectTile<"enemy">;
   roomName: string;
   tilePath: number[];
   damage: number;
@@ -24,7 +24,7 @@ export class WorldEnemy {
   enemyId: number = 0;
   displayName: string = "";
   spec: EnemySpec;
-  objectTile: ObjectTileAndTileId<"enemy">;
+  objectTile: SerializedObjectTile<"enemy">;
 
   constructor({
     uid,
