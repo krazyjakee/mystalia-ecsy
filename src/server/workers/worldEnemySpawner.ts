@@ -28,12 +28,16 @@ export default class WorldEnemySpawner {
     if (!worldEnemySpawnerMasterExists) {
       this.master = true;
       matchMaker.presence.hset(`worldEnemySpawner:master`, "i", "i");
-      this.loadFromDB();
+      await this.loadFromDB();
+      this.loadTheRest();
       this.startListeners();
+      console.log(
+        `room "${this.room.roomName}" is now worldEnemySpawner master`
+      );
     }
   }
 
-  loadFromDB() {
+  async loadFromDB() {
     const enemies = mongoose.model("Enemy", EnemySchema);
     enemies.find({ traveler: true }, (err, res) => {
       if (err) return console.log(err.message);
@@ -45,17 +49,40 @@ export default class WorldEnemySpawner {
           stateId: obj.index,
         });
         if (spec && objectTile) {
-          this.enemies.push(
-            new WorldEnemy({
-              uid: objectTile.uid,
-              spec,
-              objectTile,
-              currentTile: obj.currentTile,
-              roomName: obj.room,
-              tilePath: obj.tilePath,
-              damage: obj.damage,
-            })
-          );
+          this.addEnemy({
+            uid: objectTile.uid,
+            spec,
+            objectTile,
+            currentTile: obj.currentTile,
+            roomName: obj.room,
+            tilePath: obj.tilePath,
+            damage: obj.damage,
+          });
+        }
+      });
+      Promise.resolve();
+    });
+  }
+
+  loadTheRest() {
+    const maps = readMapFiles();
+    Object.keys(maps).forEach((roomName) => {
+      const map = maps[roomName];
+      const enemyObjects = getTilesByType("enemy", map);
+      enemyObjects.forEach((enemyObject) => {
+        const spec = enemySpecs.find(
+          (spec) => spec.id === enemyObject.properties.id
+        );
+        if (spec) {
+          this.addEnemy({
+            uid: this.generateUid(enemyObject),
+            spec,
+            objectTile: enemyObject,
+            currentTile: enemyObject.tileId,
+            roomName,
+            tilePath: [],
+            damage: 0,
+          });
         }
       });
     });
@@ -92,9 +119,7 @@ export default class WorldEnemySpawner {
     const map = maps[roomName];
     const enemyObjects = getTilesByType("enemy", map);
     const objectTile = enemyObjects.find(
-      (enemyObject) =>
-        makeHash(`${enemyObject.properties.id}_${enemyObject.tileId}`) ===
-        stateId
+      (enemyObject) => this.generateUid(enemyObject) === stateId
     );
     if (objectTile) {
       const uid = `${objectTile.properties.id}_${objectTile.tileId}`;
@@ -103,6 +128,10 @@ export default class WorldEnemySpawner {
         uid,
       };
     }
+  }
+
+  generateUid(enemyObject: SerializedObjectTile<"enemy">) {
+    return makeHash(`${enemyObject.properties.id}_${enemyObject.tileId}`);
   }
 
   addEnemy(enemyProps: WorldEnemyProps) {
@@ -140,5 +169,6 @@ export default class WorldEnemySpawner {
       matchMaker.presence.unsubscribe("worldEnemySpawner:unmountRoom");
       matchMaker.presence.unsubscribe("worldEnemySpawner:mountRoom");
     }
+    this.enemies.forEach((enemy) => enemy.dispose());
   }
 }
