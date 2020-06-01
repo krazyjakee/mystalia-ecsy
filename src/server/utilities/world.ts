@@ -1,4 +1,9 @@
-import { pixelsToTileId, tileIdToPixels } from "../../utilities/tileMap";
+import {
+  pixelsToTileId,
+  tileIdToPixels,
+  tileIdToVector,
+  vectorToTileId,
+} from "../../utilities/tileMap";
 import { getWorldMapItems, readMapFiles } from "@server/utilities/mapFiles";
 import { Size } from "types/TileMap/standard";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
@@ -6,7 +11,12 @@ import { isPresent, clone } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { AStarFinder } from "astar-typescript";
 import { getBlockGrid } from "utilities/movement/aStar";
-import { areColliding } from "utilities/math";
+import { areColliding, randomNumberBetween } from "utilities/math";
+
+export const getMapColumns = (fileName: string) => {
+  const maps = readMapFiles();
+  return maps[fileName].width / 32;
+};
 
 export const getWorldSize = (): Size & Vector => {
   const worldMap = getWorldMapItems();
@@ -46,14 +56,14 @@ export const getWorldTileId = (fileName: string, tileId: number) => {
   const x = worldMapPosition.x + vector.x;
   const y = worldMapPosition.y + vector.y;
 
-  return pixelsToTileId({ x, y }, worldSize.width / 32);
+  return pixelsToTileId({ x, y }, worldColumns);
 };
 
-export const getLocalTile = (tileId: number) => {
+export const getLocalTileId = (tileId: number) => {
   const worldMap = getWorldMapItems();
   const worldSize = getWorldSize();
 
-  const vector = tileIdToPixels(tileId, worldSize.width / 32);
+  const vector = tileIdToPixels(tileId, worldColumns);
 
   for (let i = 0; i < worldMap.length; i += 1) {
     const worldPosition = worldMap[i];
@@ -106,13 +116,42 @@ export const generateWorldBlockList = () => {
     .flat();
 };
 
+export const getRandomValidTile = () => {
+  while (true) {
+    const x = randomNumberBetween(worldSize.width + worldSize.x, worldSize.x);
+    const y = randomNumberBetween(worldSize.height + worldSize.y, worldSize.y);
+    const tileId = pixelsToTileId({ x, y }, worldColumns);
+    const isBlocked = worldBlockList.includes(tileId);
+    const isOnAMap = getLocalTileId(tileId);
+    if (!isBlocked && isOnAMap) {
+      return tileId;
+    }
+  }
+};
+
+export const pathToRandomTile = (startPosition: number) => {
+  const randomTile = getRandomValidTile();
+  const path = worldAStar.findPath(
+    tileIdToVector(startPosition, worldColumns),
+    tileIdToVector(randomTile, worldColumns)
+  );
+  if (path) {
+    return path
+      .map((pathItem) =>
+        vectorToTileId({ x: pathItem[0], y: pathItem[1] }, worldColumns)
+      )
+      .map((worldTileId) => getLocalTileId(worldTileId));
+  }
+};
+
 export const worldSize = getWorldSize();
+export const worldColumns = worldSize.width / 32;
 export const worldBlockList = generateWorldBlockList();
 export const worldAStar = new AStarFinder({
   grid: {
     matrix: getBlockGrid(
       worldBlockList,
-      worldSize.width / 32,
+      worldColumns,
       worldSize.height / 32,
       worldSize.x * worldSize.y
     ),

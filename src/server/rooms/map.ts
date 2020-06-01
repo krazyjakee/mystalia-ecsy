@@ -122,7 +122,6 @@ export default class MapRoom extends Room<MapState> {
     }
 
     await saveStateToDb("Item", this.roomName, this.state.items);
-    await saveStateToDb("Enemy", this.roomName, this.state.enemies);
 
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {

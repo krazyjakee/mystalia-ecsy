@@ -16,10 +16,11 @@ import EnemySchema from "@server/db/EnemySchema";
 import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 import aStar from "utilities/movement/aStar";
 import { ArraySchema } from "@colyseus/schema";
+import { matchMaker } from "colyseus";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
-type EnemyProps = {
+export type EnemyProps = {
   spec: EnemySpec;
   room: MapRoom;
   allowedTiles: number[];
@@ -68,6 +69,7 @@ export default class Enemy {
     } else {
       this.addToState(zoneId);
     }
+    this.addListeners();
   }
 
   addToState(zoneId: number, tilePath?: number[]) {
@@ -154,6 +156,11 @@ export default class Enemy {
             )
           );
         }
+      } else if (behavior && behavior.traveler) {
+        matchMaker.presence.publish(
+          `worldEnemySpawner:requestPath:${this.stateId}`,
+          this.currentTile
+        );
       } else {
         this.findNewTargetTile();
       }
@@ -275,6 +282,17 @@ export default class Enemy {
     if (this.room.state.enemies[this.stateId]) {
       this.room.state.enemies[this.stateId].tilePath = new ArraySchema(
         ...tilePath
+      );
+    }
+  }
+
+  addListeners() {
+    if (matchMaker.presence) {
+      matchMaker.presence.subscribe(
+        `worldEnemySpawner:pathResponse:${this.stateId}`,
+        (tilePath: number[]) => {
+          this.setTilePath(tilePath);
+        }
       );
     }
   }

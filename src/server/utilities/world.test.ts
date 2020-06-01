@@ -2,7 +2,9 @@ import {
   getWorldSize,
   getWorldTileId,
   generateWorldBlockList,
-  getLocalTile,
+  getLocalTileId,
+  getRandomValidTile,
+  pathToRandomTile,
 } from "./world";
 
 describe("world utilities", () => {
@@ -30,14 +32,14 @@ describe("world utilities", () => {
     });
   });
 
-  describe("#getLocalTile", () => {
+  describe("#getLocalTileId", () => {
     test("should get the correct local tile id below zero", () => {
-      const localTileId = getLocalTile(-711);
+      const localTileId = getLocalTileId(-711);
       expect(localTileId).toStrictEqual({ tileId: 49, fileName: "test" });
     });
 
     test("should get the correct local tile id above zero", () => {
-      const localTileId = getLocalTile(8160);
+      const localTileId = getLocalTileId(8160);
       expect(localTileId).toStrictEqual({ tileId: 0, fileName: "south" });
     });
   });
@@ -46,6 +48,20 @@ describe("world utilities", () => {
     test("should return a valid block list", () => {
       const blockList = generateWorldBlockList();
       expect(blockList.length).toStrictEqual(2614);
+    });
+  });
+
+  describe("#getRandomValidTile", () => {
+    test("should return a random valid tile", () => {
+      const randomTile = getRandomValidTile();
+      expect(randomTile).toBeTruthy();
+    });
+  });
+
+  describe("#pathToRandomTile", () => {
+    test("should return a path to a random valid tile", () => {
+      const randomPath = pathToRandomTile(0);
+      expect(randomPath && randomPath.length).toBeTruthy();
     });
   });
 });
