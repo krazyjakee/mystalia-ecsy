@@ -5,6 +5,7 @@ import {
   getLocalTileId,
   getRandomValidTile,
   pathToRandomTile,
+  isValidWorldTile,
 } from "./world";
 
 describe("world utilities", () => {
@@ -58,10 +59,38 @@ describe("world utilities", () => {
     });
   });
 
+  describe("#isValidWorldTile", () => {
+    test("should validate a valid tile", () => {
+      const validTile = isValidWorldTile(5749);
+      expect(validTile).toBeTruthy();
+    });
+
+    test("should validate an invalid tile", () => {
+      const invalidTile = isValidWorldTile(6811);
+      expect(invalidTile).toBeFalsy();
+    });
+  });
+
   describe("#pathToRandomTile", () => {
     test("should return a path to a random valid tile", () => {
       const randomPath = pathToRandomTile(2, -119);
-      expect(randomPath).toStrictEqual([1, 2, 3]);
+      expect(randomPath).toStrictEqual([
+        {
+          fileName: "first",
+          tileId: 1,
+        },
+        {
+          fileName: "test",
+          tileId: 91,
+        },
+      ]);
+    });
+
+    test("should return a path to a random valid tile", () => {
+      let randomPath = pathToRandomTile(14971, 12428);
+      expect(randomPath && randomPath.length).toBeTruthy();
+      randomPath = pathToRandomTile(6811, 5749);
+      expect(randomPath && randomPath.length).toBeTruthy();
     });
   });
 });

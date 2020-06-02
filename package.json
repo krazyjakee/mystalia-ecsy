@@ -49,6 +49,7 @@
     "mongoose": "^5.9.7",
     "normalize.css": "^8.0.1",
     "pluralize": "^8.0.0",
+    "pureimage": "^0.2.1",
     "react": "^16.13.1",
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",

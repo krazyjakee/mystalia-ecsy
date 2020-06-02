@@ -44,8 +44,6 @@ export const getWorldSize = (): Size & Vector => {
 
 export const getWorldTileId = (fileName: string, tileId: number) => {
   const worldMap = getWorldMapItems();
-  const worldSize = getWorldSize();
-
   const worldMapPosition =
     worldMap.find(
       (mapItem) => mapItem.fileName.replace(".json", "") === fileName
@@ -99,8 +97,6 @@ export const generateWorldBlockList = () => {
     worldMap.find((map) => map.fileName === key)
   );
 
-  const firstTile = pixelsToTileId(worldSize, worldColumns);
-
   const rawBlockLists = mapKeys.map((key) => ({
     blockList: new ObjectTileStore(maps[key]).blockList,
     fileName: key,
@@ -110,9 +106,8 @@ export const generateWorldBlockList = () => {
   return rawBlockLists
     .map((rawBlockList) =>
       rawBlockList.blockList
-        .map(
-          (blockedTile) =>
-            getWorldTileId(rawBlockList.fileName, blockedTile) + firstTile
+        .map((blockedTile) =>
+          getWorldTileId(rawBlockList.fileName, blockedTile)
         )
         .filter(isPresent)
     )
@@ -124,18 +119,23 @@ export const getRandomValidTile = () => {
     const x = randomNumberBetween(worldSize.width + worldSize.x, worldSize.x);
     const y = randomNumberBetween(worldSize.height + worldSize.y, worldSize.y);
     const tileId = pixelsToTileId({ x, y }, worldColumns);
-    const isBlocked = worldBlockList.includes(tileId);
-    const isOnAMap = getLocalTileId(tileId);
-    if (!isBlocked && isOnAMap) {
+    if (isValidWorldTile(tileId)) {
       return tileId;
     }
   }
+};
+
+export const isValidWorldTile = (tileId: number) => {
+  const isBlocked = worldBlockList.includes(tileId - worldFirstTile);
+  const isOnAMap = getLocalTileId(tileId);
+  return Boolean(!isBlocked && isOnAMap);
 };
 
 export const pathToRandomTile = (
   startPosition: number,
   forceDestination?: number
 ) => {
+  if (!isValidWorldTile(startPosition)) return [];
   const randomTile = forceDestination || getRandomValidTile();
   const offsetStartTile = startPosition - worldFirstTile;
   const offsetDestinationTile = randomTile - worldFirstTile;
@@ -144,12 +144,8 @@ export const pathToRandomTile = (
     tileIdToVector(offsetStartTile, worldColumns),
     tileIdToVector(offsetDestinationTile, worldColumns)
   );
-  console.log(
-    tileIdToVector(offsetStartTile, worldColumns),
-    tileIdToVector(offsetDestinationTile, worldColumns),
-    path
-  );
-  if (path) {
+
+  if (path.length) {
     return path
       .map(
         (pathItem) =>
@@ -160,6 +156,38 @@ export const pathToRandomTile = (
   }
 };
 
+export const drawBlockGrid = () => {
+  const PImage = require("pureimage");
+  const img1 = PImage.make(worldSize.width / 16, worldSize.height / 16);
+  const blockGrid = getBlockGrid(
+    worldBlockList,
+    worldSize.height / 32,
+    worldColumns,
+    worldFirstTile
+  );
+  var ctx = img1.getContext("2d");
+  ctx.fillStyle = "rgba(255,0,0, 0.5)";
+
+  blockGrid.forEach((row, rowIndex) => {
+    row.forEach((col, colIndex) => {
+      if (col) {
+        ctx.fillRect(colIndex * 2, rowIndex * 2, 2, 2);
+      }
+    });
+  });
+
+  PImage.encodePNGToStream(
+    img1,
+    require("fs").createWriteStream("blockGrid.png")
+  )
+    .then(() => {
+      console.log("wrote out the png file to out.png");
+    })
+    .catch((e) => {
+      console.log("there was an error writing");
+    });
+};
+
 export const worldSize = getWorldSize();
 export const worldColumns = worldSize.width / 32;
 export const worldFirstTile = pixelsToTileId(worldSize, worldColumns);
@@ -168,11 +196,13 @@ export const worldAStar = new AStarFinder({
   grid: {
     matrix: getBlockGrid(
       worldBlockList,
-      worldColumns,
       worldSize.height / 32,
+      worldColumns,
       worldFirstTile
     ),
   },
   diagonalAllowed: false,
   includeStartNode: false,
 });
+
+drawBlockGrid();

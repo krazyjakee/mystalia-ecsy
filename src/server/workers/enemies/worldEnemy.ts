@@ -104,6 +104,7 @@ export class WorldEnemy {
   }
 
   calculateWorldTile() {
+    console.log(this.localCurrentTile);
     return getWorldTileId(this.roomName, this.localCurrentTile);
   }
 
