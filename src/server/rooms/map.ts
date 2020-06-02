@@ -109,10 +109,6 @@ export default class MapRoom extends Room<MapState> {
       this.enemySpawner.dispose();
     }
 
-    if (this.weatherSpawner) {
-      await this.weatherSpawner.dispose();
-    }
-
     if (this.worldEnemySpawner) {
       this.worldEnemySpawner.dispose();
     }
@@ -121,6 +117,9 @@ export default class MapRoom extends Room<MapState> {
       this.battleWorker.dispose();
     }
 
+    if (this.weatherSpawner) {
+      await this.weatherSpawner.dispose();
+    }
     await saveStateToDb("Item", this.roomName, this.state.items);
 
     const sessionIds = Object.keys(this.state.players);

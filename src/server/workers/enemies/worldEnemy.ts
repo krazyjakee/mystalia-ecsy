@@ -53,6 +53,7 @@ export class WorldEnemy {
     this.damage = damage;
     this.roomName = roomName;
     this.currentWorldTile = this.calculateWorldTile();
+    this.addListeners();
   }
 
   nextDestination() {
@@ -65,7 +66,7 @@ export class WorldEnemy {
   addListeners() {
     matchMaker.presence.subscribe(
       `worldEnemySpawner:requestPath:${this.uid}`,
-      this.requestPath
+      (localCurrentTile) => this.requestPath(localCurrentTile)
     );
   }
 
@@ -73,8 +74,9 @@ export class WorldEnemy {
     this.localCurrentTile = localCurrentTile;
     this.calculateWorldTile();
     if (
+      !this.worldTilePath.length ||
       this.currentWorldTile ===
-      this.worldTilePath[this.worldTilePath.length - 1].tileId
+        this.worldTilePath[this.worldTilePath.length - 1].tileId
     ) {
       this.nextDestination();
     }
@@ -87,17 +89,18 @@ export class WorldEnemy {
       // TODO: If the local current tile is the last one in the tilepath, move the traveler to the next map
       return;
     }
-
-    const newPath = aStar.findPath(
-      this.roomName,
-      localCurrentTile,
-      lastLocalTile,
-      getMapColumns(this.roomName)
-    );
-    matchMaker.presence.publish(
-      `worldEnemySpawner:pathResponse:${this.uid}`,
-      newPath
-    );
+    if (lastLocalTile && localCurrentTile) {
+      const newPath = aStar.findPath(
+        this.roomName,
+        localCurrentTile,
+        lastLocalTile,
+        getMapColumns(this.roomName)
+      );
+      matchMaker.presence.publish(
+        `worldEnemySpawner:pathResponse:${this.uid}`,
+        newPath
+      );
+    }
   }
 
   calculateWorldTile() {

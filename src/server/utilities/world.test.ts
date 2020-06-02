@@ -60,8 +60,8 @@ describe("world utilities", () => {
 
   describe("#pathToRandomTile", () => {
     test("should return a path to a random valid tile", () => {
-      const randomPath = pathToRandomTile(0);
-      expect(randomPath && randomPath.length).toBeTruthy();
+      const randomPath = pathToRandomTile(2, -119);
+      expect(randomPath).toStrictEqual([1, 2, 3]);
     });
   });
 });

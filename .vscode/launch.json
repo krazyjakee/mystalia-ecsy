@@ -7,7 +7,7 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
+      "runtimeArgs": ["run", "server"],
       "port": 9229,
       "timeout": 30000
     }

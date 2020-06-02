@@ -99,6 +99,8 @@ export const generateWorldBlockList = () => {
     worldMap.find((map) => map.fileName === key)
   );
 
+  const firstTile = pixelsToTileId(worldSize, worldColumns);
+
   const rawBlockLists = mapKeys.map((key) => ({
     blockList: new ObjectTileStore(maps[key]).blockList,
     fileName: key,
@@ -108,8 +110,9 @@ export const generateWorldBlockList = () => {
   return rawBlockLists
     .map((rawBlockList) =>
       rawBlockList.blockList
-        .map((blockedTile) =>
-          getWorldTileId(rawBlockList.fileName, blockedTile)
+        .map(
+          (blockedTile) =>
+            getWorldTileId(rawBlockList.fileName, blockedTile) + firstTile
         )
         .filter(isPresent)
     )
@@ -129,16 +132,29 @@ export const getRandomValidTile = () => {
   }
 };
 
-export const pathToRandomTile = (startPosition: number) => {
-  const randomTile = getRandomValidTile();
+export const pathToRandomTile = (
+  startPosition: number,
+  forceDestination?: number
+) => {
+  const randomTile = forceDestination || getRandomValidTile();
+  const offsetStartTile = startPosition - worldFirstTile;
+  const offsetDestinationTile = randomTile - worldFirstTile;
+
   const path = worldAStar.findPath(
-    tileIdToVector(startPosition, worldColumns),
-    tileIdToVector(randomTile, worldColumns)
+    tileIdToVector(offsetStartTile, worldColumns),
+    tileIdToVector(offsetDestinationTile, worldColumns)
+  );
+  console.log(
+    tileIdToVector(offsetStartTile, worldColumns),
+    tileIdToVector(offsetDestinationTile, worldColumns),
+    path
   );
   if (path) {
     return path
-      .map((pathItem) =>
-        vectorToTileId({ x: pathItem[0], y: pathItem[1] }, worldColumns)
+      .map(
+        (pathItem) =>
+          vectorToTileId({ x: pathItem[0], y: pathItem[1] }, worldColumns) +
+          worldFirstTile
       )
       .map((worldTileId) => getLocalTileId(worldTileId));
   }
@@ -146,6 +162,7 @@ export const pathToRandomTile = (startPosition: number) => {
 
 export const worldSize = getWorldSize();
 export const worldColumns = worldSize.width / 32;
+export const worldFirstTile = pixelsToTileId(worldSize, worldColumns);
 export const worldBlockList = generateWorldBlockList();
 export const worldAStar = new AStarFinder({
   grid: {
@@ -153,7 +170,7 @@ export const worldAStar = new AStarFinder({
       worldBlockList,
       worldColumns,
       worldSize.height / 32,
-      worldSize.x * worldSize.y
+      worldFirstTile
     ),
   },
   diagonalAllowed: false,

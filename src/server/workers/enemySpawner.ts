@@ -76,7 +76,6 @@ export default class EnemySpawner {
       (worldEnemies: WorldEnemy[]) => {
         worldEnemies.forEach((worldEnemy) => {
           if (this.room.objectTileStore) {
-            // TODO: Are the enemies being added?
             this.addEnemy({
               spec: worldEnemy.spec,
               room: this.room,
@@ -91,10 +90,12 @@ export default class EnemySpawner {
       }
     );
 
-    matchMaker.presence.publish(
-      "worldEnemySpawner:mountRoom",
-      this.room.roomName
-    );
+    matchMaker.presence.subscribe("worldEnemySpawner:ready", () => {
+      matchMaker.presence.publish(
+        "worldEnemySpawner:mountRoom",
+        this.room.roomName
+      );
+    });
   }
 
   tick() {

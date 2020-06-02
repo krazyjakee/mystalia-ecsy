@@ -28,9 +28,10 @@ export default class WorldEnemySpawner {
     if (!worldEnemySpawnerMasterExists) {
       this.master = true;
       matchMaker.presence.hset(`worldEnemySpawner:master`, "i", "i");
+      this.startListeners();
       await this.loadFromDB();
       this.loadTheRest();
-      this.startListeners();
+      matchMaker.presence.publish("worldEnemySpawner:ready", "");
       console.log(
         `room "${this.room.roomName}" is now worldEnemySpawner master`
       );
@@ -160,6 +161,7 @@ export default class WorldEnemySpawner {
     enemies.forEach((enemy) => {
       this.mount(enemy.uid, unmount);
     });
+    console.log(`${roomName} mounted ${enemies.length} world enemies`);
     return enemies;
   }
 
