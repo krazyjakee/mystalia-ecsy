@@ -27,8 +27,14 @@
     "spriteId": 529,
     "equippable": true,
     "type": "melee",
-    "tags": ["wood", "strength"],
-    "damage": [4, 8],
+    "tags": [
+      "wood",
+      "strength"
+    ],
+    "damage": [
+      4,
+      8
+    ],
     "effect": 0
   },
   {
@@ -38,8 +44,13 @@
     "spriteId": 0,
     "equippable": true,
     "type": "cast",
-    "tags": ["magic"],
-    "damage": [9999, 99999],
+    "tags": [
+      "magic"
+    ],
+    "damage": [
+      9999,
+      99999
+    ],
     "effect": 2,
     "range": 4
   },
@@ -56,5 +67,68 @@
     "spritesheet": "items",
     "spriteId": 270,
     "type": "other"
+  },
+  {
+    "id": 7,
+    "name": "Leg Bone",
+    "spritesheet": "items",
+    "spriteId": 366,
+    "type": "other"
+  },
+  {
+    "id": 8,
+    "name": "Green Leaf",
+    "spritesheet": "items",
+    "spriteId": 265,
+    "type": "consumable"
+  },
+  {
+    "id": 9,
+    "name": "Red Mushroom",
+    "spritesheet": "items",
+    "spriteId": 282,
+    "type": "consumable"
+  },
+  {
+    "id": 10,
+    "name": "One Jujube",
+    "spritesheet": "items",
+    "spriteId": 441,
+    "type": "other"
+  },
+  {
+    "id": 11,
+    "name": "Five Jujube",
+    "spritesheet": "items",
+    "spriteId": 434,
+    "type": "other"
+  },
+  {
+    "id": 12,
+    "name": "Fifteen Jujube",
+    "spritesheet": "items",
+    "spriteId": 431,
+    "type": "other"
+  },
+  {
+    "id": 13,
+    "name": "Frog Juice",
+    "spritesheet": "items",
+    "spriteId": 479,
+    "type": "consumable"
+  },
+  {
+    "id": 14,
+    "name": "Empty Beer",
+    "spritesheet": "items",
+    "spriteId": 352,
+    "type": "consumable"
+  },
+  {
+    "id": 15,
+    "name": "Green Eye",
+    "spritesheet": "items",
+    "spriteId": 360,
+    "type": "consumable"
   }
 ]

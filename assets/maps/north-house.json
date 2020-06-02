@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":20,
  "infinite":false,
  "layers":[
@@ -110,6 +117,28 @@
                  "width":32,
                  "x":224,
                  "y":544
+                }, 
+                {
+                 "height":32,
+                 "id":19,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":3000
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":10
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":416
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -346,7 +375,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":19,
+ "nextobjectid":20,
  "orientation":"orthogonal",
  "properties":[
         {

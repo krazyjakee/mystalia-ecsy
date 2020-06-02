@@ -109,7 +109,7 @@
     "id": 5,
     "name": "Wood Owl",
     "spritesheet": "wildlife/owl",
-    "portrait": "wild-boar",
+    "portrait": "wood-owl",
     "spriteId": 0,
     "behavior": {
       "escape": {
@@ -125,7 +125,7 @@
     ],
     "drop": [
       {
-        "itemId": 5,
+        "itemId": 15,
         "quantity": [
           1,
           3
@@ -138,7 +138,7 @@
     "id": 6,
     "name": "Wild Geese",
     "spritesheet": "wildlife/geese",
-    "portrait": "wild-boar",
+    "portrait": "goose",
     "spriteId": 0,
     "behavior": {
       "escape": {
@@ -167,7 +167,7 @@
     "id": 7,
     "name": "Infected Beetle",
     "spritesheet": "wildlife/beetle",
-    "portrait": "wild-boar",
+    "portrait": "beetle",
     "spriteId": 0,
     "behavior": {
       "escape": {
@@ -176,6 +176,72 @@
       }
     },
     "speed": 3,
+    "maxDistance": 6,
+    "hp": 500,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 9,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 2
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Swamp Frog",
+    "spritesheet": "wildlife/frog",
+    "spriteSize": {
+      "width": 41,
+      "height": 32
+    },
+    "portrait": "swamp-frog",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "speed": 4,
+    "maxDistance": 6,
+    "hp": 500,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 13,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 2
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Flying Song Bird",
+    "spritesheet": "wildlife/flying-bird",
+    "spriteSize": {
+      "width": 28,
+      "height": 32
+    },
+    "portrait": "flying-bird",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "speed": 5,
     "maxDistance": 6,
     "hp": 500,
     "abilities": [
