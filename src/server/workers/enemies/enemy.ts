@@ -157,6 +157,7 @@ export default class Enemy {
           );
         }
       } else if (behavior && behavior.traveler) {
+        // TODO: Fix why this is requested multiple times with no results
         matchMaker.presence.publish(
           `worldEnemySpawner:requestPath:${this.stateId}`,
           this.currentTile

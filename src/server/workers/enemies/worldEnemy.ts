@@ -58,6 +58,8 @@ export class WorldEnemy {
     this.roomName = roomName;
     this.currentWorldTile = this.calculateWorldTile();
     this.addListeners();
+
+    // TODO: Add tick when mapTick = false
   }
 
   nextDestination() {
@@ -75,7 +77,6 @@ export class WorldEnemy {
   }
 
   requestPath(localCurrentTile: number) {
-    console.log(this.roomName, "requestPath");
     this.localCurrentTile = localCurrentTile;
     this.calculateWorldTile();
     if (

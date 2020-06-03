@@ -131,6 +131,7 @@ export default class EnemySpawner {
       enemyZone.destroy(stateId);
     });
     this.enemies.forEach((enemy) => enemy.stateId && enemy.destroy());
+    // TODO: Handle when this is a WorldEnemy
   }
 
   async dispose() {
