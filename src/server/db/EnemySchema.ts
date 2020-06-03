@@ -7,4 +7,5 @@ export default new mongoose.Schema({
   tilePath: [Number],
   room: String,
   index: String,
+  traveler: Boolean,
 });

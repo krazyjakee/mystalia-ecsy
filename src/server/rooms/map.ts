@@ -133,5 +133,7 @@ export default class MapRoom extends Room<MapState> {
         `Saved ${sessionIds.length} players in "${this.roomName}" to db.`
       );
     }
+
+    console.log(`MapRoom "${this.roomName}" disposed`);
   }
 }

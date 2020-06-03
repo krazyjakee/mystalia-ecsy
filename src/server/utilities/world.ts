@@ -15,7 +15,7 @@ import { areColliding, randomNumberBetween } from "utilities/math";
 
 export const getMapColumns = (fileName: string) => {
   const maps = readMapFiles();
-  return maps[fileName].width / 32;
+  return maps[fileName].width;
 };
 
 export const getWorldSize = (): Size & Vector => {
@@ -57,7 +57,12 @@ export const getWorldTileId = (fileName: string, tileId: number) => {
   return pixelsToTileId({ x, y }, worldColumns);
 };
 
-export const getLocalTileId = (tileId: number) => {
+export type LocalTile = {
+  tileId: number;
+  fileName: string;
+};
+
+export const getLocalTileId = (tileId: number): LocalTile | undefined => {
   const worldMap = getWorldMapItems();
   const worldSize = getWorldSize();
 
@@ -156,6 +161,24 @@ export const pathToRandomTile = (
   }
 };
 
+export const getNextPathChunk = (
+  fileName: string,
+  worldTilePath: LocalTile[]
+) => {
+  let chunkBegan = -1;
+  for (let i = 0; i < worldTilePath.length; i += 1) {
+    const tile = worldTilePath[i];
+    if (tile.fileName === fileName) {
+      if (chunkBegan === -1) chunkBegan = i;
+    } else if (chunkBegan > -1) {
+      return {
+        start: chunkBegan,
+        end: i - 1,
+      };
+    }
+  }
+};
+
 export const drawBlockGrid = () => {
   const PImage = require("pureimage");
   const img1 = PImage.make(worldSize.width / 16, worldSize.height / 16);
@@ -205,4 +228,4 @@ export const worldAStar = new AStarFinder({
   includeStartNode: false,
 });
 
-drawBlockGrid();
+// drawBlockGrid();

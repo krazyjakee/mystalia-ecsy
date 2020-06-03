@@ -9,6 +9,7 @@ import { matchMaker } from "colyseus";
 import { WorldEnemy } from "./enemies/worldEnemy";
 import { saveStateToDb } from "@server/utilities/dbState";
 import EnemyState from "@server/components/enemy";
+import { isPresent } from "utilities/guards";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -37,7 +38,12 @@ export default class EnemySpawner {
   }
 
   addEnemy(enemyProps: EnemyProps) {
-    this.enemies.push(new Enemy(enemyProps));
+    const existingEnemy = this.enemies.find(
+      (enemy) => enemyProps.stateId === enemy.stateId
+    );
+    if (!existingEnemy) {
+      this.enemies.push(new Enemy(enemyProps));
+    }
   }
 
   addEnemies() {
@@ -52,7 +58,7 @@ export default class EnemySpawner {
         `${objectTile.properties.id}_${objectTile.tileId}`
       );
 
-      if (spec.behavior.traveler) {
+      if (isPresent(spec.behavior.traveler)) {
         return;
       }
 
@@ -90,6 +96,23 @@ export default class EnemySpawner {
       }
     );
 
+    matchMaker.presence.subscribe(
+      `worldEnemySpawner:newEnemy:${this.room.roomName}`,
+      (worldEnemy) => {
+        if (this.room.objectTileStore) {
+          this.addEnemy({
+            spec: worldEnemy.spec,
+            room: this.room,
+            allowedTiles: this.room.objectTileStore.blockList,
+            currentTile: worldEnemy.objectTile.tileId,
+            zoneId: -1,
+            stateId: worldEnemy.uid,
+            objectTile: worldEnemy.objectTile,
+          });
+        }
+      }
+    );
+
     matchMaker.presence.subscribe("worldEnemySpawner:ready", () => {
       matchMaker.presence.publish(
         "worldEnemySpawner:mountRoom",
@@ -114,9 +137,15 @@ export default class EnemySpawner {
     clearInterval(this.timer);
     this.enemyZones.forEach((enemyZone) => enemyZone.dispose());
     this.enemies.forEach((enemy) => enemy.dispose());
+
     matchMaker.presence.unsubscribe(
       `worldEnemySpawner:roomMounted:${this.room.roomName}`
     );
+    matchMaker.presence.unsubscribe(
+      `worldEnemySpawner:newEnemy:${this.room.roomName}`
+    );
+    matchMaker.presence.unsubscribe("worldEnemySpawner:ready");
+
     await saveStateToDb(
       "Enemy",
       this.room.roomName,
@@ -126,7 +155,7 @@ export default class EnemySpawner {
         const spec = enemySpecs[enemyState.enemyId];
         return {
           ...enemyState,
-          ...(spec.behavior.traveler ? traveler : {}),
+          ...(isPresent(spec.behavior.traveler) ? traveler : {}),
         };
       }
     );

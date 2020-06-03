@@ -2,6 +2,7 @@ import { AStarFinder } from "astar-typescript";
 import { TMJ } from "types/TMJ";
 import { tilesAdjacent } from "./surroundings";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
+import { isPresent } from "utilities/guards";
 
 export const getBlockGrid = (
   blockList: number[],
@@ -56,6 +57,7 @@ class AStar {
     mapColumns: number
   ) {
     if (sourceTileId === destinationTileId) return [];
+    if (!isPresent(sourceTileId) || !isPresent(destinationTileId)) return [];
 
     const blockList = this.aStarStore[fileName].blockList;
     const sourceTileVector = tileIdToVector(sourceTileId, mapColumns);

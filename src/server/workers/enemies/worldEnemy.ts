@@ -6,11 +6,15 @@ import {
   pathToRandomTile,
   getLocalTileId,
   getMapColumns,
+  getNextPathChunk,
 } from "@server/utilities/world";
 import EnemyState from "@server/components/enemy";
 import { matchMaker } from "colyseus";
 import { isPresent } from "utilities/guards";
 import aStar from "utilities/movement/aStar";
+import { tilesAdjacent } from "utilities/movement/surroundings";
+import { mongoose } from "@colyseus/social";
+import EnemySchema from "@server/db/EnemySchema";
 
 export type WorldEnemyProps = {
   uid: string;
@@ -71,6 +75,7 @@ export class WorldEnemy {
   }
 
   requestPath(localCurrentTile: number) {
+    console.log(this.roomName, "requestPath");
     this.localCurrentTile = localCurrentTile;
     this.calculateWorldTile();
     if (
@@ -81,14 +86,28 @@ export class WorldEnemy {
       this.nextDestination();
     }
 
-    const localPath = this.worldTilePath
-      .filter((worldTile) => worldTile.fileName === this.roomName)
-      .map((worldTile) => worldTile.tileId);
+    const pathChunkIndices = getNextPathChunk(
+      this.roomName,
+      this.worldTilePath
+    );
+    if (!pathChunkIndices) return;
+    const localPath = pathChunkIndices
+      ? this.worldTilePath
+          .slice(pathChunkIndices.start, pathChunkIndices.end)
+          .map((tile) => tile.tileId)
+      : [];
+
     const lastLocalTile = localPath[localPath.length - 1];
     if (localCurrentTile === lastLocalTile) {
-      // TODO: If the local current tile is the last one in the tilepath, move the traveler to the next map
+      this.worldTilePath.splice(
+        pathChunkIndices.start,
+        pathChunkIndices.end - pathChunkIndices.start + 1
+      );
+
+      this.changeMap();
       return;
     }
+
     if (lastLocalTile && localCurrentTile) {
       const newPath = aStar.findPath(
         this.roomName,
@@ -103,10 +122,51 @@ export class WorldEnemy {
     }
   }
 
+  async changeMap() {
+    matchMaker.presence.publish(
+      `worldEnemySpawner:disposeEnemy:${this.uid}`,
+      ""
+    );
+
+    const newTile = this.worldTilePath[0];
+    this.mapTick = false;
+    this.roomName = newTile.fileName;
+    this.localCurrentTile = newTile.tileId;
+    matchMaker.presence.publish(
+      `worldEnemySpawner:newEnemy:${this.roomName}`,
+      this
+    );
+    console.log(`${this.uid} has changed map to ${this.roomName}`);
+  }
+
+  saveToDb() {
+    const Model = mongoose.model("Enemy", EnemySchema);
+    return Model.findOneAndUpdate(
+      {
+        index: this.uid,
+      },
+      {
+        enemyId: this.spec.id,
+        zoneId: -1,
+        currentTile: this.localCurrentTile,
+        room: this.roomName,
+        index: this.uid,
+        traveler: true,
+      },
+      { upsert: true }
+    );
+  }
+
   calculateWorldTile() {
-    console.log(this.localCurrentTile);
     return getWorldTileId(this.roomName, this.localCurrentTile);
   }
 
-  dispose() {}
+  async dispose(master = false) {
+    matchMaker.presence.unsubscribe(
+      `worldEnemySpawner:requestPath:${this.uid}`
+    );
+    if (master) {
+      await this.saveToDb();
+    }
+  }
 }

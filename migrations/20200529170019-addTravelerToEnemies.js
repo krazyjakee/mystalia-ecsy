@@ -1,10 +1,10 @@
 module.exports = {
   async up(db, client) {
     await db.collection("enemies").updateMany(
-      { enemyId: 5 },
+      {},
       {
         $set: {
-          traveler: true,
+          traveler: false,
         },
       }
     );

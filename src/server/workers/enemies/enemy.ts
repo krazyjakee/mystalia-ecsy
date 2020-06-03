@@ -294,18 +294,24 @@ export default class Enemy {
           this.setTilePath(tilePath);
         }
       );
+
+      matchMaker.presence.subscribe(
+        `worldEnemySpawner:disposeEnemy:${this.stateId}`,
+        () => {
+          this.destroy(false);
+        }
+      );
     }
   }
 
-  destroy() {
+  destroy(allowDrop = true) {
     this.dispose();
     const enemy = this.room.state.enemies[this.stateId] as EnemyState;
     if (enemy) {
-      console.log("destroy", this.stateId);
       const spec = enemySpecs.find(
         (enemySpec) => enemySpec.id === enemy.enemyId
       );
-      if (spec?.drop) {
+      if (allowDrop && spec?.drop) {
         spec.drop.forEach((drop) => {
           const roll = randomNumberBetween(drop.chance) === 1;
           if (roll) {
@@ -329,5 +335,12 @@ export default class Enemy {
     if (this.timer) {
       clearTimeout(this.timer);
     }
+    matchMaker.presence.unsubscribe(
+      `worldEnemySpawner:pathResponse:${this.stateId}`
+    );
+
+    matchMaker.presence.unsubscribe(
+      `worldEnemySpawner:disposeEnemy:${this.stateId}`
+    );
   }
 }

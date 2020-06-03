@@ -14,7 +14,9 @@
     "test:watch": "jest --watch",
     "testMaps": "ts-node -r tsconfig-paths/register src/scripts/testMaps.ts",
     "testMaps:watch": "nodemon --config configs/testMaps.nodemon.json",
-    "lintMaps": "ts-node -r tsconfig-paths/register src/scripts/lintMaps.ts"
+    "lintMaps": "ts-node -r tsconfig-paths/register src/scripts/lintMaps.ts",
+    "db:migrate": "migrate-mongo up",
+    "db:rollback": "migrate-mongo down"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
