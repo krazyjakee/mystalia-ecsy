@@ -1,0 +1,14 @@
+{ "columns":9,
+ "image":"farm plants.png",
+ "imageheight":384,
+ "imagewidth":288,
+ "margin":0,
+ "name":"farm plants",
+ "spacing":0,
+ "tilecount":108,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

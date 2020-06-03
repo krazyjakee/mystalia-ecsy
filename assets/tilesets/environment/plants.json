@@ -1,0 +1,14 @@
+{ "columns":13,
+ "image":"plants.png",
+ "imageheight":288,
+ "imagewidth":416,
+ "margin":0,
+ "name":"plants",
+ "spacing":0,
+ "tilecount":117,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

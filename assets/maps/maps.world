@@ -2,15 +2,15 @@
     "maps": [
         {
             "fileName": "south.json",
-            "height": 0,
-            "width": 0,
+            "height": 2176,
+            "width": 3840,
             "x": 0,
             "y": 2176
         },
         {
             "fileName": "north.json",
-            "height": 0,
-            "width": 0,
+            "height": 2176,
+            "width": 3840,
             "x": 0,
             "y": -2176
         },
@@ -20,6 +20,13 @@
             "width": 3840,
             "x": 0,
             "y": 0
+        },
+        {
+            "fileName": "north-east.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 3840,
+            "y": -2176
         }
     ],
     "onlyShowAdjacentMaps": false,
