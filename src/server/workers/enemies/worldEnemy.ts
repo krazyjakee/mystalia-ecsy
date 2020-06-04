@@ -2,17 +2,12 @@ import { EnemySpec } from "types/enemies";
 import { SerializedObjectTile } from "utilities/tileMap";
 import {
   getWorldTileId,
-  worldAStar,
   pathToRandomTile,
-  getLocalTileId,
   getMapColumns,
   getNextPathChunk,
 } from "@server/utilities/world";
-import EnemyState from "@server/components/enemy";
 import { matchMaker } from "colyseus";
-import { isPresent } from "utilities/guards";
 import aStar from "utilities/movement/aStar";
-import { tilesAdjacent } from "utilities/movement/surroundings";
 import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
 
@@ -27,6 +22,7 @@ export type WorldEnemyProps = {
 };
 
 export class WorldEnemy {
+  timer?: NodeJS.Timer;
   mapTick: boolean = false; // Whether the local map has control of the enemy or not
   uid: string; // The stateId to be persisted across rooms
   worldTilePath: { tileId: number; fileName: string }[] = [];
@@ -58,15 +54,32 @@ export class WorldEnemy {
     this.roomName = roomName;
     this.currentWorldTile = this.calculateWorldTile();
     this.addListeners();
+    this.tick();
+  }
 
-    // TODO: Add tick when mapTick = false
+  tick() {
+    if (!this.mapTick) {
+      if (this.worldTilePath.length) {
+        const steppedTile = this.worldTilePath.shift();
+        console.log(steppedTile);
+        if (steppedTile && this.worldTilePath.length) {
+          const nextTile = this.worldTilePath[0];
+          if (steppedTile.fileName != nextTile.fileName) {
+            this.changeMap();
+          }
+        }
+      } else {
+        this.nextDestination();
+      }
+
+      this.timer = setTimeout(() => {
+        this.tick();
+      }, 1000 / this.spec.speed);
+    }
   }
 
   nextDestination() {
-    const worldPath = pathToRandomTile(this.currentWorldTile);
-    if (worldPath) {
-      this.worldTilePath = worldPath.filter(isPresent);
-    }
+    this.worldTilePath = pathToRandomTile(this.currentWorldTile) || [];
   }
 
   addListeners() {
@@ -87,16 +100,16 @@ export class WorldEnemy {
       this.nextDestination();
     }
 
-    const pathChunkIndices = getNextPathChunk(
-      this.roomName,
-      this.worldTilePath
-    );
-    if (!pathChunkIndices) return;
-    const localPath = pathChunkIndices
-      ? this.worldTilePath
-          .slice(pathChunkIndices.start, pathChunkIndices.end)
-          .map((tile) => tile.tileId)
-      : [];
+    let pathChunkIndices = getNextPathChunk(this.roomName, this.worldTilePath);
+
+    if (!pathChunkIndices) {
+      this.changeMap();
+      return;
+    }
+
+    const localPath = this.worldTilePath
+      .slice(pathChunkIndices.start, pathChunkIndices.end)
+      .map((tile) => tile.tileId);
 
     const lastLocalTile = localPath[localPath.length - 1];
     if (localCurrentTile === lastLocalTile) {
@@ -123,11 +136,15 @@ export class WorldEnemy {
     }
   }
 
-  async changeMap() {
+  changeMap() {
     matchMaker.presence.publish(
       `worldEnemySpawner:disposeEnemy:${this.uid}`,
       ""
     );
+
+    if (!this.worldTilePath.length) {
+      return;
+    }
 
     const newTile = this.worldTilePath[0];
     this.mapTick = false;
@@ -135,7 +152,7 @@ export class WorldEnemy {
     this.localCurrentTile = newTile.tileId;
     matchMaker.presence.publish(
       `worldEnemySpawner:newEnemy:${this.roomName}`,
-      this
+      ""
     );
     console.log(`${this.uid} has changed map to ${this.roomName}`);
   }
@@ -163,10 +180,11 @@ export class WorldEnemy {
   }
 
   async dispose(master = false) {
-    matchMaker.presence.unsubscribe(
-      `worldEnemySpawner:requestPath:${this.uid}`
-    );
     if (master) {
+      if (this.timer) clearTimeout(this.timer);
+      matchMaker.presence.unsubscribe(
+        `worldEnemySpawner:requestPath:${this.uid}`
+      );
       await this.saveToDb();
     }
   }

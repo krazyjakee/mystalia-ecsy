@@ -131,7 +131,7 @@ export const getRandomValidTile = () => {
 };
 
 export const isValidWorldTile = (tileId: number) => {
-  const isBlocked = worldBlockList.includes(tileId - worldFirstTile);
+  const isBlocked = worldBlockList.includes(tileId);
   const isOnAMap = getLocalTileId(tileId);
   return Boolean(!isBlocked && isOnAMap);
 };
@@ -157,7 +157,8 @@ export const pathToRandomTile = (
           vectorToTileId({ x: pathItem[0], y: pathItem[1] }, worldColumns) +
           worldFirstTile
       )
-      .map((worldTileId) => getLocalTileId(worldTileId));
+      .map((worldTileId) => getLocalTileId(worldTileId))
+      .filter(isPresent);
   }
 };
 

@@ -98,18 +98,11 @@ export default class EnemySpawner {
 
     matchMaker.presence.subscribe(
       `worldEnemySpawner:newEnemy:${this.room.roomName}`,
-      (worldEnemy) => {
-        if (this.room.objectTileStore) {
-          this.addEnemy({
-            spec: worldEnemy.spec,
-            room: this.room,
-            allowedTiles: this.room.objectTileStore.blockList,
-            currentTile: worldEnemy.objectTile.tileId,
-            zoneId: -1,
-            stateId: worldEnemy.uid,
-            objectTile: worldEnemy.objectTile,
-          });
-        }
+      () => {
+        matchMaker.presence.publish(
+          "worldEnemySpawner:mountRoom",
+          this.room.roomName
+        );
       }
     );
 
