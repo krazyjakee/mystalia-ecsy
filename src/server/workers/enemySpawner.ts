@@ -86,8 +86,10 @@ export default class EnemySpawner {
               spec: worldEnemy.spec,
               room: this.room,
               allowedTiles: this.room.objectTileStore.blockList,
-              currentTile: worldEnemy.objectTile.tileId,
-              zoneId: -1,
+              currentTile: isPresent(worldEnemy.localCurrentTile)
+                ? worldEnemy.localCurrentTile
+                : worldEnemy.objectTile.tileId,
+              zoneId: -2,
               stateId: worldEnemy.uid,
               objectTile: worldEnemy.objectTile,
             });

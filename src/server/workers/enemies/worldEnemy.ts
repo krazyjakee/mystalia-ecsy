@@ -27,7 +27,6 @@ export class WorldEnemy {
   uid: string; // The stateId to be persisted across rooms
   worldTilePath: { tileId: number; fileName: string }[] = [];
   currentWorldTile: number;
-  localTilePath: number[];
   localCurrentTile: number;
   roomName: string;
   damage: number;
@@ -41,7 +40,6 @@ export class WorldEnemy {
     spec,
     objectTile,
     roomName,
-    tilePath = [],
     damage = 0,
     currentTile,
   }: WorldEnemyProps) {
@@ -49,7 +47,6 @@ export class WorldEnemy {
     this.spec = spec;
     this.objectTile = objectTile;
     this.localCurrentTile = currentTile || objectTile.tileId;
-    this.localTilePath = tilePath;
     this.damage = damage;
     this.roomName = roomName;
     this.currentWorldTile = this.calculateWorldTile();
@@ -61,11 +58,13 @@ export class WorldEnemy {
     if (!this.mapTick) {
       if (this.worldTilePath.length) {
         const steppedTile = this.worldTilePath.shift();
-        console.log(steppedTile);
-        if (steppedTile && this.worldTilePath.length) {
-          const nextTile = this.worldTilePath[0];
-          if (steppedTile.fileName != nextTile.fileName) {
-            this.changeMap();
+        if (steppedTile) {
+          this.localCurrentTile = steppedTile.tileId;
+          if (this.worldTilePath.length) {
+            const nextTile = this.worldTilePath[0];
+            if (steppedTile.fileName != nextTile.fileName) {
+              this.changeMap();
+            }
           }
         }
       } else {
@@ -165,7 +164,7 @@ export class WorldEnemy {
       },
       {
         enemyId: this.spec.id,
-        zoneId: -1,
+        zoneId: -2,
         currentTile: this.localCurrentTile,
         room: this.roomName,
         index: this.uid,
