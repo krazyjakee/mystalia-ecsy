@@ -8,7 +8,10 @@ import gameState from "@client/gameState";
 
 const useStyles = createUseStyles({
   root: {
-    border: "1px solid black",
+    position: "absolute",
+    bottom: 64,
+    left: 32,
+    border: "1px solid #DFDFDF",
     backgroundColor: "rgba(0,0,0,0.8)",
     padding: 10,
     width: 500,
@@ -30,7 +33,7 @@ const useStyles = createUseStyles({
     width: "100%",
   },
   textInput: {
-    border: "none",
+    border: "1px solid #DFDFDF",
     padding: 5,
     backgroundColor: "rgba(0,0,0,0.1)",
     boxShadow: "inset 0px 0px 10px rgba(0,0,0,0.5)",
@@ -42,10 +45,13 @@ const useStyles = createUseStyles({
 
 export default () => {
   const classes = useStyles();
-  const [roomName, setRoomName] = useState("first");
-  const [localChat] = useGameEvent(
-    `chat:subscribe:${roomName}` as "chat:subscribe"
-  );
+  const [nextMap] = useGameEvent("localPlayer:movement:nextMap", "chat");
+
+  // TODO: A better way to get the current map.
+  const roomChatEvent = `chat:subscribe:${
+    nextMap ? nextMap.fileName : "global"
+  }` as "chat:subscribe";
+  const [localChat] = useGameEvent(roomChatEvent);
   const [globalChat] = useGameEvent(
     `chat:subscribe:global` as "chat:subscribe"
   );
@@ -63,7 +69,7 @@ export default () => {
     }
   };
 
-  const [tabs, setTabs] = useState<boolean[]>([true, false]);
+  const [tabs, setTabs] = useState<boolean[]>([false, true]);
   const setTab = (tab: number) => {
     if (tab) {
       setTabs([false, true]);
@@ -72,22 +78,12 @@ export default () => {
     }
   };
 
-  useEffect(() => {
-    gameState.subscribe(
-      "localPlayer:movement:nextMap",
-      ({ fileName }) => {
-        setRoomName(fileName);
-      },
-      "chat"
-    );
-  }, []);
-
   return (
     <div className={classes.root}>
       <div className={classes.tabContainer}>
         <Button
           className={classes.tab}
-          value="Nearby"
+          value={nextMap?.fileName} // Change this back to "Nearby" after debugging
           onClick={() => setTab(0)}
         />
         <Button

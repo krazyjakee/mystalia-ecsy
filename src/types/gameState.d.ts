@@ -97,6 +97,9 @@ export interface GameStateEvents {
     role: string;
     date: number;
   };
+  "chat:publish:global": {
+    message: string;
+  };
   "chat:publish": {
     message: string;
   };

@@ -9,6 +9,7 @@ import {
   BattleUnTargetCommand,
   MovementWalkOffCommand,
 } from "./localplayer";
+import { ChatPublishCommand, GlobalChatPublishCommand } from "./chat";
 
 export type RoomCommandsAvailable = Extract<
   RoomMessageType,
@@ -20,6 +21,7 @@ export type RoomCommandsAvailable = Extract<
   | "localPlayer:shop:trade"
   | "localPlayer:battle:targetEnemy"
   | "localPlayer:battle:unTarget"
+  | "chat:publish:global"
 >;
 
 export const roomCommands: { [key in RoomCommandsAvailable]: any } = {
@@ -31,4 +33,11 @@ export const roomCommands: { [key in RoomCommandsAvailable]: any } = {
   "localPlayer:shop:trade": ShopTradeCommand,
   "localPlayer:battle:targetEnemy": BattleTargetEnemyCommand,
   "localPlayer:battle:unTarget": BattleUnTargetCommand,
+  "chat:publish:global": GlobalChatPublishCommand,
+};
+
+export const thisRoomCommands = (roomName: string) => {
+  const results = {};
+  results[`chat:publish:${roomName}`] = ChatPublishCommand;
+  return results;
 };
