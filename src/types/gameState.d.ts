@@ -91,6 +91,15 @@ export interface GameStateEvents {
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
   "enemy:unfocused": EnemyReference;
+  "chat:subscribe": {
+    message: string;
+    username: string;
+    role: string;
+    date: number;
+  };
+  "chat:publish": {
+    message: string;
+  };
 }
 
 export type RoomMessageType = keyof GameStateEvents;
