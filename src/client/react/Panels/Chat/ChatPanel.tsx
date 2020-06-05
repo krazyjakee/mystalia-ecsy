@@ -45,12 +45,15 @@ const useStyles = createUseStyles({
 
 export default () => {
   const classes = useStyles();
-  const [nextMap] = useGameEvent("localPlayer:movement:nextMap", "chat");
 
-  // TODO: A better way to get the current map.
-  const roomChatEvent = `chat:subscribe:${
-    nextMap ? nextMap.fileName : "global"
-  }` as "chat:subscribe";
+  // TODO: Find somewhere to send a request and receive a response
+  const [currentMap] = useGameEvent("localPlayer:currentMap:response", "chat");
+
+  const roomName = currentMap?.mapName;
+
+  if (!roomName) return null;
+
+  const roomChatEvent = `chat:subscribe:${roomName}` as "chat:subscribe";
   const [localChat] = useGameEvent(roomChatEvent);
   const [globalChat] = useGameEvent(
     `chat:subscribe:global` as "chat:subscribe"
@@ -83,7 +86,7 @@ export default () => {
       <div className={classes.tabContainer}>
         <Button
           className={classes.tab}
-          value={nextMap?.fileName} // Change this back to "Nearby" after debugging
+          value={roomName} // Change this back to "Nearby" after debugging
           onClick={() => setTab(0)}
         />
         <Button
