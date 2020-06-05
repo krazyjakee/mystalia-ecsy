@@ -51,6 +51,8 @@ export class WorldEnemy {
     this.roomName = roomName;
     this.currentWorldTile = this.calculateWorldTile();
     this.addListeners();
+
+    // @ts-ignore
     this.timer = setInterval(() => {
       this.tick();
     }, 1000 / this.spec.speed);
