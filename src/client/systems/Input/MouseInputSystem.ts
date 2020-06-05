@@ -11,7 +11,7 @@ import { Loadable } from "@client/components/Loadable";
 import Drawable from "@client/components/Drawable";
 import isWalkable from "../../utilities/TileMap/isWalkable";
 import NewMovementTarget from "@client/components/NewMovementTarget";
-import { vectorToTileId } from "utilities/tileMap";
+import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
 import addOffset from "@client/utilities/Vector/addOffset";
 import Position from "@client/components/Position";
 import LocalPlayer from "@client/components/LocalPlayer";
@@ -21,6 +21,7 @@ import { findClosestPath } from "utilities/movement/surroundings";
 import Movement from "@client/components/Movement";
 import Enemy from "@client/components/Enemy";
 import { areColliding } from "utilities/math";
+import { isPresent } from "utilities/guards";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -84,13 +85,14 @@ export default class MouseInputSystem extends System {
 
     this.queries.localPlayer.results.forEach((playerEntity) => {
       let entityClicked = false;
+      let targetTile: number | undefined;
 
       this.queries.mouseEnabledEntities.results.forEach((entity) => {
         if (!this.clickedPosition) return;
         const drawable = entity.getComponent(Drawable);
         const { value } = entity.getComponent(Position);
+        const enemy = entity.getComponent(Enemy);
         const isFocused = entity.hasComponent(Focused);
-        const isEnemy = entity.hasComponent(Enemy);
         const isBattleTarget = entity.hasComponent(BattleTarget);
 
         const enemyPosition = addOffset(
@@ -111,16 +113,29 @@ export default class MouseInputSystem extends System {
           }
         );
 
-        if (isEnemy && isClicked) {
-          if (this.doubleClicked && isEnemy && !isBattleTarget) {
+        if (enemy && isClicked) {
+          if (this.doubleClicked && enemy && !isBattleTarget) {
             entity.addComponent(BattleTarget);
             entity.removeComponent(Focused);
             entityClicked = true;
           } else if (!isFocused) {
-            entity.addComponent(Focused);
-            entityClicked = true;
+            if (enemy.spec && isPresent(enemy.spec.shopId)) {
+              playerEntity.addComponent(OpenShopAtDestination, {
+                shopId: enemy.spec.shopId,
+              });
+              const movement = playerEntity.getComponent(Movement);
+              const closestPath = findClosestPath(
+                tileMapComponent.objectTileStore,
+                movement.currentTile,
+                pixelsToTileId(value, tileMapComponent.width)
+              );
+              targetTile = closestPath?.pop();
+            } else {
+              entity.addComponent(Focused);
+              entityClicked = true;
+            }
           }
-        } else if (isEnemy && !isClicked) {
+        } else if (enemy && !isClicked) {
           if (isFocused) {
             entity.removeComponent(Focused);
           }
@@ -168,13 +183,11 @@ export default class MouseInputSystem extends System {
         clickedTile
       );
 
-      let targetTile: number | undefined;
-
-      if (isWalkable(tileMapComponent, clickedTile)) {
+      if (!targetTile && isWalkable(tileMapComponent, clickedTile)) {
         targetTile = clickedTile;
       }
 
-      if (clickedTileObjects && clickedTileObjects.length) {
+      if (!targetTile && clickedTileObjects && clickedTileObjects.length) {
         clickedTileObjects.forEach((tileObject) => {
           if (tileObject.type === "shop") {
             const { shopId } = tileObject.value;

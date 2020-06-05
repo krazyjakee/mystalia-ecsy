@@ -68,6 +68,7 @@
     "speed": 1,
     "maxDistance": 4,
     "hp": 55000,
+    "shopId": 0,
     "behavior": {
       "static": {
         "lookAround": true,
