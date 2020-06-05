@@ -6,6 +6,8 @@ import { serializeProperties } from "utilities/tileMap";
 import WeatherState from "@server/components/weather";
 import { ArraySchema } from "@colyseus/schema";
 import { randomNumberBetween } from "utilities/math";
+import { matchMaker } from "colyseus";
+import { saveStateToDb } from "@server/utilities/dbState";
 
 export default class WeatherSpawner {
   room: MapRoom;
@@ -45,7 +47,7 @@ export default class WeatherSpawner {
   }
 
   async tick() {
-    const biomeWorkerExists = await this.room.presence.hget(
+    const biomeWorkerExists = await matchMaker.presence.hget(
       `${this.presenceKey}:enabled`,
       "i"
     );
@@ -54,18 +56,24 @@ export default class WeatherSpawner {
         `${this.room.roomName} became weather master for the ${this.biome} biome.`
       );
       this.master = true;
-      this.room.presence.hset(`${this.presenceKey}:enabled`, "i", "i");
+      matchMaker.presence.hset(`${this.presenceKey}:enabled`, "i", "i");
       this.loadFromDB();
     } else if (this.master) {
       this.generateWeather();
     } else if (this.presenceKey) {
-      this.room.presence.subscribe(
+      matchMaker.presence.subscribe(
         this.presenceKey,
         ({ weathers, duration }) => {
           this.setWeather(weathers, duration);
         }
       );
     }
+  }
+
+  masterWatch() {
+    matchMaker.presence.subscribe(`${this.presenceKey}:masterDisposed`, () => {
+      this.tick();
+    });
   }
 
   generateWeather() {
@@ -107,14 +115,22 @@ export default class WeatherSpawner {
 
   publish(weathers: Weather[], duration: number) {
     if (this.presenceKey) {
-      this.room.presence.publish(this.presenceKey, { weathers, duration });
+      matchMaker.presence.publish(this.presenceKey, { weathers, duration });
     }
   }
 
-  dispose() {
+  async dispose() {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    this.room.presence.del(`${this.presenceKey}:enabled`);
+    if (this.master) {
+      await saveStateToDb(
+        "Weather",
+        this.room.roomName,
+        this.room.state.weather
+      );
+      matchMaker.presence.del(`${this.presenceKey}:enabled`);
+      matchMaker.presence.publish(`${this.presenceKey}:masterDisposed`, "1");
+    }
   }
 }

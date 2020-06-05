@@ -1,0 +1,39 @@
+On server start
+Database lookup for existing database entries for uid
+- If exists
+  - Load the data into the WorldEnemy
+  - Generate a new world path
+- Else
+  - Create a new WorldEnemy
+  - Generate a new world path
+
+On server shutting down
+  - Any actively ticking Worldenemy should save to the db.
+
+On new WorldEnemy
+- Send new world enemy to starting map
+
+On WorldEnemy move
+  - If on WorldEnemySpawner
+    - Update current path on a timely basis based on spec speed
+  - If on map
+    - Do nothing
+
+On WorldEnemy near player
+  - Map will take care of it
+
+On WorldEnemy targetting
+  - Map will take care of it
+  - After targetting ends, it should refetch the localised tile path
+
+On WorldEnemy targetted
+
+On WorldEnemy reached edge of map
+  - 
+
+On room dispose
+  - Send enemy data to WorldEnemy
+  - Hand tick back to WorldEnemySpawner
+
+On WorldEnemy reaches world path destination
+  - 

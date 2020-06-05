@@ -6690,6 +6690,28 @@
                  "y":1767.33333333333
                 }, 
                 {
+                 "height":32,
+                 "id":767,
+                 "name":"Ancient",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":8000
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":10
+                        }],
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":32,
+                 "x":2912,
+                 "y":1792
+                }, 
+                {
                  "height":0,
                  "id":289,
                  "name":"",

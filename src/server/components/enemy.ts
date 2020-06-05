@@ -1,4 +1,4 @@
-import { Schema, type } from "@colyseus/schema";
+import { Schema, type, ArraySchema } from "@colyseus/schema";
 
 export default class EnemyState extends Schema {
   @type("string")
@@ -13,6 +13,9 @@ export default class EnemyState extends Schema {
   @type("number")
   currentTile: number;
 
+  @type(["number"])
+  tilePath = new ArraySchema<number>();
+
   @type("string")
   targetPlayer?: string;
 
@@ -23,11 +26,13 @@ export default class EnemyState extends Schema {
     enemyId: number,
     currentTile: number,
     zoneId?: number,
-    displayName?: string
+    displayName?: string,
+    tilePath: number[] = []
   ) {
     super();
     this.displayName = displayName;
     this.currentTile = currentTile;
+    this.tilePath = new ArraySchema(...tilePath);
     this.enemyId = enemyId;
     this.zoneId = zoneId;
   }

@@ -2,7 +2,28 @@ import { AStarFinder } from "astar-typescript";
 import { TMJ } from "types/TMJ";
 import { tilesAdjacent } from "./surroundings";
 import { vectorToTileId, tileIdToVector } from "utilities/tileMap";
-import memoize from "utilities/memoize";
+import { isPresent } from "utilities/guards";
+
+export const getBlockGrid = (
+  blockList: number[],
+  rows,
+  columns,
+  offset = 0
+) => {
+  return Array(rows)
+    .fill(0)
+    .map((_, index1) => {
+      return Array(columns)
+        .fill(0)
+        .map((_, index2) => {
+          let tileId = index1 * columns + index2;
+          if (offset) {
+            tileId += offset;
+          }
+          return blockList.includes(tileId) ? 1 : 0;
+        });
+    });
+};
 
 type AStarFinderExtended = AStarFinder & { blockList?: number[] };
 type AStarStore = {
@@ -13,11 +34,7 @@ class AStar {
   aStarStore: AStarStore = {};
 
   add(fileName: string, mapData: TMJ, blockList: number[]) {
-    const blockGrid = this.getBlockGrid(
-      blockList,
-      mapData.height,
-      mapData.width
-    );
+    const blockGrid = getBlockGrid(blockList, mapData.height, mapData.width);
 
     const aStarFinder: AStarFinderExtended = new AStarFinder({
       grid: mapData.layers.length
@@ -33,19 +50,6 @@ class AStar {
     this.aStarStore[fileName] = aStarFinder;
   }
 
-  getBlockGrid(blockList: number[], rows, columns) {
-    return Array(rows)
-      .fill(0)
-      .map((_, index1) => {
-        return Array(columns)
-          .fill(0)
-          .map((_, index2) => {
-            const tileId = index1 * columns + index2;
-            return blockList.includes(tileId) ? 1 : 0;
-          });
-      });
-  }
-
   findPath(
     fileName: string,
     sourceTileId: number,
@@ -53,6 +57,7 @@ class AStar {
     mapColumns: number
   ) {
     if (sourceTileId === destinationTileId) return [];
+    if (!isPresent(sourceTileId) || !isPresent(destinationTileId)) return [];
 
     const blockList = this.aStarStore[fileName].blockList;
     const sourceTileVector = tileIdToVector(sourceTileId, mapColumns);
@@ -78,6 +83,4 @@ class AStar {
   }
 }
 
-const aStar = new AStar();
-
-export default aStar;
+export default new AStar();

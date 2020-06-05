@@ -14,7 +14,9 @@
     "test:watch": "jest --watch",
     "testMaps": "ts-node -r tsconfig-paths/register src/scripts/testMaps.ts",
     "testMaps:watch": "nodemon --config configs/testMaps.nodemon.json",
-    "lintMaps": "ts-node -r tsconfig-paths/register src/scripts/lintMaps.ts"
+    "lintMaps": "ts-node -r tsconfig-paths/register src/scripts/lintMaps.ts",
+    "db:migrate": "migrate-mongo up",
+    "db:rollback": "migrate-mongo down"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
@@ -45,9 +47,11 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "fantasy-name-generator": "^2.0.0",
+    "migrate-mongo": "^7.2.1",
     "mongoose": "^5.9.7",
     "normalize.css": "^8.0.1",
     "pluralize": "^8.0.0",
+    "pureimage": "^0.2.1",
     "react": "^16.13.1",
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",

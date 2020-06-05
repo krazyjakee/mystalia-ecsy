@@ -5,7 +5,7 @@ import { InventoryStateProps } from "@server/components/inventory";
 import ItemSchema from "../db/ItemSchema";
 import EnemySchema from "../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
-import { MapSchema, ArraySchema } from "@colyseus/schema";
+import { MapSchema, ArraySchema, Schema } from "@colyseus/schema";
 import WeatherSchema from "../db/WeatherSchema";
 
 export const savePlayerState = async (player: PlayerState, room: string) => {
@@ -70,7 +70,8 @@ const schemas = {
 export const saveStateToDb = async (
   key: string,
   roomName: string,
-  state: MapSchema<any> | ArraySchema<any>
+  state: MapSchema<any> | ArraySchema<any>,
+  manipulator?: (obj: any) => any
 ) => {
   const { schema, fields } = schemas[key];
   const indexIds = Object.keys(state);
@@ -88,6 +89,7 @@ export const saveStateToDb = async (
 
         const item = {
           ...fieldsToSave,
+          ...(manipulator ? manipulator(fieldsToSave) : {}),
           room: roomName,
           index,
         };

@@ -13,11 +13,13 @@ import EnemySpawner from "@server/workers/enemySpawner";
 import WeatherSpawner from "@server/workers/weatherSpawner";
 import { roomCommands, RoomCommandsAvailable } from "./mapEventHandlers";
 import Battle from "@server/workers/battle";
+import WorldEnemySpawner from "@server/workers/worldEnemySpawner";
 
 export default class MapRoom extends Room<MapState> {
   dispatcher = new Dispatcher(this);
   itemSpawner?: ItemSpawner;
   enemySpawner?: EnemySpawner;
+  worldEnemySpawner?: WorldEnemySpawner;
   weatherSpawner?: WeatherSpawner;
   battleWorker?: Battle;
 
@@ -42,8 +44,10 @@ export default class MapRoom extends Room<MapState> {
 
     this.itemSpawner = new ItemSpawner(this);
     this.enemySpawner = new EnemySpawner(this);
-    this.weatherSpawner = new WeatherSpawner(this);
     this.battleWorker = new Battle(this);
+
+    this.weatherSpawner = new WeatherSpawner(this);
+    this.worldEnemySpawner = new WorldEnemySpawner(this);
 
     const roomCommandsAvailable = Object.keys(
       roomCommands
@@ -105,19 +109,18 @@ export default class MapRoom extends Room<MapState> {
       this.enemySpawner.dispose();
     }
 
-    if (this.weatherSpawner) {
-      if (this.weatherSpawner.master) {
-        await saveStateToDb("Weather", this.roomName, this.state.weather);
-      }
-      this.weatherSpawner.dispose();
+    if (this.worldEnemySpawner) {
+      this.worldEnemySpawner.dispose();
     }
 
     if (this.battleWorker) {
       this.battleWorker.dispose();
     }
 
+    if (this.weatherSpawner) {
+      await this.weatherSpawner.dispose();
+    }
     await saveStateToDb("Item", this.roomName, this.state.items);
-    await saveStateToDb("Enemy", this.roomName, this.state.enemies);
 
     const sessionIds = Object.keys(this.state.players);
     if (sessionIds.length) {
@@ -130,5 +133,7 @@ export default class MapRoom extends Room<MapState> {
         `Saved ${sessionIds.length} players in "${this.roomName}" to db.`
       );
     }
+
+    console.log(`MapRoom "${this.roomName}" disposed`);
   }
 }

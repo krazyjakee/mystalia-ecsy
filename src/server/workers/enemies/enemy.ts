@@ -15,10 +15,12 @@ import { mongoose } from "@colyseus/social";
 import EnemySchema from "@server/db/EnemySchema";
 import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 import aStar from "utilities/movement/aStar";
+import { ArraySchema } from "@colyseus/schema";
+import { matchMaker } from "colyseus";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
-type EnemyProps = {
+export type EnemyProps = {
   spec: EnemySpec;
   room: MapRoom;
   allowedTiles: number[];
@@ -31,10 +33,10 @@ type EnemyProps = {
 export default class Enemy {
   stateId: string;
   currentTile: number;
-  tilePath: number[] = [];
   spec: EnemySpec;
   room: MapRoom;
   allowedTiles: number[];
+  tilePath: number[] = [];
   timer?: NodeJS.Timeout;
   mapColumns: number;
   speedMs: number;
@@ -67,15 +69,18 @@ export default class Enemy {
     } else {
       this.addToState(zoneId);
     }
+    this.addListeners();
   }
 
-  addToState(zoneId: number) {
+  addToState(zoneId: number, tilePath?: number[]) {
     this.room.state.enemies[this.stateId] = new EnemyState(
       this.spec.id,
       this.currentTile,
       zoneId,
-      this.objectTile?.name
+      this.objectTile?.name,
+      tilePath
     );
+    this.tilePath = tilePath || [];
     this.tick();
   }
 
@@ -109,6 +114,8 @@ export default class Enemy {
         }
 
         const targetTile = this.tilePath.shift();
+        this.setTilePath(this.tilePath);
+
         if (targetTile && this.room.state.enemies[this.stateId]) {
           this.currentTile = targetTile;
           (this.room.state.enemies[
@@ -140,13 +147,21 @@ export default class Enemy {
             this.room.objectTileStore,
             this.objectTile.properties.patrolId || 0
           );
-          this.tilePath = aStar.findPath(
-            this.room.objectTileStore.uid,
-            this.currentTile,
-            targetTile,
-            this.mapColumns
+          this.setTilePath(
+            aStar.findPath(
+              this.room.objectTileStore.uid,
+              this.currentTile,
+              targetTile,
+              this.mapColumns
+            )
           );
         }
+      } else if (behavior && behavior.traveler) {
+        // TODO: Fix why this is requested multiple times with no results
+        matchMaker.presence.publish(
+          `worldEnemySpawner:requestPath:${this.stateId}`,
+          this.currentTile
+        );
       } else {
         this.findNewTargetTile();
       }
@@ -195,11 +210,13 @@ export default class Enemy {
     }
 
     if (this.room.objectTileStore) {
-      this.tilePath = aStar.findPath(
-        this.room.objectTileStore.uid,
-        this.currentTile,
-        targetTile,
-        columns
+      this.setTilePath(
+        aStar.findPath(
+          this.room.objectTileStore.uid,
+          this.currentTile,
+          targetTile,
+          columns
+        )
       );
     }
   }
@@ -235,7 +252,7 @@ export default class Enemy {
         playerState.targetTile
       );
       if (path) {
-        this.tilePath = path;
+        this.setTilePath(path);
       }
       return true;
     }
@@ -251,7 +268,7 @@ export default class Enemy {
           if (this.allowedTiles) {
             const obj = doc.toJSON();
             this.currentTile = obj.currentTile;
-            this.addToState(-1);
+            this.addToState(-1, obj.tilePath);
           }
         });
         if (!res.length) {
@@ -261,15 +278,41 @@ export default class Enemy {
     );
   }
 
-  destroy() {
+  setTilePath(tilePath: number[]) {
+    this.tilePath = tilePath;
+    if (this.room.state.enemies[this.stateId]) {
+      this.room.state.enemies[this.stateId].tilePath = new ArraySchema(
+        ...tilePath
+      );
+    }
+  }
+
+  addListeners() {
+    if (matchMaker.presence) {
+      matchMaker.presence.subscribe(
+        `worldEnemySpawner:pathResponse:${this.stateId}`,
+        (tilePath: number[]) => {
+          this.setTilePath(tilePath);
+        }
+      );
+
+      matchMaker.presence.subscribe(
+        `worldEnemySpawner:disposeEnemy:${this.stateId}`,
+        () => {
+          this.destroy(false);
+        }
+      );
+    }
+  }
+
+  destroy(allowDrop = true) {
     this.dispose();
     const enemy = this.room.state.enemies[this.stateId] as EnemyState;
     if (enemy) {
-      console.log("destroy", this.stateId);
       const spec = enemySpecs.find(
         (enemySpec) => enemySpec.id === enemy.enemyId
       );
-      if (spec?.drop) {
+      if (allowDrop && spec?.drop) {
         spec.drop.forEach((drop) => {
           const roll = randomNumberBetween(drop.chance) === 1;
           if (roll) {
@@ -292,6 +335,15 @@ export default class Enemy {
   dispose() {
     if (this.timer) {
       clearTimeout(this.timer);
+    }
+    if (matchMaker.presence) {
+      matchMaker.presence.unsubscribe(
+        `worldEnemySpawner:pathResponse:${this.stateId}`
+      );
+
+      matchMaker.presence.unsubscribe(
+        `worldEnemySpawner:disposeEnemy:${this.stateId}`
+      );
     }
   }
 }

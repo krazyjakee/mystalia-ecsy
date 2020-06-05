@@ -1,6 +1,6 @@
 import { Size } from "types/TileMap/standard";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
-import { tileIdToVector, vectorToTileId } from "utilities/tileMap";
+import { tileIdToVector } from "utilities/tileMap";
 import { isPresent } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { Direction } from "types/Grid";
