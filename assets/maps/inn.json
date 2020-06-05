@@ -967,41 +967,7 @@
          "draworder":"topdown",
          "id":6,
          "name":"Shop",
-         "objects":[
-                {
-                 "height":64,
-                 "id":33,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"shopId",
-                         "type":"int",
-                         "value":0
-                        }],
-                 "rotation":0,
-                 "type":"shop",
-                 "visible":true,
-                 "width":32,
-                 "x":352,
-                 "y":160
-                }, 
-                {
-                 "height":32,
-                 "id":34,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"shopId",
-                         "type":"int",
-                         "value":0
-                        }],
-                 "rotation":0,
-                 "type":"shop",
-                 "visible":true,
-                 "width":160,
-                 "x":224,
-                 "y":224
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
