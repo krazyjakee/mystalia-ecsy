@@ -48,7 +48,7 @@ describe("world utilities", () => {
   describe("#generateWorldBlockList", () => {
     test("should return a valid block list", () => {
       const blockList = generateWorldBlockList();
-      expect(blockList.length).toStrictEqual(2614);
+      expect(blockList.length).toStrictEqual(2609);
     });
   });
 
@@ -61,35 +61,33 @@ describe("world utilities", () => {
 
   describe("#isValidWorldTile", () => {
     test("should validate a valid tile", () => {
-      const validTile = isValidWorldTile(5749);
+      const validTile = isValidWorldTile(6811);
       expect(validTile).toBeTruthy();
     });
 
     test("should validate an invalid tile", () => {
-      const invalidTile = isValidWorldTile(6811);
+      const invalidTile = isValidWorldTile(5749);
       expect(invalidTile).toBeFalsy();
     });
   });
 
   describe("#pathToRandomTile", () => {
     test("should return a path to a random valid tile", () => {
-      const randomPath = pathToRandomTile(2, -119);
+      const randomPath = pathToRandomTile(1, -118);
       expect(randomPath).toStrictEqual([
         {
           fileName: "first",
-          tileId: 1,
+          tileId: 2,
         },
         {
           fileName: "test",
-          tileId: 91,
+          tileId: 92,
         },
       ]);
     });
 
     test("should return a path to a random valid tile", () => {
       let randomPath = pathToRandomTile(14971, 12428);
-      expect(randomPath && randomPath.length).toBeTruthy();
-      randomPath = pathToRandomTile(6811, 5749);
       expect(randomPath && randomPath.length).toBeTruthy();
     });
   });

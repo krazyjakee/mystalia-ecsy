@@ -336,12 +336,14 @@ export default class Enemy {
     if (this.timer) {
       clearTimeout(this.timer);
     }
-    matchMaker.presence.unsubscribe(
-      `worldEnemySpawner:pathResponse:${this.stateId}`
-    );
+    if (matchMaker.presence) {
+      matchMaker.presence.unsubscribe(
+        `worldEnemySpawner:pathResponse:${this.stateId}`
+      );
 
-    matchMaker.presence.unsubscribe(
-      `worldEnemySpawner:disposeEnemy:${this.stateId}`
-    );
+      matchMaker.presence.unsubscribe(
+        `worldEnemySpawner:disposeEnemy:${this.stateId}`
+      );
+    }
   }
 }
