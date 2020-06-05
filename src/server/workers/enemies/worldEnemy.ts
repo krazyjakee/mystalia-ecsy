@@ -51,7 +51,9 @@ export class WorldEnemy {
     this.roomName = roomName;
     this.currentWorldTile = this.calculateWorldTile();
     this.addListeners();
-    this.tick();
+    this.timer = setInterval(() => {
+      this.tick();
+    }, 1000 / this.spec.speed);
   }
 
   tick() {
@@ -68,12 +70,10 @@ export class WorldEnemy {
           }
         }
       } else {
+        this.calculateWorldTile();
         this.nextDestination();
+        this.changeMap();
       }
-
-      this.timer = setTimeout(() => {
-        this.tick();
-      }, 1000 / this.spec.speed);
     }
   }
 
@@ -146,14 +146,16 @@ export class WorldEnemy {
     }
 
     const newTile = this.worldTilePath[0];
-    this.mapTick = false;
-    this.roomName = newTile.fileName;
+    const newRoomName = newTile.fileName;
     this.localCurrentTile = newTile.tileId;
-    matchMaker.presence.publish(
-      `worldEnemySpawner:newEnemy:${this.roomName}`,
-      ""
-    );
-    console.log(`${this.uid} has changed map to ${this.roomName}`);
+    if (this.roomName != newRoomName) {
+      this.mapTick = false;
+      this.roomName = newRoomName;
+      matchMaker.presence.publish(
+        `worldEnemySpawner:newEnemy:${this.roomName}`,
+        ""
+      );
+    }
   }
 
   saveToDb() {
@@ -180,7 +182,7 @@ export class WorldEnemy {
 
   async dispose(master = false) {
     if (master) {
-      if (this.timer) clearTimeout(this.timer);
+      if (this.timer) clearInterval(this.timer);
       matchMaker.presence.unsubscribe(
         `worldEnemySpawner:requestPath:${this.uid}`
       );

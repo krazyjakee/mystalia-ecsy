@@ -101,13 +101,6 @@ export default class WorldEnemySpawner {
         );
       }
     );
-
-    matchMaker.presence.subscribe(
-      "worldEnemySpawner:unmountRoom",
-      (roomName: string) => {
-        this.mountRoom(roomName, true);
-      }
-    );
   }
 
   getObjectTile(stateId: string) {
@@ -133,10 +126,10 @@ export default class WorldEnemySpawner {
     }
   }
 
-  mount(stateId: string, unmount = false) {
+  mount(stateId: string) {
     const index = this.enemies.findIndex((enemy) => enemy.uid === stateId);
     if (index > -1) {
-      this.enemies[index].mapTick = !unmount;
+      this.enemies[index].mapTick = true;
     }
   }
 
@@ -144,17 +137,16 @@ export default class WorldEnemySpawner {
     return this.enemies.findIndex((enemy) => enemy.uid === stateId) > -1;
   }
 
-  mountRoom(roomName: string, unmount = false) {
+  mountRoom(roomName: string) {
     const enemies = this.enemies.filter((enemy) => enemy.roomName === roomName);
     enemies.forEach((enemy) => {
-      this.mount(enemy.uid, unmount);
+      this.mount(enemy.uid);
     });
     console.log(`${roomName} mounted ${enemies.length} world enemies`);
     return enemies;
   }
 
   async dispose() {
-    matchMaker.presence.unsubscribe("worldEnemySpawner:unmountRoom");
     matchMaker.presence.unsubscribe("worldEnemySpawner:mountRoom");
     await Promise.all(this.enemies.map((enemy) => enemy.dispose(this.master)));
     if (this.master) {
