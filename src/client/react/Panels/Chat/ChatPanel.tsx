@@ -106,6 +106,14 @@ export default ({ mapName }: Props) => {
     }
   };
 
+  const focus = () => {
+    window.keyboardBusy = true;
+  };
+
+  const blur = () => {
+    window.keyboardBusy = false;
+  };
+
   useEffect(() => {
     gameState.trigger("localPlayer:currentMap:request", undefined);
   }, [localChat, globalChat, roomName]);
@@ -145,6 +153,8 @@ export default ({ mapName }: Props) => {
           <input
             ref={inputRef}
             className={classes.textInput}
+            onFocus={focus}
+            onBlur={blur}
             onKeyDown={send}
           />
         </>

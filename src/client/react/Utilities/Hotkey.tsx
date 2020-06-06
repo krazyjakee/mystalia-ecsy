@@ -18,7 +18,7 @@ export default (props: Props) => {
 
   const eventListener = (e: KeyboardEvent) => {
     e.preventDefault();
-    if (props.keys && props.keys.includes(e.code)) {
+    if (!window.keyboardBusy && props.keys && props.keys.includes(e.code)) {
       toggleShow();
     }
   };
