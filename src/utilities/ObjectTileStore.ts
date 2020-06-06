@@ -72,6 +72,7 @@ const mapObjectToTileTypes = memoize(
 export class ObjectTileStore {
   store: ObjectTileStoreType = {};
   columns: number = 0;
+  rows: number = 0;
   uid: string = "";
   blockList: number[] = [];
 
@@ -80,6 +81,7 @@ export class ObjectTileStore {
 
     const { width, height, layers } = mapData;
     this.columns = width;
+    this.rows = height;
 
     (layers as Layer[]).forEach((layer) => this.add(layer));
 

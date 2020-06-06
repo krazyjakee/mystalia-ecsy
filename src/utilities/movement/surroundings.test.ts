@@ -8,9 +8,9 @@ import {
   facePosition,
 } from "./surroundings";
 
-const createObjectTileStore = () => {
+const createObjectTileStore = (mapName = "test") => {
   const maps = readMapFiles();
-  const data = maps["test"];
+  const data = maps[mapName];
   const ots = new ObjectTileStore(data);
   return ots;
 };
@@ -75,8 +75,11 @@ describe("surroundings", () => {
       path = findClosestPath(ots, 0, 23);
       expect(path).toStrictEqual([1, 2, 12]);
 
-      path = findClosestPath(ots, 76, 89);
+      path = findClosestPath(ots, 76, 89, 1);
       expect(path).toStrictEqual([66, 67]);
+
+      path = findClosestPath(createObjectTileStore("first"), 1146, 1750, 1);
+      expect(path?.length).toEqual(7);
     });
   });
 

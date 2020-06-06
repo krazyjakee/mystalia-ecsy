@@ -13,13 +13,14 @@ import {
   distanceBetweenTiles,
 } from "utilities/movement/surroundings";
 import { BattleTarget } from "@client/components/Tags";
-import { tileIdToVector } from "utilities/tileMap";
 import {
   AddCharacterHighlight,
   RemoveCharacterHighlight,
 } from "@client/components/CharacterHighlight";
 import { EnemySpec } from "types/enemies";
 import aStar from "utilities/movement/aStar";
+import Position from "@client/components/Position";
+import { vectorToTileId } from "utilities/tileMap";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -79,21 +80,25 @@ export default class BattleSystem extends System {
 
     this.queries.targettedEnemies.results.forEach((enemyEntity) => {
       const playerMovement = localPlayerEntity.getComponent(Movement);
-      const movement = enemyEntity.getComponent(Movement);
+      const playerPosition = localPlayerEntity.getComponent(Position);
+      const enemyPosition = enemyEntity.getComponent(Position);
 
-      const path = aStar.findPath(
-        tileMap.fileName,
-        playerMovement.currentTile,
-        movement.currentTile,
-        tileMap.width
-      );
-
-      if (!path) {
-        enemyEntity.removeComponent(BattleTarget);
-        return;
-      }
+      const currentTile = vectorToTileId(playerPosition.value, tileMap.width);
+      const enemyTile = vectorToTileId(enemyPosition.value, tileMap.width);
 
       if (!playerMovement.tileQueue.length) {
+        const path = aStar.findPath(
+          tileMap.fileName,
+          currentTile,
+          enemyTile,
+          tileMap.width
+        );
+
+        if (!path) {
+          enemyEntity.removeComponent(BattleTarget);
+          return;
+        }
+
         const { inventory } = localPlayerEntity.getComponent(Inventory);
 
         const equippedItem = inventory.find((item) => item && item.equipped);
@@ -104,16 +109,16 @@ export default class BattleSystem extends System {
         }
 
         const currentRange = distanceBetweenTiles(
-          playerMovement.currentTile,
-          movement.currentTile,
+          currentTile,
+          enemyTile,
           tileMap.width
         );
 
         if (currentRange > weaponRange && tileMap.objectTileStore) {
           const path = findClosestPath(
             tileMap.objectTileStore,
-            playerMovement.currentTile,
-            movement.currentTile,
+            currentTile,
+            enemyTile,
             weaponRange > 1 ? weaponRange - 1 : 1
           );
 

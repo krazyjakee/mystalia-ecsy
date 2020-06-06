@@ -98,14 +98,14 @@ export const findClosestPath = (
   to: number,
   startingRadius: number = 1
 ) => {
-  const { columns } = ots;
+  const { columns, rows } = ots;
   let totalRadius = 20;
   let radius = startingRadius - 1;
 
   while (totalRadius > 0) {
     radius += 1;
     const availablePaths: number[][] = allowedTiles(
-      tilesAtRadiusOf(to, { width: columns, height: 10 }, radius),
+      tilesAtRadiusOf(to, { width: columns, height: rows }, radius),
       ots.blockList
     )
       .map((tileId) => aStar.findPath(ots.uid, from, tileId, columns))
