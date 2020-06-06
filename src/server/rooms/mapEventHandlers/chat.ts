@@ -12,7 +12,7 @@ export class ChatPublishCommand extends Command<
     const player = this.state.players[sessionId] as PlayerState;
     const client = this.room.clients.find((c) => c.sessionId === sessionId);
     if (client) {
-      client.send(`chat:subscribe:${this.room.roomName}`, {
+      this.room.broadcast(`chat:subscribe:${this.room.roomName}`, {
         message: data.message,
         username: player.username,
         role: "player",

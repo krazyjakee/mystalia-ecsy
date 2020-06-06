@@ -84,6 +84,10 @@ export default class NetworkingSystem extends System {
         tileMapEntity.removeComponent(Gray);
         clearTimeout(connectionTimer);
         gameState.addRoom("map", room);
+        gameState.trigger("localPlayer:currentMap:response", {
+          mapName: fileName,
+        });
+
         networkRoom.room = room as RoomState;
         networkRoom.joining = false;
         const myKey = room.sessionId;

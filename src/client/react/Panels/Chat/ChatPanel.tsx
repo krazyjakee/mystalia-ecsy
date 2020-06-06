@@ -108,7 +108,7 @@ export default ({ mapName }: Props) => {
 
   useEffect(() => {
     gameState.trigger("localPlayer:currentMap:request", undefined);
-  }, [localChat, globalChat]);
+  }, [localChat, globalChat, roomName]);
 
   if (!roomName) return null;
 
