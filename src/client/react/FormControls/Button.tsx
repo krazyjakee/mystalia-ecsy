@@ -55,15 +55,25 @@ const useStyles = createUseStyles({
     cursor: "pointer",
     ...whiteText,
   },
+  active: {
+    filter: "brightness(1.4) !important",
+  },
 });
 
-export const Button = (
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>
-) => {
+type Props = {
+  active?: boolean;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+export const Button = (props: Props) => {
   const classes = useStyles();
   const { className, ...rest } = props;
   return (
-    <div className={classnames(classes.container, className)}>
+    <div
+      className={classnames(
+        classes.container,
+        className,
+        props.active ? classes.active : null
+      )}
+    >
       <div className={classnames(classes.leftAddon, classes.addon)}></div>
       <button className={classes.input} {...rest}>
         {props.value}

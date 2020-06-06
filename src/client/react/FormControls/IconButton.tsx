@@ -1,8 +1,8 @@
-import React, { ButtonHTMLAttributes } from "react";
-import { whiteText } from "../palette";
+import React from "react";
 import { createUseStyles } from "react-jss";
 import classnames from "classnames";
 import { guiAssetPath } from "../cssUtilities";
+import { IconType } from "react-icons/lib/cjs";
 
 const useStyles = createUseStyles({
   input: {
@@ -24,22 +24,30 @@ const useStyles = createUseStyles({
   active: {
     filter: "brightness(1.4) !important",
   },
+  icon: {
+    color: "rgba(0,0,0,0.6)",
+    marginTop: 3,
+  },
 });
 
 type Props = {
   active?: boolean;
-  Icon: React.ReactNode;
+  Icon: IconType;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const IconButton = (props: Props) => {
   const classes = useStyles();
-  const { active, Icon } = props;
+  const { active, Icon, className, ...rest } = props;
   return (
     <button
-      className={classnames(classes.input, active ? classes.active : null)}
-      {...props}
+      className={classnames(
+        classes.input,
+        className,
+        active ? classes.active : null
+      )}
+      {...rest}
     >
-      {Icon}
+      <Icon className={classes.icon} />
     </button>
   );
 };
