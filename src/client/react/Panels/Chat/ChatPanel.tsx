@@ -8,7 +8,7 @@ import gameState from "@client/gameState";
 
 const useStyles = createUseStyles({
   root: {
-    position: "absolute",
+    borderRadius: 5,
     bottom: 64,
     left: 32,
     border: "1px solid #DFDFDF",
@@ -28,7 +28,7 @@ const useStyles = createUseStyles({
     width: 100,
   },
   chatArea: {
-    backgroundColor: "rgba(0,0,0,0.1)",
+    backgroundColor: "rgba(0,0,0,0.2)",
     boxShadow: "inset 0px 0px 10px rgba(0,0,0,0.5)",
     width: "100%",
   },
@@ -43,13 +43,16 @@ const useStyles = createUseStyles({
   },
 });
 
-export default () => {
+type Props = {
+  mapName?: string;
+};
+
+export default ({ mapName }: Props) => {
   const classes = useStyles();
 
-  // TODO: Find somewhere to send a request and receive a response
   const [currentMap] = useGameEvent("localPlayer:currentMap:response", "chat");
 
-  const roomName = currentMap?.mapName;
+  const roomName = currentMap?.mapName || mapName;
 
   const roomChatEvent = `chat:subscribe:${roomName}` as "chat:subscribe";
   const [localChat] = useGameEvent(roomChatEvent);
@@ -90,7 +93,10 @@ export default () => {
   if (!roomName) return null;
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      style={{ position: mapName ? "initial" : "absolute" }}
+    >
       <div className={classes.tabContainer}>
         <Button
           className={classes.tab}

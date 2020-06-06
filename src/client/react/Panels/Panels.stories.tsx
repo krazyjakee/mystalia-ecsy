@@ -103,4 +103,4 @@ export const ShopPanel = () => (
   />
 );
 
-export const ChatPanel = () => <ChatPanelComponent />;
+export const ChatPanel = () => <ChatPanelComponent mapName="test" />;

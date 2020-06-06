@@ -4,6 +4,8 @@ import { guiAssetPath } from "../cssUtilities";
 import { whiteText } from "../palette";
 import classnames from "classnames";
 import { Rnd, Props } from "react-rnd";
+import { IconButton } from "../FormControls/IconButton";
+import { FaTimes } from "react-icons/fa";
 
 const useStyles = createUseStyles({
   container: {
@@ -94,9 +96,6 @@ const useStyles = createUseStyles({
     right: 5,
     top: 10,
     zIndex: 1,
-    width: 37,
-    height: 37,
-    backgroundImage: guiAssetPath("panel/close-btn.png"),
     cursor: "pointer",
   },
   content: {
@@ -178,7 +177,11 @@ export const BasePanel = (props: PanelProps) => {
         {props.title && <span className={classes.label}>{props.title}</span>}
       </div>
       <div className={classnames(classes.header, "panelDragHandle")}>
-        <div className={classes.closeBtn} onClick={props.onCloseClick}></div>
+        <IconButton
+          Icon={FaTimes}
+          className={classes.closeBtn}
+          onClick={props.onCloseClick}
+        />
       </div>
       <div className={classes.border}>
         <div className={classes.content}>{props.children}</div>

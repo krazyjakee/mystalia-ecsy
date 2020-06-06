@@ -5,7 +5,6 @@ import { whiteText } from "@client/react/palette";
 
 const useStyles = createUseStyles({
   root: {
-    backgroundColor: "rgba(0,0,0,0.8)",
     padding: 10,
     height: 80,
     overflowX: "hidden",
