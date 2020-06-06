@@ -88,9 +88,25 @@ export interface GameStateEvents {
     damage: number;
     ability: number;
   };
+  "localPlayer:currentMap:request": undefined;
+  "localPlayer:currentMap:response": {
+    mapName: string;
+  };
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
   "enemy:unfocused": EnemyReference;
+  "chat:subscribe": {
+    message: string;
+    username: string;
+    role: string;
+    date: number;
+  };
+  "chat:publish:global": {
+    message: string;
+  };
+  "chat:publish": {
+    message: string;
+  };
 }
 
 export type RoomMessageType = keyof GameStateEvents;

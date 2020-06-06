@@ -10,6 +10,7 @@ import gameState from "./gameState";
 import { EnemyStatus } from "./react/Panels/EnemyStatus";
 import ShopPanel from "./react/Panels/Shop/ShopPanel";
 import { TargetedEnemyStatus } from "./react/Panels/Status/TargetedEnemyStatus";
+import ChatPanel from "./react/Panels/Chat/ChatPanel";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -44,6 +45,7 @@ const App = () => {
           <EnemyStatus />
           <ShopPanel />
           <TargetedEnemyStatus />
+          <ChatPanel />
         </>
       ) : null}
     </>

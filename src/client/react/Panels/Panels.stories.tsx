@@ -5,6 +5,7 @@ import AdminPanelComponent from "./Admin/AdminPanel";
 import InventoryPanelComponent from "./Inventory/InventoryPanel";
 import TopMenuComponent from "./TopMenu";
 import { EnemyStatus as EnemyStatusComponent } from "./EnemyStatus";
+import ChatPanelComponent from "./Chat/ChatPanel";
 import { Status as StatusComponent } from "./Status";
 import ShopPanelComponent from "./Shop/ShopPanel";
 import { MapSchema } from "@colyseus/schema";
@@ -101,3 +102,5 @@ export const ShopPanel = () => (
     }}
   />
 );
+
+export const ChatPanel = () => <ChatPanelComponent mapName="test" />;

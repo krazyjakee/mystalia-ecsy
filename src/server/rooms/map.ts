@@ -11,7 +11,11 @@ import { readMapFiles } from "@server/utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import EnemySpawner from "@server/workers/enemySpawner";
 import WeatherSpawner from "@server/workers/weatherSpawner";
-import { roomCommands, RoomCommandsAvailable } from "./mapEventHandlers";
+import {
+  roomCommands,
+  RoomCommandsAvailable,
+  thisRoomCommands,
+} from "./mapEventHandlers";
 import Battle from "@server/workers/battle";
 import WorldEnemySpawner from "@server/workers/worldEnemySpawner";
 
@@ -65,6 +69,23 @@ export default class MapRoom extends Room<MapState> {
           }
         );
       }
+    });
+
+    const thisRoomCommandsAvailable = thisRoomCommands(this.roomName);
+    Object.keys(thisRoomCommandsAvailable).forEach((cmd) => {
+      const RoomCommand = thisRoomCommandsAvailable[cmd];
+      if (RoomCommand) {
+        this.onMessage(cmd, (client: Client, data?: any) => {
+          this.dispatcher.dispatch(new RoomCommand(), {
+            data,
+            sessionId: client.sessionId,
+          });
+        });
+      }
+    });
+
+    this.presence.subscribe("chat:publish:global", (data) => {
+      this.broadcast("chat:subscribe:global", data);
     });
   }
 

@@ -123,6 +123,13 @@ export default class CommandsSystem extends System {
           }
         );
 
+        gameState.subscribe("localPlayer:currentMap:request", () => {
+          const map = tileMapEntity.getComponent(TileMap);
+          gameState.trigger("localPlayer:currentMap:response", {
+            mapName: map.fileName,
+          });
+        });
+
         localPlayerEntity.removeComponent(CommandsPending);
       });
 

@@ -18,7 +18,7 @@ export const useGameEvent = <T extends RoomMessageType>(
       },
       key
     );
-  }, []);
+  }, [eventName, key]);
   return [data, setData];
 };
 
