@@ -94,7 +94,7 @@ export default class EnemyZone {
     }
   }
 
-  calculateAllowedTiles = memoize((mapData: TMJ) => {
+  calculateAllowedTiles = (mapData: TMJ) => {
     const columns = mapData.width;
     const { x, y, polygon } = this.objectTile;
     if (!polygon) return [];
@@ -141,7 +141,7 @@ export default class EnemyZone {
     });
 
     return allowedTiles;
-  });
+  };
 
   destroy(stateId: string) {
     const enemyIndex = this.enemies.findIndex(
