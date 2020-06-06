@@ -33,7 +33,7 @@ export default ({ stream, hide = false }: Props) => {
   );
   const addMessage = () => {
     if (stream) {
-      setMessages([stream].concat(messages));
+      setMessages([stream].concat(messages.slice(0, 1000)));
     }
   };
 
