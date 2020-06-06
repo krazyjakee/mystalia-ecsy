@@ -51,8 +51,6 @@ export default () => {
 
   const roomName = currentMap?.mapName;
 
-  if (!roomName) return null;
-
   const roomChatEvent = `chat:subscribe:${roomName}` as "chat:subscribe";
   const [localChat] = useGameEvent(roomChatEvent);
   const [globalChat] = useGameEvent(
@@ -60,26 +58,36 @@ export default () => {
   );
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [tabs, setTabs] = useState<boolean[]>([false, true]);
+  const setTab = (tab: number) => {
+    if (tab) {
+      setTabs([true, false]);
+    } else {
+      setTabs([false, true]);
+    }
+  };
+
   const send = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
       const messageToSend = inputRef.current?.value;
       if (inputRef.current && messageToSend) {
-        gameState.send("map", `chat:publish:global` as "chat:publish", {
-          message: messageToSend,
-        });
+        gameState.send(
+          "map",
+          `chat:publish:${tabs[1] ? roomName : "global"}` as "chat:publish",
+          {
+            message: messageToSend,
+          }
+        );
         inputRef.current.value = "";
       }
     }
   };
 
-  const [tabs, setTabs] = useState<boolean[]>([false, true]);
-  const setTab = (tab: number) => {
-    if (tab) {
-      setTabs([false, true]);
-    } else {
-      setTabs([true, false]);
-    }
-  };
+  useEffect(() => {
+    gameState.trigger("localPlayer:currentMap:request", undefined);
+  }, [localChat, globalChat]);
+
+  if (!roomName) return null;
 
   return (
     <div className={classes.root}>

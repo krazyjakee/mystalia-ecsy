@@ -88,6 +88,10 @@ export interface GameStateEvents {
     damage: number;
     ability: number;
   };
+  "localPlayer:currentMap:request": undefined;
+  "localPlayer:currentMap:response": {
+    mapName: string;
+  };
   "enemy:change": EnemyReference;
   "enemy:focused": EnemyReference;
   "enemy:unfocused": EnemyReference;

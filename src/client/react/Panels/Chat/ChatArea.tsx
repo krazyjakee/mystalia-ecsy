@@ -34,7 +34,7 @@ export default ({ stream, hide = false }: Props) => {
   );
   const addMessage = () => {
     if (stream) {
-      setMessages(messages.concat([stream]));
+      setMessages([stream].concat(messages));
     }
   };
 
@@ -46,9 +46,9 @@ export default ({ stream, hide = false }: Props) => {
 
   return (
     <div className={classes.root}>
-      {messages.reverse().map((message) => {
+      {messages.map((message) => {
         return (
-          <p className={classes.chatEntry}>
+          <p key={message.date} className={classes.chatEntry}>
             <strong>{message.username}: </strong>
             {message.message}
           </p>

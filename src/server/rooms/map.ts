@@ -71,8 +71,9 @@ export default class MapRoom extends Room<MapState> {
       }
     });
 
-    Object.keys(thisRoomCommands(this.roomName)).forEach((cmd) => {
-      const RoomCommand = roomCommands[cmd];
+    const thisRoomCommandsAvailable = thisRoomCommands(this.roomName);
+    Object.keys(thisRoomCommandsAvailable).forEach((cmd) => {
+      const RoomCommand = thisRoomCommandsAvailable[cmd];
       if (RoomCommand) {
         this.onMessage(cmd, (client: Client, data?: any) => {
           this.dispatcher.dispatch(new RoomCommand(), {
