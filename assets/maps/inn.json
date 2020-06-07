@@ -47,6 +47,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":7,
+         "name":"Item",
+         "objects":[
+                {
+                 "height":32,
+                 "id":76,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"chance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":14
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":32,
+                 "x":992,
+                 "y":224
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"Player",
          "objects":[
@@ -986,8 +1019,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":7,
- "nextobjectid":76,
+ "nextlayerid":8,
+ "nextobjectid":77,
  "orientation":"orthogonal",
  "properties":[
         {

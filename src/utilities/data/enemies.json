@@ -226,6 +226,58 @@
   },
   {
     "id": 10,
+    "name": "Baby Aurata",
+    "spritesheet": "wildlife/beetle-red",
+    "spriteSize": {
+      "width": 27,
+      "height": 39
+    },
+    "portrait": "beetle",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 3,
+        "chance": 2
+      }
+    },
+    "speed": 5,
+    "maxDistance": 6,
+    "hp": 300,
+    "abilities": [0],
+    "drop": [
+      {
+        "itemId": 13,
+        "quantity": [1, 3],
+        "chance": 2
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Adult Aurata",
+    "spritesheet": "wildlife/beetle-blue",
+    "portrait": "beetle",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 1,
+        "chance": 2
+      }
+    },
+    "speed": 2,
+    "maxDistance": 6,
+    "hp": 600,
+    "abilities": [0],
+    "drop": [
+      {
+        "itemId": 13,
+        "quantity": [1, 3],
+        "chance": 2
+      }
+    ]
+  },
+  {
+    "id": 12,
     "name": "Ancient Mystic",
     "spritesheet": "npcs/ancient/mystic",
     "spriteSize": { "width": 24, "height": 32 },

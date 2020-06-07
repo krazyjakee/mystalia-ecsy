@@ -1,0 +1,14 @@
+{ "columns":18,
+ "image":"freebie_statue-orb-set-1.png",
+ "imageheight":384,
+ "imagewidth":576,
+ "margin":0,
+ "name":"freebie_statue-orb-set-1",
+ "spacing":0,
+ "tilecount":216,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

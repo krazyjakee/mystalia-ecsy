@@ -91,21 +91,21 @@
   },
   {
     "id": 10,
-    "name": "One Jujube",
+    "name": "One Joobs",
     "spritesheet": "items",
     "spriteId": 441,
     "type": "other"
   },
   {
     "id": 11,
-    "name": "Five Jujube",
+    "name": "Five Joobs",
     "spritesheet": "items",
     "spriteId": 434,
     "type": "other"
   },
   {
     "id": 12,
-    "name": "Fifteen Jujube",
+    "name": "Fifteen Joobs",
     "spritesheet": "items",
     "spriteId": 431,
     "type": "other"
@@ -122,7 +122,7 @@
     "name": "Empty Beer",
     "spritesheet": "items",
     "spriteId": 352,
-    "type": "consumable"
+    "type": "other"
   },
   {
     "id": 15,
@@ -130,5 +130,19 @@
     "spritesheet": "items",
     "spriteId": 360,
     "type": "consumable"
+  },
+  {
+    "id": 16,
+    "name": "Plain Looking Book",
+    "spritesheet": "items",
+    "spriteId": 402,
+    "type": "other"
+  },
+  {
+    "id": 17,
+    "name": "Worn Book",
+    "spritesheet": "items",
+    "spriteId": 403,
+    "type": "other"
   }
 ]
