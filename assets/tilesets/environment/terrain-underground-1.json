@@ -1,0 +1,15 @@
+{
+  "columns": 21,
+  "image": "terrain-underground-1.png",
+  "imageheight": 736,
+  "imagewidth": 672,
+  "margin": 0,
+  "name": "terrain-underground-1",
+  "spacing": 0,
+  "tilecount": 483,
+  "tiledversion": "2020.05.07",
+  "tileheight": 32,
+  "tilewidth": 32,
+  "type": "tileset",
+  "version": 1.2
+}
