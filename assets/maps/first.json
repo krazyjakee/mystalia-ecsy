@@ -6519,6 +6519,42 @@
                  "width":32,
                  "x":1152,
                  "y":256
+                }, 
+                {
+                 "gid":6593,
+                 "height":32,
+                 "id":800,
+                 "name":"",
+                 "rotation":0,
+                 "type":"gate",
+                 "visible":true,
+                 "width":32,
+                 "x":992,
+                 "y":576
+                }, 
+                {
+                 "gid":6593,
+                 "height":32,
+                 "id":801,
+                 "name":"",
+                 "rotation":0,
+                 "type":"gate",
+                 "visible":true,
+                 "width":32,
+                 "x":640,
+                 "y":416
+                }, 
+                {
+                 "gid":6587,
+                 "height":32,
+                 "id":802,
+                 "name":"",
+                 "rotation":0,
+                 "type":"gate",
+                 "visible":true,
+                 "width":32,
+                 "x":192,
+                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -8481,7 +8517,7 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":799,
+ "nextobjectid":803,
  "orientation":"orthogonal",
  "properties":[
         {
@@ -8553,6 +8589,10 @@
         {
          "firstgid":6458,
          "source":"..\/tilesets\/environment\/plants.json"
+        }, 
+        {
+         "firstgid":6575,
+         "source":"..\/tilesets\/structures\/doors.json"
         }],
  "tilewidth":32,
  "type":"map",

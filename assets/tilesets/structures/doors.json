@@ -1,0 +1,22 @@
+{ "columns":24,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
+ "image":"doors.png",
+ "imageheight":256,
+ "imagewidth":768,
+ "margin":0,
+ "name":"doors",
+ "spacing":0,
+ "tilecount":192,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}
