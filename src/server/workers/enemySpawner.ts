@@ -50,6 +50,7 @@ export default class EnemySpawner {
     if (!this.room.mapData) return;
 
     getTilesByType("enemy", this.room.mapData).forEach((objectTile) => {
+      if (!objectTile.properties) return;
       const roll = randomNumberBetween(objectTile.properties.chance);
       if (roll != 1) return;
 

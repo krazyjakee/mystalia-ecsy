@@ -13,7 +13,11 @@ import LocalPlayer from "@client/components/LocalPlayer";
 import AnimatedTile, {
   AnimatedTilesInitiated,
 } from "@client/components/AnimatedTile";
-import { tileIdToPixels, tileIdToVector } from "utilities/tileMap";
+import {
+  tileIdToPixels,
+  tileIdToVector,
+  getTilesByType,
+} from "utilities/tileMap";
 import Item from "@client/components/Item";
 import { Remove } from "@client/components/Tags";
 import Enemy from "@client/components/Enemy";
@@ -21,6 +25,8 @@ import Weather from "@client/components/Weather";
 import config from "@client/config.json";
 import Shop from "@client/components/Shop";
 import gameState from "@client/gameState";
+import CreateGate from "@client/entities/Gate";
+import { TMJ } from "types/TMJ";
 
 const { allowableOffMapDistance } = config;
 
@@ -136,6 +142,25 @@ export default class TileMapChanger extends System {
           shopTiles: tileMap.objectTileStore
             .getAllByType("shop")
             .map((shopTiles) => shopTiles.objectTile),
+        });
+
+        getTilesByType("gate", drawable.data).forEach((gateObject) => {
+          if (!gateObject.gid) return;
+
+          const tileSetSource = (drawable.data as TMJ).tilesets.find(
+            (tileset) => tileset.firstgid < (gateObject.gid || 0)
+          );
+          if (!tileSetSource) return;
+
+          const externalTileSet = tileMap.tileSetStore[tileSetSource?.source];
+          if (externalTileSet) {
+            CreateGate(
+              gateObject.gid - tileSetSource.firstgid,
+              tileMap.width,
+              externalTileSet,
+              gateObject
+            );
+          }
         });
 
         this.queries.networkRoom.results.forEach(

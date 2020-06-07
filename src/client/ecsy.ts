@@ -41,6 +41,7 @@ import TextBurstSystem from "./systems/Rendering/TextBurstSystem";
 import SpriteSheetAnimationSystem from "./systems/Rendering/SpriteSheetAnimationSystem";
 import BehaviourSystem from "./systems/MovementSystem/Behaviour";
 import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerSystem";
+import GateSystem from "./systems/Rendering/GateSystem";
 
 let world = new World();
 
@@ -76,6 +77,7 @@ export default (user: User) => {
     .registerSystem(PlayerNameSystem)
     .registerSystem(BehaviourSystem)
     .registerSystem(LookAtPlayerSystem)
+    .registerSystem(GateSystem)
     .registerSystem(TextBurstSystem)
     .registerSystem(SpriteSheetAnimationSystem)
     .registerSystem(CommandsSystem)

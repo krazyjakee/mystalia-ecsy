@@ -73,7 +73,7 @@ export default class WorldEnemySpawner {
       const enemyObjects = getTilesByType("enemy", map);
       enemyObjects.forEach((enemyObject) => {
         const spec = enemySpecs.find(
-          (spec) => spec.id === enemyObject.properties.id
+          (spec) => spec.id === enemyObject.properties?.id
         );
         if (spec && isPresent(spec.behavior.traveler)) {
           this.addEnemy({
@@ -117,7 +117,7 @@ export default class WorldEnemySpawner {
   }
 
   generateUid(enemyObject: SerializedObjectTile<"enemy">) {
-    return makeHash(`${enemyObject.properties.id}_${enemyObject.tileId}`);
+    return makeHash(`${enemyObject.properties?.id}_${enemyObject.tileId}`);
   }
 
   addEnemy(enemyProps: WorldEnemyProps) {

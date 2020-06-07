@@ -42,6 +42,7 @@ export default class ItemSpawner {
   tick() {
     this.mapItems.forEach((objectTile) => {
       const item = objectTile.properties;
+      if (!item) return;
       const chance = randomNumberBetween(item.chance);
       const quantity = item.maximumQuantity
         ? randomNumberBetween(item.maximumQuantity)
