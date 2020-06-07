@@ -15,6 +15,7 @@
   <property name="max" type="int" default="0"/>
  </objecttype>
  <objecttype name="flame" color="#f8f7ff"/>
+ <objecttype name="gate" color="#4f000d"/>
  <objecttype name="item" color="#3c3ef9">
   <property name="chance" type="int" default="0"/>
   <property name="id" type="int" default="0"/>
