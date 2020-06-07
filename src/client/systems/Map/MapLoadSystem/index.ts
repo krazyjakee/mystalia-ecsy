@@ -27,6 +27,7 @@ import Shop from "@client/components/Shop";
 import gameState from "@client/gameState";
 import CreateGate from "@client/entities/Gate";
 import { TMJ } from "types/TMJ";
+import Gate from "@client/components/Gate";
 
 const { allowableOffMapDistance } = config;
 
@@ -49,6 +50,9 @@ export default class TileMapChanger extends System {
     },
     items: {
       components: [Item],
+    },
+    gates: {
+      components: [Gate],
     },
   };
 
@@ -142,6 +146,10 @@ export default class TileMapChanger extends System {
           shopTiles: tileMap.objectTileStore
             .getAllByType("shop")
             .map((shopTiles) => shopTiles.objectTile),
+        });
+
+        this.queries.gates.results.forEach((gate: Entity) => {
+          gate.addComponent(Remove);
         });
 
         getTilesByType("gate", drawable.data).forEach((gateObject) => {
