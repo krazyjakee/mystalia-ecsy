@@ -6,13 +6,14 @@ import Hotkey from "../../Utilities/Hotkey";
 import { TabButton } from "../../FormControls/TabButton";
 import gameState from "../../../gameState";
 import PlayerManagementForm from "./PlayerManagementForm";
+import ItemManagementForm from "./ItemManagementForm";
 
 type Props = {
   forceEnable?: boolean;
 };
 
 export default ({ forceEnable }: Props) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [enabled, setEnabled] = useState(forceEnable || false);
 
   useEffect(() => {
@@ -41,10 +42,17 @@ export default ({ forceEnable }: Props) => {
                   active={activeTab === 0}
                   onClick={() => setActiveTab(0)}
                 ></TabButton>
+                <br />
+                <TabButton
+                  value="Item Management"
+                  active={activeTab === 1}
+                  onClick={() => setActiveTab(1)}
+                ></TabButton>
               </Section>
             </Col>
             <Col xs={true}>
-              <PlayerManagementForm />
+              <PlayerManagementForm show={activeTab === 0} />
+              <ItemManagementForm show={activeTab === 1} />
             </Col>
           </Row>
         </Grid>
