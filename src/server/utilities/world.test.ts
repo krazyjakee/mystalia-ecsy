@@ -45,13 +45,6 @@ describe("world utilities", () => {
     });
   });
 
-  describe("#generateWorldBlockList", () => {
-    test("should return a valid block list", () => {
-      const blockList = generateWorldBlockList();
-      expect(blockList.length).toStrictEqual(2609);
-    });
-  });
-
   describe("#getRandomValidTile", () => {
     test("should return a random valid tile", () => {
       const randomTile = getRandomValidTile();
