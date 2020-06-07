@@ -145,7 +145,7 @@ export default class Enemy {
         if (this.room.objectTileStore && this.objectTile) {
           const targetTile = selectRandomPatrolTile(
             this.room.objectTileStore,
-            this.objectTile.properties.patrolId || 0
+            this.objectTile.properties?.patrolId || 0
           );
           this.setTilePath(
             aStar.findPath(

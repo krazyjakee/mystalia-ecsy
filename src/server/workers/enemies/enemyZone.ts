@@ -25,7 +25,8 @@ export default class EnemyZone {
 
   constructor(objectTile: SerializedObjectTile<"enemyZone">, room: MapRoom) {
     this.objectTile = objectTile;
-    const { enemy } = objectTile.properties;
+
+    const enemy = objectTile.properties?.enemy;
     this.room = room;
 
     const spec = enemySpecs.find((spec) => spec.id === enemy) || enemySpecs[0];
@@ -41,6 +42,8 @@ export default class EnemyZone {
   }
 
   tick() {
+    if (!this.objectTile.properties) return;
+
     const { chance, max } = this.objectTile.properties;
     if (this.enemies.length < max) {
       const roll = randomNumberBetween(chance);

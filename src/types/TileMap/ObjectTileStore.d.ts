@@ -3,6 +3,7 @@ import { Biome } from "utilities/weather";
 export type ObjectTileType = {
   "": null;
   block: null;
+  gate: null;
   door: {
     map: string;
     tile: number;

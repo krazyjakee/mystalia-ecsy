@@ -6,6 +6,7 @@ export type Vector = {
 };
 
 interface Attributes {
+  gid?: number;
   height: number;
   name: string;
   properties: Property[];

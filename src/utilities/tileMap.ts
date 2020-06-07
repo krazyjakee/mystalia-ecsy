@@ -69,7 +69,7 @@ export type SerializedObjectTile<T extends ObjectTileTypeString> = Omit<
   "properties"
 > & {
   tileId: number;
-  properties: ObjectTileType[T];
+  properties: ObjectTileType[T] | null;
 };
 
 export const getTilesByType = memoize(
@@ -86,18 +86,15 @@ export const getTilesByType = memoize(
         const serializedObjects = objectsOfType
           .map((object) => {
             const serializedObject = serializeProperties<T>(object.properties);
-            if (serializedObject) {
-              const newObject: SerializedObjectTile<T> = {
-                ...object,
-                properties: serializedObject,
-                tileId: pixelsToTileId(
-                  { x: object.x, y: object.y },
-                  mapData.width
-                ),
-              };
-              return newObject;
-            }
-            return null;
+            const newObject: SerializedObjectTile<T> = {
+              ...object,
+              properties: serializedObject,
+              tileId: pixelsToTileId(
+                { x: object.x, y: object.y },
+                mapData.width
+              ),
+            };
+            return newObject;
           })
           .filter(isPresent);
 
