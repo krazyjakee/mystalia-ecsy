@@ -57,6 +57,8 @@ export default class KeyboardInputSystem extends System {
   }
 
   execute() {
+    if (!this.pressedKeys.length) return;
+
     const tileMap =
       this.queries.tileMaps.results.length &&
       this.queries.tileMaps.results[0].getComponent(TileMap);
