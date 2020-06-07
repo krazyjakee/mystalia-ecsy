@@ -8,6 +8,7 @@ import Gate from "@client/components/Gate";
 import Position from "@client/components/Position";
 import Drawable from "@client/components/Drawable";
 import { tilesAdjacent } from "utilities/movement/surroundings";
+import { roundToNearestMultiple } from "utilities/math";
 
 export default class GateSystem extends System {
   static queries = {
@@ -38,15 +39,27 @@ export default class GateSystem extends System {
           )
         )
         .forEach((entity) => {
-          const position = entity.getComponent(Position);
-          const positionPixels = {
-            x: gateDrawable.x / 32,
-            y: gateDrawable.y / 32,
-          };
           if (!characterAdjacent) {
-            // TODO: round positions to nearest multiple of 32
-            // TODO: also include if the positions are equal
-            characterAdjacent = tilesAdjacent(position.value, positionPixels);
+            const position = entity.getComponent(Position);
+            const gatePosition = {
+              x: gateDrawable.x / 32,
+              y: gateDrawable.y / 32,
+            };
+            const characterPosition = {
+              x: Math.round(position.value.x),
+              y: Math.round(position.value.y),
+            };
+            if (
+              gatePosition.x === characterPosition.x &&
+              gatePosition.y === characterPosition.y
+            ) {
+              characterAdjacent = true;
+            } else {
+              characterAdjacent = tilesAdjacent(
+                characterPosition,
+                gatePosition
+              );
+            }
           }
         });
 
