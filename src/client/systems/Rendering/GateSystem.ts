@@ -8,7 +8,6 @@ import Gate from "@client/components/Gate";
 import Position from "@client/components/Position";
 import Drawable from "@client/components/Drawable";
 import { tilesAdjacent } from "utilities/movement/surroundings";
-import { roundToNearestMultiple } from "utilities/math";
 
 export default class GateSystem extends System {
   static queries = {
