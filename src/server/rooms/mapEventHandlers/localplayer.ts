@@ -41,15 +41,18 @@ export class MovementWalkOffCommand extends Command<
       );
 
       const client = this.room.clients.find((c) => c.sessionId === sessionId);
-      if (nextMapPosition && client) {
+      if (!client) return false;
+      if (nextMapPosition) {
         const response: RoomMessage<"localPlayer:movement:nextMap"> = {
           fileName: nextMapPosition.fileName,
           tileId: nextMapPosition.tileId,
         };
         client.send("localPlayer:movement:nextMap", response);
         return true;
+      } else {
+        client.send("localPlayer:movement:nextMap", undefined);
+        return false;
       }
-      return false;
     };
 
     const nextPositionFound = getNextMapPosition();

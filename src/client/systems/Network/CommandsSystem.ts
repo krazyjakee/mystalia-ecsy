@@ -77,9 +77,9 @@ export default class CommandsSystem extends System {
         const movement = localPlayerEntity.getMutableComponent(Movement);
         const positionComponent = localPlayerEntity.getComponent(Position);
 
-        gameState.subscribe(
-          "localPlayer:movement:nextMap",
-          ({ fileName, tileId }) => {
+        gameState.subscribe("localPlayer:movement:nextMap", (nextPosition) => {
+          if (nextPosition) {
+            const { fileName, tileId } = nextPosition;
             drawable.data = undefined;
             movement.currentTile = tileId;
             movement.tileQueue = [];
@@ -88,8 +88,10 @@ export default class CommandsSystem extends System {
               dataPath: mapAssetPath(fileName),
             });
             localPlayerEntity.removeComponent(ChangingMap);
+          } else {
+            localPlayerEntity.removeComponent(ChangingMap);
           }
-        );
+        });
 
         gameState.subscribe("localPlayer:movement:request", () => {
           gameState.trigger("localPlayer:movement:response", {
