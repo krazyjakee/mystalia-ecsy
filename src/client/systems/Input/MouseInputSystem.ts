@@ -22,6 +22,9 @@ import Movement from "@client/components/Movement";
 import Enemy from "@client/components/Enemy";
 import { areColliding } from "utilities/math";
 import { isPresent } from "utilities/guards";
+import tileInDirection from "@client/utilities/TileMap/tileInDirection";
+import getNextTileData from "@client/utilities/TileMap/getNextTileData";
+import gameState from "@client/gameState";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -204,14 +207,32 @@ export default class MouseInputSystem extends System {
       }
 
       if (targetTile) {
-        this.queries.mouseEnabledEntities.results.forEach((entity) => {
-          entity.removeComponent(Focused);
-        });
-        playerEntity.addComponent(NewMovementTarget, {
-          targetTile,
-          mapDir,
-        });
-        if (this.doubleClicked) playerEntity.addComponent(PickUpAtDestination);
+        const movement = playerEntity.getComponent(Movement);
+        if (targetTile === movement.currentTile) {
+          const isEdge = getNextTileData(
+            movement.currentTile,
+            tileMapComponent.height,
+            tileMapComponent.width,
+            mapDir
+          );
+
+          if (isEdge) {
+            playerEntity.addComponent(ChangingMap);
+            gameState.send("map", "localPlayer:movement:walkOff", {
+              direction: mapDir,
+            });
+          }
+        } else {
+          this.queries.mouseEnabledEntities.results.forEach((entity) => {
+            entity.removeComponent(Focused);
+          });
+          playerEntity.addComponent(NewMovementTarget, {
+            targetTile,
+            mapDir,
+          });
+          if (this.doubleClicked)
+            playerEntity.addComponent(PickUpAtDestination);
+        }
       }
 
       this.clickedPosition = undefined;
