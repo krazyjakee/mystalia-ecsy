@@ -1,16 +1,22 @@
-import { RoomMessageType } from "types/gameState";
-import { ListAllMapsCommand, ListAllPlayersCommand } from "./list";
-import { TeleportRequestCommand } from "./teleport";
+import { Command } from "@colyseus/command";
+import MapState from "@server/components/map";
+import { RoomMessage } from "types/gameState";
+import { writeFile } from "@server/utilities/files";
 
-export type AdminCommandsAvailable = Extract<
-  RoomMessageType,
-  | "admin:list:requestAllPlayers"
-  | "admin:list:requestAllMaps"
-  | "admin:teleport:request"
->;
-
-export const adminCommands: { [key in AdminCommandsAvailable]: any } = {
-  "admin:list:requestAllPlayers": ListAllMapsCommand,
-  "admin:list:requestAllMaps": ListAllPlayersCommand,
-  "admin:teleport:request": TeleportRequestCommand,
-};
+export class ItemSpecUpdateCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"admin:itemSpec:update"> }
+> {
+  execute({ sessionId, data }) {
+    const client = this.room.clients.find((c) => c.sessionId === sessionId);
+    if (client) {
+      try {
+        writeFile("utilities/data/items.json", data.specs);
+        client.send("admin:itemSpec:updated", { result: true });
+      } catch (e) {
+        console.error(e);
+        client.send("admin:itemSpec:updated", { result: false });
+      }
+    }
+  }
+}

@@ -14,6 +14,7 @@ const useStyles = createUseStyles({
     padding: 5,
     maxHeight: 460,
     overflowY: "auto",
+    overflowX: "hidden",
   },
 });
 

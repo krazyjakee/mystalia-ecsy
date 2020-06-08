@@ -1,5 +1,5 @@
 import { Section } from "../../Section";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ItemSpec, ItemType, ItemTags } from "types/TileMap/ItemTiles";
 import Select, { SelectValue } from "@client/react/FormControls/Select";
 import Sprite from "@client/react/Utilities/Sprite";
@@ -9,6 +9,9 @@ import { Row, Col } from "react-flexbox-grid";
 import { EffectSpec } from "utilities/effect";
 import { isPresent } from "utilities/guards";
 import { Label } from "@client/react/FormControls/Label";
+import { Button } from "@client/react/FormControls/Button";
+import gameState from "@client/gameState";
+import { RoomMessage } from "types/gameState";
 
 const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
 const effectSpecs = require("utilities/data/effects.json") as EffectSpec[];
@@ -17,6 +20,7 @@ export const SelectedUser = React.createContext<string | null>("selectedUser");
 
 export default ({ show = false }) => {
   const [selectedItem, setSelectedItem] = useState<number>(0);
+  const [saving, setSaving] = useState<boolean>(false);
 
   const options = itemSpecs.map((item) => ({
     label: item.name,
@@ -36,12 +40,19 @@ export default ({ show = false }) => {
     getItemSpec()
   );
 
-  if (!show) return null;
+  useEffect(() => {
+    gameState.subscribe(
+      "admin:itemSpec:updated",
+      (update: RoomMessage<"admin:itemSpec:updated">) => {
+        if (!update.result) {
+          alert("items.json failed to save");
+        }
+        setSaving(false);
+      }
+    );
+  }, [saving]);
 
-  /*
-    TODO:
-    range?: number;
-  */
+  if (!show) return null;
 
   return (
     <Section>
@@ -231,6 +242,19 @@ export default ({ show = false }) => {
             }
             placeholder="Enter Range"
             type="number"
+          />
+          <Button
+            disabled={saving}
+            onClick={() => {
+              const updatedItemSpecs = itemSpecs.map((spec) =>
+                spec.id === customProperties.id ? customProperties : spec
+              );
+              gameState.send("admin", "admin:itemSpec:update", {
+                specs: updatedItemSpecs,
+              });
+              setSaving(true);
+            }}
+            value={saving ? "Saving..." : "Save"}
           />
         </>
       ) : null}

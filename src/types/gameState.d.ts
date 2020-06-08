@@ -4,6 +4,7 @@ import { MapSchema } from "@colyseus/schema";
 import { EnemyReference } from "./enemies";
 import PlayerState from "@server/components/player";
 import { Direction } from "./Grid";
+import { ItemSpec } from "./TileMap/ItemTiles";
 
 export interface GameStateEvents {
   "admin:list:allPlayers": {
@@ -20,6 +21,12 @@ export interface GameStateEvents {
     username: string;
     fileName?: string;
     tileId?: number;
+  };
+  "admin:itemSpec:update": {
+    specs: ItemSpec[];
+  };
+  "admin:itemSpec:updated": {
+    result: Boolean;
   };
   "localPlayer:change": {
     key: string;
