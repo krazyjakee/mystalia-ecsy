@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default ({ forceEnable }: Props) => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const [enabled, setEnabled] = useState(forceEnable || false);
 
   useEffect(() => {

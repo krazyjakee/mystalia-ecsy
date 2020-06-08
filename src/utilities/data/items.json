@@ -73,7 +73,17 @@
     "name": "Leg Bone",
     "spritesheet": "items",
     "spriteId": 366,
-    "type": "other"
+    "type": "melee",
+    "tags": [
+      "strength"
+    ],
+    "equippable": true,
+    "damage": [
+      1,
+      3
+    ],
+    "effect": 0,
+    "range": 1
   },
   {
     "id": 8,
