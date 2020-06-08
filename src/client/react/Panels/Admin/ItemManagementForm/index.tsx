@@ -1,11 +1,17 @@
 import { Section } from "../../Section";
 import React, { useState } from "react";
-import { ItemSpec, ItemType } from "types/TileMap/ItemTiles";
-import Select from "@client/react/FormControls/Select";
+import { ItemSpec, ItemType, ItemTags } from "types/TileMap/ItemTiles";
+import Select, { SelectValue } from "@client/react/FormControls/Select";
 import Sprite from "@client/react/Utilities/Sprite";
 import { TextInput } from "@client/react/FormControls/TextInput";
+import { CheckBox } from "@client/react/FormControls/CheckBox";
+import { Row, Col } from "react-flexbox-grid";
+import { EffectSpec } from "utilities/effect";
+import { isPresent } from "utilities/guards";
+import { Label } from "@client/react/FormControls/Label";
 
 const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
+const effectSpecs = require("utilities/data/effects.json") as EffectSpec[];
 
 export const SelectedUser = React.createContext<string | null>("selectedUser");
 
@@ -17,20 +23,23 @@ export default ({ show = false }) => {
     value: item.id,
   }));
 
-  const getSpec = (id = 0) => {
+  const getItemSpec = (id = 0) => {
     return itemSpecs.find((spec) => spec.id === id) as ItemSpec;
   };
 
-  const [customProperties, setCustomProperties] = useState<ItemSpec>(getSpec());
+  const getEffectSpec = (id = 0) => {
+    const spec = effectSpecs.find((spec) => spec.id === id) as EffectSpec;
+    return { value: spec.id, label: spec.spritesheet };
+  };
+
+  const [customProperties, setCustomProperties] = useState<ItemSpec>(
+    getItemSpec()
+  );
 
   if (!show) return null;
 
   /*
     TODO:
-    equippable?: boolean;
-    tags?: ItemTags[];
-    damage?: [number, number];
-    effect?: number;
     range?: number;
   */
 
@@ -41,19 +50,15 @@ export default ({ show = false }) => {
         onChange={(e) => {
           const value = parseInt(e.value);
           setSelectedItem(value);
-          setCustomProperties(getSpec(value));
+          setCustomProperties(getItemSpec(value));
         }}
         placeholder="Select Item"
         options={options}
       />
       {customProperties ? (
         <>
-          <Sprite
-            spriteId={customProperties.spriteId}
-            spritesheet={customProperties.spritesheet}
-            spriteSize={16}
-            sizeMultiplier={2}
-          />
+          <hr />
+          <Label>Name:</Label>
           <TextInput
             onChange={(e) => {
               setCustomProperties({
@@ -64,17 +69,31 @@ export default ({ show = false }) => {
             value={customProperties.name}
             placeholder="Enter Name"
           />
-          <TextInput
-            onChange={(e) => {
-              setCustomProperties({
-                ...customProperties,
-                spriteId: parseInt(e.target.value),
-              });
-            }}
-            value={customProperties.spriteId}
-            placeholder="Enter Tile ID"
-            type="number"
-          />
+          <Label>Sprite:</Label>
+          <Row>
+            <Col xs={1}>
+              <Sprite
+                spriteId={customProperties.spriteId}
+                spritesheet={customProperties.spritesheet}
+                spriteSize={16}
+                sizeMultiplier={2}
+              />
+            </Col>
+            <Col xs={11}>
+              <TextInput
+                onChange={(e) => {
+                  setCustomProperties({
+                    ...customProperties,
+                    spriteId: parseInt(e.target.value),
+                  });
+                }}
+                value={customProperties.spriteId}
+                placeholder="Enter Tile ID"
+                type="number"
+              />
+            </Col>
+          </Row>
+          <Label>Spritesheet:</Label>
           <TextInput
             onChange={(e) => {
               setCustomProperties({
@@ -85,6 +104,7 @@ export default ({ show = false }) => {
             value={customProperties.spritesheet}
             placeholder="Enter Spritesheet"
           />
+          <Label>Type:</Label>
           <Select
             value={{
               label: customProperties.type,
@@ -104,6 +124,113 @@ export default ({ show = false }) => {
               "consumable",
               "other",
             ].map((i) => ({ label: i, value: i }))}
+          />
+          <Label>Tags:</Label>
+          <Select
+            value={
+              customProperties.tags
+                ? customProperties.tags.map((tag) => ({
+                    label: tag,
+                    value: tag,
+                  }))
+                : []
+            }
+            isMulti={true}
+            onChange={(e) => {
+              setCustomProperties({
+                ...customProperties,
+                // @ts-ignore
+                tags: e.map((opt) => opt.value) as any,
+              });
+            }}
+            placeholder="Select Tags"
+            options={["wood", "strength"].map((i) => ({ label: i, value: i }))}
+          />
+          <CheckBox
+            checked={customProperties.equippable}
+            label="Equippable"
+            onClick={(checked) => {
+              setCustomProperties({
+                ...customProperties,
+                equippable: checked,
+              });
+            }}
+          />
+          <Label>Damage:</Label>
+          <Row>
+            <Col xs={6}>
+              <TextInput
+                disabled={!customProperties.equippable}
+                onChange={(e) => {
+                  setCustomProperties({
+                    ...customProperties,
+                    damage: [
+                      parseInt(e.target.value),
+                      customProperties.damage ? customProperties.damage[1] : 0,
+                    ],
+                  });
+                }}
+                value={
+                  customProperties.damage ? customProperties.damage[0] : ""
+                }
+                placeholder="Enter Lowest Damage"
+                type="number"
+              />
+            </Col>
+            <Col xs={6}>
+              <TextInput
+                disabled={!customProperties.equippable}
+                onChange={(e) => {
+                  setCustomProperties({
+                    ...customProperties,
+                    damage: [
+                      customProperties.damage ? customProperties.damage[0] : 0,
+                      parseInt(e.target.value),
+                    ],
+                  });
+                }}
+                value={
+                  customProperties.damage ? customProperties.damage[1] : ""
+                }
+                placeholder="Enter Highest Damage"
+                type="number"
+              />
+            </Col>
+          </Row>
+          <Label>Effect:</Label>
+          <Select
+            disabled={!customProperties.equippable}
+            value={
+              isPresent(customProperties.effect)
+                ? getEffectSpec(customProperties.effect)
+                : null
+            }
+            onChange={(e) => {
+              setCustomProperties({
+                ...customProperties,
+                effect: parseInt(e.value),
+              });
+            }}
+            placeholder="Select Effect"
+            options={effectSpecs.map((i) => ({
+              label: i.spritesheet,
+              value: i.id,
+            }))}
+          />
+          <Label>Range:</Label>
+          <TextInput
+            disabled={!customProperties.equippable}
+            onChange={(e) => {
+              setCustomProperties({
+                ...customProperties,
+                range: parseInt(e.target.value),
+              });
+            }}
+            value={
+              isPresent(customProperties.range) ? customProperties.range : ""
+            }
+            placeholder="Enter Range"
+            type="number"
           />
         </>
       ) : null}
