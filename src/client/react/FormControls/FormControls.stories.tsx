@@ -4,6 +4,8 @@ import { TextInput as TextInputComponent } from "./TextInput";
 import { Button as ButtonComponent } from "./Button";
 import { TabButton as TabButtonComponent } from "./TabButton";
 import SelectComponent from "./Select";
+import { CheckBox as CheckBoxComponent } from "./CheckBox";
+import { RadioButton as RadioButtonComponent } from "./RadioButton";
 
 export default {
   title: "Form Controls",
@@ -42,4 +44,12 @@ export const TabButton = () => {
 
 export const Select = () => {
   return <SelectComponent onChange={() => false} />;
+};
+
+export const CheckBox = () => {
+  return <CheckBoxComponent label="Check Box" />;
+};
+
+export const RadioButtom = () => {
+  return <RadioButtonComponent label="Radio Button" />;
 };

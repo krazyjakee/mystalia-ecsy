@@ -11,8 +11,11 @@ const useStyles = createUseStyles({
     borderImageSource: guiAssetPath("panel/section-border.png"),
     borderImageSlice: 6,
     borderImageRepeat: "round",
-    padding: 5
-  }
+    padding: 5,
+    maxHeight: 460,
+    overflowY: "auto",
+    overflowX: "hidden",
+  },
 });
 
 export const Section = (props: React.HTMLAttributes<HTMLDivElement>) => {

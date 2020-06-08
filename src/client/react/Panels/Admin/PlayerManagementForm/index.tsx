@@ -4,11 +4,10 @@ import gameState from "../../../../gameState";
 import { useGameEvent } from "../../../Hooks/useGameEvent";
 import TeleportForm from "./TeleportForm";
 import Select from "../../../FormControls/Select";
-import { OptionsType } from "react-select";
 
 export const SelectedUser = React.createContext<string | null>("selectedUser");
 
-export default () => {
+export default ({ show = false }) => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [allPlayers] = useGameEvent("admin:list:allPlayers");
 
@@ -16,19 +15,21 @@ export default () => {
     gameState.send("admin", "admin:list:requestAllPlayers");
   }, []);
 
+  if (!show) return null;
+
   return (
     <Section>
       <Select
-        onChange={e => {
+        onChange={(e) => {
           setSelectedUser(e.value);
         }}
         placeholder="Select Player"
         isLoading={!allPlayers}
         options={
           allPlayers &&
-          allPlayers.all.map(player => ({
+          allPlayers.all.map((player) => ({
             label: player.displayName,
-            value: player.username
+            value: player.username,
           }))
         }
       />
