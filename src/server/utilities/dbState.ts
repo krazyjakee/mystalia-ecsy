@@ -7,6 +7,7 @@ import EnemySchema from "../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
 import { MapSchema, ArraySchema, Schema } from "@colyseus/schema";
 import WeatherSchema from "../db/WeatherSchema";
+import LootSchema from "@server/db/LootSchema";
 
 export const savePlayerState = async (player: PlayerState, room: string) => {
   if (player.dbId) {
@@ -64,6 +65,10 @@ const schemas = {
   Weather: {
     schema: WeatherSchema,
     fields: ["biome", "weathers", "duration"],
+  },
+  Loot: {
+    schema: LootSchema,
+    fields: ["lootId", "tileId", "items"],
   },
 };
 

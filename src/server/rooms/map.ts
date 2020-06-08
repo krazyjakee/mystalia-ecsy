@@ -18,14 +18,16 @@ import {
 } from "./mapEventHandlers";
 import Battle from "@server/workers/battle";
 import WorldEnemySpawner from "@server/workers/worldEnemySpawner";
+import LootSpawner from "@server/workers/lootSpawner";
 
 export default class MapRoom extends Room<MapState> {
   dispatcher = new Dispatcher(this);
-  itemSpawner?: ItemSpawner;
-  enemySpawner?: EnemySpawner;
-  worldEnemySpawner?: WorldEnemySpawner;
-  weatherSpawner?: WeatherSpawner;
-  battleWorker?: Battle;
+  itemSpawner = new ItemSpawner(this);
+  lootSpawner = new LootSpawner(this);
+  enemySpawner = new EnemySpawner(this);
+  battleWorker = new Battle(this);
+  weatherSpawner = new WeatherSpawner(this);
+  worldEnemySpawner = new WorldEnemySpawner(this);
 
   objectTileStore?: ObjectTileStore;
   mapData?: TMJ;
@@ -45,13 +47,6 @@ export default class MapRoom extends Room<MapState> {
     const maps = readMapFiles();
     this.mapData = maps[this.roomName];
     this.objectTileStore = new ObjectTileStore(this.mapData);
-
-    this.itemSpawner = new ItemSpawner(this);
-    this.enemySpawner = new EnemySpawner(this);
-    this.battleWorker = new Battle(this);
-
-    this.weatherSpawner = new WeatherSpawner(this);
-    this.worldEnemySpawner = new WorldEnemySpawner(this);
 
     const roomCommandsAvailable = Object.keys(
       roomCommands
@@ -122,25 +117,14 @@ export default class MapRoom extends Room<MapState> {
   }
 
   async onDispose() {
-    if (this.itemSpawner) {
-      this.itemSpawner.dispose();
-    }
+    this.itemSpawner.dispose();
+    await this.lootSpawner.dispose();
+    this.enemySpawner.dispose();
+    this.worldEnemySpawner.dispose();
+    this.battleWorker.dispose();
 
-    if (this.enemySpawner) {
-      this.enemySpawner.dispose();
-    }
+    await this.weatherSpawner.dispose();
 
-    if (this.worldEnemySpawner) {
-      this.worldEnemySpawner.dispose();
-    }
-
-    if (this.battleWorker) {
-      this.battleWorker.dispose();
-    }
-
-    if (this.weatherSpawner) {
-      await this.weatherSpawner.dispose();
-    }
     await saveStateToDb("Item", this.roomName, this.state.items);
 
     const sessionIds = Object.keys(this.state.players);

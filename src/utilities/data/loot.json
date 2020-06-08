@@ -1,0 +1,15 @@
+[
+  {
+    "id": 0,
+    "name": "Forest Trash",
+    "items": [
+      {
+        "itemId": 0,
+        "chance": 10,
+        "quantity": [1, 3]
+      }
+    ],
+    "daysToRespawn": 2,
+    "requiredItem": 1
+  }
+]

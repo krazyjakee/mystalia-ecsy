@@ -22,6 +22,8 @@ export default class WorldEnemySpawner {
   }
 
   async checkForMaster() {
+    if (!matchMaker.presence) return;
+
     const worldEnemySpawnerMasterExists = await matchMaker.presence.hget(
       `worldEnemySpawner:master`,
       "i"
