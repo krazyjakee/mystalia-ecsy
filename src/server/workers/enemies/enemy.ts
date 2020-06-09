@@ -17,6 +17,7 @@ import { selectRandomPatrolTile } from "./behaviourHelpers/patrol";
 import aStar from "utilities/movement/aStar";
 import { ArraySchema } from "@colyseus/schema";
 import { matchMaker } from "colyseus";
+import { objectMap } from "utilities/loops";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -95,12 +96,12 @@ export default class Enemy {
       // @ts-ignore
       this.timer = setTimeout(() => {
         if (behavior && behavior.patrol) {
-          const playerTiles = Object.keys(this.room.state.players)
-            .map((key) => {
-              const player = this.room.state.players[key] as PlayerState;
-              return player.targetTile;
-            })
-            .filter(isPresent);
+          const playerTiles = Object.values(
+            objectMap(
+              this.room.state.players,
+              (_, player: PlayerState) => player.targetTile
+            )
+          ).filter(isPresent);
           const distances = playerTiles.map((tile) =>
             distanceBetweenTiles(this.currentTile, tile, this.mapColumns)
           );

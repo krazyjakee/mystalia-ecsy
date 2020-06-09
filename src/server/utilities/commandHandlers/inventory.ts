@@ -4,6 +4,7 @@ import ItemState from "@server/components/item";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { randomHash } from "utilities/hash";
 import { searchState } from "../colyseusState";
+import { objectMap } from "utilities/loops";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -19,10 +20,9 @@ export const addItemToPlayer = (
   if (matches.length) return;
 
   // Otherwise add the item
-  const inventoryKeys = Object.keys(inventoryState);
-  const positions = inventoryKeys.map((key: string) => {
-    return inventoryState[key].position;
-  });
+  const positions = Object.values<number>(
+    objectMap(inventoryState, (_, value: InventoryState) => value.position)
+  );
   positions.sort();
 
   const highestPosition = positions[positions.length - 1];

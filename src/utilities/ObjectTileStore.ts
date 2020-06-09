@@ -9,6 +9,7 @@ import { Attributes, Layer, Property, TMJ } from "types/TMJ";
 import aStar from "utilities/movement/aStar";
 import { makeHash } from "./hash";
 import memoize from "./memoize";
+import { objectForEach } from "./loops";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -152,13 +153,11 @@ export class ObjectTileStore {
 
     layer.objects.forEach((object) => {
       const tileData = mapObjectToTileTypes(object, this.columns);
-      Object.keys(tileData).forEach((id) => {
-        const tileId = parseInt(id);
-        const objectTile = tileData[tileId];
-        if (objectTile) {
-          this.set(tileId, objectTile);
-        }
-      });
+      objectForEach(
+        tileData,
+        (tileId, objectTile) =>
+          objectTile && this.set(parseInt(tileId), objectTile)
+      );
     });
   }
 

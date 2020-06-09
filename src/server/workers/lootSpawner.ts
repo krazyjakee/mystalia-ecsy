@@ -6,7 +6,12 @@ import LootSchema from "@server/db/LootSchema";
 import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
 import { isPresent } from "utilities/guards";
-import { objectForEach, objectMap, objectFilter } from "utilities/loops";
+import {
+  objectForEach,
+  objectMap,
+  objectFilter,
+  objectFindValue,
+} from "utilities/loops";
 import { saveStateToDb } from "@server/utilities/dbState";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
@@ -44,15 +49,13 @@ export default class LootSpawner {
 
   tick() {
     const expiredLoot = this.mapLoot.filter((objectTile) => {
-      if (
-        Object.keys(this.lootCounters).find(
-          (key) =>
-            this.getUid(objectTile.tileId) === key && this.lootCounters[key] > 0
+      const uid = this.getUid(objectTile.tileId);
+      return !Boolean(
+        objectFindValue(
+          this.lootCounters,
+          (key, value) => uid === key && value > 0
         )
-      ) {
-        return false;
-      }
-      return true;
+      );
     });
 
     expiredLoot.forEach((objectTile) => {

@@ -1,6 +1,6 @@
-export const objectForEach = <T extends Object>(
+export const objectForEach = <T extends { [key: string]: any }>(
   obj: T,
-  callback: (key: keyof T, value: T[keyof T]) => void
+  callback: (key: string, value: T[keyof T]) => void
 ) => {
   for (let key in obj) {
     callback(key, obj[key]);
@@ -11,14 +11,14 @@ export const objectMap = <T extends Object>(
   obj: T,
   callback: (key: keyof T, value: T[keyof T]) => any
 ) => {
-  let result: { [key: string]: any } = {};
+  const result = {} as Record<keyof T, any>;
   for (let key in obj) {
     result[key] = callback(key, obj[key]);
   }
   return result;
 };
 
-export const objectFind = <T extends Object>(
+export const objectFindValue = <T extends Object>(
   obj: T,
   callback: (key: keyof T, value: T[keyof T]) => any
 ) => {

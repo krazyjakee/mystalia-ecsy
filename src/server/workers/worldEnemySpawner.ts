@@ -8,6 +8,7 @@ import { makeHash } from "utilities/hash";
 import { matchMaker } from "colyseus";
 import MapRoom from "@server/rooms/map";
 import { isPresent } from "utilities/guards";
+import { objectForEach } from "utilities/loops";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 
@@ -70,8 +71,7 @@ export default class WorldEnemySpawner {
 
   loadTheRest() {
     const maps = readMapFiles();
-    Object.keys(maps).forEach((roomName) => {
-      const map = maps[roomName];
+    objectForEach(maps, (roomName, map) => {
       const enemyObjects = getTilesByType("enemy", map);
       enemyObjects.forEach((enemyObject) => {
         const spec = enemySpecs.find(
@@ -114,7 +114,9 @@ export default class WorldEnemySpawner {
       const objectTile = enemyObjects.find(
         (enemyObject) => this.generateUid(enemyObject) === stateId
       );
-      return objectTile;
+      if (objectTile) {
+        return objectTile;
+      }
     }
   }
 
