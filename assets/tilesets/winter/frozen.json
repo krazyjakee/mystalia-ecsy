@@ -1,0 +1,14 @@
+{ "columns":45,
+ "image":"frozen.png",
+ "imageheight":512,
+ "imagewidth":1440,
+ "margin":0,
+ "name":"frozen",
+ "spacing":0,
+ "tilecount":720,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}

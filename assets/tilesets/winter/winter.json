@@ -1,0 +1,14 @@
+{ "columns":40,
+ "image":"winter.png",
+ "imageheight":1472,
+ "imagewidth":1280,
+ "margin":0,
+ "name":"winter",
+ "spacing":0,
+ "tilecount":1840,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}
