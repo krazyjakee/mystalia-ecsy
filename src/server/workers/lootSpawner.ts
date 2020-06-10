@@ -6,15 +6,12 @@ import LootSchema from "@server/db/LootSchema";
 import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
 import { isPresent } from "utilities/guards";
-import {
-  objectForEach,
-  objectMap,
-  objectFilter,
-  objectFindValue,
-} from "utilities/loops";
+import { objectMap, objectFindValue } from "utilities/loops";
 import { saveStateToDb } from "@server/utilities/dbState";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
+
+const config = require("@client/config.json");
 
 export default class LootSpawner {
   room: MapRoom;
@@ -40,11 +37,24 @@ export default class LootSpawner {
         const obj = doc.toJSON();
         const items = obj.items.map((item) => new LootItemState(item));
         this.addLoot(obj.lootId, obj.tileId, items);
-        // TODO: Set the lootCountdown stored in the DB
+        this.setCountdown(obj.tileId, obj.lootId, obj.countdown);
       });
       // @ts-ignore
       this.timer = setInterval(() => this.tick(), 1000);
     });
+  }
+
+  setCountdown(tileId: number, lootId: number, timeLeft?: number) {
+    const uid = this.getUid(tileId);
+    if (timeLeft) {
+      this.lootCounters[uid] = timeLeft;
+    } else {
+      const spec = this.getSpec(lootId);
+      if (spec) {
+        this.lootCounters[uid] =
+          spec.daysToRespawn * (config.dayLengthInMinutes * 60000);
+      }
+    }
   }
 
   tick() {
@@ -75,7 +85,7 @@ export default class LootSpawner {
     });
 
     Object.keys(this.lootCounters).forEach(
-      (key) => (this.lootCounters[key] -= 1)
+      (key) => (this.lootCounters[key] -= 1000)
     );
   }
 
