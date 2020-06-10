@@ -27,6 +27,13 @@
             "width": 3840,
             "x": 3840,
             "y": -2176
+        },
+        {
+            "fileName": "cold.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -12256,
+            "y": -43584
         }
     ],
     "onlyShowAdjacentMaps": false,
