@@ -1,12 +1,20 @@
-{ "columns":45,
+{ "columns":53,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"frozen.png",
  "imageheight":512,
- "imagewidth":1440,
+ "imagewidth":1696,
  "margin":0,
  "name":"frozen",
  "spacing":0,
- "tilecount":720,
- "tiledversion":"2020.05.07",
+ "tilecount":848,
+ "tiledversion":"2020.05.29",
  "tileheight":32,
  "tilewidth":32,
  "type":"tileset",
