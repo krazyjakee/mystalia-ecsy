@@ -3,8 +3,6 @@ import Drawable from "@client/components/Drawable";
 import Gate from "@client/components/Gate";
 import { SerializedObjectTile, tileIdToPixels } from "utilities/tileMap";
 import { TileSetStoreItem } from "types/TileMap/TileSetStore";
-import { SimpleLoadable, Loadable } from "@client/components/Loadable";
-import { itemAssetPath } from "@client/utilities/assets";
 
 export default function CreateGate(
   tileId: number,

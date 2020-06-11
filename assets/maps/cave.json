@@ -1094,6 +1094,18 @@
                  "width":0,
                  "x":256,
                  "y":224
+                }, 
+                {
+                 "gid":1355,
+                 "height":32,
+                 "id":81,
+                 "name":"",
+                 "rotation":0,
+                 "type":"loot",
+                 "visible":true,
+                 "width":32,
+                 "x":96,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1126,7 +1138,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":81,
+ "nextobjectid":82,
  "orientation":"orthogonal",
  "properties":[
         {
@@ -1140,7 +1152,7 @@
          "value":"cave"
         }],
  "renderorder":"right-down",
- "tiledversion":"2020.05.07",
+ "tiledversion":"2020.05.29",
  "tileheight":32,
  "tilesets":[
         {

@@ -1,4 +1,4 @@
-export const objectForEach = <T extends { [key: string]: any }>(
+export const objectForEach = <T extends Object>(
   obj: T,
   callback: (key: string, value: T[keyof T]) => void
 ) => {
@@ -7,11 +7,11 @@ export const objectForEach = <T extends { [key: string]: any }>(
   }
 };
 
-export const objectMap = <T extends Object>(
+export const objectMap = <T extends Object, K>(
   obj: T,
-  callback: (key: keyof T, value: T[keyof T]) => any
+  callback: (key: keyof T, value: T[keyof T]) => K
 ) => {
-  const result = {} as Record<keyof T, any>;
+  const result = {} as Record<keyof T, K>;
   for (let key in obj) {
     result[key] = callback(key, obj[key]);
   }
@@ -29,11 +29,11 @@ export const objectFindValue = <T extends Object>(
   }
 };
 
-export const objectFilter = <T extends Object>(
+export const objectFilter = <T extends Object, K>(
   obj: T,
   callback: (key: keyof T, value: T[keyof T]) => Boolean
 ) => {
-  let result: { [key: string]: any } = {};
+  let result = {} as Partial<T>;
   for (let key in obj) {
     if (callback(key, obj[key])) {
       result[key] = obj[key];

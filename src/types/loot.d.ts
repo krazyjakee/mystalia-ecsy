@@ -1,10 +1,10 @@
-type LootItem = {
+export type LootItem = {
   itemId: number;
   chance: number;
   quantity: [number, number];
 };
 
-type LootSpec = {
+export type LootSpec = {
   id: number;
   name: string;
   items: LootItem[];

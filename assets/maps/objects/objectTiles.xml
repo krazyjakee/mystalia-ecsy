@@ -23,6 +23,9 @@
  <objecttype name="light" color="#f3e121">
   <property name="radius" type="int" default="0"/>
  </objecttype>
+ <objecttype name="loot" color="#00faef">
+  <property name="lootId" type="int" default="0"/>
+ </objecttype>
  <objecttype name="patrol" color="#65a76f">
   <property name="id" type="int" default="0"/>
  </objecttype>

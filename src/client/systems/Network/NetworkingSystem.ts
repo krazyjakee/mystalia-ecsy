@@ -24,6 +24,7 @@ import {
   tileIdToVector,
   vectorToTileId,
   vectorToPixels,
+  getTilesByType,
 } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
 import Item from "@client/components/Item";
@@ -35,6 +36,11 @@ import Weather from "@client/components/Weather";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import Enemy from "@client/components/Enemy";
 import CreateEffect from "@client/entities/Effect";
+import CreateLoot from "@client/entities/Loot";
+import Drawable from "@client/components/Drawable";
+import { TMJ } from "types/TMJ";
+import { UpdateLoot } from "@client/components/Loot";
+import { objectMap } from "utilities/loops";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -271,6 +277,43 @@ export default class NetworkingSystem extends System {
               }
             });
           }
+        };
+
+        networkRoom.room.state.loot.onAdd = (loot) => {
+          const tmj = tileMapEntity.getComponent(Drawable).data as TMJ;
+          if (!tmj) return;
+
+          const lootTiles = getTilesByType("loot", tmj);
+          const tile = lootTiles.find(
+            (lootTile) => lootTile.tileId === loot.tileId
+          );
+          if (!tile) return;
+
+          const tileSetSource = tmj.tilesets.find(
+            (tileset) => tileset.firstgid < (tile.gid || 0)
+          );
+          if (!tileSetSource) return;
+
+          const externalTileSet = tileMap.tileSetStore[tileSetSource?.source];
+          CreateLoot(tile, loot, tileMap.width, externalTileSet);
+
+          loot.onChange = function(changes) {
+            changes.forEach((change) => {
+              if (change.field === "items") {
+                networkRoomEntity.addComponent(UpdateLoot, {
+                  tileId: loot.tileId,
+                  items: Object.values(objectMap(change.value, (_, v) => v)),
+                });
+              }
+            });
+          };
+
+          loot.onRemove = () => {
+            networkRoomEntity.addComponent(UpdateLoot, {
+              tileId: loot.tileId,
+              items: [],
+            });
+          };
         };
 
         networkRoom.room.state.weather.onAdd = (weatherState) => {

@@ -1,13 +1,15 @@
 import { SerializedObjectTile, getTilesByType } from "utilities/tileMap";
 import { mongoose } from "@colyseus/social";
 import MapRoom from "@server/rooms/map";
-import { makeHash } from "utilities/hash";
+import { makeHash, randomHash } from "utilities/hash";
 import LootSchema from "@server/db/LootSchema";
 import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
 import { isPresent } from "utilities/guards";
 import { objectMap, objectFindValue } from "utilities/loops";
 import { saveStateToDb } from "@server/utilities/dbState";
+import { randomNumberBetween } from "utilities/math";
+import { LootSpec } from "types/loot";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
 
@@ -101,13 +103,50 @@ export default class LootSpawner {
     const uid = this.getUid(tileId);
 
     const lootState = this.room.state.loot[uid] as LootState;
-    if (lootState) {
-      const spec = this.getSpec(lootId);
+    const spec = this.getSpec(lootId);
+    if (lootState && spec) {
       const existingItems = Object.values(
         objectMap(lootState.items, (_, value: LootItemState) => value.itemId)
       );
-      // TODO: For items that don't exist, replenish them
-      // TODO: Reset lootCounter
+      const existingPositions = Object.values(
+        objectMap(lootState.items, (_, value: LootItemState) => value.position)
+      );
+
+      const availablePositions: number[] = [];
+      for (let i = 0; i < 6; i += 1) {
+        if (!existingPositions.includes(i)) {
+          availablePositions.push(i);
+        }
+      }
+
+      spec.items
+        .filter((item) => !existingItems.includes(item.itemId))
+        .map((item) => {
+          const roll = randomNumberBetween(item.chance);
+          if (roll === 1) {
+            const quantity = randomNumberBetween(
+              item.quantity[0],
+              item.quantity[1]
+            );
+            const position = availablePositions.shift();
+            if (quantity && isPresent(position)) {
+              return new LootItemState({
+                itemId: item.itemId,
+                position,
+                quantity,
+              });
+            }
+          }
+        })
+        .filter(isPresent)
+        .forEach((item) => {
+          this.room.state.loot[uid].items[randomHash()] = item;
+        });
+
+      console.log(
+        `Loot on ${this.room.roomName} at tile ${tileId} has been replenished.`
+      );
+      this.setCountdown(tileId, lootId);
     }
   }
 

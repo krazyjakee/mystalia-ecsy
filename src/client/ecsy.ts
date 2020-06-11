@@ -42,6 +42,7 @@ import SpriteSheetAnimationSystem from "./systems/Rendering/SpriteSheetAnimation
 import BehaviourSystem from "./systems/MovementSystem/Behaviour";
 import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerSystem";
 import GateSystem from "./systems/Rendering/GateSystem";
+import LootSystem from "./systems/Rendering/LootSystem";
 
 let world = new World();
 
@@ -78,6 +79,7 @@ export default (user: User) => {
     .registerSystem(BehaviourSystem)
     .registerSystem(LookAtPlayerSystem)
     .registerSystem(GateSystem)
+    .registerSystem(LootSystem)
     .registerSystem(TextBurstSystem)
     .registerSystem(SpriteSheetAnimationSystem)
     .registerSystem(CommandsSystem)
