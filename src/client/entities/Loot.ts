@@ -11,6 +11,7 @@ const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
 
 export default function CreateLoot(
   objectTile: SerializedObjectTile<"loot">,
+  sourceTileId: number,
   lootState: LootState,
   mapColumns: number,
   tileSet: TileSetStoreItem
@@ -20,10 +21,7 @@ export default function CreateLoot(
   );
   if (!spec) return;
 
-  const tileSetPosition = tileIdToPixels(
-    objectTile.tileId,
-    tileSet.imagewidth / 32
-  );
+  const tileSetPosition = tileIdToPixels(sourceTileId, tileSet.imagewidth / 32);
   const mapPosition = tileIdToPixels(objectTile.tileId, mapColumns);
 
   return getWorld()

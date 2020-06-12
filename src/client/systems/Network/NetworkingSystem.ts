@@ -295,7 +295,13 @@ export default class NetworkingSystem extends System {
           if (!tileSetSource) return;
 
           const externalTileSet = tileMap.tileSetStore[tileSetSource?.source];
-          CreateLoot(tile, loot, tileMap.width, externalTileSet);
+          CreateLoot(
+            tile,
+            (tile.gid || 0) - tileSetSource.firstgid,
+            loot,
+            tileMap.width,
+            externalTileSet
+          );
 
           loot.onChange = function(changes) {
             changes.forEach((change) => {
