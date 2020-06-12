@@ -30,7 +30,7 @@ export default class LootSystem extends System {
         }
       }
 
-      lootUpdateEntity.remove();
+      lootUpdateEntity.removeComponent(UpdateLoot);
     });
   }
 }

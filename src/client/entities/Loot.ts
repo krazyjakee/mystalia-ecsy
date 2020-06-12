@@ -28,16 +28,16 @@ export default function CreateLoot(
 
   return getWorld()
     .createEntity()
-    .addComponent(
-      Loot,
-      Object.values(
+    .addComponent(Loot, {
+      items: Object.values(
         objectMap(lootState.items, (_, { itemId, position, quantity }) => ({
           itemId,
           position,
           quantity,
         }))
-      )
-    )
+      ),
+      tileId: objectTile.tileId,
+    })
     .addComponent(Drawable, {
       image: tileSet.image,
       x: mapPosition.x,

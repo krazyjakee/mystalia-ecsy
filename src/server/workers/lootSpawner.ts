@@ -5,7 +5,7 @@ import { makeHash, randomHash } from "utilities/hash";
 import LootSchema from "@server/db/LootSchema";
 import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
-import { isPresent } from "utilities/guards";
+import { isPresent, clone } from "utilities/guards";
 import { objectMap, objectFindValue } from "utilities/loops";
 import { saveStateToDb } from "@server/utilities/dbState";
 import { randomNumberBetween } from "utilities/math";
@@ -48,13 +48,13 @@ export default class LootSpawner {
 
   setCountdown(tileId: number, lootId: number, timeLeft?: number) {
     const uid = this.getUid(tileId);
-    if (timeLeft) {
+    if (isPresent(timeLeft)) {
       this.lootCounters[uid] = timeLeft;
     } else {
       const spec = this.getSpec(lootId);
       if (spec) {
         this.lootCounters[uid] =
-          spec.daysToRespawn * (config.dayLengthInMinutes * 60000);
+          spec.daysToRespawn * (config.dayLengthInMinutes * 100); // TODO: Set back to 60000 when testing is done
       }
     }
   }
@@ -79,8 +79,9 @@ export default class LootSpawner {
 
       const uid = this.getUid(objectTile.tileId);
 
-      if (!this.lootCounters[uid]) {
+      if (!isPresent(this.lootCounters[uid])) {
         this.addLoot(lootSpec.id, objectTile.tileId, []);
+        this.setCountdown(objectTile.tileId, lootSpec.id, 0);
       } else {
         this.replenishLoot(lootSpec.id, objectTile.tileId);
       }
@@ -105,11 +106,13 @@ export default class LootSpawner {
     const lootState = this.room.state.loot[uid] as LootState;
     const spec = this.getSpec(lootId);
     if (lootState && spec) {
+      const items = this.room.state.loot[uid].items;
+
       const existingItems = Object.values(
-        objectMap(lootState.items, (_, value: LootItemState) => value.itemId)
+        objectMap(items, (_, value: LootItemState) => value.itemId)
       );
       const existingPositions = Object.values(
-        objectMap(lootState.items, (_, value: LootItemState) => value.position)
+        objectMap(items, (_, value: LootItemState) => value.position)
       );
 
       const availablePositions: number[] = [];
@@ -119,7 +122,7 @@ export default class LootSpawner {
         }
       }
 
-      spec.items
+      const replenishedItems = spec.items
         .filter((item) => !existingItems.includes(item.itemId))
         .map((item) => {
           const roll = randomNumberBetween(item.chance);
@@ -139,13 +142,17 @@ export default class LootSpawner {
           }
         })
         .filter(isPresent)
-        .forEach((item) => {
+        .map((item) => {
           this.room.state.loot[uid].items[randomHash()] = item;
+          return 1;
         });
 
-      console.log(
-        `Loot on ${this.room.roomName} at tile ${tileId} has been replenished.`
-      );
+      if (replenishedItems.length) {
+        console.log(
+          `Loot on ${this.room.roomName} at tile ${tileId} has been replenished.`
+        );
+      }
+
       this.setCountdown(tileId, lootId);
     }
   }

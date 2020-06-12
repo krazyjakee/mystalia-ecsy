@@ -5,7 +5,7 @@
     "items": [
       {
         "itemId": 0,
-        "chance": 10,
+        "chance": 1,
         "quantity": [1, 3]
       }
     ],

@@ -1100,6 +1100,12 @@
                  "height":32,
                  "id":81,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"lootId",
+                         "type":"int",
+                         "value":0
+                        }],
                  "rotation":0,
                  "type":"loot",
                  "visible":true,
