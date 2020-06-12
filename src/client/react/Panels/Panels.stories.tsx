@@ -8,6 +8,7 @@ import { EnemyStatus as EnemyStatusComponent } from "./EnemyStatus";
 import ChatPanelComponent from "./Chat/ChatPanel";
 import { Status as StatusComponent } from "./Status";
 import ShopPanelComponent from "./Shop/ShopPanel";
+import LootPanelComponent from "./Loot";
 import { MapSchema } from "@colyseus/schema";
 
 export default {
@@ -104,3 +105,5 @@ export const ShopPanel = () => (
 );
 
 export const ChatPanel = () => <ChatPanelComponent mapName="test" />;
+
+export const LootPanel = () => <LootPanelComponent forceEnable={true} />;

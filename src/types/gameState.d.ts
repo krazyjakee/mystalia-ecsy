@@ -5,6 +5,7 @@ import { EnemyReference } from "./enemies";
 import PlayerState from "@server/components/player";
 import { Direction } from "./Grid";
 import { ItemSpec } from "./TileMap/ItemTiles";
+import LootState from "@server/components/loot";
 
 export interface GameStateEvents {
   "admin:list:allPlayers": {
@@ -63,6 +64,13 @@ export interface GameStateEvents {
   };
   "localPlayer:inventory:equip": {
     position: number;
+  };
+  "localPlayer:loot:request": {
+    tileId: number;
+  };
+  "localPlayer:loot:response": {
+    tileId: number;
+    lootState: MapSchema<LootState>;
   };
   "localPlayer:battle:targetEnemy": EnemyReference;
   "localPlayer:battle:unTarget": undefined;
