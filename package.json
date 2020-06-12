@@ -47,7 +47,6 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "fantasy-name-generator": "^2.0.0",
-    "install": "^0.13.0",
     "migrate-mongo": "^7.2.1",
     "mongoose": "^5.9.7",
     "normalize.css": "^8.0.1",
