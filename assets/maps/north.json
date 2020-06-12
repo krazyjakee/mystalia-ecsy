@@ -2114,7 +2114,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":500
+                         "value":300
                         }, 
                         {
                          "name":"enemy",
@@ -2174,7 +2174,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":700
+                         "value":600
                         }, 
                         {
                          "name":"enemy",
@@ -2184,7 +2184,7 @@
                         {
                          "name":"max",
                          "type":"int",
-                         "value":3
+                         "value":4
                         }],
                  "rotation":0,
                  "type":"enemyZone",
@@ -2342,7 +2342,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":600
+                         "value":400
                         }, 
                         {
                          "name":"enemy",
@@ -2406,7 +2406,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":800
+                         "value":500
                         }, 
                         {
                          "name":"enemy",
@@ -2458,7 +2458,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":1000
+                         "value":600
                         }, 
                         {
                          "name":"enemy",
@@ -2526,7 +2526,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":700
+                         "value":400
                         }, 
                         {
                          "name":"enemy",
@@ -2630,7 +2630,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":300
+                         "value":100
                         }, 
                         {
                          "name":"enemy",
@@ -2694,7 +2694,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":700
+                         "value":300
                         }, 
                         {
                          "name":"enemy",
@@ -2742,7 +2742,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":500
+                         "value":300
                         }, 
                         {
                          "name":"enemy",
@@ -2818,7 +2818,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":1000
+                         "value":800
                         }, 
                         {
                          "name":"enemy",

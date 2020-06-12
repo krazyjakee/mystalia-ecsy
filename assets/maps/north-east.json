@@ -2091,7 +2091,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":500
+                         "value":200
                         }, 
                         {
                          "name":"enemy",
@@ -2175,7 +2175,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":700
+                         "value":300
                         }, 
                         {
                          "name":"enemy",
@@ -2255,7 +2255,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":500
+                         "value":300
                         }, 
                         {
                          "name":"enemy",
@@ -2327,7 +2327,7 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":800
+                         "value":600
                         }, 
                         {
                          "name":"enemy",
@@ -2526,8 +2526,19 @@
                  "height":32,
                  "id":17,
                  "name":"north east cave 1",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-east-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":846
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":32,
                  "x":320,
@@ -6827,8 +6838,19 @@
                  "height":32,
                  "id":424,
                  "name":"north east cave 3",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-east-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":3274
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":64,
                  "x":1152,
@@ -8719,8 +8741,19 @@
                  "height":32,
                  "id":604,
                  "name":"north east cave 4",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-east-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":7899
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":32,
                  "x":3040,
@@ -10864,8 +10897,19 @@
                  "height":64,
                  "id":800,
                  "name":"north east cave 5",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-east-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":2268
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":64,
                  "x":3232,
@@ -12404,8 +12448,19 @@
                  "height":96,
                  "id":964,
                  "name":"hole door way",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-east-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":4032
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":96,
                  "x":2272,

@@ -5995,6 +5995,12 @@
                  "height":32,
                  "id":735,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"radius",
+                         "type":"int",
+                         "value":8
+                        }],
                  "rotation":0,
                  "type":"light",
                  "visible":true,
@@ -6993,56 +6999,12 @@
                         {
                          "name":"chance",
                          "type":"int",
-                         "value":1
+                         "value":700
                         }, 
                         {
                          "name":"enemy",
                          "type":"int",
                          "value":9
-                        }, 
-                        {
-                         "name":"max",
-                         "type":"int",
-                         "value":20
-                        }],
-                 "rotation":0,
-                 "type":"enemyZone",
-                 "visible":true,
-                 "width":0,
-                 "x":1376,
-                 "y":128
-                }, 
-                {
-                 "height":0,
-                 "id":795,
-                 "name":"",
-                 "polygon":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":0,
-                         "y":384
-                        }, 
-                        {
-                         "x":288,
-                         "y":416
-                        }, 
-                        {
-                         "x":256,
-                         "y":32
-                        }],
-                 "properties":[
-                        {
-                         "name":"chance",
-                         "type":"int",
-                         "value":1
-                        }, 
-                        {
-                         "name":"enemy",
-                         "type":"int",
-                         "value":6
                         }, 
                         {
                          "name":"max",
@@ -7053,8 +7015,8 @@
                  "type":"enemyZone",
                  "visible":true,
                  "width":0,
-                 "x":576,
-                 "y":448
+                 "x":1376,
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
