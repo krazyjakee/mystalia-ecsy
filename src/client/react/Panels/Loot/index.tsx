@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { MapSchema } from "@colyseus/schema";
-import { Row, Col, Grid } from "react-flexbox-grid";
 import { guiAssetPath } from "../../cssUtilities";
 import { createUseStyles } from "react-jss";
-import { Section } from "../Section";
 import { useGameEvent } from "../../Hooks/useGameEvent";
 import LootState from "@server/components/loot";
 import { Button } from "@client/react/FormControls/Button";
 import { IconButton } from "@client/react/FormControls/IconButton";
 import { FaTimes } from "react-icons/fa";
+import { objectMap } from "utilities/loops";
+import LootItem from "./LootItem";
 
 const useStyles = createUseStyles({
   root: {
@@ -62,7 +62,8 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
   const slotRows = 3;
   const emptySlots = new Array(slotRows * 3).fill(0);
 
-  if (!iState && !forceEnable) return null;
+  if (!iState) return null;
+  if (!forceEnable) return null;
 
   return (
     <div className={classes.root}>
@@ -75,6 +76,11 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
         {emptySlots.map((_, index) => (
           <EmptySlot key={index} index={index} />
         ))}
+        {Object.values(
+          objectMap(iState.items, (_, item) => {
+            return <LootItem lootItem={item} />;
+          })
+        )}
         <Button className={classes.button} value="Grab All" />
       </div>
     </div>

@@ -106,4 +106,23 @@ export const ShopPanel = () => (
 
 export const ChatPanel = () => <ChatPanelComponent mapName="test" />;
 
-export const LootPanel = () => <LootPanelComponent forceEnable={true} />;
+export const LootPanel = () => {
+  const lootState = new MapSchema({
+    lootId: 0,
+    tileId: 0,
+    items: {
+      a: {
+        itemId: 0,
+        quantity: 1,
+        position: 0,
+      },
+      b: {
+        itemId: 0,
+        quantity: 3,
+        position: 1,
+      },
+    },
+  });
+
+  return <LootPanelComponent forceEnable={true} propsLootState={lootState} />;
+};
