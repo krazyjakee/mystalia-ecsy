@@ -39,7 +39,7 @@ export default function CreateLoot(
     .addComponent(Drawable, {
       image: tileSet.image,
       x: mapPosition.x,
-      y: mapPosition.y - 32,
+      y: mapPosition.y,
       sourceX: tileSetPosition.x,
       sourceY: tileSetPosition.y,
       sourceHeight: 32,

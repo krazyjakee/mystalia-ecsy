@@ -132,7 +132,7 @@ export default class LootSpawner {
               item.quantity[0],
               item.quantity[1]
             );
-            const position = availablePositions.shift();
+            const position = availablePositions.shift() || 0;
             if (quantity && isPresent(position)) {
               return new LootItemState({
                 itemId: item.itemId,
@@ -158,9 +158,9 @@ export default class LootSpawner {
     }
   }
 
-  addLoot(lootId: number, tileId: number, items: LootItemState[]) {
+  addLoot(lootId: number, tileId: number, items: LootItemState[] = []) {
     const uid = this.getUid(tileId);
-    this.room.state.loot[uid] = new LootState(lootId, tileId, []);
+    this.room.state.loot[uid] = new LootState(lootId, tileId, items);
   }
 
   grabbedItem(tileId: number, position: number) {

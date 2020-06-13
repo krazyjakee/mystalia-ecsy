@@ -3,14 +3,14 @@ import { createUseStyles } from "react-jss";
 import { tileIdToVector } from "utilities/tileMap";
 import { whiteText } from "../../palette";
 import Sprite from "@client/react/Utilities/Sprite";
-import LootItemState from "@server/components/lootItem";
 import { ItemSpec } from "types/TileMap/ItemTiles";
+import { SimpleLootItemState } from "./lootItemStateToArray";
 
 const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
 
 type Props = {
-  lootItem: LootItemState;
-  onClick: (item: LootItemState) => void;
+  lootItem: SimpleLootItemState;
+  onClick: (item: SimpleLootItemState) => void;
 };
 
 const useStyles = createUseStyles({

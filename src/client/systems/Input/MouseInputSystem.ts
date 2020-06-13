@@ -193,7 +193,7 @@ export default class MouseInputSystem extends System {
 
       if (!targetTile && clickedTileObjects && clickedTileObjects.length) {
         clickedTileObjects.forEach((tileObject) => {
-          if (["shop", "loot"].includes(tileObject.type)) {
+          if (["gate", "loot"].includes(tileObject.type)) {
             if (tileObject.type === "shop") {
               const { shopId } = tileObject.value;
               playerEntity.addComponent(OpenShopAtDestination, { shopId });

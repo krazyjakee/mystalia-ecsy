@@ -12,6 +12,9 @@ import LootItem from "./LootItem";
 import LootItemState from "@server/components/lootItem";
 import gameState from "@client/gameState";
 import { isPresent } from "utilities/guards";
+import lootItemStateToArray, {
+  SimpleLootItemState,
+} from "./lootItemStateToArray";
 
 const useStyles = createUseStyles({
   root: {
@@ -58,23 +61,37 @@ export default ({ forceEnable = false, propsLootState = [] }: Props) => {
   const [tileId, setTileId] = useState<number | undefined>(
     propsLootState ? 1 : undefined
   );
-  const [lootItems, setLootItems] = useState<LootItemState[]>(propsLootState);
+  const [lootItems, setLootItems] = useState<SimpleLootItemState[]>(
+    propsLootState
+  );
+
+  const lootOpen = (lootOpen) => {
+    setTileId(lootOpen.tileId);
+    gameState.trigger("localPlayer:loot:request", {
+      tileId: lootOpen.tileId,
+    });
+  };
+
+  const lootUpdate = (lootUpdate) => {
+    if (lootUpdate.tileId === tileId) {
+      const lootItemArray = lootItemStateToArray(lootUpdate.lootState.items);
+      if (!lootItemArray.length) {
+        setTileId(undefined);
+      }
+      setLootItems(lootItemArray);
+    }
+  };
 
   useEffect(() => {
-    gameState.subscribe("localPlayer:loot:open", (lootOpen) => {
-      setTileId(lootOpen.tileId);
-      gameState.trigger("localPlayer:loot:request", {
-        tileId: lootOpen.tileId,
-      });
-    });
-    gameState.subscribe("localPlayer:loot:update", (lootUpdate) => {
-      if (lootUpdate.tileId === tileId) {
-        setLootItems(
-          Object.values(objectMap(lootUpdate.lootState.items, (_, v) => v))
-        );
-      }
-    });
-  }, [lootItems, tileId]);
+    gameState.unsubscribe("localPlayer:loot:open", lootOpen);
+    gameState.unsubscribe("localPlayer:loot:update", lootUpdate);
+    gameState.subscribe("localPlayer:loot:open", lootOpen);
+    gameState.subscribe("localPlayer:loot:update", lootUpdate);
+    return () => {
+      gameState.unsubscribe("localPlayer:loot:open", lootOpen);
+      gameState.unsubscribe("localPlayer:loot:update", lootUpdate);
+    };
+  }, [tileId, lootItems]);
 
   if (!forceEnable) {
     if (!isPresent(tileId)) return null;
@@ -84,8 +101,8 @@ export default ({ forceEnable = false, propsLootState = [] }: Props) => {
   const slotRows = 3;
   const emptySlots = new Array(slotRows * 3).fill(0);
 
-  const grab = (lootItem: LootItemState) => {
-    if (lootItems && isPresent(tileId)) {
+  const grab = (lootItem: SimpleLootItemState) => {
+    if (lootItems.length && isPresent(tileId)) {
       gameState.send("map", "localPlayer:loot:grab", {
         tileId: tileId,
         position: lootItem.position,

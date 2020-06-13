@@ -43,6 +43,8 @@ import { UpdateLoot } from "@client/components/Loot";
 import { objectMap } from "utilities/loops";
 import { MapSchema } from "@colyseus/schema";
 import LootItemState from "@server/components/lootItem";
+import LootState from "@server/components/loot";
+import lootItemStateToArray from "@client/react/Panels/Loot/lootItemStateToArray";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -310,7 +312,7 @@ export default class NetworkingSystem extends System {
               if (change.field === "items") {
                 networkRoomEntity.addComponent(UpdateLoot, {
                   tileId: loot.tileId,
-                  items: Object.values(objectMap(change.value, (_, v) => v)),
+                  items: lootItemStateToArray(loot.items),
                 });
               }
             });
@@ -321,6 +323,7 @@ export default class NetworkingSystem extends System {
           };
 
           const sendUpdate = ({ tileId }) => {
+            console.log("localPlayer:loot:update", 2);
             gameState.trigger("localPlayer:loot:update", {
               tileId,
               lootState: loot,
@@ -338,14 +341,12 @@ export default class NetworkingSystem extends System {
               tileId: loot.tileId,
               items: [],
             });
+
             gameState.trigger("localPlayer:loot:update", {
               tileId: loot.tileId,
-              // TODO: Make an empty items schema
-              lootState: {
-                ...loot,
-                items: new MapSchema({}),
-              },
+              lootState: new LootState(loot.lootId, loot.tileId, []),
             });
+
             gameState.unsubscribe(
               "localPlayer:loot:request",
               sendUpdate,
