@@ -5,12 +5,11 @@ import { makeHash, randomHash } from "utilities/hash";
 import LootSchema from "@server/db/LootSchema";
 import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
-import { isPresent, clone } from "utilities/guards";
+import { isPresent } from "utilities/guards";
 import { objectMap, objectFindValue, objectFilter } from "utilities/loops";
 import { saveStateToDb } from "@server/utilities/dbState";
 import { randomNumberBetween } from "utilities/math";
 import { LootSpec } from "types/loot";
-import { MapSchema } from "@colyseus/schema";
 import lootItemStateToArray from "@client/react/Panels/Loot/lootItemStateToArray";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
@@ -21,7 +20,7 @@ export default class LootSpawner {
   room: MapRoom;
   timer?: NodeJS.Timeout;
   mapLoot: SerializedObjectTile<"loot">[] = [];
-  lootCounters: { [key: string]: number } = {};
+  lootCounters: { [key: string]: number } = {}; // TODO: Rename this to be "lootExpirations"
 
   constructor(room: MapRoom) {
     this.room = room;
@@ -48,6 +47,9 @@ export default class LootSpawner {
     });
   }
 
+  // TODO: Add a "checkExpired" function.
+
+  // TODO: Replace this with a function to update the "lootExpiration" with a future date
   setCountdown(tileId: number, lootId: number, timeLeft?: number) {
     const uid = this.getUid(tileId);
     if (isPresent(timeLeft)) {
@@ -64,6 +66,7 @@ export default class LootSpawner {
   tick() {
     const expiredLoot = this.mapLoot.filter((objectTile) => {
       const uid = this.getUid(objectTile.tileId);
+      // TODO: Remove the below logic and use the "checkExpired" function
       return !Boolean(
         objectFindValue(
           this.lootCounters,
@@ -89,6 +92,7 @@ export default class LootSpawner {
       }
     });
 
+    // TODO: Remove this
     Object.keys(this.lootCounters).forEach(
       (key) => (this.lootCounters[key] -= 1000)
     );
@@ -188,6 +192,7 @@ export default class LootSpawner {
       this.room.roomName,
       this.room.state.loot,
       (lootState: LootState) => {
+        // TODO: Get the lootExpiration instead
         const countdown = this.lootCounters[this.getUid(lootState.tileId)] || 0;
         const items = objectMap(
           lootState.items,
