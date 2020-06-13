@@ -11,6 +11,7 @@ import { saveStateToDb } from "@server/utilities/dbState";
 import { randomNumberBetween } from "utilities/math";
 import { LootSpec } from "types/loot";
 import { MapSchema } from "@colyseus/schema";
+import lootItemStateToArray from "@client/react/Panels/Loot/lootItemStateToArray";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
 
@@ -55,7 +56,7 @@ export default class LootSpawner {
       const spec = this.getSpec(lootId);
       if (spec) {
         this.lootCounters[uid] =
-          spec.daysToRespawn * (config.dayLengthInMinutes * 100); // TODO: Set back to 60000 when testing is done
+          spec.daysToRespawn * (config.dayLengthInMinutes * 1000); // TODO: Set back to 60000 when testing is done
       }
     }
   }
@@ -107,14 +108,10 @@ export default class LootSpawner {
     const lootState = this.room.state.loot[uid] as LootState;
     const spec = this.getSpec(lootId);
     if (lootState && spec) {
-      const items = this.room.state.loot[uid].items;
+      const items = lootItemStateToArray(this.room.state.loot[uid].items);
 
-      const existingItems = Object.values(
-        objectMap(items, (_, value: LootItemState) => value.itemId)
-      );
-      const existingPositions = Object.values(
-        objectMap(items, (_, value: LootItemState) => value.position)
-      );
+      const existingItems = items.map((item) => item.itemId);
+      const existingPositions = items.map((item) => item.position);
 
       const availablePositions: number[] = [];
       for (let i = 0; i < 6; i += 1) {
@@ -129,8 +126,8 @@ export default class LootSpawner {
           const roll = randomNumberBetween(item.chance);
           if (roll === 1) {
             const quantity = randomNumberBetween(
-              item.quantity[0],
-              item.quantity[1]
+              item.quantity[1],
+              item.quantity[0]
             );
             const position = availablePositions.shift() || 0;
             if (quantity && isPresent(position)) {

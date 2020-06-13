@@ -284,29 +284,6 @@ export default class NetworkingSystem extends System {
         };
 
         networkRoom.room.state.loot.onAdd = (loot) => {
-          const tmj = tileMapEntity.getComponent(Drawable).data as TMJ;
-          if (!tmj) return;
-
-          const lootTiles = getTilesByType("loot", tmj);
-          const tile = lootTiles.find(
-            (lootTile) => lootTile.tileId === loot.tileId
-          );
-          if (!tile) return;
-
-          const tileSetSource = tmj.tilesets.find(
-            (tileset) => tileset.firstgid < (tile.gid || 0)
-          );
-          if (!tileSetSource) return;
-
-          const externalTileSet = tileMap.tileSetStore[tileSetSource?.source];
-          CreateLoot(
-            tile,
-            (tile.gid || 0) - tileSetSource.firstgid,
-            loot,
-            tileMap.width,
-            externalTileSet
-          );
-
           loot.onChange = function(changes) {
             changes.forEach((change) => {
               if (change.field === "items") {
@@ -317,15 +294,14 @@ export default class NetworkingSystem extends System {
               }
             });
             gameState.trigger("localPlayer:loot:update", {
-              tileId: tile.tileId,
+              tileId: loot.tileId,
               lootState: loot,
             });
           };
 
           const sendUpdate = ({ tileId }) => {
-            console.log("localPlayer:loot:update", 2);
             gameState.trigger("localPlayer:loot:update", {
-              tileId,
+              tileId: loot.tileId,
               lootState: loot,
             });
           };

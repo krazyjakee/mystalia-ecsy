@@ -94,8 +94,10 @@ export default ({ forceEnable = false, propsLootState = [] }: Props) => {
   }, [tileId, lootItems]);
 
   if (!forceEnable) {
-    if (!isPresent(tileId)) return null;
-    if (!lootItems.length) return null;
+    if (!isPresent(tileId) || !lootItems.length) {
+      window.disableMovement = false;
+      return null;
+    }
   }
 
   const slotRows = 3;
@@ -116,12 +118,14 @@ export default ({ forceEnable = false, propsLootState = [] }: Props) => {
     lootItems.forEach((item) => grab(item));
   };
 
+  window.disableMovement = true;
+
   return (
     <div className={classes.root}>
       <IconButton
         Icon={FaTimes}
         className={classes.closeBtn}
-        onClick={() => setLootItems([])}
+        onClick={() => setTileId(undefined)}
       />
       <div className={classes.slotContainer}>
         {emptySlots.map((_, index) => (

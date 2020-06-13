@@ -80,6 +80,11 @@ export default class MouseInputSystem extends System {
   }
 
   execute() {
+    if (window.disableMovement) {
+      this.clickedPosition = undefined;
+      return;
+    }
+
     const tileMap =
       this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMap) return;

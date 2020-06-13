@@ -1,18 +1,17 @@
 import { getWorld } from "../ecsy";
 import Drawable from "@client/components/Drawable";
 import { SerializedObjectTile, tileIdToPixels } from "utilities/tileMap";
-import LootState from "@server/components/loot";
 import { TileSetStoreItem } from "types/TileMap/TileSetStore";
 import Loot from "@client/components/Loot";
-import { objectMap } from "utilities/loops";
 import { LootSpec } from "types/loot";
+import { SimpleLootItemState } from "@client/react/Panels/Loot/lootItemStateToArray";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
 
 export default function CreateLoot(
   objectTile: SerializedObjectTile<"loot">,
   sourceTileId: number,
-  lootState: LootState,
+  lootStateItems: SimpleLootItemState[],
   mapColumns: number,
   tileSet: TileSetStoreItem
 ) {
@@ -27,13 +26,7 @@ export default function CreateLoot(
   return getWorld()
     .createEntity()
     .addComponent(Loot, {
-      items: Object.values(
-        objectMap(lootState.items, (_, { itemId, position, quantity }) => ({
-          itemId,
-          position,
-          quantity,
-        }))
-      ),
+      items: lootStateItems,
       tileId: objectTile.tileId,
     })
     .addComponent(Drawable, {
