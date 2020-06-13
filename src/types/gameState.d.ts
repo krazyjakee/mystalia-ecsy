@@ -68,6 +68,9 @@ export interface GameStateEvents {
   "localPlayer:loot:open": {
     tileId: number;
   };
+  "localPlayer:loot:request": {
+    tileId: number;
+  };
   "localPlayer:loot:update": {
     tileId: number;
     lootState: LootState;

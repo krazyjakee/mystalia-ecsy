@@ -65,17 +65,21 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
   useEffect(() => {
     gameState.subscribe("localPlayer:loot:open", (lootOpen) => {
       setTileId(lootOpen.tileId);
+      gameState.trigger("localPlayer:loot:request", {
+        tileId: lootOpen.tileId,
+      });
     });
     gameState.subscribe("localPlayer:loot:update", (lootUpdate) => {
       if (lootUpdate.tileId === tileId) {
         setLootState(lootUpdate.lootState);
       }
     });
-  });
+  }, [lootState, tileId]);
 
-  if (!isPresent(tileId)) return null;
-  if (!lootState) return null;
-  if (!forceEnable) return null;
+  if (!forceEnable) {
+    if (!isPresent(tileId)) return null;
+    if (!lootState) return null;
+  }
 
   const slotRows = 3;
   const emptySlots = new Array(slotRows * 3).fill(0);
@@ -88,6 +92,8 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
       });
     }
   };
+
+  if (!lootState) return null;
 
   const grabAll = () => {
     objectForEach(lootState.items, (_, item) => grab(item));

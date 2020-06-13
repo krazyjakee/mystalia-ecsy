@@ -49,12 +49,16 @@ const mapObjectToTileTypes = memoize(
     let row = 0;
 
     for (let tileId = 0; tileId < totalTiles; tileId += 1) {
-      const newTileId = startTileId + col + row * tileMapColumns;
+      let newTileId = startTileId + col + row * tileMapColumns;
       const newObjectTile = {
         name,
         type: type || "block",
         value,
       };
+
+      if (object.gid) {
+        newTileId -= tileMapColumns;
+      }
 
       objectTileType[newTileId] = [newObjectTile];
 
@@ -143,7 +147,7 @@ export class ObjectTileStore {
 
   set<T extends ObjectTileTypeString>(tileId: number, data: ObjectTile<T>[]) {
     const objectTile = this.store[tileId];
-    this.store[tileId] = objectTile ? objectTile?.concat(data) : data;
+    this.store[tileId] = objectTile ? objectTile.concat(data) : data;
   }
 
   add(layer: Layer) {

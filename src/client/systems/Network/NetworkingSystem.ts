@@ -318,6 +318,19 @@ export default class NetworkingSystem extends System {
             });
           };
 
+          const sendUpdate = ({ tileId }) => {
+            gameState.trigger("localPlayer:loot:update", {
+              tileId,
+              lootState: loot,
+            });
+          };
+
+          gameState.subscribe(
+            "localPlayer:loot:request",
+            sendUpdate,
+            loot.tileId.toString()
+          );
+
           loot.onRemove = () => {
             networkRoomEntity.addComponent(UpdateLoot, {
               tileId: loot.tileId,
@@ -349,6 +362,7 @@ export default class NetworkingSystem extends System {
             );
             tileMapEntity.addComponent(Gray);
           }, 5000);
+          gameState.unsubscribe("localPlayer:loot:request");
         });
       });
     }
