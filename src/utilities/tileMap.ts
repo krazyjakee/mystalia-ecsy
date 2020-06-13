@@ -86,13 +86,19 @@ export const getTilesByType = memoize(
         const serializedObjects = objectsOfType
           .map((object) => {
             const serializedObject = serializeProperties<T>(object.properties);
+            let tileId = pixelsToTileId(
+              { x: object.x, y: object.y },
+              mapData.width
+            );
+
+            if (object.gid) {
+              tileId -= mapData.width;
+            }
+
             const newObject: SerializedObjectTile<T> = {
               ...object,
               properties: serializedObject,
-              tileId: pixelsToTileId(
-                { x: object.x, y: object.y },
-                mapData.width
-              ),
+              tileId,
             };
             return newObject;
           })

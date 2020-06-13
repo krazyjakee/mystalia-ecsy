@@ -24,6 +24,7 @@ import {
   tileIdToVector,
   vectorToTileId,
   vectorToPixels,
+  getTilesByType,
 } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
 import Item from "@client/components/Item";
@@ -35,6 +36,15 @@ import Weather from "@client/components/Weather";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import Enemy from "@client/components/Enemy";
 import CreateEffect from "@client/entities/Effect";
+import CreateLoot from "@client/entities/Loot";
+import Drawable from "@client/components/Drawable";
+import { TMJ } from "types/TMJ";
+import { UpdateLoot } from "@client/components/Loot";
+import { objectMap } from "utilities/loops";
+import { MapSchema } from "@colyseus/schema";
+import LootItemState from "@server/components/lootItem";
+import LootState from "@server/components/loot";
+import lootItemStateToArray from "@client/react/Panels/Loot/lootItemStateToArray";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -273,6 +283,54 @@ export default class NetworkingSystem extends System {
           }
         };
 
+        networkRoom.room.state.loot.onAdd = (loot) => {
+          loot.onChange = function(changes) {
+            changes.forEach((change) => {
+              if (change.field === "items") {
+                networkRoomEntity.addComponent(UpdateLoot, {
+                  tileId: loot.tileId,
+                  items: lootItemStateToArray(loot.items),
+                });
+              }
+            });
+            gameState.trigger("localPlayer:loot:update", {
+              tileId: loot.tileId,
+              lootState: loot,
+            });
+          };
+
+          const sendUpdate = ({ tileId }) => {
+            gameState.trigger("localPlayer:loot:update", {
+              tileId: loot.tileId,
+              lootState: loot,
+            });
+          };
+
+          gameState.subscribe(
+            "localPlayer:loot:request",
+            sendUpdate,
+            loot.tileId.toString()
+          );
+
+          loot.onRemove = () => {
+            networkRoomEntity.addComponent(UpdateLoot, {
+              tileId: loot.tileId,
+              items: [],
+            });
+
+            gameState.trigger("localPlayer:loot:update", {
+              tileId: loot.tileId,
+              lootState: new LootState(loot.lootId, loot.tileId, []),
+            });
+
+            gameState.unsubscribe(
+              "localPlayer:loot:request",
+              sendUpdate,
+              loot.tileId.toString()
+            );
+          };
+        };
+
         networkRoom.room.state.weather.onAdd = (weatherState) => {
           const weather = tileMapEntity.getMutableComponent(Weather);
           if (weather) {
@@ -296,6 +354,7 @@ export default class NetworkingSystem extends System {
             );
             tileMapEntity.addComponent(Gray);
           }, 5000);
+          gameState.unsubscribe("localPlayer:loot:request");
         });
       });
     }

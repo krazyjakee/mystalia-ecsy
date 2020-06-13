@@ -15,6 +15,7 @@ import context2d from "../../../canvas";
 import AnimatedTile from "@client/components/AnimatedTile";
 import Item from "@client/components/Item";
 import Gate from "@client/components/Gate";
+import Loot from "@client/components/Loot";
 
 export default class TileMapDrawer extends System {
   static queries = {
@@ -29,6 +30,9 @@ export default class TileMapDrawer extends System {
     },
     gates: {
       components: [Gate],
+    },
+    loot: {
+      components: [Loot],
     },
   };
 
@@ -107,6 +111,18 @@ export default class TileMapDrawer extends System {
             drawImage(
               drawableWithOffset(
                 drawableToDrawableProperties(gateDrawable),
+                offset
+              )
+            );
+          }
+        });
+
+        this.queries.loot.results.forEach((loot: Entity) => {
+          if (loot.getComponent(Loot).items.length) {
+            const lootDrawable = loot.getComponent(Drawable);
+            drawImage(
+              drawableWithOffset(
+                drawableToDrawableProperties(lootDrawable),
                 offset
               )
             );

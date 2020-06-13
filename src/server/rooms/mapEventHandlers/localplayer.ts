@@ -11,6 +11,8 @@ import { performTrade } from "@server/utilities/commandHandlers/shop";
 import { ShopSpec } from "types/shops";
 import PlayerState from "@server/components/player";
 import { movementWalkOff } from "@server/utilities/commandHandlers/map";
+import { getTilesByType } from "utilities/tileMap";
+import ItemState from "@server/components/item";
 const shops = require("utilities/data/shop.json") as ShopSpec[];
 
 export class MovementReportCommand extends Command<
@@ -127,5 +129,24 @@ export class BattleUnTargetCommand extends Command<
 > {
   execute({ sessionId }) {
     (this.state.players[sessionId] as PlayerState).targetEnemy = undefined;
+  }
+}
+
+export class LootGrabCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:loot:grab"> }
+> {
+  execute({ sessionId, data }) {
+    const player = this.state.players[sessionId] as PlayerState;
+    const room = this.room as MapRoom;
+    if (!room.lootSpawner) return;
+
+    const item = room.lootSpawner.grabbedItem(data.tileId, data.position);
+    if (item) {
+      const itemState = new ItemState(item.itemId, -1, item.quantity);
+      if (addItemToPlayer(player.inventory, itemState)) {
+        room.lootSpawner.removeItem(data.tileId, data.position);
+      }
+    }
   }
 }

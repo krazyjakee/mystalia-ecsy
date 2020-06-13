@@ -37,7 +37,7 @@ export default class KeyboardInputSystem extends System {
     document.addEventListener(
       "keydown",
       (e) => {
-        if (window.keyboardBusy) return;
+        if (window.keyboardBusy || window.disableMovement) return;
         const key = e.code;
         if (!this.pressedKeys.includes(key) && !e.repeat) {
           this.pressedKeys.push(key);
@@ -48,7 +48,7 @@ export default class KeyboardInputSystem extends System {
     document.addEventListener(
       "keyup",
       (e) => {
-        if (window.keyboardBusy) return;
+        if (window.keyboardBusy || window.disableMovement) return;
         const key = e.code;
         this.pressedKeys.splice(this.pressedKeys.indexOf(key), 1);
       },

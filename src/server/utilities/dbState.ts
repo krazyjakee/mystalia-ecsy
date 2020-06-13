@@ -1,12 +1,16 @@
 import PlayerState from "../components/player";
 import users, { IUser } from "@colyseus/social/src/models/User";
 import { isPresent } from "utilities/guards";
-import { InventoryStateProps } from "@server/components/inventory";
+import InventoryState, {
+  InventoryStateProps,
+} from "@server/components/inventory";
 import ItemSchema from "../db/ItemSchema";
 import EnemySchema from "../db/EnemySchema";
 import { mongoose } from "@colyseus/social";
 import { MapSchema, ArraySchema, Schema } from "@colyseus/schema";
 import WeatherSchema from "../db/WeatherSchema";
+import LootSchema from "@server/db/LootSchema";
+import { objectMap } from "utilities/loops";
 
 export const savePlayerState = async (player: PlayerState, room: string) => {
   if (player.dbId) {
@@ -16,14 +20,15 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
       let inventory: InventoryStateProps[] = [];
 
       if (player.inventory) {
-        inventory = Object.keys(player.inventory)
-          .filter((key) => isPresent(player.inventory[key].itemId))
-          .map((key) => {
-            const { itemId, position, quantity, equipped } = player.inventory[
-              key
-            ];
-            return { itemId, position, quantity, equipped };
-          });
+        inventory = Object.values(
+          objectMap(
+            player.inventory,
+            (_, { itemId, position, quantity, equipped }: InventoryState) =>
+              isPresent(itemId)
+                ? { itemId, position, quantity, equipped }
+                : undefined
+          )
+        ).filter(isPresent);
       }
 
       const newData: Partial<IUser> = {
@@ -64,6 +69,10 @@ const schemas = {
   Weather: {
     schema: WeatherSchema,
     fields: ["biome", "weathers", "duration"],
+  },
+  Loot: {
+    schema: LootSchema,
+    fields: ["lootId", "tileId", "items"],
   },
 };
 

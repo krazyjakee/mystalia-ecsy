@@ -25,6 +25,7 @@ import { isPresent } from "utilities/guards";
 import tileInDirection from "@client/utilities/TileMap/tileInDirection";
 import getNextTileData from "@client/utilities/TileMap/getNextTileData";
 import gameState from "@client/gameState";
+import { OpenLootAtDestination } from "@client/components/Loot";
 
 export default class MouseInputSystem extends System {
   clickedPosition?: Vector;
@@ -79,6 +80,11 @@ export default class MouseInputSystem extends System {
   }
 
   execute() {
+    if (window.disableMovement) {
+      this.clickedPosition = undefined;
+      return;
+    }
+
     const tileMap =
       this.queries.tileMaps.results.length && this.queries.tileMaps.results[0];
     if (!tileMap) return;
@@ -192,9 +198,16 @@ export default class MouseInputSystem extends System {
 
       if (!targetTile && clickedTileObjects && clickedTileObjects.length) {
         clickedTileObjects.forEach((tileObject) => {
-          if (tileObject.type === "shop") {
-            const { shopId } = tileObject.value;
-            playerEntity.addComponent(OpenShopAtDestination, { shopId });
+          if (["gate", "loot"].includes(tileObject.type)) {
+            if (tileObject.type === "shop") {
+              const { shopId } = tileObject.value;
+              playerEntity.addComponent(OpenShopAtDestination, { shopId });
+            } else if (tileObject.type === "loot") {
+              playerEntity.addComponent(OpenLootAtDestination, {
+                tileId: clickedTile,
+              });
+            }
+
             const movement = playerEntity.getComponent(Movement);
             const closestPath = findClosestPath(
               tileMapComponent.objectTileStore,

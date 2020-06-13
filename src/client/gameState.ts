@@ -87,13 +87,15 @@ class GameState {
     eventName: T,
     options: GameStateEvents[T]
   ) {
-    if (this.callbacks[eventName]) {
-      this.callbacks[eventName].forEach((callbackObject) => {
-        if (callbackObject.callback(options) === false) {
-          this.unsubscribe(eventName, callbackObject.callback);
-        }
-      });
-    }
+    setTimeout(() => {
+      if (this.callbacks[eventName]) {
+        this.callbacks[eventName].forEach((callbackObject) => {
+          if (callbackObject.callback(options) === false) {
+            this.unsubscribe(eventName, callbackObject.callback);
+          }
+        });
+      }
+    }, 1);
   }
 }
 

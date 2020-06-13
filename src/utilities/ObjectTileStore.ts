@@ -9,6 +9,7 @@ import { Attributes, Layer, Property, TMJ } from "types/TMJ";
 import aStar from "utilities/movement/aStar";
 import { makeHash } from "./hash";
 import memoize from "./memoize";
+import { objectForEach } from "./loops";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -48,12 +49,16 @@ const mapObjectToTileTypes = memoize(
     let row = 0;
 
     for (let tileId = 0; tileId < totalTiles; tileId += 1) {
-      const newTileId = startTileId + col + row * tileMapColumns;
+      let newTileId = startTileId + col + row * tileMapColumns;
       const newObjectTile = {
         name,
         type: type || "block",
         value,
       };
+
+      if (object.gid) {
+        newTileId -= tileMapColumns;
+      }
 
       objectTileType[newTileId] = [newObjectTile];
 
@@ -142,7 +147,7 @@ export class ObjectTileStore {
 
   set<T extends ObjectTileTypeString>(tileId: number, data: ObjectTile<T>[]) {
     const objectTile = this.store[tileId];
-    this.store[tileId] = objectTile ? objectTile?.concat(data) : data;
+    this.store[tileId] = objectTile ? objectTile.concat(data) : data;
   }
 
   add(layer: Layer) {
@@ -152,13 +157,11 @@ export class ObjectTileStore {
 
     layer.objects.forEach((object) => {
       const tileData = mapObjectToTileTypes(object, this.columns);
-      Object.keys(tileData).forEach((id) => {
-        const tileId = parseInt(id);
-        const objectTile = tileData[tileId];
-        if (objectTile) {
-          this.set(tileId, objectTile);
-        }
-      });
+      objectForEach(
+        tileData,
+        (tileId, objectTile) =>
+          objectTile && this.set(parseInt(tileId), objectTile)
+      );
     });
   }
 

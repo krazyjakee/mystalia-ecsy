@@ -46,6 +46,9 @@ export type ObjectTileType = {
   patrol: {
     id: number;
   };
+  loot: {
+    lootId: number;
+  };
 };
 
 export type ObjectTileTypeString = keyof ObjectTileType;

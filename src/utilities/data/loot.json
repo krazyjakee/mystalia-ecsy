@@ -1,0 +1,31 @@
+[
+  {
+    "id": 0,
+    "name": "Forest Trash",
+    "items": [
+      {
+        "itemId": 0,
+        "chance": 1,
+        "quantity": [1, 3]
+      }
+    ],
+    "daysToRespawn": 2
+  },
+  {
+    "id": 1,
+    "name": "Forest Trash 2",
+    "items": [
+      {
+        "itemId": 1,
+        "chance": 1,
+        "quantity": [1, 3]
+      },
+      {
+        "itemId": 0,
+        "chance": 1,
+        "quantity": [1, 2]
+      }
+    ],
+    "daysToRespawn": 2
+  }
+]

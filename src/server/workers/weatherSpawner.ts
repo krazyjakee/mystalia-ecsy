@@ -47,6 +47,8 @@ export default class WeatherSpawner {
   }
 
   async tick() {
+    if (!matchMaker.presence) return;
+
     const biomeWorkerExists = await matchMaker.presence.hget(
       `${this.presenceKey}:enabled`,
       "i"

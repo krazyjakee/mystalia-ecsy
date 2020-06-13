@@ -8,6 +8,7 @@ import {
   BattleTargetEnemyCommand,
   BattleUnTargetCommand,
   MovementWalkOffCommand,
+  LootGrabCommand,
 } from "./localplayer";
 import { ChatPublishCommand, GlobalChatPublishCommand } from "./chat";
 
@@ -21,6 +22,7 @@ export type RoomCommandsAvailable = Extract<
   | "localPlayer:shop:trade"
   | "localPlayer:battle:targetEnemy"
   | "localPlayer:battle:unTarget"
+  | "localPlayer:loot:grab"
   | "chat:publish:global"
 >;
 
@@ -33,6 +35,7 @@ export const roomCommands: { [key in RoomCommandsAvailable]: any } = {
   "localPlayer:shop:trade": ShopTradeCommand,
   "localPlayer:battle:targetEnemy": BattleTargetEnemyCommand,
   "localPlayer:battle:unTarget": BattleUnTargetCommand,
+  "localPlayer:loot:grab": LootGrabCommand,
   "chat:publish:global": GlobalChatPublishCommand,
 };
 

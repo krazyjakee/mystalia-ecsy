@@ -33,7 +33,7 @@ import WeatherSystem from "./systems/Rendering/WeatherSystem";
 import "./entities";
 import EnemyStatusSystem from "./systems/HUD/EnemyStatusSystem";
 import PickUpSystem from "./systems/MovementSystem/PickUpSystem";
-import ShopOpenSystem from "./systems/MovementSystem/ShopOpenSystem";
+import TileActionSystem from "./systems/MovementSystem/TileActionSystem";
 import BattleSystem from "./systems/BattleSystem";
 import InventorySystem from "./systems/InventorySystem";
 import CharacterHighlightSystem from "./systems/Rendering/CharacterHighlightSystem";
@@ -42,6 +42,7 @@ import SpriteSheetAnimationSystem from "./systems/Rendering/SpriteSheetAnimation
 import BehaviourSystem from "./systems/MovementSystem/Behaviour";
 import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerSystem";
 import GateSystem from "./systems/Rendering/GateSystem";
+import LootSystem from "./systems/Rendering/LootSystem";
 
 let world = new World();
 
@@ -58,7 +59,7 @@ export default (user: User) => {
     .registerSystem(ScrollingSystem)
     .registerSystem(MovementSystem)
     .registerSystem(PickUpSystem)
-    .registerSystem(ShopOpenSystem)
+    .registerSystem(TileActionSystem)
     .registerSystem(MapChangeSystem)
     .registerSystem(AnimationSystem)
     .registerSystem(ItemSystem)
@@ -78,6 +79,7 @@ export default (user: User) => {
     .registerSystem(BehaviourSystem)
     .registerSystem(LookAtPlayerSystem)
     .registerSystem(GateSystem)
+    .registerSystem(LootSystem)
     .registerSystem(TextBurstSystem)
     .registerSystem(SpriteSheetAnimationSystem)
     .registerSystem(CommandsSystem)
