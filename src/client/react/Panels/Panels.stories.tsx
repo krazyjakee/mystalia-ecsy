@@ -10,6 +10,8 @@ import { Status as StatusComponent } from "./Status";
 import ShopPanelComponent from "./Shop/ShopPanel";
 import LootPanelComponent from "./Loot";
 import { MapSchema } from "@colyseus/schema";
+import LootState from "@server/components/loot";
+import LootItemState from "@server/components/lootItem";
 
 export default {
   title: "Panels",
@@ -107,22 +109,10 @@ export const ShopPanel = () => (
 export const ChatPanel = () => <ChatPanelComponent mapName="test" />;
 
 export const LootPanel = () => {
-  const lootState = new MapSchema({
-    lootId: 0,
-    tileId: 0,
-    items: {
-      a: {
-        itemId: 0,
-        quantity: 1,
-        position: 0,
-      },
-      b: {
-        itemId: 0,
-        quantity: 3,
-        position: 1,
-      },
-    },
-  });
+  const lootState = new LootState(0, 0, [
+    new LootItemState({ itemId: 0, position: 0, quantity: 1 }),
+    new LootItemState({ itemId: 0, position: 1, quantity: 3 }),
+  ]);
 
   return <LootPanelComponent forceEnable={true} propsLootState={lootState} />;
 };

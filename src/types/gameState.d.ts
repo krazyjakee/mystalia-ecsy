@@ -70,7 +70,11 @@ export interface GameStateEvents {
   };
   "localPlayer:loot:response": {
     tileId: number;
-    lootState: MapSchema<LootState>;
+    lootState: LootState;
+  };
+  "localPlayer:loot:grab": {
+    tileId: number;
+    position: number;
   };
   "localPlayer:battle:targetEnemy": EnemyReference;
   "localPlayer:battle:unTarget": undefined;

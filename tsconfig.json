@@ -18,6 +18,5 @@
       "utilities/*": ["src/utilities/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.stories.*"]
+  "include": ["src/**/*"]
 }

@@ -7,8 +7,10 @@ import LootState from "@server/components/loot";
 import { Button } from "@client/react/FormControls/Button";
 import { IconButton } from "@client/react/FormControls/IconButton";
 import { FaTimes } from "react-icons/fa";
-import { objectMap } from "utilities/loops";
+import { objectMap, objectFindValue, objectForEach } from "utilities/loops";
 import LootItem from "./LootItem";
+import LootItemState from "@server/components/lootItem";
+import gameState from "@client/gameState";
 
 const useStyles = createUseStyles({
   root: {
@@ -42,7 +44,7 @@ const useStyles = createUseStyles({
 
 type Props = {
   forceEnable?: boolean;
-  propsLootState?: MapSchema<LootState>;
+  propsLootState?: LootState;
 };
 
 const EmptySlot = (props: { index: number }) => {
@@ -53,17 +55,30 @@ const EmptySlot = (props: { index: number }) => {
 export default ({ forceEnable = false, propsLootState }: Props) => {
   const classes = useStyles();
   const [lootState] = useGameEvent("localPlayer:loot:response");
-  const [iState, setiState] = useState<MapSchema<LootState>>();
+  const [iState, setiState] = useState<LootState>();
 
   useEffect(() => {
     setiState(lootState?.lootState || propsLootState);
   });
+
+  const grab = (lootItem: LootItemState) => {
+    if (lootState) {
+      gameState.send("map", "localPlayer:loot:grab", {
+        tileId: lootState.tileId,
+        position: lootItem.position,
+      });
+    }
+  };
 
   const slotRows = 3;
   const emptySlots = new Array(slotRows * 3).fill(0);
 
   if (!iState) return null;
   if (!forceEnable) return null;
+
+  const grabAll = () => {
+    objectForEach(iState.items, (_, item) => grab(item));
+  };
 
   return (
     <div className={classes.root}>
@@ -77,11 +92,11 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
           <EmptySlot key={index} index={index} />
         ))}
         {Object.values(
-          objectMap(iState.items, (_, item) => {
-            return <LootItem lootItem={item} />;
-          })
+          objectMap(iState.items, (_, item) => (
+            <LootItem onClick={() => grab(item)} lootItem={item} />
+          ))
         )}
-        <Button className={classes.button} value="Grab All" />
+        <Button onClick={grabAll} className={classes.button} value="Grab All" />
       </div>
     </div>
   );

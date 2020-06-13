@@ -10,6 +10,7 @@ const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
 
 type Props = {
   lootItem: LootItemState;
+  onClick: (item: LootItemState) => void;
 };
 
 const useStyles = createUseStyles({
@@ -46,7 +47,7 @@ export default (props: Props) => {
   if (!item) return null;
 
   return (
-    <div>
+    <div onClick={() => props.onClick(lootItem)}>
       <div className={classes.root} style={rootStyles} title={item?.name}>
         <Sprite
           spriteId={item.spriteId}
