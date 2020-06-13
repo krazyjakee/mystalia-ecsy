@@ -65,10 +65,10 @@ export interface GameStateEvents {
   "localPlayer:inventory:equip": {
     position: number;
   };
-  "localPlayer:loot:request": {
+  "localPlayer:loot:open": {
     tileId: number;
   };
-  "localPlayer:loot:response": {
+  "localPlayer:loot:update": {
     tileId: number;
     lootState: LootState;
   };

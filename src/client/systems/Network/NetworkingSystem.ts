@@ -312,6 +312,10 @@ export default class NetworkingSystem extends System {
                 });
               }
             });
+            gameState.trigger("localPlayer:loot:update", {
+              tileId: tile.tileId,
+              lootState: loot,
+            });
           };
 
           loot.onRemove = () => {

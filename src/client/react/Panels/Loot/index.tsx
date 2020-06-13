@@ -7,10 +7,11 @@ import LootState from "@server/components/loot";
 import { Button } from "@client/react/FormControls/Button";
 import { IconButton } from "@client/react/FormControls/IconButton";
 import { FaTimes } from "react-icons/fa";
-import { objectMap, objectFindValue, objectForEach } from "utilities/loops";
+import { objectMap, objectForEach } from "utilities/loops";
 import LootItem from "./LootItem";
 import LootItemState from "@server/components/lootItem";
 import gameState from "@client/gameState";
+import { isPresent } from "utilities/guards";
 
 const useStyles = createUseStyles({
   root: {
@@ -54,12 +55,30 @@ const EmptySlot = (props: { index: number }) => {
 
 export default ({ forceEnable = false, propsLootState }: Props) => {
   const classes = useStyles();
-  const [lootState] = useGameEvent("localPlayer:loot:response");
-  const [iState, setiState] = useState<LootState>();
+  const [tileId, setTileId] = useState<number | undefined>(
+    propsLootState ? 1 : undefined
+  );
+  const [lootState, setLootState] = useState<LootState | undefined>(
+    propsLootState
+  );
 
   useEffect(() => {
-    setiState(lootState?.lootState || propsLootState);
+    gameState.subscribe("localPlayer:loot:open", (lootOpen) => {
+      setTileId(lootOpen.tileId);
+    });
+    gameState.subscribe("localPlayer:loot:update", (lootUpdate) => {
+      if (lootUpdate.tileId === tileId) {
+        setLootState(lootUpdate.lootState);
+      }
+    });
   });
+
+  if (!isPresent(tileId)) return null;
+  if (!lootState) return null;
+  if (!forceEnable) return null;
+
+  const slotRows = 3;
+  const emptySlots = new Array(slotRows * 3).fill(0);
 
   const grab = (lootItem: LootItemState) => {
     if (lootState) {
@@ -70,14 +89,8 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
     }
   };
 
-  const slotRows = 3;
-  const emptySlots = new Array(slotRows * 3).fill(0);
-
-  if (!iState) return null;
-  if (!forceEnable) return null;
-
   const grabAll = () => {
-    objectForEach(iState.items, (_, item) => grab(item));
+    objectForEach(lootState.items, (_, item) => grab(item));
   };
 
   return (
@@ -85,15 +98,15 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
       <IconButton
         Icon={FaTimes}
         className={classes.closeBtn}
-        onClick={() => setiState(undefined)}
+        onClick={() => setLootState(undefined)}
       />
       <div className={classes.slotContainer}>
         {emptySlots.map((_, index) => (
           <EmptySlot key={index} index={index} />
         ))}
         {Object.values(
-          objectMap(iState.items, (_, item) => (
-            <LootItem onClick={() => grab(item)} lootItem={item} />
+          objectMap(lootState.items, (key, item) => (
+            <LootItem key={key} onClick={() => grab(item)} lootItem={item} />
           ))
         )}
         <Button onClick={grabAll} className={classes.button} value="Grab All" />

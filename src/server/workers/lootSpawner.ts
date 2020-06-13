@@ -6,10 +6,11 @@ import LootSchema from "@server/db/LootSchema";
 import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
 import { isPresent, clone } from "utilities/guards";
-import { objectMap, objectFindValue } from "utilities/loops";
+import { objectMap, objectFindValue, objectFilter } from "utilities/loops";
 import { saveStateToDb } from "@server/utilities/dbState";
 import { randomNumberBetween } from "utilities/math";
 import { LootSpec } from "types/loot";
+import { MapSchema } from "@colyseus/schema";
 
 const lootSpecs = require("utilities/data/loot.json") as LootSpec[];
 
@@ -160,6 +161,24 @@ export default class LootSpawner {
   addLoot(lootId: number, tileId: number, items: LootItemState[]) {
     const uid = this.getUid(tileId);
     this.room.state.loot[uid] = new LootState(lootId, tileId, []);
+  }
+
+  grabbedItem(tileId: number, position: number) {
+    const uid = this.getUid(tileId);
+    const item = objectFindValue(
+      this.room.state.loot[uid].items,
+      (_, item) => item.position === position
+    );
+    return item as LootItemState;
+  }
+
+  removeItem(tileId, position) {
+    const uid = this.getUid(tileId);
+    const item = objectFilter(
+      this.room.state.loot[uid].items,
+      (_, item) => item.position === position
+    );
+    delete this.room.state.loot[uid].items[Object.keys(item)[0]];
   }
 
   async dispose() {

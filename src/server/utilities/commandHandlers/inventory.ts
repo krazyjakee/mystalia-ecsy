@@ -45,6 +45,8 @@ export const addItemToPlayer = (
     quantity: item.quantity,
     equipped: false,
   });
+
+  return true;
 };
 
 export const moveInventoryItem = (
