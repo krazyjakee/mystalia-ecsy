@@ -17,7 +17,7 @@ export const addItemToPlayer = (
   matches.forEach((key) => {
     inventoryState[key].quantity += item.quantity;
   });
-  if (matches.length) return;
+  if (matches.length) return true;
 
   // Otherwise add the item
   const positions = Object.values<number>(

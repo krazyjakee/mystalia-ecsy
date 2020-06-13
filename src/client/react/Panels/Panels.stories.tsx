@@ -109,10 +109,10 @@ export const ShopPanel = () => (
 export const ChatPanel = () => <ChatPanelComponent mapName="test" />;
 
 export const LootPanel = () => {
-  const lootState = new LootState(0, 0, [
+  const lootState = [
     new LootItemState({ itemId: 0, position: 0, quantity: 1 }),
     new LootItemState({ itemId: 0, position: 1, quantity: 3 }),
-  ]);
+  ];
 
   return <LootPanelComponent forceEnable={true} propsLootState={lootState} />;
 };

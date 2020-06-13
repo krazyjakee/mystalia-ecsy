@@ -41,6 +41,8 @@ import Drawable from "@client/components/Drawable";
 import { TMJ } from "types/TMJ";
 import { UpdateLoot } from "@client/components/Loot";
 import { objectMap } from "utilities/loops";
+import { MapSchema } from "@colyseus/schema";
+import LootItemState from "@server/components/lootItem";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -336,6 +338,19 @@ export default class NetworkingSystem extends System {
               tileId: loot.tileId,
               items: [],
             });
+            gameState.trigger("localPlayer:loot:update", {
+              tileId: loot.tileId,
+              // TODO: Make an empty items schema
+              lootState: {
+                ...loot,
+                items: new MapSchema({}),
+              },
+            });
+            gameState.unsubscribe(
+              "localPlayer:loot:request",
+              sendUpdate,
+              loot.tileId.toString()
+            );
           };
         };
 

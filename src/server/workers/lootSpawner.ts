@@ -165,11 +165,13 @@ export default class LootSpawner {
 
   grabbedItem(tileId: number, position: number) {
     const uid = this.getUid(tileId);
-    const item = objectFindValue(
-      this.room.state.loot[uid].items,
-      (_, item) => item.position === position
-    );
-    return item as LootItemState;
+    if (this.room.state.loot[uid]) {
+      const item = objectFindValue(
+        this.room.state.loot[uid].items,
+        (_, item) => item.position === position
+      );
+      return item as LootItemState;
+    }
   }
 
   removeItem(tileId, position) {

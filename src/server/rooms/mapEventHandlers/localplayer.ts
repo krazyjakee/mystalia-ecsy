@@ -142,9 +142,11 @@ export class LootGrabCommand extends Command<
     if (!room.lootSpawner) return;
 
     const item = room.lootSpawner.grabbedItem(data.tileId, data.position);
-    const itemState = new ItemState(item.itemId, -1, item.quantity);
-    if (addItemToPlayer(player.inventory, itemState)) {
-      room.lootSpawner.removeItem(data.tileId, data.position);
+    if (item) {
+      const itemState = new ItemState(item.itemId, -1, item.quantity);
+      if (addItemToPlayer(player.inventory, itemState)) {
+        room.lootSpawner.removeItem(data.tileId, data.position);
+      }
     }
   }
 }

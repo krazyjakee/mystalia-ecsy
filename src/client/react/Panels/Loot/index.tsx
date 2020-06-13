@@ -45,7 +45,7 @@ const useStyles = createUseStyles({
 
 type Props = {
   forceEnable?: boolean;
-  propsLootState?: LootState;
+  propsLootState?: LootItemState[];
 };
 
 const EmptySlot = (props: { index: number }) => {
@@ -53,14 +53,12 @@ const EmptySlot = (props: { index: number }) => {
   return <div className={classes.emptySlot} />;
 };
 
-export default ({ forceEnable = false, propsLootState }: Props) => {
+export default ({ forceEnable = false, propsLootState = [] }: Props) => {
   const classes = useStyles();
   const [tileId, setTileId] = useState<number | undefined>(
     propsLootState ? 1 : undefined
   );
-  const [lootState, setLootState] = useState<LootState | undefined>(
-    propsLootState
-  );
+  const [lootItems, setLootItems] = useState<LootItemState[]>(propsLootState);
 
   useEffect(() => {
     gameState.subscribe("localPlayer:loot:open", (lootOpen) => {
@@ -71,32 +69,34 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
     });
     gameState.subscribe("localPlayer:loot:update", (lootUpdate) => {
       if (lootUpdate.tileId === tileId) {
-        setLootState(lootUpdate.lootState);
+        setLootItems(
+          Object.values(objectMap(lootUpdate.lootState.items, (_, v) => v))
+        );
       }
     });
-  }, [lootState, tileId]);
+  }, [lootItems, tileId]);
 
   if (!forceEnable) {
     if (!isPresent(tileId)) return null;
-    if (!lootState) return null;
+    if (!lootItems.length) return null;
   }
 
   const slotRows = 3;
   const emptySlots = new Array(slotRows * 3).fill(0);
 
   const grab = (lootItem: LootItemState) => {
-    if (lootState) {
+    if (lootItems && isPresent(tileId)) {
       gameState.send("map", "localPlayer:loot:grab", {
-        tileId: lootState.tileId,
+        tileId: tileId,
         position: lootItem.position,
       });
     }
   };
 
-  if (!lootState) return null;
+  if (!lootItems.length) return null;
 
   const grabAll = () => {
-    objectForEach(lootState.items, (_, item) => grab(item));
+    lootItems.forEach((item) => grab(item));
   };
 
   return (
@@ -104,17 +104,19 @@ export default ({ forceEnable = false, propsLootState }: Props) => {
       <IconButton
         Icon={FaTimes}
         className={classes.closeBtn}
-        onClick={() => setLootState(undefined)}
+        onClick={() => setLootItems([])}
       />
       <div className={classes.slotContainer}>
         {emptySlots.map((_, index) => (
           <EmptySlot key={index} index={index} />
         ))}
-        {Object.values(
-          objectMap(lootState.items, (key, item) => (
-            <LootItem key={key} onClick={() => grab(item)} lootItem={item} />
-          ))
-        )}
+        {lootItems.map((item) => (
+          <LootItem
+            key={item.position}
+            onClick={() => grab(item)}
+            lootItem={item}
+          />
+        ))}
         <Button onClick={grabAll} className={classes.button} value="Grab All" />
       </div>
     </div>
