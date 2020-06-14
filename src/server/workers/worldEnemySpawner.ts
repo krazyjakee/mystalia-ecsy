@@ -18,7 +18,8 @@ export default class WorldEnemySpawner {
 
   constructor(room: MapRoom) {
     this.room = room;
-    this.checkForMaster();
+    // this.checkForMaster();
+    // TODO: Disabled until inaccessible maps don't cause an inifinite loop in travelers somewhere
   }
 
   async checkForMaster() {

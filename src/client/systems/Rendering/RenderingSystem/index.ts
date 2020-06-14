@@ -66,7 +66,7 @@ export default class TileMapDrawer extends System {
           image: canvasCache[0],
         });
 
-        animatedTiles.drawables[1].forEach(
+        animatedTiles.drawables[0].forEach(
           (tile) =>
             tile.drawable &&
             drawImage(drawableWithOffset(tile.drawable, offset))
@@ -95,7 +95,7 @@ export default class TileMapDrawer extends System {
           );
         });
 
-        animatedTiles.drawables[0].forEach(
+        animatedTiles.drawables[1].forEach(
           (tile) =>
             tile.drawable &&
             drawImage(drawableWithOffset(tile.drawable, offset))
