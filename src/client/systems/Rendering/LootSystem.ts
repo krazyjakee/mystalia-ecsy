@@ -22,67 +22,55 @@ export default class LootSystem extends System {
 
   execute() {
     this.queries.lootUpdates.results.forEach((lootUpdateEntity) => {
-      const lootDestroy = () => {
-        lootUpdateEntity.removeComponent(UpdateLoot);
-      };
+      const lootUpdates = lootUpdateEntity.getComponent(UpdateLoot);
 
-      const lootUpdate = lootUpdateEntity.getComponent(UpdateLoot);
-      if (!isPresent(lootUpdate.tileId)) {
-        lootDestroy();
-        return;
-      }
+      lootUpdates.updates.forEach((lootUpdate) => {
+        if (!isPresent(lootUpdate.tileId)) return;
 
-      const loot = this.queries.loot.results.find((lootEntity) => {
-        const lootComponent = lootEntity.getComponent(Loot);
-        return lootComponent.tileId === lootUpdate.tileId;
-      });
+        const loot = this.queries.loot.results.find((lootEntity) => {
+          const lootComponent = lootEntity.getComponent(Loot);
+          return lootComponent.tileId === lootUpdate.tileId;
+        });
 
-      if (loot) {
-        if (!lootUpdate.items.length) {
-          loot.remove();
+        if (loot) {
+          if (!lootUpdate.items.length) {
+            loot.remove();
+          } else {
+            const lootComponent = loot.getComponent(Loot);
+            lootComponent.items = lootUpdate.items;
+          }
         } else {
-          const lootComponent = loot.getComponent(Loot);
-          lootComponent.items = lootUpdate.items;
-        }
-      } else {
-        const tileMapEntity =
-          this.queries.tileMaps.results.length &&
-          this.queries.tileMaps.results[0];
-        if (!tileMapEntity) {
-          lootDestroy();
-          return;
-        }
-        const tileMap = tileMapEntity.getComponent(TileMap);
-        const tileMapDrawable = tileMapEntity.getComponent(Drawable);
+          const tileMapEntity =
+            this.queries.tileMaps.results.length &&
+            this.queries.tileMaps.results[0];
+          if (!tileMapEntity) return;
 
-        const allLootTiles = getTilesByType("loot", tileMapDrawable.data);
-        const tile = allLootTiles.find(
-          (tile) => tile.tileId === lootUpdate.tileId
-        );
-        if (!tile) {
-          lootDestroy();
-          return;
+          const tileMap = tileMapEntity.getComponent(TileMap);
+          const tileMapDrawable = tileMapEntity.getComponent(Drawable);
+
+          const allLootTiles = getTilesByType("loot", tileMapDrawable.data);
+          const tile = allLootTiles.find(
+            (tile) => tile.tileId === lootUpdate.tileId
+          );
+          if (!tile) return;
+
+          const tileSetSource = tileMapDrawable.data.tilesets.find(
+            (tileset) => tileset.firstgid < (tile.gid || 0)
+          );
+          if (!tileSetSource) return;
+
+          const externalTileSet = tileMap.tileSetStore[tileSetSource?.source];
+
+          CreateLoot(
+            tile,
+            (tile.gid || 0) - tileSetSource.firstgid,
+            lootUpdate.items,
+            tileMap.width,
+            externalTileSet
+          );
         }
-
-        const tileSetSource = tileMapDrawable.data.tilesets.find(
-          (tileset) => tileset.firstgid < (tile.gid || 0)
-        );
-        if (!tileSetSource) {
-          lootDestroy();
-          return;
-        }
-
-        const externalTileSet = tileMap.tileSetStore[tileSetSource?.source];
-        CreateLoot(
-          tile,
-          (tile.gid || 0) - tileSetSource.firstgid,
-          lootUpdate.items,
-          tileMap.width,
-          externalTileSet
-        );
-      }
-
-      lootDestroy();
+      });
+      lootUpdateEntity.removeComponent(UpdateLoot);
     });
   }
 }

@@ -20,7 +20,7 @@ export default class LootSpawner {
   room: MapRoom;
   timer?: NodeJS.Timeout;
   mapLoot: SerializedObjectTile<"loot">[] = [];
-  lootCounters: { [key: string]: number } = {}; // TODO: Rename this to be "lootExpirations"
+  lootExpirations: { [key: string]: number } = {};
 
   constructor(room: MapRoom) {
     this.room = room;
@@ -40,40 +40,36 @@ export default class LootSpawner {
         const obj = doc.toJSON();
         const items = obj.items.map((item) => new LootItemState(item));
         this.addLoot(obj.lootId, obj.tileId, items);
-        this.setCountdown(obj.tileId, obj.lootId, obj.countdown);
+        this.setExpiration(obj.tileId, obj.lootId, obj.expires);
       });
       // @ts-ignore
       this.timer = setInterval(() => this.tick(), 1000);
+      this.tick();
     });
   }
 
-  // TODO: Add a "checkExpired" function.
-
-  // TODO: Replace this with a function to update the "lootExpiration" with a future date
-  setCountdown(tileId: number, lootId: number, timeLeft?: number) {
+  checkExpired(tileId: number) {
     const uid = this.getUid(tileId);
-    if (isPresent(timeLeft)) {
-      this.lootCounters[uid] = timeLeft;
+    return this.lootExpirations[uid] < new Date().getTime();
+  }
+
+  setExpiration(tileId: number, lootId: number, expiresAt?: number) {
+    const uid = this.getUid(tileId);
+    if (isPresent(expiresAt)) {
+      this.lootExpirations[uid] = expiresAt;
     } else {
       const spec = this.getSpec(lootId);
       if (spec) {
-        this.lootCounters[uid] =
-          spec.daysToRespawn * (config.dayLengthInMinutes * 1000); // TODO: Set back to 60000 when testing is done
+        const time = spec.daysToRespawn * (config.dayLengthInMinutes * 1000); // TODO: Set back to 60000 when testing is done
+        this.lootExpirations[uid] = new Date().getTime() + time;
       }
     }
   }
 
   tick() {
-    const expiredLoot = this.mapLoot.filter((objectTile) => {
-      const uid = this.getUid(objectTile.tileId);
-      // TODO: Remove the below logic and use the "checkExpired" function
-      return !Boolean(
-        objectFindValue(
-          this.lootCounters,
-          (key, value) => uid === key && value > 0
-        )
-      );
-    });
+    const expiredLoot = this.mapLoot.filter((objectTile) =>
+      this.checkExpired(objectTile.tileId)
+    );
 
     expiredLoot.forEach((objectTile) => {
       const lootProperty = objectTile.properties;
@@ -84,18 +80,13 @@ export default class LootSpawner {
 
       const uid = this.getUid(objectTile.tileId);
 
-      if (!isPresent(this.lootCounters[uid])) {
+      if (!isPresent(this.lootExpirations[uid])) {
         this.addLoot(lootSpec.id, objectTile.tileId, []);
-        this.setCountdown(objectTile.tileId, lootSpec.id, 0);
+        this.setExpiration(objectTile.tileId, lootSpec.id, 0);
       } else {
         this.replenishLoot(lootSpec.id, objectTile.tileId);
       }
     });
-
-    // TODO: Remove this
-    Object.keys(this.lootCounters).forEach(
-      (key) => (this.lootCounters[key] -= 1000)
-    );
   }
 
   getUid(tileId) {
@@ -155,7 +146,7 @@ export default class LootSpawner {
         );
       }
 
-      this.setCountdown(tileId, lootId);
+      this.setExpiration(tileId, lootId);
     }
   }
 
@@ -192,8 +183,8 @@ export default class LootSpawner {
       this.room.roomName,
       this.room.state.loot,
       (lootState: LootState) => {
-        // TODO: Get the lootExpiration instead
-        const countdown = this.lootCounters[this.getUid(lootState.tileId)] || 0;
+        const expires =
+          this.lootExpirations[this.getUid(lootState.tileId)] || 0;
         const items = objectMap(
           lootState.items,
           (_, { itemId, position, quantity }: LootItemState) => ({
@@ -205,7 +196,7 @@ export default class LootSpawner {
 
         return {
           items,
-          ...{ countdown },
+          ...{ expires },
         };
       }
     );

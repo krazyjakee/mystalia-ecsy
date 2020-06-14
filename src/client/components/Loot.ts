@@ -8,8 +8,10 @@ export default class Loot extends Component {
 }
 
 export class UpdateLoot extends Component {
-  tileId?: number;
-  items: SimpleLootItemState[] = [];
+  updates: {
+    tileId?: number;
+    items: SimpleLootItemState[];
+  }[] = [];
 }
 
 export class OpenLootAtDestination extends Component {

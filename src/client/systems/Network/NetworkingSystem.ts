@@ -285,14 +285,20 @@ export default class NetworkingSystem extends System {
 
         networkRoom.room.state.loot.onAdd = (loot) => {
           loot.onChange = function(changes) {
-            changes.forEach((change) => {
-              if (change.field === "items") {
-                networkRoomEntity.addComponent(UpdateLoot, {
-                  tileId: loot.tileId,
-                  items: lootItemStateToArray(loot.items),
-                });
-              }
-            });
+            const updates = changes
+              .filter((change) => change.field === "items")
+              .map((change) => ({
+                tileId: loot.tileId,
+                items: lootItemStateToArray(change.value),
+              }));
+
+            if (networkRoomEntity.hasComponent(UpdateLoot)) {
+              const updateLoot = networkRoomEntity.getComponent(UpdateLoot);
+              updateLoot.updates = updateLoot.updates.concat(updates);
+            } else {
+              networkRoomEntity.addComponent(UpdateLoot, { updates });
+            }
+
             gameState.trigger("localPlayer:loot:update", {
               tileId: loot.tileId,
               lootState: loot,
