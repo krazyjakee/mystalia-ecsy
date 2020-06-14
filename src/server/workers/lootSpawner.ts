@@ -83,9 +83,8 @@ export default class LootSpawner {
       if (!isPresent(this.lootExpirations[uid])) {
         this.addLoot(lootSpec.id, objectTile.tileId, []);
         this.setExpiration(objectTile.tileId, lootSpec.id, 0);
-      } else {
-        this.replenishLoot(lootSpec.id, objectTile.tileId);
       }
+      this.replenishLoot(lootSpec.id, objectTile.tileId);
     });
   }
 
