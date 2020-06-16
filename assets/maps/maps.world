@@ -29,7 +29,42 @@
             "y": -2176
         },
         {
-            "fileName": "cold.json",
+            "fileName": "north-west.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -3840,
+            "y": -2176
+        },
+        {
+            "fileName": "west.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -3840,
+            "y": 0
+        },
+        {
+            "fileName": "south-west.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -3840,
+            "y": 2176
+        },
+        {
+            "fileName": "south-east.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 3840,
+            "y": 2176
+        },
+        {
+            "fileName": "east.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 3840,
+            "y": 0
+        },
+        {
+           "fileName": "cold.json",
             "height": 2176,
             "width": 3840,
             "x": -12256,
