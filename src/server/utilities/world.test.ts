@@ -1,7 +1,6 @@
 import {
   getWorldSize,
   getWorldTileId,
-  generateWorldBlockList,
   getLocalTileId,
   getRandomValidTile,
   pathToRandomTile,

@@ -6,12 +6,11 @@ import {
 } from "../../utilities/tileMap";
 import { getWorldMapItems, readMapFiles } from "@server/utilities/mapFiles";
 import { Size } from "types/TileMap/standard";
-import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { isPresent, clone } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { AStarFinder } from "astar-typescript";
 import { getBlockGrid } from "utilities/movement/aStar";
-import { areColliding, randomNumberBetween } from "utilities/math";
+import { areColliding, randomItemFromArray } from "utilities/math";
 
 export const getMapColumns = (fileName: string) => {
   const maps = readMapFiles();
@@ -95,40 +94,7 @@ export const getLocalTileId = (tileId: number): LocalTile | undefined => {
   }
 };
 
-export const generateWorldBlockList = () => {
-  const maps = readMapFiles();
-  const worldMap = getWorldMapItems();
-  const mapKeys = Object.keys(maps).filter((key) =>
-    worldMap.find((map) => map.fileName === key)
-  );
-
-  const rawBlockLists = mapKeys.map((key) => ({
-    blockList: new ObjectTileStore(maps[key]).blockList,
-    fileName: key,
-    mapColumns: maps[key].width,
-  }));
-
-  return rawBlockLists
-    .map((rawBlockList) =>
-      rawBlockList.blockList
-        .map((blockedTile) =>
-          getWorldTileId(rawBlockList.fileName, blockedTile)
-        )
-        .filter(isPresent)
-    )
-    .flat();
-};
-
-export const getRandomValidTile = () => {
-  while (true) {
-    const x = randomNumberBetween(worldSize.width + worldSize.x, worldSize.x);
-    const y = randomNumberBetween(worldSize.height + worldSize.y, worldSize.y);
-    const tileId = pixelsToTileId({ x, y }, worldColumns);
-    if (isValidWorldTile(tileId)) {
-      return tileId;
-    }
-  }
-};
+export const getRandomValidTile = () => randomItemFromArray(worldAllowList);
 
 export const isValidWorldTile = (tileId: number) => {
   const isBlocked = worldBlockList.includes(tileId);
@@ -180,42 +146,11 @@ export const getNextPathChunk = (
   }
 };
 
-export const drawBlockGrid = () => {
-  const PImage = require("pureimage");
-  const img1 = PImage.make(worldSize.width / 16, worldSize.height / 16);
-  const blockGrid = getBlockGrid(
-    worldBlockList,
-    worldSize.height / 32,
-    worldColumns,
-    worldFirstTile
-  );
-  var ctx = img1.getContext("2d");
-  ctx.fillStyle = "rgba(255,0,0, 0.5)";
-
-  blockGrid.forEach((row, rowIndex) => {
-    row.forEach((col, colIndex) => {
-      if (col) {
-        ctx.fillRect(colIndex * 2, rowIndex * 2, 2, 2);
-      }
-    });
-  });
-
-  PImage.encodePNGToStream(
-    img1,
-    require("fs").createWriteStream("blockGrid.png")
-  )
-    .then(() => {
-      console.log("wrote out the png file to out.png");
-    })
-    .catch((e) => {
-      console.log("there was an error writing");
-    });
-};
-
 export const worldSize = getWorldSize();
 export const worldColumns = worldSize.width / 32;
 export const worldFirstTile = pixelsToTileId(worldSize, worldColumns);
-export const worldBlockList = generateWorldBlockList();
+export const worldBlockList = require("utilities/data/blockList.json");
+export const worldAllowList = require("utilities/data/allowList.json");
 export const worldAStar = new AStarFinder({
   grid: {
     matrix: getBlockGrid(
@@ -228,5 +163,3 @@ export const worldAStar = new AStarFinder({
   diagonalAllowed: false,
   includeStartNode: false,
 });
-
-// drawBlockGrid();
