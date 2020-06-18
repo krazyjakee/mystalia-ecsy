@@ -643,7 +643,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -2408,8 +2408,19 @@
                  "height":128,
                  "id":168,
                  "name":"north access",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-first-south-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":5758
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":32,
                  "x":32,

@@ -5581,8 +5581,19 @@
                  "height":32,
                  "id":265,
                  "name":"north cave 1",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-first-south-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":4603
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":64,
                  "x":1248,

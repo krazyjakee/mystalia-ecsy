@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":204,
  "infinite":false,
  "layers":[
@@ -129,9 +136,14 @@
          "value":""
         }, 
         {
-         "name":"name",
+         "name":"light",
          "type":"string",
          "value":""
+        }, 
+        {
+         "name":"name",
+         "type":"string",
+         "value":"ADDME"
         }],
  "renderorder":"right-down",
  "tiledversion":"2020.05.07",

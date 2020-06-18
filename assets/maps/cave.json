@@ -1223,8 +1223,19 @@
                  "height":32,
                  "id":91,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"north-first-south-underground"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":12687
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":32,
                  "x":1408,
