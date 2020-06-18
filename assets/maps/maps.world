@@ -27,6 +27,41 @@
             "width": 3840,
             "x": 3840,
             "y": -2176
+        },
+        {
+            "fileName": "cold.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -12256,
+            "y": -43584
+        },
+        {
+            "fileName": "cold1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -12256,
+            "y": -41408
+        },
+        {
+            "fileName": "cold2.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -12256,
+            "y": -37056
+        },
+        {
+            "fileName": "cold3.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -12256,
+            "y": -39232
+        },
+        {
+            "fileName": "cold-mountain.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -12256,
+            "y": -34880
         }
     ],
     "onlyShowAdjacentMaps": false,

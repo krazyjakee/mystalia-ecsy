@@ -1,1 +1,2 @@
 automap/forest.tmx
+automap/winter.tmx
