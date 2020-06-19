@@ -49,7 +49,7 @@ if (cluster.isMaster) {
   const writeStream = fs.createWriteStream(
     "./src/utilities/data/blockList.tmp.json"
   );
-  writeStream.write("[" + generateWorldBlockList().toString());
+  writeStream.write("[" + generateWorldBlockList().toString() + ",");
 
   workers.forEach((worker) => {
     worker.on("message", function(msg: WorkerMessage) {
@@ -69,6 +69,7 @@ if (cluster.isMaster) {
         //   JSON.stringify(allowedTiles)
         // );
         console.log("Done.");
+        process.exit(0);
       } else {
         writeStream.write(",");
       }
