@@ -1,0 +1,14 @@
+{ "columns":7,
+ "image":"lootable-containers.png",
+ "imageheight":704,
+ "imagewidth":224,
+ "margin":0,
+ "name":"lootable-containers",
+ "spacing":0,
+ "tilecount":154,
+ "tiledversion":"2020.05.07",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}
