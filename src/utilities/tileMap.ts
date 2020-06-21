@@ -2,7 +2,6 @@ import { Vector, Attributes, TMJ } from "types/TMJ";
 import {
   ObjectTileTypeString,
   ObjectTileType,
-  ObjectTile,
 } from "types/TileMap/ObjectTileStore";
 import { Property } from "types/TMJ";
 import { isPresent } from "./guards";
@@ -20,10 +19,16 @@ export const tileIdToPixels = (
   columns: number,
   tileSize: number = 32
 ): Vector => {
-  return {
+  const vector = {
     x: (number % columns) * tileSize,
     y: Math.floor(number / columns) * tileSize,
   };
+  return number < 0
+    ? {
+        x: vector.x ? columns * tileSize + vector.x : 0,
+        y: vector.y,
+      }
+    : vector;
 };
 
 export const vectorToTileId = ({ x, y }: Vector, columns: number) => {

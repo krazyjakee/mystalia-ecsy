@@ -11,6 +11,7 @@ import { Vector } from "types/TMJ";
 import { AStarFinder } from "astar-typescript";
 import { getBlockGrid } from "utilities/movement/aStar";
 import { areColliding, randomItemFromArray } from "utilities/math";
+import addOffset from "@client/utilities/Vector/addOffset";
 
 export const getMapColumns = (fileName: string) => {
   const maps = readMapFiles();
@@ -56,6 +57,29 @@ export const getWorldTileId = (fileName: string, tileId: number) => {
   return pixelsToTileId({ x, y }, worldColumns);
 };
 
+export const worldPixelsToTileId = (
+  { x, y }: Vector,
+  columns = worldColumns
+) => {
+  const column = Math.floor(x / 32);
+  const row = Math.floor(y / 32);
+  return row * columns + column;
+};
+
+export const worldTileIdToPixels = (
+  number: number,
+  columns = worldColumns,
+  wSize = worldSize
+): Vector => {
+  const zeroColumn = Math.abs(worldSize.x / 32);
+  const unmovedVector = tileIdToPixels(number + zeroColumn, columns);
+
+  return {
+    x: unmovedVector.x + wSize.x,
+    y: unmovedVector.y,
+  };
+};
+
 export type LocalTile = {
   tileId: number;
   fileName: string;
@@ -63,29 +87,24 @@ export type LocalTile = {
 
 export const getLocalTileId = (tileId: number): LocalTile | undefined => {
   const worldMap = getWorldMapItems();
-  const worldSize = getWorldSize();
 
-  const vector = tileIdToPixels(tileId, worldColumns);
+  const vector = worldTileIdToPixels(tileId);
 
   for (let i = 0; i < worldMap.length; i += 1) {
     const worldPosition = worldMap[i];
 
-    const adjustedVector = {
-      x: tileId > 0 ? vector.x : vector.x + worldSize.width,
-      y: vector.y,
-    };
     const colliding = areColliding(worldPosition, {
-      ...adjustedVector,
+      ...vector,
       width: 32,
       height: 32,
     });
 
-    const relativeVector = {
-      x: 0 - (worldPosition.x - adjustedVector.x),
-      y: 0 - (worldPosition.y - adjustedVector.y),
-    };
-
     if (colliding) {
+      const relativeVector = {
+        x: 0 - (worldPosition.x - vector.x),
+        y: 0 - (worldPosition.y - vector.y),
+      };
+
       return {
         tileId: pixelsToTileId(relativeVector, worldPosition.width / 32),
         fileName: worldPosition.fileName,
