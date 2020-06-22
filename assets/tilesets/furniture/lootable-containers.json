@@ -1,4 +1,12 @@
 { "columns":7,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"lootable-containers.png",
  "imageheight":704,
  "imagewidth":224,

@@ -5563,7 +5563,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":5
+                         "value":6
                         }],
                  "rotation":0,
                  "type":"loot",
@@ -5581,7 +5581,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":5
+                         "value":6
                         }],
                  "rotation":0,
                  "type":"loot",
@@ -5599,7 +5599,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":5
+                         "value":6
                         }],
                  "rotation":0,
                  "type":"loot",
@@ -5617,7 +5617,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":5
+                         "value":6
                         }],
                  "rotation":0,
                  "type":"loot",
@@ -5635,7 +5635,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":5
+                         "value":6
                         }],
                  "rotation":0,
                  "type":"loot",
@@ -5671,7 +5671,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":5
+                         "value":6
                         }],
                  "rotation":0,
                  "type":"loot",
