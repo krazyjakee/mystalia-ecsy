@@ -7,6 +7,7 @@ import { getWorld } from "../ecsy";
 import { mapAssetPath } from "../utilities/assets";
 import Weather from "@client/components/Weather";
 import Shop from "@client/components/Shop";
+import EnvironmentBrightness from "@client/components/EnvironmentBrightness";
 
 export default function CreateTileMap(user: User) {
   getWorld()
@@ -18,5 +19,6 @@ export default function CreateTileMap(user: User) {
     .addComponent(AnimatedTile)
     .addComponent(Weather)
     .addComponent(TileMap)
-    .addComponent(Shop);
+    .addComponent(Shop)
+    .addComponent(EnvironmentBrightness);
 }

@@ -40,33 +40,29 @@ export const drawLightSource = (
 
 const { dayLightPercentage } = config;
 
-export const calculateBrightness = (environmentLight: number | false) => {
+export const calculateBrightness = () => {
   let brightness = 0;
 
-  if (environmentLight) {
-    brightness = environmentLight;
-  } else {
-    const dayPercentage = timeOfDayAsPercentage();
+  const dayPercentage = timeOfDayAsPercentage();
 
-    if (dayPercentage < dayLightPercentage) {
-      const phaseProgress = (100 / dayLightPercentage) * dayPercentage;
-      if (phaseProgress < 40) {
-        brightness = 80 + phaseProgress;
-      } else if (phaseProgress > 60) {
-        brightness = 100 - (phaseProgress - 60);
-      } else {
-        brightness = 100;
-      }
+  if (dayPercentage < dayLightPercentage) {
+    const phaseProgress = (100 / dayLightPercentage) * dayPercentage;
+    if (phaseProgress < 40) {
+      brightness = 80 + phaseProgress;
+    } else if (phaseProgress > 60) {
+      brightness = 100 - (phaseProgress - 60);
     } else {
-      const phaseProgress =
-        100 - (100 / (100 - dayLightPercentage)) * (100 - dayPercentage);
-      if (phaseProgress < 40) {
-        brightness = 60 - phaseProgress * 2;
-      } else if (phaseProgress > 60) {
-        brightness = (phaseProgress - 60) * 2;
-      } else {
-        brightness = 0;
-      }
+      brightness = 100;
+    }
+  } else {
+    const phaseProgress =
+      100 - (100 / (100 - dayLightPercentage)) * (100 - dayPercentage);
+    if (phaseProgress < 40) {
+      brightness = 60 - phaseProgress * 2;
+    } else if (phaseProgress > 60) {
+      brightness = (phaseProgress - 60) * 2;
+    } else {
+      brightness = 0;
     }
   }
   return brightness;
