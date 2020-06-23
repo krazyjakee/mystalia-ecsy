@@ -47,7 +47,7 @@ export default class ItemSpawner {
       const quantity = item.maximumQuantity
         ? randomNumberBetween(item.maximumQuantity)
         : item.quantity;
-      if (chance === 1) {
+      if (chance >= 1) {
         const isTileVacant =
           searchState(this.room.state.items, { tileId: objectTile.tileId })
             .length === 0;
