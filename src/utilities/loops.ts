@@ -41,3 +41,14 @@ export const objectFilter = <T extends Object, K>(
   }
   return result;
 };
+
+export const splitArrayByChunk = <T extends any>(arr: T[], n: number) => {
+  var i,
+    j,
+    temparray: T[][] = [],
+    chunk = n;
+  for (i = 0, j = arr.length; i < j; i += chunk) {
+    temparray.push(arr.slice(i, i + chunk));
+  }
+  return temparray;
+};

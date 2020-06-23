@@ -5,41 +5,22 @@ import {
   vectorToTileId,
 } from "../../utilities/tileMap";
 import { getWorldMapItems, readMapFiles } from "@server/utilities/mapFiles";
-import { Size } from "types/TileMap/standard";
-import { isPresent, clone } from "utilities/guards";
+import { isPresent } from "utilities/guards";
 import { Vector } from "types/TMJ";
-import { AStarFinder } from "astar-typescript";
-import { getBlockGrid } from "utilities/movement/aStar";
-import { areColliding, randomItemFromArray } from "utilities/math";
-import addOffset from "@client/utilities/Vector/addOffset";
+import { areColliding } from "utilities/math";
+import WorldBlockList from "./world/WorldBlockList";
+import * as AdmZip from "adm-zip";
+import * as fs from "fs";
+import {
+  getWorldColumns,
+  getWorldSize,
+  getWorldFirstTile,
+} from "./world/worldSize";
+import { splitArrayByChunk } from "utilities/loops";
 
 export const getMapColumns = (fileName: string) => {
   const maps = readMapFiles();
   return maps[fileName].width;
-};
-
-export const getWorldSize = (): Size & Vector => {
-  const worldMap = getWorldMapItems();
-
-  const farthest = clone(worldMap);
-  farthest.sort((a, b) => b.x + b.width - (a.x + a.width));
-  const farthestEast = farthest[0].x + farthest[0].width;
-  farthest.sort((a, b) => b.y + b.height - (a.y + a.height));
-  const farthestSouth = farthest[0].y + farthest[0].height;
-
-  const xPositions = worldMap.map((map) => map.x);
-  const yPositions = worldMap.map((map) => map.y);
-  const minXPosition = Math.min(...xPositions);
-  const minYPosition = Math.min(...yPositions);
-  const worldWidth = farthestEast - minXPosition;
-  const worldHeight = farthestSouth - minYPosition;
-
-  return {
-    width: worldWidth,
-    height: worldHeight,
-    x: minXPosition,
-    y: minYPosition,
-  };
 };
 
 export const getWorldTileId = (fileName: string, tileId: number) => {
@@ -54,12 +35,12 @@ export const getWorldTileId = (fileName: string, tileId: number) => {
   const x = worldMapPosition.x + vector.x;
   const y = worldMapPosition.y + vector.y;
 
-  return pixelsToTileId({ x, y }, worldColumns);
+  return pixelsToTileId({ x, y }, getWorldColumns());
 };
 
 export const worldPixelsToTileId = (
   { x, y }: Vector,
-  columns = worldColumns
+  columns = getWorldColumns()
 ) => {
   const column = Math.floor(x / 32);
   const row = Math.floor(y / 32);
@@ -68,11 +49,10 @@ export const worldPixelsToTileId = (
 
 export const worldTileIdToPixels = (
   number: number,
-  columns = worldColumns,
-  wSize = worldSize
+  wSize = getWorldSize()
 ): Vector => {
-  const zeroColumn = Math.abs(worldSize.x / 32);
-  const unmovedVector = tileIdToPixels(number + zeroColumn, columns);
+  const zeroColumn = Math.abs(wSize.x / 32);
+  const unmovedVector = tileIdToPixels(number + zeroColumn, wSize.width / 32);
 
   return {
     x: unmovedVector.x + wSize.x,
@@ -113,24 +93,26 @@ export const getLocalTileId = (tileId: number): LocalTile | undefined => {
   }
 };
 
-export const getRandomValidTile = () => randomItemFromArray(worldAllowList);
+export const getRandomValidTile = async () => await wbl.randomValidTile();
 
-export const isValidWorldTile = (tileId: number) => {
-  const isBlocked = worldBlockList.includes(tileId);
+export const isValidWorldTile = async (tileId: number) => {
+  const isBlocked = await wbl.tileBlocked(tileId);
   const isOnAMap = getLocalTileId(tileId);
   return Boolean(!isBlocked && isOnAMap);
 };
 
-export const pathToRandomTile = (
+export const pathToRandomTile = async (
   startPosition: number,
   forceDestination?: number
 ) => {
-  if (!isValidWorldTile(startPosition)) return [];
-  const randomTile = forceDestination || getRandomValidTile();
+  if (!wbl.aStar || !isValidWorldTile(startPosition)) return [];
+  const worldFirstTile = getWorldFirstTile();
+  const worldColumns = getWorldColumns();
+  const randomTile = forceDestination || (await getRandomValidTile());
   const offsetStartTile = startPosition - worldFirstTile;
   const offsetDestinationTile = randomTile - worldFirstTile;
 
-  const path = worldAStar.findPath(
+  const path = wbl.aStar.findPath(
     tileIdToVector(offsetStartTile, worldColumns),
     tileIdToVector(offsetDestinationTile, worldColumns)
   );
@@ -165,20 +147,58 @@ export const getNextPathChunk = (
   }
 };
 
-export const worldSize = getWorldSize();
-export const worldColumns = worldSize.width / 32;
-export const worldFirstTile = pixelsToTileId(worldSize, worldColumns);
-export const worldBlockList = require("utilities/data/blockList.json");
-export const worldAllowList = require("utilities/data/allowList.json");
-export const worldAStar = new AStarFinder({
-  grid: {
-    matrix: getBlockGrid(
-      worldBlockList,
-      worldSize.height / 32,
-      worldColumns,
-      worldFirstTile
-    ),
-  },
-  diagonalAllowed: false,
-  includeStartNode: false,
-});
+const wbl = new WorldBlockList();
+
+export const setupWorldBlockLists = async () => {
+  const blockListPath = "./src/utilities/data/blockList.zip";
+  if (fs.existsSync(blockListPath)) {
+    await wbl.connection();
+    const zip = new AdmZip(blockListPath);
+    const hash = zip.getZipComment();
+    const sameHash = await wbl.sameHash(hash);
+    if (!sameHash) {
+      await wbl.clearAll();
+      const ProgressBar = require("progress");
+      const zipEntries = zip.getEntries();
+      for (let entryKey in zipEntries) {
+        const zipEntry = zipEntries[entryKey];
+        if (zipEntry.entryName === "allowList.json") {
+          console.log("Updating world allow list...");
+          const allowList = zipEntry
+            .getData()
+            .toString()
+            .split(",");
+          const chunked = splitArrayByChunk(allowList, 10000);
+          const bar = new ProgressBar(":bar :current/:total", {
+            total: chunked.length,
+          });
+          for (let listKey in chunked) {
+            await wbl.addAllowList(chunked[listKey]);
+            bar.tick();
+          }
+          await wbl.setAStarMatrix(allowList);
+        }
+        if (zipEntry.entryName === "blockList.json") {
+          console.log("Updating world block list...");
+          const blockList = zipEntry
+            .getData()
+            .toString()
+            .split(",");
+          const chunked = splitArrayByChunk(blockList, 10000);
+          const bar = new ProgressBar(":bar :current/:total", {
+            total: chunked.length,
+          });
+          for (let listKey in chunked) {
+            await wbl.addBlockList(chunked[listKey]);
+            bar.tick();
+          }
+        }
+      }
+      console.log("World block lists updated.");
+      await wbl.setHash(hash);
+    }
+    console.log("Preparing world aStar for launch...");
+    await wbl.setupWorldAStar();
+    console.log("World aStar preparations complete.");
+  }
+};

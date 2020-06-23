@@ -80,6 +80,7 @@ export class ObjectTileStore {
   rows: number = 0;
   uid: string = "";
   blockList: number[] = [];
+  allowList: number[] = [];
 
   constructor(mapData?: TMJ) {
     if (!mapData) return;
@@ -100,7 +101,7 @@ export class ObjectTileStore {
       this.uid = makeHash(JSON.stringify(mapData));
     }
 
-    this.blockList = this.generateBlockList(height, width);
+    this.generateBlockList(height, width);
 
     aStar.add(this.uid, mapData, this.blockList);
   }
@@ -166,12 +167,16 @@ export class ObjectTileStore {
   }
 
   generateBlockList(rows: number, columns: number) {
-    return Array(rows * columns)
+    Array(rows * columns)
       .fill(0)
       .map((_, index) => index)
-      .filter((_, index) => {
+      .forEach((_, index) => {
         const tileTypes = this.getTypes(index);
-        return tileTypes && tileTypes.includes("block");
+        if (tileTypes && tileTypes.includes("block")) {
+          this.blockList.push(index);
+        } else {
+          this.allowList.push(index);
+        }
       });
   }
 }

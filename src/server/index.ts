@@ -4,7 +4,7 @@ import * as express from "express";
 import * as path from "path";
 import * as http from "http";
 import * as cors from "cors";
-import { Server } from "colyseus";
+import { Server, RedisPresence } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 import socialRoutes from "@colyseus/social/express";
 import healthCheck from "./utilities/healthChecks";
@@ -12,6 +12,9 @@ import MapRoom from "./rooms/map";
 import AdminRoom from "./rooms/admin";
 import { readMapFiles } from "@server/utilities/mapFiles";
 import mapRoutes from "./routes/maps";
+import * as redisUrl from "redis-url";
+import { setupWorldBlockLists } from "./utilities/world";
+import { redisOptions } from "./utilities/world/WorldBlockList";
 
 const port = parseInt(process.env.PORT || "8080");
 const app = express();
@@ -47,6 +50,7 @@ const server = http.createServer(app);
 const gameServer = new Server({
   server,
   gracefullyShutdown: false,
+  presence: new RedisPresence(redisOptions),
 });
 
 function shutdown(signal: string) {
@@ -72,7 +76,8 @@ gameServer.define("admin", AdminRoom);
 
 console.log("Maps loaded");
 
-healthCheck(() => {
+healthCheck(async () => {
+  await setupWorldBlockLists();
   gameServer.listen(port);
   console.log(
     `Server listening on port ${port} in ${process.env.NODE_ENV} mode!`

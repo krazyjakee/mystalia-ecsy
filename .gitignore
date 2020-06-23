@@ -5,3 +5,6 @@ public/**/*
 assets/maps/*.png
 .env
 assets/maps/project.tiled-session
+*.tmp.json
+src/utilities/data/allowList.json
+src/utilities/data/blockList.json

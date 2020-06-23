@@ -4,20 +4,24 @@ import { getWorldTileId } from "@server/utilities/world";
 import { isPresent } from "utilities/guards";
 
 const worldMap = getWorldMapItems();
+const maps = readMapFiles();
 
 export const generateWorldBlockList = () => {
-  const maps = readMapFiles();
   const mapKeys = Object.keys(maps).filter((key) =>
     worldMap.find((map) => map.fileName === key)
   );
 
-  const rawBlockLists = mapKeys.map((key) => ({
-    blockList: new ObjectTileStore(maps[key]).blockList,
-    fileName: key,
-    mapColumns: maps[key].width,
-  }));
+  const rawBlockLists = mapKeys.map((key) => {
+    const ots = new ObjectTileStore(maps[key]);
+    return {
+      blockList: ots.blockList,
+      allowList: ots.allowList,
+      fileName: key,
+      mapColumns: maps[key].width,
+    };
+  });
 
-  return rawBlockLists
+  const blockLists = rawBlockLists
     .map((rawBlockList) =>
       rawBlockList.blockList
         .map((blockedTile) =>
@@ -26,4 +30,19 @@ export const generateWorldBlockList = () => {
         .filter(isPresent)
     )
     .flat();
+
+  const allowLists = rawBlockLists
+    .map((rawBlockList) =>
+      rawBlockList.allowList
+        .map((allowedTile) =>
+          getWorldTileId(rawBlockList.fileName, allowedTile)
+        )
+        .filter(isPresent)
+    )
+    .flat();
+
+  return {
+    blockLists,
+    allowLists,
+  };
 };

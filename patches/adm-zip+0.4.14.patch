@@ -1,0 +1,13 @@
+diff --git a/node_modules/adm-zip/zipFile.js b/node_modules/adm-zip/zipFile.js
+index 607e528..9a738ba 100644
+--- a/node_modules/adm-zip/zipFile.js
++++ b/node_modules/adm-zip/zipFile.js
+@@ -304,7 +304,7 @@ module.exports = function (/*String|Buffer*/input, /*Number*/inputType) {
+ 
+ 			var mh = mainHeader.toBinary();
+ 			if (_comment) {
+-				_comment.copy(mh, Utils.Constants.ENDHDR); // add zip file comment
++				Buffer.from(_comment).copy(mh, Utils.Constants.ENDHDR); // add zip file comment
+ 			}
+ 
+ 			mh.copy(outBuffer, dindex); // write main header

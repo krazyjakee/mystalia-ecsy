@@ -58,7 +58,7 @@ export class WorldEnemy {
     }, 1000 / this.spec.speed);
   }
 
-  tick() {
+  async tick() {
     if (!this.mapTick) {
       if (this.worldTilePath.length) {
         const steppedTile = this.worldTilePath.shift();
@@ -73,14 +73,14 @@ export class WorldEnemy {
         }
       } else {
         this.calculateWorldTile();
-        this.nextDestination();
+        await this.nextDestination();
         this.changeMap();
       }
     }
   }
 
-  nextDestination() {
-    this.worldTilePath = pathToRandomTile(this.currentWorldTile) || [];
+  async nextDestination() {
+    this.worldTilePath = (await pathToRandomTile(this.currentWorldTile)) || [];
   }
 
   addListeners() {
@@ -90,7 +90,7 @@ export class WorldEnemy {
     );
   }
 
-  requestPath(localCurrentTile: number) {
+  async requestPath(localCurrentTile: number) {
     this.localCurrentTile = localCurrentTile;
     this.calculateWorldTile();
     if (
@@ -98,7 +98,7 @@ export class WorldEnemy {
       this.currentWorldTile ===
         this.worldTilePath[this.worldTilePath.length - 1].tileId
     ) {
-      this.nextDestination();
+      await this.nextDestination();
     }
 
     let pathChunkIndices = getNextPathChunk(this.roomName, this.worldTilePath);

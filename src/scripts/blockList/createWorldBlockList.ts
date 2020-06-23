@@ -1,17 +1,19 @@
-import { worldSize, worldFirstTile } from "@server/utilities/world";
 import { writeFile } from "@server/utilities/files";
-import { generateWorldBlockList } from "./blockListFromObjectTile";
-import { createBlockListFromOutOfBounds } from "./blockListFromOutOfBounds";
 import * as fs from "fs";
+import { randomHash } from "utilities/hash";
+import {
+  getWorldSize,
+  getWorldFirstTile,
+} from "@server/utilities/world/worldSize";
 
-writeFile("./src/utilities/data/blockList.tmp.json", "[]");
 const cluster = require("cluster");
 
 type WorkerMessage = { type: number; tiles: number[] };
 
-const totalTiles = (worldSize.width * worldSize.height) / 32;
-
 if (cluster.isWorker) {
+  const {
+    createBlockListFromOutOfBounds,
+  } = require("./blockListFromOutOfBounds");
   process.on("message", function(msg: WorkerMessage) {
     if (msg.type === 0) {
       const tiles: number[] = msg.tiles.filter((tileId) => {
@@ -24,6 +26,15 @@ if (cluster.isWorker) {
 }
 
 if (cluster.isMaster) {
+  const blockListFilePath = "./src/utilities/data/blockList.json";
+  const allowListFilePath = "./src/utilities/data/allowList.json";
+  const blockListZipPath = "./src/utilities/data/blockList.zip";
+
+  const worldSize = getWorldSize();
+  const worldFirstTile = getWorldFirstTile();
+  const { generateWorldBlockList } = require("./blockListFromObjectTile");
+  const totalTiles = (worldSize.width * worldSize.height) / 32;
+
   const os = require("os");
   const cpuCount = os.cpus().length;
   const workers = new Array(cpuCount).fill(0).map(() => cluster.fork());
@@ -45,29 +56,35 @@ if (cluster.isMaster) {
     allTiles.push(i);
   }
 
-  let allowedTiles: number[] = [];
-  const writeStream = fs.createWriteStream(
-    "./src/utilities/data/blockList.tmp.json"
-  );
-  writeStream.write("[" + generateWorldBlockList().toString() + ",");
+  const writeStream = fs.createWriteStream(blockListFilePath);
+  const mapTileLists = generateWorldBlockList();
+  writeFile(allowListFilePath, mapTileLists.allowLists.toString());
+  writeStream.write(mapTileLists.blockLists.toString() + ",");
 
   workers.forEach((worker) => {
     worker.on("message", function(msg: WorkerMessage) {
       if (msg.type === 0) {
         writeStream.write(msg.tiles.toString());
-      } else if (msg.type === 1) {
-        allowedTiles = allowedTiles.concat(msg.tiles);
       }
 
       counter += 1;
 
       if (counter === cpuCount) {
-        writeStream.write("]");
         writeStream.close();
-        // writeFile(
-        //   "./src/utilities/data/allowList.json",
-        //   JSON.stringify(allowedTiles)
-        // );
+        console.log("Block list generation complete. Packaging it up...");
+        if (fs.existsSync(blockListZipPath)) {
+          fs.unlinkSync(blockListZipPath);
+        }
+
+        const AdmZip = require("adm-zip");
+        const zip = new AdmZip();
+        zip.addZipComment(randomHash());
+        zip.addLocalFile(blockListFilePath);
+        zip.addLocalFile(allowListFilePath);
+        zip.writeZip(blockListZipPath);
+        fs.unlinkSync(blockListFilePath);
+        fs.unlinkSync(allowListFilePath);
+
         console.log("Done.");
         process.exit(0);
       } else {
