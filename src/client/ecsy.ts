@@ -43,6 +43,7 @@ import BehaviourSystem from "./systems/MovementSystem/Behaviour";
 import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerSystem";
 import GateSystem from "./systems/Rendering/GateSystem";
 import LootSystem from "./systems/Rendering/LootSystem";
+import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
 
 let world = new World();
 
@@ -68,6 +69,7 @@ export default (user: User) => {
     .registerSystem(WeatherSystem)
     .registerSystem(LightSystem)
     .registerSystem(FlameSystem)
+    .registerSystem(BrightnessSystem)
     .registerSystem(TileAnimationSystem)
     .registerSystem(EnemyStatusSystem)
     .registerSystem(CharacterHighlightSystem)

@@ -6,9 +6,11 @@ import Drawable from "@client/components/Drawable";
 import addOffset from "../../../utilities/Vector/addOffset";
 import LocalPlayer from "@client/components/LocalPlayer";
 import Position from "@client/components/Position";
-import { drawLightSource, calculateBrightness } from "./lightRenderFunctions";
+import { drawLightSource } from "./lightRenderFunctions";
 import { tileIdToPixels } from "utilities/tileMap";
 import { drawImage } from "@client/utilities/drawing";
+import { isPresent } from "utilities/guards";
+import EnvironmentBrightness from "@client/components/EnvironmentBrightness";
 
 const imageMask = new Image();
 imageMask.src = "/assets/utilities/lightmask.png";
@@ -31,6 +33,9 @@ export default class LightSystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
+      const brightnessComponent = tileMapEntity.getComponent(
+        EnvironmentBrightness
+      );
       const { offset } = tileMapDrawable;
 
       const minWidth = window.innerWidth;
@@ -39,17 +44,15 @@ export default class LightSystem extends System {
       lightCanvas.width = minWidth;
       lightCanvas.height = minHeight;
 
-      const environmentLight =
-        !!tileMap.properties.light && parseInt(tileMap.properties.light);
-
-      // TODO: brightness should not be calculated on the fly, there should be a system to store it for flamesystem and this one.
-      const brightness = calculateBrightness(environmentLight);
+      const brightness = isPresent(tileMap.properties.light)
+        ? parseInt(tileMap.properties.light)
+        : brightnessComponent.brightness;
 
       shadowContext.beginPath();
       shadowContext.fillStyle = `rgba(0,0,0,${1 - 0.01 * brightness})`;
       shadowContext.fillRect(0, 0, minWidth, minHeight);
 
-      if (!environmentLight || environmentLight < 40) {
+      if (brightness < 40) {
         this.queries.player.results.forEach((playerEntity: Entity) => {
           const { value } = playerEntity.getComponent(Position);
           const position = addOffset(offset, {
@@ -65,7 +68,7 @@ export default class LightSystem extends System {
         });
       }
 
-      if (environmentLight || (!environmentLight && brightness < 60)) {
+      if (brightness < 60) {
         for (let key in tileMap.objectTileStore.store) {
           const tileId = parseInt(key);
           const tilePosition = tileIdToPixels(tileId, tileMap.width);

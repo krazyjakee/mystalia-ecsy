@@ -6,18 +6,9 @@ import Weather from "@client/components/Weather";
 import drawRain from "./rain";
 import drawCloud from "./cloud";
 import { Vector } from "types/TMJ";
-import context2d from "@client/canvas";
+import EnvironmentBrightness from "@client/components/EnvironmentBrightness";
 
 let rainOffset: Vector = { x: 0, y: 0 };
-
-const drawOvercast = (opacity: number) => {
-  context2d.save();
-  context2d.fillStyle = `rgba(0,0,0,${opacity})`;
-  context2d.beginPath();
-  context2d.fillRect(0, 0, window.innerWidth, window.innerHeight);
-  context2d.closePath();
-  context2d.restore();
-};
 
 export default class WeatherSystem extends System {
   static queries = {
@@ -30,6 +21,10 @@ export default class WeatherSystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const { active } = tileMapEntity.getComponent(Weather);
+      const brightnessComponent = tileMapEntity.getMutableComponent(
+        EnvironmentBrightness
+      );
+
       rainOffset.x = tileMapDrawable.offset.x - rainOffset.x;
       rainOffset.y = tileMapDrawable.offset.y - rainOffset.y;
       if (active.includes("cloudy")) {
@@ -37,11 +32,12 @@ export default class WeatherSystem extends System {
       }
       if (active.includes("lightRain")) {
         drawRain(rainOffset);
-        // TODO: Fade in the overcast
-        drawOvercast(0.1);
+        brightnessComponent.offset = -10;
       } else if (active.includes("heavyRain")) {
         drawRain(rainOffset, true);
-        drawOvercast(0.2);
+        brightnessComponent.offset = -20;
+      } else {
+        brightnessComponent.offset = 0;
       }
       rainOffset = { ...tileMapDrawable.offset };
     });

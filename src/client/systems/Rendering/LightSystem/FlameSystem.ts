@@ -5,7 +5,8 @@ import Drawable from "@client/components/Drawable";
 import { TMJ } from "types/TMJ";
 import { flameOn } from "./flameRenderFunctions";
 import context2d from "../../../canvas";
-import { calculateBrightness } from "./lightRenderFunctions";
+import EnvironmentBrightness from "@client/components/EnvironmentBrightness";
+import { isPresent } from "utilities/guards";
 
 const finalCanvas = document.createElement("canvas");
 const finalCanvasContext = finalCanvas.getContext(
@@ -52,12 +53,14 @@ export default class FlameSystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const drawable = tileMapEntity.getComponent(Drawable);
       const tileMap = tileMapEntity.getComponent(TileMap);
+      const brightnessComponent = tileMapEntity.getComponent(
+        EnvironmentBrightness
+      );
       const { offset } = drawable;
 
-      const environmentLight =
-        !!tileMap.properties.light && parseInt(tileMap.properties.light);
-
-      const brightness = calculateBrightness(environmentLight);
+      const brightness = isPresent(tileMap.properties.light)
+        ? parseInt(tileMap.properties.light)
+        : brightnessComponent.brightness;
 
       if (brightness < 60) {
         context2d.drawImage(
