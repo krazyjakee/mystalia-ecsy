@@ -1,17 +1,10 @@
-import {
-  pixelsToTileId,
-  tileIdToPixels,
-  tileIdToVector,
-  vectorToTileId,
-} from "../../utilities/tileMap";
+import { pixelsToTileId, tileIdToPixels } from "../../utilities/tileMap";
 import { getWorldMapItems, readMapFiles } from "@server/utilities/mapFiles";
 import { Size } from "types/TileMap/standard";
-import { isPresent, clone } from "utilities/guards";
+import { clone } from "utilities/guards";
 import { Vector } from "types/TMJ";
 import { AStarFinder } from "astar-typescript";
-import { getBlockGrid } from "utilities/movement/aStar";
-import { areColliding, randomItemFromArray } from "utilities/math";
-import addOffset from "@client/utilities/Vector/addOffset";
+import { areColliding } from "utilities/math";
 
 export const getMapColumns = (fileName: string) => {
   const maps = readMapFiles();
@@ -113,39 +106,39 @@ export const getLocalTileId = (tileId: number): LocalTile | undefined => {
   }
 };
 
-export const getRandomValidTile = () => randomItemFromArray(worldAllowList);
+// export const getRandomValidTile = () => randomItemFromArray(worldAllowList);
 
-export const isValidWorldTile = (tileId: number) => {
-  const isBlocked = worldBlockList.includes(tileId);
-  const isOnAMap = getLocalTileId(tileId);
-  return Boolean(!isBlocked && isOnAMap);
-};
+// export const isValidWorldTile = (tileId: number) => {
+//   const isBlocked = worldBlockList.includes(tileId);
+//   const isOnAMap = getLocalTileId(tileId);
+//   return Boolean(!isBlocked && isOnAMap);
+// };
 
-export const pathToRandomTile = (
-  startPosition: number,
-  forceDestination?: number
-) => {
-  if (!isValidWorldTile(startPosition)) return [];
-  const randomTile = forceDestination || getRandomValidTile();
-  const offsetStartTile = startPosition - worldFirstTile;
-  const offsetDestinationTile = randomTile - worldFirstTile;
+// export const pathToRandomTile = (
+//   startPosition: number,
+//   forceDestination?: number
+// ) => {
+//   if (!isValidWorldTile(startPosition)) return [];
+//   const randomTile = forceDestination || getRandomValidTile();
+//   const offsetStartTile = startPosition - worldFirstTile;
+//   const offsetDestinationTile = randomTile - worldFirstTile;
 
-  const path = worldAStar.findPath(
-    tileIdToVector(offsetStartTile, worldColumns),
-    tileIdToVector(offsetDestinationTile, worldColumns)
-  );
+//   const path = worldAStar.findPath(
+//     tileIdToVector(offsetStartTile, worldColumns),
+//     tileIdToVector(offsetDestinationTile, worldColumns)
+//   );
 
-  if (path.length) {
-    return path
-      .map(
-        (pathItem) =>
-          vectorToTileId({ x: pathItem[0], y: pathItem[1] }, worldColumns) +
-          worldFirstTile
-      )
-      .map((worldTileId) => getLocalTileId(worldTileId))
-      .filter(isPresent);
-  }
-};
+//   if (path.length) {
+//     return path
+//       .map(
+//         (pathItem) =>
+//           vectorToTileId({ x: pathItem[0], y: pathItem[1] }, worldColumns) +
+//           worldFirstTile
+//       )
+//       .map((worldTileId) => getLocalTileId(worldTileId))
+//       .filter(isPresent);
+//   }
+// };
 
 export const getNextPathChunk = (
   fileName: string,
@@ -168,16 +161,17 @@ export const getNextPathChunk = (
 export const worldSize = getWorldSize();
 export const worldColumns = worldSize.width / 32;
 export const worldFirstTile = pixelsToTileId(worldSize, worldColumns);
-export const worldBlockList = require("utilities/data/blockList.json");
-export const worldAllowList = require("utilities/data/allowList.json");
+
 export const worldAStar = new AStarFinder({
   grid: {
-    matrix: getBlockGrid(
-      worldBlockList,
-      worldSize.height / 32,
-      worldColumns,
-      worldFirstTile
-    ),
+    width: 2,
+    height: 2,
+    // matrix: getBlockGrid(
+    //   worldBlockList,
+    //   worldSize.height / 32,
+    //   worldColumns,
+    //   worldFirstTile
+    // ),
   },
   diagonalAllowed: false,
   includeStartNode: false,

@@ -2,11 +2,8 @@ import {
   getWorldSize,
   getWorldTileId,
   getLocalTileId,
-  pathToRandomTile,
-  isValidWorldTile,
   worldTileIdToPixels,
   worldPixelsToTileId,
-  getRandomValidTile,
 } from "./world";
 
 describe("world utilities", () => {
@@ -76,46 +73,6 @@ describe("world utilities", () => {
     test("should get the correct local tile id above zero", () => {
       const localTileId = getLocalTileId(8228);
       expect(localTileId).toStrictEqual({ tileId: 0, fileName: "south" });
-    });
-  });
-
-  describe("#getRandomValidTile", () => {
-    test("should return a random valid tile", () => {
-      const randomTile = getRandomValidTile();
-      expect(randomTile).toBeTruthy();
-    });
-  });
-
-  describe("#isValidWorldTile", () => {
-    test("should validate a valid tile", () => {
-      const validTile = isValidWorldTile(6811);
-      expect(validTile).toBeTruthy();
-    });
-
-    test("should validate an invalid tile", () => {
-      const invalidTile = isValidWorldTile(5749);
-      expect(invalidTile).toBeFalsy();
-    });
-  });
-
-  describe("#pathToRandomTile", () => {
-    test("should return a path to a random valid tile", () => {
-      const randomPath = pathToRandomTile(1, -119);
-      expect(randomPath).toStrictEqual([
-        {
-          fileName: "first",
-          tileId: 2,
-        },
-        {
-          fileName: "test",
-          tileId: 102,
-        },
-      ]);
-    });
-
-    test("should return a path to a random valid tile", () => {
-      let randomPath = pathToRandomTile(14971, 12428);
-      expect(randomPath && randomPath.length).toBeTruthy();
     });
   });
 });

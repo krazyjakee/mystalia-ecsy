@@ -2,7 +2,6 @@ import { EnemySpec } from "types/enemies";
 import { SerializedObjectTile } from "utilities/tileMap";
 import {
   getWorldTileId,
-  pathToRandomTile,
   getMapColumns,
   getNextPathChunk,
 } from "@server/utilities/world";
@@ -80,7 +79,7 @@ export class WorldEnemy {
   }
 
   nextDestination() {
-    this.worldTilePath = pathToRandomTile(this.currentWorldTile) || [];
+    // this.worldTilePath = pathToRandomTile(this.currentWorldTile) || [];
   }
 
   addListeners() {
