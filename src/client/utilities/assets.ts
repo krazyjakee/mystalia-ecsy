@@ -1,6 +1,28 @@
 import axios from "axios";
 import { domainBase } from "./url";
 
+const loadedAudio: {
+  [key: string]: HTMLAudioElement;
+} = {};
+
+export const loadAudio = async (
+  path: string
+): Promise<HTMLAudioElement | undefined> => {
+  return new Promise((accept, reject) => {
+    if (loadedAudio[path]) {
+      accept(loadedAudio[path]);
+      return;
+    }
+
+    const audio = document.createElement("audio");
+    audio.src = path;
+    audio.addEventListener("load", () => {
+      loadedAudio[path] = audio;
+      accept(audio);
+    });
+  });
+};
+
 const loadedImages: {
   [key: string]: HTMLImageElement;
 } = {};

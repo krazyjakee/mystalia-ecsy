@@ -44,6 +44,7 @@ import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerS
 import GateSystem from "./systems/Rendering/GateSystem";
 import LootSystem from "./systems/Rendering/LootSystem";
 import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
+import MusicSystem from "./systems/Audio/MusicSystem";
 
 let world = new World();
 
@@ -87,7 +88,8 @@ export default (user: User) => {
     .registerSystem(CommandsSystem)
     .registerSystem(AdminNetworkSystem)
     .registerSystem(LoadingSystem)
-    .registerSystem(CleanupSystem);
+    .registerSystem(CleanupSystem)
+    .registerSystem(MusicSystem);
 
   CreateNetworkRoom();
   CreateLocalPlayer(user);
