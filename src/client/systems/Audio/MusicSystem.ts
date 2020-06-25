@@ -10,7 +10,7 @@ import { Loadable } from "@client/components/Loadable";
 export default class MusicSystem extends System {
   static queries = {
     music: {
-      components: [Music, Not(Loadable), Not(AudioFadeIn), Not(AudioFadeOut)],
+      components: [Music, Not(Loadable)],
     },
     audioFadeIn: {
       components: [Music, AudioFadeIn, Not(Loadable)],
@@ -28,17 +28,20 @@ export default class MusicSystem extends System {
 
   execute() {
     const musicEntity = this.queries.music.results[0];
+    if (!musicEntity) return;
+
     const audioComponent = musicEntity.getComponent(Audio);
     const audio = audioComponent.audio;
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.volume = 0;
-      audio.play();
+    if (audio) {
+      if (audio.paused && audio.seekable.length) {
+        audio.loop = true;
+        audio.volume = 0;
+        audio.play();
+      }
     }
 
     this.queries.audioFadeIn.results.forEach((fadeInEntity) => {
-      if (audio.volume < 100) {
+      if (audio && audio.volume < 100) {
         audio.volume += 0.5;
       } else {
         fadeInEntity.remove();
@@ -46,7 +49,7 @@ export default class MusicSystem extends System {
     });
 
     this.queries.audioFadeOut.results.forEach((fadeOutEntity) => {
-      if (audio.volume > 0) {
+      if (audio && audio.volume > 0) {
         audio.volume -= 0.5;
       } else {
         fadeOutEntity.remove();

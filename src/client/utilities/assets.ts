@@ -15,11 +15,16 @@ export const loadAudio = async (
     }
 
     const audio = document.createElement("audio");
-    audio.src = path;
     audio.addEventListener("load", () => {
       loadedAudio[path] = audio;
       accept(audio);
     });
+
+    audio.addEventListener("error", () => {
+      accept(audio);
+    });
+
+    audio.src = path;
   });
 };
 
@@ -59,3 +64,5 @@ export const characterAssetPath = (name: string) =>
   `/assets/characters/${name}.png`;
 
 export const effectAssetPath = (name: string) => `/assets/effects/${name}.png`;
+
+export const musicAssetPath = (name: string) => `/assets/music/${name}.mp3`;
