@@ -64,7 +64,7 @@
             "y": 0
         },
         {
-           "fileName": "cold.json",
+            "fileName": "cold.json",
             "height": 2176,
             "width": 3840,
             "x": -12256,
@@ -97,6 +97,55 @@
             "width": 3840,
             "x": -12256,
             "y": -34880
+        },
+        {
+            "fileName": "east-road-block.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 7680,
+            "y": 0
+        },
+        {
+            "fileName": "north-broken-bridge.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 0,
+            "y": -4352
+        },
+        {
+            "fileName": "north-east1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 3840,
+            "y": -4352
+        },
+        {
+            "fileName": "north-east2.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 7680,
+            "y": -4352
+        },
+        {
+            "fileName": "north-east3.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 7680,
+            "y": -2176
+        },
+        {
+            "fileName": "north-inlet.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -3840,
+            "y": -4352
+        },
+        {
+            "fileName": "south-east-road-block.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 7680,
+            "y": 2176
         }
     ],
     "onlyShowAdjacentMaps": false,
