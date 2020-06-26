@@ -15,7 +15,7 @@ export const loadAudio = async (
     }
 
     const audio = document.createElement("audio");
-    audio.addEventListener("load", () => {
+    audio.addEventListener("canplaythrough", () => {
       loadedAudio[path] = audio;
       accept(audio);
     });
