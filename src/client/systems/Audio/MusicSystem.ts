@@ -30,6 +30,10 @@ export default class MusicSystem extends System {
     },
   };
 
+  init() {
+    // set max volume using gameState listener event
+  }
+
   setVolume(audio: HTMLAudioElement, newVolume: number) {
     if (this.muted) {
       this.savedVolume = newVolume;
@@ -44,12 +48,10 @@ export default class MusicSystem extends System {
 
     const audioComponent = musicEntity.getComponent(Audio);
     const audio = audioComponent.audio;
-    if (audio) {
-      if (audio.paused && audio.seekable.length) {
-        audio.loop = true;
-        audio.volume = 0;
-        audio.play();
-      }
+    if (audio && audio.paused && audio.seekable.length) {
+      audio.loop = true;
+      audio.volume = 0;
+      audio.play();
     }
 
     this.queries.audioFadeIn.results.forEach((fadeInEntity) => {
@@ -61,7 +63,7 @@ export default class MusicSystem extends System {
     });
 
     this.queries.audioFadeOut.results.forEach((fadeOutEntity) => {
-      if (audio && audio.volume > this.maxVolume) {
+      if (audio && audio.volume > 0) {
         this.setVolume(audio, Math.max(audio.volume - 0.001, 0));
       } else {
         fadeOutEntity.removeComponent(AudioFadeOut);

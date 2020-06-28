@@ -8,6 +8,7 @@ import Gate from "@client/components/Gate";
 import Position from "@client/components/Position";
 import Drawable from "@client/components/Drawable";
 import { tilesAdjacent } from "utilities/movement/surroundings";
+import CreateSoundEffect from "@client/entities/SoundEffect";
 
 export default class GateSystem extends System {
   static queries = {
@@ -62,7 +63,11 @@ export default class GateSystem extends System {
           }
         });
 
-      gateEntity.getComponent(Gate).open = characterAdjacent;
+      const gateComponent = gateEntity.getComponent(Gate);
+      if (!gateComponent.open && characterAdjacent) {
+        CreateSoundEffect("gate");
+      }
+      gateComponent.open = characterAdjacent;
     });
   }
 }

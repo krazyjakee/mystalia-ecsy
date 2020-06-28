@@ -12,3 +12,5 @@ export class NextMusic extends Component {
 }
 
 export class Music extends TagComponent {}
+
+export class SoundEffect extends TagComponent {}

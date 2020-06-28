@@ -47,6 +47,7 @@ import LootSystem from "./systems/Rendering/LootSystem";
 import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
 import MusicSystem from "./systems/Audio/MusicSystem";
 import SoundScapeSystem from "./systems/Audio/SoundScapeSystem";
+import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
 
 let world = new World();
 
@@ -92,7 +93,8 @@ export default (user: User) => {
     .registerSystem(LoadingSystem)
     .registerSystem(CleanupSystem)
     .registerSystem(MusicSystem)
-    .registerSystem(SoundScapeSystem);
+    .registerSystem(SoundScapeSystem)
+    .registerSystem(SoundEffectSystem);
 
   CreateMusic();
   CreateNetworkRoom();
