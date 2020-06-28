@@ -91,12 +91,14 @@ export default (user: User) => {
     .registerSystem(CommandsSystem)
     .registerSystem(AdminNetworkSystem)
     .registerSystem(LoadingSystem)
-    .registerSystem(CleanupSystem)
-    .registerSystem(MusicSystem)
-    .registerSystem(SoundScapeSystem)
-    .registerSystem(SoundEffectSystem);
+    .registerSystem(CleanupSystem);
 
-  CreateMusic();
+  // TODO: After the options menu is made and sound options available, this can be uncommented.
+  // .registerSystem(MusicSystem)
+  // .registerSystem(SoundScapeSystem)
+  // .registerSystem(SoundEffectSystem);
+  // CreateMusic();
+
   CreateNetworkRoom();
   CreateLocalPlayer(user);
   CreateTileMap(user);
