@@ -6,10 +6,20 @@ export default class BrightnessSystem extends System {
   static queries = {
     brightness: {
       components: [EnvironmentBrightness],
+      listen: {
+        added: true,
+      },
     },
   };
 
   execute() {
+    this.queries.brightness.added?.forEach((brightnessEntity) => {
+      const brightnessComponent = brightnessEntity.getMutableComponent(
+        EnvironmentBrightness
+      );
+      brightnessComponent.brightness = calculateBrightness();
+    });
+
     this.queries.brightness.results.forEach((brightnessEntity) => {
       const brightnessComponent = brightnessEntity.getMutableComponent(
         EnvironmentBrightness

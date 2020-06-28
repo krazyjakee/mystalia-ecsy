@@ -66,3 +66,5 @@ export const characterAssetPath = (name: string) =>
 export const effectAssetPath = (name: string) => `/assets/effects/${name}.png`;
 
 export const musicAssetPath = (name: string) => `/assets/music/${name}.mp3`;
+
+export const sfxAssetPath = (name: string) => `/assets/sfx/${name}.mp3`;

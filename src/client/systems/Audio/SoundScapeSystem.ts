@@ -13,7 +13,7 @@ import TileMap from "@client/components/TileMap";
 import { musicAssetPath } from "@client/utilities/assets";
 
 export default class SoundScapeSystem extends System {
-  night: boolean = false;
+  night: null | boolean = null;
 
   static queries = {
     brightness: {
@@ -35,6 +35,7 @@ export default class SoundScapeSystem extends System {
     if (!tileMapEntity) return;
 
     const tileMap = tileMapEntity.getComponent(TileMap);
+
     const audioEntity = this.queries.audio.results[0];
     if (!audioEntity) return;
 
@@ -47,14 +48,25 @@ export default class SoundScapeSystem extends System {
         EnvironmentBrightness
       );
       const brightness = brightnessComponent.brightness;
+
+      if (this.night === null) {
+        this.night = brightness >= 40;
+      }
+
       if (brightness < 40 && !this.night) {
         this.night = true;
         audioEntity.addComponent(NextMusic, {
           audioPath: musicAssetPath(`soundscapes/${biome}Night`),
         });
-      } else if (this.night) {
+      } else if (brightness >= 40 && this.night) {
         this.night = false;
-        audioEntity.addComponent(AudioFadeOut);
+        if (tileMap.properties.music) {
+          audioEntity.addComponent(NextMusic, {
+            audioPath: musicAssetPath(tileMap.properties.music),
+          });
+        } else {
+          audioEntity.addComponent(AudioFadeOut);
+        }
       }
     }
   }

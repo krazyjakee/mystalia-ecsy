@@ -132,9 +132,11 @@ export default (user: User) => {
   };
 
   window.onblur = () => {
+    window.gameFocused = false;
     worker.postMessage("start");
   };
   window.onfocus = () => {
+    window.gameFocused = true;
     worker.postMessage("stop");
   };
 
