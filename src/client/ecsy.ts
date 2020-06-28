@@ -1,5 +1,12 @@
 import context2d from "./canvas";
 import User from "types/User";
+import { World } from "ecsy";
+import "./entities";
+
+import CreateLocalPlayer from "./entities/LocalPlayer";
+import CreateTileMap from "./entities/TileMap";
+import CreateNetworkRoom from "./entities/NetworkRoom";
+import CreateMusic from "./entities/Music";
 
 import MapChangeSystem from "./systems/Map/MapChangeSystem";
 import MapLoadSystem from "./systems/Map/MapLoadSystem";
@@ -18,10 +25,6 @@ import FadeSystem from "./systems/Rendering/FadeSystem";
 import PlayerNameSystem from "./systems/Rendering/PlayerNameSystem";
 import LightSystem from "./systems/Rendering/LightSystem/LightSystem";
 import TileAnimationSystem from "./systems/Rendering/TileAnimationSystem";
-import CreateLocalPlayer from "./entities/LocalPlayer";
-import CreateTileMap from "./entities/TileMap";
-import { World } from "ecsy";
-import CreateNetworkRoom from "./entities/NetworkRoom";
 import AdminNetworkSystem from "./systems/Network/AdminNetworkSystem";
 import CommandsSystem from "./systems/Network/CommandsSystem";
 import ItemSystem from "./systems/Rendering/ItemSystem";
@@ -29,8 +32,6 @@ import CleanupSystem from "./systems/CleanupSystem";
 import FlameSystem from "./systems/Rendering/LightSystem/FlameSystem";
 import GraySystem from "./systems/Rendering/GraySystem";
 import WeatherSystem from "./systems/Rendering/WeatherSystem";
-
-import "./entities";
 import EnemyStatusSystem from "./systems/HUD/EnemyStatusSystem";
 import PickUpSystem from "./systems/MovementSystem/PickUpSystem";
 import TileActionSystem from "./systems/MovementSystem/TileActionSystem";
@@ -44,6 +45,9 @@ import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerS
 import GateSystem from "./systems/Rendering/GateSystem";
 import LootSystem from "./systems/Rendering/LootSystem";
 import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
+import MusicSystem from "./systems/Audio/MusicSystem";
+import SoundScapeSystem from "./systems/Audio/SoundScapeSystem";
+import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
 
 let world = new World();
 
@@ -89,6 +93,12 @@ export default (user: User) => {
     .registerSystem(LoadingSystem)
     .registerSystem(CleanupSystem);
 
+  // TODO: After the options menu is made and sound options available, this can be uncommented.
+  // .registerSystem(MusicSystem)
+  // .registerSystem(SoundScapeSystem)
+  // .registerSystem(SoundEffectSystem);
+  // CreateMusic();
+
   CreateNetworkRoom();
   CreateLocalPlayer(user);
   CreateTileMap(user);
@@ -126,9 +136,11 @@ export default (user: User) => {
   };
 
   window.onblur = () => {
+    window.gameFocused = false;
     worker.postMessage("start");
   };
   window.onfocus = () => {
+    window.gameFocused = true;
     worker.postMessage("stop");
   };
 
