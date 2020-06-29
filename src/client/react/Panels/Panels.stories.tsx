@@ -9,8 +9,8 @@ import ChatPanelComponent from "./Chat/ChatPanel";
 import { Status as StatusComponent } from "./Status";
 import ShopPanelComponent from "./Shop/ShopPanel";
 import LootPanelComponent from "./Loot";
+import GameMenuComponent from "./GameMenu";
 import { MapSchema } from "@colyseus/schema";
-import LootState from "@server/components/loot";
 import LootItemState from "@server/components/lootItem";
 
 export default {
@@ -116,3 +116,7 @@ export const LootPanel = () => {
 
   return <LootPanelComponent forceEnable={true} propsLootState={lootState} />;
 };
+
+export const GameMenu = () => (
+  <GameMenuComponent logout={() => false} forceEnable={true} />
+);
