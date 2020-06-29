@@ -54,6 +54,9 @@ const useStyles = createUseStyles({
     outline: "none",
     cursor: "pointer",
     ...whiteText,
+    "&[disabled]": {
+      filter: "grayscale(100%)",
+    },
   },
   active: {
     filter: "brightness(1.4) !important",

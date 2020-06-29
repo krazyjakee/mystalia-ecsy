@@ -4,6 +4,7 @@ type Props = {
   keys: string | string[];
   show?: boolean;
   onShow?: VoidFunction;
+  onHide?: VoidFunction;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default (props: Props) => {
@@ -13,6 +14,8 @@ export default (props: Props) => {
     setShow(!show);
     if (!show && props.onShow) {
       props.onShow();
+    } else if (show && props.onHide) {
+      props.onHide();
     }
   };
 

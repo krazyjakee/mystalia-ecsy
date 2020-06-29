@@ -69,7 +69,7 @@ const menuItems = [
   {
     id: "options",
     label: "Options/Logout",
-    hotkey: "Esc",
+    hotkey: "Escape",
   },
 ];
 

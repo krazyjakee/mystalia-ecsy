@@ -12,6 +12,7 @@ import ShopPanel from "./react/Panels/Shop/ShopPanel";
 import { TargetedEnemyStatus } from "./react/Panels/Status/TargetedEnemyStatus";
 import ChatPanel from "./react/Panels/Chat/ChatPanel";
 import LootPanel from "./react/Panels/Loot";
+import GameMenu from "./react/Panels/GameMenu";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -48,6 +49,7 @@ const App = () => {
           <TargetedEnemyStatus />
           <ChatPanel />
           <LootPanel />
+          <GameMenu logout={() => setInGame(false)} />
         </>
       ) : null}
     </>
