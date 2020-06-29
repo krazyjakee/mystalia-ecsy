@@ -12,6 +12,7 @@ import LootPanelComponent from "./Loot";
 import GameMenuComponent from "./GameMenu";
 import { MapSchema } from "@colyseus/schema";
 import LootItemState from "@server/components/lootItem";
+import OptionsPanelComponent from "./Options/OptionsPanel";
 
 export default {
   title: "Panels",
@@ -120,3 +121,5 @@ export const LootPanel = () => {
 export const GameMenu = () => (
   <GameMenuComponent logout={() => false} forceEnable={true} />
 );
+
+export const OptionsPanel = () => <OptionsPanelComponent forceShow={true} />;

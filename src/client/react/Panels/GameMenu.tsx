@@ -15,6 +15,11 @@ export default (props: Props) => {
     triggerGlobalKeypress("Escape");
   };
 
+  const openOptions = () => {
+    close();
+    triggerGlobalKeypress("T");
+  };
+
   const logout = () => {
     window.ecsyError = true;
     client.auth.logout();
@@ -35,7 +40,7 @@ export default (props: Props) => {
       >
         <Button value="Resume" onClick={() => close()} />
         <br />
-        <Button value="Options" disabled />
+        <Button value="Options" onClick={() => openOptions()} />
         <br />
         <Button value="Log Out" onClick={() => logout()} />
       </BasePanel>
