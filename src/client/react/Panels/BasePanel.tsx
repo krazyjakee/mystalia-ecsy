@@ -6,6 +6,7 @@ import classnames from "classnames";
 import { Rnd, Props } from "react-rnd";
 import { IconButton } from "../FormControls/IconButton";
 import { FaTimes } from "react-icons/fa";
+import classNames from "classnames";
 
 const useStyles = createUseStyles({
   container: {
@@ -168,26 +169,34 @@ type PanelProps = {
   onCloseClick?: VoidFunction;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export const BasePanel = (props: PanelProps) => {
+export const BasePanel = ({
+  isDraggable,
+  rndOptions,
+  className,
+  title,
+  onCloseClick,
+  children,
+  ...rest
+}: PanelProps) => {
   const classes = useStyles();
 
   const panel = (
-    <div className={classes.container} {...props}>
+    <div className={classNames(classes.container, className)} {...rest}>
       <div className={classes.labelContainer}>
-        {props.title && <span className={classes.label}>{props.title}</span>}
+        {title && <span className={classes.label}>{title}</span>}
       </div>
       <div className={classnames(classes.header, "panelDragHandle")}>
         <IconButton
           Icon={FaTimes}
           className={classes.closeBtn}
-          onClick={props.onCloseClick}
+          onClick={onCloseClick}
         />
       </div>
       <div className={classes.border}>
-        <div className={classes.content}>{props.children}</div>
+        <div className={classes.content}>{children}</div>
       </div>
     </div>
   );
 
-  return props.isDraggable ? makeRnd(panel, props.rndOptions || {}) : panel;
+  return isDraggable ? makeRnd(panel, rndOptions || {}) : panel;
 };
