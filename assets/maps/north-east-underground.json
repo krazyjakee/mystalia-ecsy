@@ -5414,7 +5414,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":2
+                         "value":7
                         }],
                  "rotation":0,
                  "type":"loot",

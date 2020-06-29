@@ -43,11 +43,11 @@ export default class ItemSpawner {
     this.mapItems.forEach((objectTile) => {
       const item = objectTile.properties;
       if (!item) return;
-      const chance = randomNumberBetween(item.chance, 0);
+      const chance = randomNumberBetween(item.chance);
       const quantity = item.maximumQuantity
         ? randomNumberBetween(item.maximumQuantity)
         : item.quantity;
-      if (chance >= 1) {
+      if (chance === 1) {
         const isTileVacant =
           searchState(this.room.state.items, { tileId: objectTile.tileId })
             .length === 0;

@@ -447,7 +447,7 @@
                         {
                          "name":"lootId",
                          "type":"int",
-                         "value":1
+                         "value":9
                         }],
                  "rotation":0,
                  "type":"loot",
@@ -461,6 +461,12 @@
                  "height":32,
                  "id":36,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"lootId",
+                         "type":"int",
+                         "value":8
+                        }],
                  "rotation":0,
                  "type":"loot",
                  "visible":true,
