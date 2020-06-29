@@ -35,7 +35,7 @@ export default (props: Props) => {
       >
         <Button value="Resume" onClick={() => close()} />
         <br />
-        <Button value="Options" />
+        <Button value="Options" disabled />
         <br />
         <Button value="Log Out" onClick={() => logout()} />
       </BasePanel>
