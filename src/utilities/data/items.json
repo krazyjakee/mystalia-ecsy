@@ -196,5 +196,54 @@
     "spritesheet": "items",
     "spriteId": 182,
     "type": "other"
+  },
+  {
+    "id": 24,
+    "name": "Cooked Fish",
+    "spritesheet": "items",
+    "spriteId": 343,
+    "type": "consumable"
+  },
+  {
+    "id": 25,
+    "name": "Wedge of Cheese",
+    "spritesheet": "items",
+    "spriteId": 327,
+    "type": "consumable"
+  },
+  {
+    "id": 26,
+    "name": "Cooked Kebab",
+    "spritesheet": "items",
+    "spriteId": 328,
+    "type": "consumable"
+  },
+  {
+    "id": 27,
+    "name": "Raw Fish",
+    "spritesheet": "items",
+    "spriteId": 342,
+    "type": "consumable"
+  },
+  {
+    "id": 28,
+    "name": "Cooked ChickenLeg",
+    "spritesheet": "items",
+    "spriteId": 330,
+    "type": "consumable"
+  },
+  {
+    "id": 29,
+    "name": "Raw ChickenLeg",
+    "spritesheet": "items",
+    "spriteId": 329,
+    "type": "consumable"
+  },
+  {
+    "id": 30,
+    "name": "Bunch of Grapes",
+    "spritesheet": "items",
+    "spriteId": 322,
+    "type": "consumable"
   }
 ]
