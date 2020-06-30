@@ -146,6 +146,13 @@
             "width": 3840,
             "x": 7680,
             "y": 2176
+        },
+        {
+            "fileName": "south-east-valley.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 7680,
+            "y": 4352
         }
     ],
     "onlyShowAdjacentMaps": false,
