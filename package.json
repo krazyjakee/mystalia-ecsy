@@ -44,7 +44,7 @@
     "colyseus.js": "^0.13.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "ecsy": "file:../ecsy",
+    "ecsy": "github:krazyjakee/ecsy#better-type-inference",
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "fantasy-name-generator": "^2.0.0",
