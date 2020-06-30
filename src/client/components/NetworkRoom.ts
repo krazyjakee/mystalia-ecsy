@@ -4,12 +4,7 @@ import MapState from "@server/components/map";
 
 export type RoomState = Room<MapState>;
 
-type NetworkRoomProps = {
-  room?: RoomState;
-  joining: boolean;
-};
-
-export default class NetworkRoom extends Component<NetworkRoomProps> {
+export default class NetworkRoom extends Component {
   room?: RoomState;
   joining: boolean = false;
 }

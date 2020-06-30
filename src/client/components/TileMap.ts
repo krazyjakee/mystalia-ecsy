@@ -5,20 +5,7 @@ import { TileSetStore } from "types/TileMap/TileSetStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { Direction } from "types/Grid";
 
-type TileMapProps = {
-  properties: TileMapProperties;
-  tiles: DrawableProperties[];
-  tileSetStore: TileSetStore;
-  objectLayerIndex: number;
-  objectTileStore: ObjectTileStore;
-  canvasCache: HTMLCanvasElement[];
-  width: number;
-  height: number;
-  fileName: string;
-  targetTile: number | null;
-};
-
-export default class TileMap extends Component<TileMapProps> {
+export default class TileMap extends Component {
   properties: TileMapProperties = {};
   tiles: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
@@ -44,11 +31,7 @@ export default class TileMap extends Component<TileMapProps> {
   }
 }
 
-type ChangeMapProps = {
-  direction?: Direction;
-};
-
-export class ChangeMap extends Component<ChangeMapProps> {
+export class ChangeMap extends Component {
   direction?: Direction;
 }
 

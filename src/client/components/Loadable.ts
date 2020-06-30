@@ -1,4 +1,4 @@
-import { Component, TagComponent } from "ecsy";
+import { Component } from "ecsy";
 
 export class Loadable extends Component {
   audioPath?: string;
@@ -25,4 +25,4 @@ export class Unloadable extends Component {
   }
 }
 
-export class SimpleLoadable extends TagComponent {}
+export class SimpleLoadable extends Component {}

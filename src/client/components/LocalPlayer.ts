@@ -1,11 +1,7 @@
 import { Component, TagComponent } from "ecsy";
 import User from "types/User";
 
-type LocalPlayerProps = {
-  user?: User;
-};
-
-export default class LocalPlayer extends Component<LocalPlayerProps> {
+export default class LocalPlayer extends Component {
   user?: User;
 }
 

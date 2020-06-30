@@ -5,20 +5,10 @@ type ShopTiles = {
   [key: number]: ObjectTile<"shop">;
 };
 
-type ShopProps = {
-  shopTiles: ShopTiles;
-};
-
-export default class Shop extends Component<ShopProps> {
+export default class Shop extends Component {
   shopTiles: ShopTiles = {};
 }
 
-type OpenShopAtDestinationProps = {
-  shopId?: number;
-};
-
-export class OpenShopAtDestination extends Component<
-  OpenShopAtDestinationProps
-> {
+export class OpenShopAtDestination extends Component {
   shopId?: number;
 }

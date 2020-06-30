@@ -1,11 +1,9 @@
 import BaseCharacter from "./BaseCharacter";
-import RemotePlayer, {
-  RemotePlayerProps,
-} from "@client/components/RemotePlayer";
+import RemotePlayer from "@client/components/RemotePlayer";
 import SpriteSheetAnimation from "@client/components/SpriteSheetAnimation";
 import { generateCharacterAnimationSteps } from "../utilities/Animation/character";
 
-export default function CreateRemotePlayer(opts: RemotePlayerProps) {
+export default function CreateRemotePlayer(opts: Partial<RemotePlayer>) {
   return BaseCharacter()
     .addComponent(SpriteSheetAnimation, {
       speed: 10,

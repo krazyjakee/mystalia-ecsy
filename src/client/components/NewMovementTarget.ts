@@ -1,14 +1,7 @@
 import { Component } from "ecsy";
 import { Direction } from "types/Grid";
 
-type NewMovementTargetProps = {
-  targetTile: number;
-  mapDir?: Direction;
-};
-
-export default class NewMovementTarget extends Component<
-  Partial<NewMovementTargetProps>
-> {
+export default class NewMovementTarget extends Component {
   targetTile: number = 0;
   mapDir?: Direction;
 }

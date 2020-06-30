@@ -1,13 +1,6 @@
 import { Component } from "ecsy";
 
-type EnvironmentBrightnessProps = {
-  brightness: number;
-  offset: number;
-};
-
-export default class EnvironmentBrightness extends Component<
-  EnvironmentBrightnessProps
-> {
+export default class EnvironmentBrightness extends Component {
   brightness: number = 100;
   offset: number = 0;
 }

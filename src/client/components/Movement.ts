@@ -1,16 +1,7 @@
 import { Component } from "ecsy";
 import { Direction } from "types/Grid";
 
-type MovementProps = {
-  direction?: Direction;
-  targetTile?: number;
-  currentTile: number;
-  tileQueue: number[];
-  speed: number;
-  pathingTo?: number;
-};
-
-export default class Movement extends Component<Partial<MovementProps>> {
+export default class Movement extends Component {
   direction?: Direction;
   targetTile?: number;
   currentTile: number = 0;
