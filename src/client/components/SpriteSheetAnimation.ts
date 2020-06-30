@@ -1,7 +1,20 @@
 import { Component } from "ecsy";
 import { Vector } from "types/TMJ";
 
-export default class SpriteSheetAnimation extends Component {
+type SpriteSheetAnimationProps = {
+  step: number;
+  steps: Vector[];
+  restingStep: number;
+  speed: number;
+  playing: boolean;
+  timeSinceLastAnimation: number;
+  increment: boolean;
+  loopAround: boolean;
+};
+
+export default class SpriteSheetAnimation extends Component<
+  Partial<SpriteSheetAnimationProps>
+> {
   step: number = 0;
   steps: Vector[] = [];
   restingStep: number = 0;

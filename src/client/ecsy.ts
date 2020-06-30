@@ -13,7 +13,6 @@ import MapLoadSystem from "./systems/Map/MapLoadSystem";
 import RenderingSystem from "./systems/Rendering/RenderingSystem";
 import LoadingSystem from "./systems/LoadingSystem";
 import NetworkingSystem from "./systems/Network/NetworkingSystem";
-import ToggleInputSystem from "./systems/Input/ToggleInputSystem";
 import KeyboardInputSystem from "./systems/Input/KeyboardInputSystem";
 import MouseInputSystem from "./systems/Input/MouseInputSystem";
 import MovementSystem from "./systems/MovementSystem";
@@ -48,7 +47,48 @@ import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
 import MusicSystem from "./systems/Audio/MusicSystem";
 import SoundScapeSystem from "./systems/Audio/SoundScapeSystem";
 import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
-import Storage from "./utilities/storage";
+import AnimatedTile from "./components/AnimatedTile";
+import Audio from "./components/Audio";
+import CharacterHighlight from "./components/CharacterHighlight";
+import Drawable from "./components/Drawable";
+import Effect from "./components/Effect";
+import Enemy from "./components/Enemy";
+import EnvironmentBrightness from "./components/EnvironmentBrightness";
+import Fade from "./components/Fade";
+import Gate from "./components/Gate";
+import Inventory from "./components/Inventory";
+import Item from "./components/Item";
+import { Loadable, Unloadable, SimpleLoadable } from "./components/Loadable";
+import LocalPlayer, {
+  RoleCheckPending,
+  CommandsPending,
+} from "./components/LocalPlayer";
+import Loot from "./components/Loot";
+import Movement from "./components/Movement";
+import NetworkRoom from "./components/NetworkRoom";
+import NewMovementTarget from "./components/NewMovementTarget";
+import Position from "./components/Position";
+import RemotePlayer from "./components/RemotePlayer";
+import Shop from "./components/Shop";
+import SpriteSheetAnimation from "./components/SpriteSheetAnimation";
+import TextBurst from "./components/TextBurst";
+import TileMap from "./components/TileMap";
+import Weather from "./components/Weather";
+import {
+  Remove,
+  SendData,
+  Move,
+  KeyboardInput,
+  MouseInput,
+  AwaitingPosition,
+  Gray,
+  Disable,
+  Focused,
+  BattleTarget,
+  PickUpAtDestination,
+  GenerateSpriteSheetAnimationSteps,
+} from "./components/Tags";
+import Storage from "@client/utilities/storage";
 
 let world = new World();
 
@@ -56,7 +96,46 @@ export const getWorld = () => world;
 
 export default (user: User) => {
   world
-    .registerSystem(ToggleInputSystem)
+    .registerComponent(AnimatedTile)
+    .registerComponent(Audio)
+    .registerComponent(CharacterHighlight)
+    .registerComponent(Drawable)
+    .registerComponent(Effect)
+    .registerComponent(Enemy)
+    .registerComponent(EnvironmentBrightness)
+    .registerComponent(Fade)
+    .registerComponent(Gate)
+    .registerComponent(Inventory)
+    .registerComponent(Item)
+    .registerComponent(Loadable)
+    .registerComponent(Unloadable)
+    .registerComponent(SimpleLoadable)
+    .registerComponent(LocalPlayer)
+    .registerComponent(RoleCheckPending)
+    .registerComponent(CommandsPending)
+    .registerComponent(Loot)
+    .registerComponent(Movement)
+    .registerComponent(NetworkRoom)
+    .registerComponent(NewMovementTarget)
+    .registerComponent(Position)
+    .registerComponent(RemotePlayer)
+    .registerComponent(Shop)
+    .registerComponent(SpriteSheetAnimation)
+    .registerComponent(TextBurst)
+    .registerComponent(TileMap)
+    .registerComponent(Weather)
+    .registerComponent(Remove)
+    .registerComponent(Move)
+    .registerComponent(SendData)
+    .registerComponent(KeyboardInput)
+    .registerComponent(MouseInput)
+    .registerComponent(AwaitingPosition)
+    .registerComponent(Gray)
+    .registerComponent(Disable)
+    .registerComponent(Focused)
+    .registerComponent(BattleTarget)
+    .registerComponent(PickUpAtDestination)
+    .registerComponent(GenerateSpriteSheetAnimationSteps)
     .registerSystem(KeyboardInputSystem)
     .registerSystem(MouseInputSystem)
     .registerSystem(MapEventSystem)

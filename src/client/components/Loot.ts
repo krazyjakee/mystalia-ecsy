@@ -1,18 +1,30 @@
 import { Component } from "ecsy";
 import { SimpleLootItemState } from "@client/react/Panels/Loot/lootItemStateToArray";
 
-export default class Loot extends Component {
+type LootProps = {
+  tileId?: number;
+  items: SimpleLootItemState[];
+};
+
+export default class Loot extends Component<LootProps> {
   tileId?: number;
   items: SimpleLootItemState[] = [];
 }
 
-export class UpdateLoot extends Component {
-  updates: {
-    tileId?: number;
-    items: SimpleLootItemState[];
-  }[] = [];
+type UpdateLootProps = {
+  updates: LootProps[];
+};
+
+export class UpdateLoot extends Component<UpdateLootProps> {
+  updates: LootProps[] = [];
 }
 
-export class OpenLootAtDestination extends Component {
+type OpenLootAtDestinationProps = {
+  tileId?: number;
+};
+
+export class OpenLootAtDestination extends Component<
+  OpenLootAtDestinationProps
+> {
   tileId?: number;
 }

@@ -1,7 +1,21 @@
 import { Component } from "ecsy";
 import { Vector } from "types/TMJ";
 
-export default class Drawable extends Component {
+type DrawableProps = {
+  image?: CanvasImageSource | HTMLImageElement | null;
+  data?: any;
+  sourceX: number;
+  sourceY: number;
+  sourceWidth: number;
+  sourceHeight: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  offset: Vector;
+};
+
+export default class Drawable extends Component<Partial<DrawableProps>> {
   image?: CanvasImageSource | HTMLImageElement | null;
   data?: any;
   sourceX: number = 0;

@@ -45,13 +45,15 @@ const config = {
     publicPath: "/",
   },
   plugins: [
-    new CopyWebpackPlugin([
-      "assets/**/*",
-      {
-        from: "node_modules/normalize.css/normalize.css",
-        to: "css/normalize.css",
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        "assets/**/*",
+        {
+          from: "node_modules/normalize.css/normalize.css",
+          to: "css/normalize.css",
+        },
+      ],
+    }),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "..", "client", "index.html"),
     }),

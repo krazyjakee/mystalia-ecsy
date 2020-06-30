@@ -1,6 +1,13 @@
 import { Component } from "ecsy";
 
-export default class Item extends Component {
+type ItemProps = {
+  itemId?: number;
+  tileId?: number;
+  sourceTileId?: number;
+  quantity: number;
+};
+
+export default class Item extends Component<ItemProps> {
   itemId?: number;
   tileId?: number;
   sourceTileId?: number;

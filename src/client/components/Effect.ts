@@ -1,5 +1,8 @@
 import { Component } from "ecsy";
 
-export default class Effect extends Component {
+type EffectProps = {
+  effectId?: number;
+};
+export default class Effect extends Component<EffectProps> {
   effectId?: number;
 }

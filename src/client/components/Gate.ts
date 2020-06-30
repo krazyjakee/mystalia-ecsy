@@ -1,5 +1,9 @@
 import { Component } from "ecsy";
 
-export default class Gate extends Component {
+type GateProps = {
+  open: boolean;
+};
+
+export default class Gate extends Component<GateProps> {
   open: boolean = false;
 }
