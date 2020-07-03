@@ -48,6 +48,7 @@ import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
 import MusicSystem from "./systems/Audio/MusicSystem";
 import SoundScapeSystem from "./systems/Audio/SoundScapeSystem";
 import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
+import Storage from "./utilities/storage";
 
 let world = new World();
 
@@ -91,14 +92,12 @@ export default (user: User) => {
     .registerSystem(CommandsSystem)
     .registerSystem(AdminNetworkSystem)
     .registerSystem(LoadingSystem)
-    .registerSystem(CleanupSystem);
+    .registerSystem(CleanupSystem)
+    .registerSystem(MusicSystem)
+    .registerSystem(SoundScapeSystem)
+    .registerSystem(SoundEffectSystem);
 
-  // TODO: After the options menu is made and sound options available, this can be uncommented.
-  // .registerSystem(MusicSystem)
-  // .registerSystem(SoundScapeSystem)
-  // .registerSystem(SoundEffectSystem);
-  // CreateMusic();
-
+  CreateMusic();
   CreateNetworkRoom();
   CreateLocalPlayer(user);
   CreateTileMap(user);
@@ -143,6 +142,9 @@ export default (user: User) => {
     window.gameFocused = true;
     worker.postMessage("stop");
   };
+
+  // Load all settings from storage
+  Storage.init();
 
   update();
 };

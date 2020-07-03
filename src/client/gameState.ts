@@ -39,9 +39,15 @@ class GameState {
     data?: GameStateEvents[T]
   ) {
     if (this.rooms[type]) {
-      const messageData = {
-        ...data,
-      };
+      let messageData: GameStateEvents[T] | undefined;
+
+      if (typeof data === "object" || data === undefined) {
+        messageData = {
+          ...(data as any),
+        };
+      } else if (["string", "number"].includes(typeof data)) {
+        messageData = data;
+      }
 
       this.rooms[type].send(name, messageData);
       return true;

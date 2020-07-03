@@ -1,10 +1,13 @@
 import { System, Not } from "ecsy";
 import Audio, { SoundEffect } from "@client/components/Audio";
 import { Loadable } from "@client/components/Loadable";
+import gameState from "@client/gameState";
+import { isPresent } from "utilities/guards";
 
 export default class SoundEffectSystem extends System {
   muted = false;
   maxVolume = 0.8;
+  newMaxVolume: number | undefined;
 
   static queries = {
     soundEffect: {
@@ -16,7 +19,9 @@ export default class SoundEffectSystem extends System {
   };
 
   init() {
-    // set max volume using gameState listener event
+    gameState.subscribe("setting:sfxVolume", (value) => {
+      this.newMaxVolume = parseInt(value) / 100;
+    });
   }
 
   execute() {
@@ -27,12 +32,18 @@ export default class SoundEffectSystem extends System {
 
     const audioComponent = soundEffectEntity.getComponent(Audio);
     const audio = audioComponent.audio;
-    if (audio && audio.paused && audio.seekable.length) {
-      audio.onended = () => {
-        soundEffectEntity.remove();
-      };
-      audio.volume = this.maxVolume;
-      audio.play();
+    if (audio) {
+      if (audio.paused && audio.seekable.length) {
+        audio.onended = () => {
+          soundEffectEntity.remove();
+        };
+        audio.volume = this.maxVolume;
+        audio.play();
+      }
+      if (isPresent(this.newMaxVolume)) {
+        audio.volume = this.newMaxVolume;
+        this.maxVolume = this.newMaxVolume;
+      }
     }
   }
 }

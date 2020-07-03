@@ -6,11 +6,14 @@ import Audio, {
   NextMusic,
 } from "@client/components/Audio";
 import { Loadable } from "@client/components/Loadable";
+import gameState from "@client/gameState";
+import { isPresent } from "utilities/guards";
 
 export default class MusicSystem extends System {
   savedVolume = 0;
   muted = false;
   maxVolume = 0.8;
+  newMaxVolume: number | undefined;
 
   static queries = {
     music: {
@@ -31,7 +34,9 @@ export default class MusicSystem extends System {
   };
 
   init() {
-    // set max volume using gameState listener event
+    gameState.subscribe("setting:musicVolume", (value) => {
+      this.newMaxVolume = parseInt(value) / 100;
+    });
   }
 
   setVolume(audio: HTMLAudioElement, newVolume: number) {
@@ -48,10 +53,16 @@ export default class MusicSystem extends System {
 
     const audioComponent = musicEntity.getComponent(Audio);
     const audio = audioComponent.audio;
-    if (audio && audio.paused && audio.seekable.length) {
-      audio.loop = true;
-      audio.volume = 0;
-      audio.play();
+    if (audio) {
+      if (audio.paused && audio.seekable.length) {
+        audio.loop = true;
+        audio.volume = 0;
+        audio.play();
+      }
+      if (isPresent(this.newMaxVolume)) {
+        audio.volume = this.newMaxVolume;
+        this.maxVolume = this.newMaxVolume;
+      }
     }
 
     this.queries.audioFadeIn.results.forEach((fadeInEntity) => {

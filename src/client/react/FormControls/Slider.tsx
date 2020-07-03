@@ -5,7 +5,7 @@ import { guiAssetPath } from "../cssUtilities";
 
 const useStyles = createUseStyles({
   root: {
-    marginTop: 45,
+    marginTop: 35,
     height: 33,
   },
   inputRangeSlider: {
@@ -125,7 +125,7 @@ const useStyles = createUseStyles({
 });
 
 type Props = {
-  value: number;
+  value: number | Range;
   onChange: (value: number | Range) => void;
 };
 
