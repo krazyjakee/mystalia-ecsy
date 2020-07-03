@@ -10,8 +10,7 @@ import gameState from "@client/gameState";
 import { isPresent } from "utilities/guards";
 
 export default class MusicSystem extends System {
-  savedVolume = 0;
-  muted = false;
+  volume = 0.8;
   maxVolume = 0.8;
   newMaxVolume: number | undefined;
 
@@ -39,35 +38,33 @@ export default class MusicSystem extends System {
     });
   }
 
-  setVolume(audio: HTMLAudioElement, newVolume: number) {
-    if (this.muted) {
-      this.savedVolume = newVolume;
-    } else {
-      audio.volume = newVolume;
-    }
-  }
-
   execute() {
     const musicEntity = this.queries.music.results[0];
     if (!musicEntity) return;
 
-    const audioComponent = musicEntity.getComponent(Audio);
+    const audioComponent = musicEntity.getMutableComponent(Audio);
     const audio = audioComponent.audio;
     if (audio) {
       if (audio.paused && audio.seekable.length) {
         audio.loop = true;
-        audio.volume = 0;
+        this.volume = 0;
         audio.play();
       }
-      if (isPresent(this.newMaxVolume)) {
+      if (
+        isPresent(this.newMaxVolume) &&
+        !musicEntity.hasComponent(AudioFadeIn) &&
+        !musicEntity.hasComponent(AudioFadeOut)
+      ) {
         audio.volume = this.newMaxVolume;
         this.maxVolume = this.newMaxVolume;
+        this.newMaxVolume = undefined;
       }
     }
 
     this.queries.audioFadeIn.results.forEach((fadeInEntity) => {
       if (audio && audio.volume < this.maxVolume) {
-        this.setVolume(audio, Math.min(audio.volume + 0.001, this.maxVolume));
+        this.volume = Math.min(audio.volume + 0.001, this.maxVolume);
+        audio.volume = this.volume;
       } else {
         fadeInEntity.removeComponent(AudioFadeIn);
       }
@@ -75,7 +72,8 @@ export default class MusicSystem extends System {
 
     this.queries.audioFadeOut.results.forEach((fadeOutEntity) => {
       if (audio && audio.volume > 0) {
-        this.setVolume(audio, Math.max(audio.volume - 0.001, 0));
+        this.volume = Math.max(audio.volume - 0.001, 0);
+        audio.volume = this.volume;
       } else {
         fadeOutEntity.removeComponent(AudioFadeOut);
       }
@@ -89,10 +87,16 @@ export default class MusicSystem extends System {
       if (!nextMusicEntity.hasComponent(AudioFadeOut)) {
         const nextMusic = nextMusicEntity.getComponent(NextMusic);
         audioComponent.audio = undefined;
-        audioComponent.audioPath = nextMusic.audioPath;
-        musicEntity.addComponent(Loadable, { audioPath: nextMusic.audioPath });
-        musicEntity.addComponent(AudioFadeIn);
-        musicEntity.removeComponent(NextMusic);
+        if (nextMusic.audioPath) {
+          audioComponent.audioPath = nextMusic.audioPath;
+          musicEntity.addComponent(Loadable, {
+            audioPath: nextMusic.audioPath,
+          });
+          musicEntity.addComponent(AudioFadeIn);
+          musicEntity.removeComponent(NextMusic);
+        } else {
+          musicEntity.removeComponent(NextMusic);
+        }
       }
     });
   }

@@ -43,23 +43,34 @@ export default class SoundScapeSystem extends System {
 
     const biome = tileMap.properties.biome;
 
-    if (brightnessEntity && biome) {
-      const brightnessComponent = brightnessEntity.getComponent(
-        EnvironmentBrightness
-      );
-      const brightness = brightnessComponent.brightness;
+    if (brightnessEntity) {
+      if (biome) {
+        const brightnessComponent = brightnessEntity.getComponent(
+          EnvironmentBrightness
+        );
+        const brightness = brightnessComponent.brightness;
 
-      if (this.night === null) {
-        this.night = brightness >= 40;
-      }
+        if (this.night === null) {
+          this.night = brightness >= 40;
+        }
 
-      if (brightness < 40 && !this.night) {
-        this.night = true;
-        audioEntity.addComponent(NextMusic, {
-          audioPath: musicAssetPath(`soundscapes/${biome}Night`),
-        });
-      } else if (brightness >= 40 && this.night) {
-        this.night = false;
+        if (brightness < 40 && !this.night) {
+          this.night = true;
+          audioEntity.addComponent(NextMusic, {
+            audioPath: musicAssetPath(`soundscapes/${biome}Night`),
+          });
+        } else if (brightness >= 40 && this.night) {
+          this.night = false;
+          if (tileMap.properties.music) {
+            audioEntity.addComponent(NextMusic, {
+              audioPath: musicAssetPath(tileMap.properties.music),
+            });
+          } else {
+            audioEntity.addComponent(AudioFadeOut);
+          }
+        }
+      } else if (this.night != null) {
+        this.night = null;
         if (tileMap.properties.music) {
           audioEntity.addComponent(NextMusic, {
             audioPath: musicAssetPath(tileMap.properties.music),
