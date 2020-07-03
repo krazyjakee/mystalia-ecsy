@@ -6,6 +6,7 @@ import { TabButton as TabButtonComponent } from "./TabButton";
 import SelectComponent from "./Select";
 import { CheckBox as CheckBoxComponent } from "./CheckBox";
 import { RadioButton as RadioButtonComponent } from "./RadioButton";
+import SliderComponent from "./Slider";
 
 export default {
   title: "Form Controls",
@@ -53,3 +54,7 @@ export const CheckBox = () => {
 export const RadioButtom = () => {
   return <RadioButtonComponent label="Radio Button" />;
 };
+
+export const Slider = () => (
+  <SliderComponent value={50} onChange={() => false} />
+);

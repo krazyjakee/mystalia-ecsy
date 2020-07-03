@@ -129,6 +129,8 @@ export interface GameStateEvents {
   "chat:publish": {
     message: string;
   };
+  "setting:musicVolume": string;
+  "setting:sfxVolume": string;
 }
 
 export type RoomMessageType = keyof GameStateEvents;

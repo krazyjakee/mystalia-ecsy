@@ -6,6 +6,7 @@ import { TabButton } from "../../FormControls/TabButton";
 import { createUseStyles } from "react-jss";
 import Hotkey from "@client/react/Utilities/Hotkey";
 import { triggerGlobalKeypress } from "utilities/input";
+import SoundOptions from "./SoundOptions";
 
 const useStyles = createUseStyles({
   root: {
@@ -46,7 +47,9 @@ export default ({ forceShow }: Props) => {
                 ></TabButton>
               </Section>
             </Col>
-            <Col xs={true}></Col>
+            <Col xs={true}>
+              <SoundOptions show={activeTab === 0}></SoundOptions>
+            </Col>
           </Row>
         </Grid>
       </BasePanel>

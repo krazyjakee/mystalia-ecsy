@@ -22,7 +22,6 @@ export default (props: Props) => {
 
   const logout = () => {
     window.ecsyError = true;
-    client.auth.logout();
     location.reload();
   };
 
