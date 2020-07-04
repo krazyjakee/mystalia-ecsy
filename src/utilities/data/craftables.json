@@ -1,0 +1,13 @@
+[
+  {
+    "id": 0,
+    "requiredItems": [],
+    "ingredients": [
+      {
+        "itemId": 0,
+        "quantity": 20
+      }
+    ],
+    "item": 2
+  }
+]
