@@ -6,6 +6,7 @@ import { whiteText } from "../../palette";
 import { useDrag, useDrop } from "react-dnd";
 import Sprite from "@client/react/Utilities/Sprite";
 import gameState from "@client/gameState";
+import ReactTooltip from "react-tooltip";
 
 type Props = {
   item: InventoryItems;
@@ -66,10 +67,11 @@ export default (props: Props) => {
 
   return (
     <div ref={drop}>
+      <ReactTooltip place="top" effect="solid" />
       <div
         className={classes.root}
         style={rootStyles}
-        title={item.name}
+        data-tip={item.name}
         ref={drag}
         onDoubleClick={() => equip(item.position)}
       >

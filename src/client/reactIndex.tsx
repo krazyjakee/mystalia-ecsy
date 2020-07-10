@@ -14,6 +14,7 @@ import ChatPanel from "./react/Panels/Chat/ChatPanel";
 import LootPanel from "./react/Panels/Loot";
 import GameMenu from "./react/Panels/GameMenu";
 import OptionsPanel from "./react/Panels/Options/OptionsPanel";
+import CraftingPanel from "./react/Panels/Crafting/CraftingPanel";
 
 const useStyles = createUseStyles({
   clickArea: {
@@ -52,6 +53,7 @@ const App = () => {
           <LootPanel />
           <GameMenu logout={() => setInGame(false)} />
           <OptionsPanel />
+          <CraftingPanel />
         </>
       ) : null}
     </>

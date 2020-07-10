@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
 });
 
 type Props = {
-  forceEnable?: boolean;
+  forceShow?: boolean;
   propsInventoryState?: MapSchema<InventoryState>;
 };
 
@@ -50,7 +50,7 @@ const EmptySlot = (props: { index: number }) => {
   return <div className={classes.emptySlot} ref={drop} />;
 };
 
-export default ({ forceEnable = false, propsInventoryState }: Props) => {
+export default ({ forceShow = false, propsInventoryState }: Props) => {
   const classes = useStyles();
   const [inventoryState] = useGameEvent("localPlayer:inventory:response");
   const [iState, setiState] = useState<MapSchema<InventoryState>>();
@@ -85,7 +85,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const emptySlots = new Array(slotRows * 5).fill(0);
 
   return (
-    <Hotkey keys={["KeyI"]} show={forceEnable}>
+    <Hotkey keys={["KeyI"]} show={forceShow}>
       <BasePanel
         title="Inventory"
         rndOptions={{

@@ -27,11 +27,11 @@ const sendTrade = (shopId: number, tradeIndex: number, valid: boolean) => {
 };
 
 type Props = {
-  forceEnable?: boolean;
+  forceShow?: boolean;
   shop?: ShopSpec;
 };
 
-export default ({ forceEnable = false, shop: propShop }: Props) => {
+export default ({ forceShow = false, shop: propShop }: Props) => {
   const classes = useStyles();
 
   const [inventoryState] = useGameEvent("localPlayer:inventory:response");
@@ -70,7 +70,7 @@ export default ({ forceEnable = false, shop: propShop }: Props) => {
     });
   }
 
-  return forceEnable || shop ? (
+  return forceShow || shop ? (
     <BasePanel
       title={shop.name}
       rndOptions={{

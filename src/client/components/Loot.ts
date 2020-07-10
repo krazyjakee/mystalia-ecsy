@@ -1,5 +1,4 @@
 import { Component } from "ecsy";
-import LootItemState from "@server/components/lootItem";
 import { SimpleLootItemState } from "@client/react/Panels/Loot/lootItemStateToArray";
 
 export default class Loot extends Component {

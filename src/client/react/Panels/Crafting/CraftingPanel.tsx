@@ -1,5 +1,5 @@
 // TODO: Create crafting panel
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, CSSProperties } from "react";
 import { MapSchema } from "@colyseus/schema";
 import { useDrop } from "react-dnd";
 import { Row, Col, Grid } from "react-flexbox-grid";
@@ -14,8 +14,11 @@ import { BasePanel } from "../BasePanel";
 import { Section } from "../Section";
 import { CraftableSpec } from "types/craftable";
 import mergeQuantities from "./mergeQuantities";
+import CraftItem from "./CraftItem";
+import { ItemSpec } from "types/TileMap/ItemTiles";
 
 const craftingSpecs = require("utilities/data/craftables.json") as CraftableSpec[];
+const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
 
 const useStyles = createUseStyles({
   emptySlot: {
@@ -28,14 +31,20 @@ const useStyles = createUseStyles({
   slotContainer: {
     position: "relative",
   },
+  plank: {
+    backgroundImage: guiAssetPath("panel/inventory/inventory-plank.png"),
+    width: 343,
+    height: 55,
+    marginBottom: 10,
+  },
 });
 
 type Props = {
-  forceEnable?: boolean;
+  forceShow?: boolean;
   propsInventoryState?: MapSchema<InventoryState>;
 };
 
-export default ({ forceEnable = false, propsInventoryState }: Props) => {
+export default ({ forceShow = false, propsInventoryState }: Props) => {
   const classes = useStyles();
   const [inventoryState] = useGameEvent("localPlayer:inventory:response");
   const [iState, setiState] = useState<MapSchema<InventoryState>>();
@@ -48,9 +57,11 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const mergedInventoryState = mergeQuantities(inventoryItems);
 
   const availableCraftItems = craftingSpecs.filter((craftable) => {
-    const hasRequiredItem = Boolean(
-      mergedInventoryState.find((item) => item.itemId === craftable.item)
-    );
+    const hasRequiredItem = craftable.requiredItems.length
+      ? mergedInventoryState.filter((item) =>
+          craftable.requiredItems.includes(item.itemId)
+        ).length > 0
+      : true;
     const hasIngredients =
       craftable.ingredients.filter((ingredient) =>
         mergedInventoryState.find(
@@ -66,7 +77,7 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
   const emptySlots = new Array(slotRows * 5).fill(0);
 
   return (
-    <Hotkey keys={["KeyC"]} show={forceEnable}>
+    <Hotkey keys={["KeyC"]} show={forceShow}>
       <BasePanel
         title="Crafting"
         rndOptions={{
@@ -89,16 +100,26 @@ export default ({ forceEnable = false, propsInventoryState }: Props) => {
         <Grid fluid>
           <Row>
             <Col>
+              <div className={classes.plank} />
               <Section>
                 <Grid fluid>
                   <Row>
                     <Col className={classes.slotContainer}>
                       <div>
-                        {emptySlots.map(() => (
-                          <div className={classes.emptySlot} />
-                        ))}
-                        {availableCraftItems.map((item) => (
-                          <div>{JSON.stringify(item)}</div>
+                        {availableCraftItems.map((item, index) => {
+                          const itemSpec = itemSpecs.find(
+                            (i) => i.id === item.item
+                          );
+                          return (
+                            <CraftItem
+                              key={index}
+                              index={index}
+                              itemSpec={itemSpec}
+                            />
+                          );
+                        })}
+                        {emptySlots.map((_, index) => (
+                          <div key={index} className={classes.emptySlot} />
                         ))}
                       </div>
                     </Col>

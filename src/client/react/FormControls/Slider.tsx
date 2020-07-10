@@ -139,7 +139,6 @@ export default (props: Props) => {
         minValue={0}
         maxValue={100}
         step={1}
-        // TODO: Use JSS classes for "react-input-range/lib/css/index.css"
         classNames={{
           activeTrack: classes.inputRangeTrackActive,
           disabledInputRange: classes.inputRangeDisabled,

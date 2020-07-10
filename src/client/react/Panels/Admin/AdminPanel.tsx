@@ -9,12 +9,12 @@ import PlayerManagementForm from "./PlayerManagementForm";
 import ItemManagementForm from "./ItemManagementForm";
 
 type Props = {
-  forceEnable?: boolean;
+  forceShow?: boolean;
 };
 
-export default ({ forceEnable }: Props) => {
+export default ({ forceShow }: Props) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [enabled, setEnabled] = useState(forceEnable || false);
+  const [enabled, setEnabled] = useState(forceShow || false);
 
   useEffect(() => {
     gameState.subscribe("admin:enable", () => setEnabled(true));
@@ -22,7 +22,7 @@ export default ({ forceEnable }: Props) => {
   }, []);
 
   return enabled ? (
-    <Hotkey keys={["Backquote"]} show={forceEnable}>
+    <Hotkey keys={["Backquote"]} show={forceShow}>
       <BasePanel
         title="Admin Panel"
         rndOptions={{

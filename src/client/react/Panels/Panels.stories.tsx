@@ -11,8 +11,9 @@ import ShopPanelComponent from "./Shop/ShopPanel";
 import LootPanelComponent from "./Loot";
 import GameMenuComponent from "./GameMenu";
 import { MapSchema } from "@colyseus/schema";
-import LootItemState from "@server/components/lootItem";
 import OptionsPanelComponent from "./Options/OptionsPanel";
+import CraftingPanelComponent from "./Crafting/CraftingPanel";
+import LootItemState from "../../../server/components/lootItem";
 
 export default {
   title: "Panels",
@@ -31,7 +32,7 @@ export const BasePanel = () => (
 
 export const PanelSection = () => <SectionComponent style={{ height: 200 }} />;
 
-export const AdminPanel = () => <AdminPanelComponent forceEnable={true} />;
+export const AdminPanel = () => <AdminPanelComponent forceShow={true} />;
 
 export const InventoryPanel = () => {
   const items = new MapSchema({
@@ -53,7 +54,7 @@ export const InventoryPanel = () => {
   });
 
   return (
-    <InventoryPanelComponent forceEnable={true} propsInventoryState={items} />
+    <InventoryPanelComponent forceShow={true} propsInventoryState={items} />
   );
 };
 
@@ -91,7 +92,7 @@ export const Status = () => (
 
 export const ShopPanel = () => (
   <ShopPanelComponent
-    forceEnable={true}
+    forceShow={true}
     shop={{
       id: 0,
       name: "Polegreen Inn",
@@ -115,11 +116,29 @@ export const LootPanel = () => {
     new LootItemState({ itemId: 0, position: 1, quantity: 3 }),
   ];
 
-  return <LootPanelComponent forceEnable={true} propsLootState={lootState} />;
+  return <LootPanelComponent forceShow={true} propsLootState={lootState} />;
 };
 
 export const GameMenu = () => (
-  <GameMenuComponent logout={() => false} forceEnable={true} />
+  <GameMenuComponent logout={() => false} forceShow={true} />
 );
 
 export const OptionsPanel = () => <OptionsPanelComponent forceShow={true} />;
+
+export const CraftingPanel = () => {
+  const items = new MapSchema({
+    a: {
+      itemId: 0,
+      position: 0,
+      quantity: 100,
+    },
+    b: {
+      itemId: 2,
+      position: 1,
+      quantity: 1,
+    },
+  });
+  return (
+    <CraftingPanelComponent forceShow={true} propsInventoryState={items} />
+  );
+};
