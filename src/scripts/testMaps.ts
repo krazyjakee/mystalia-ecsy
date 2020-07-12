@@ -35,6 +35,7 @@ while ((file = dir.readSync()) !== null) {
 
 dir.closeSync();
 
+// Check doors are correctly configured
 Object.keys(objectTileStores).forEach((key) => {
   const ots = objectTileStores[key];
   ots.getAllByType("door").forEach((doorTiles) => {
@@ -59,8 +60,10 @@ Object.keys(objectTileStores).forEach((key) => {
   });
 });
 
-Object.keys(mapJsons).forEach((key) => {
+for (let key in mapJsons) {
   const tmj = mapJsons[key];
+
+  // Check object types are correct
   tmj.layers.forEach((layer) => {
     if (layer.objects) {
       layer.objects.forEach((tile) => {
@@ -72,7 +75,19 @@ Object.keys(mapJsons).forEach((key) => {
       });
     }
   });
-});
+
+  // Check tilesets exist
+  tmj.tilesets
+    .map((tileset) => tileset.source)
+    .forEach((tileSetPath) => {
+      const path = tileSetPath.replace(/\\/g, "").replace("..", "./assets");
+      if (!fs.existsSync(path)) {
+        errors.push(
+          `Tileset on map "${key}" does not exists at ${tileSetPath}`
+        );
+      }
+    });
+}
 
 errors.forEach((error) => {
   console.error(error);

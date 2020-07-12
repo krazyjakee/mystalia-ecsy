@@ -1,7 +1,7 @@
 import { System, Entity, Not } from "ecsy";
 import { Loadable } from "@client/components/Loadable";
 import Fade from "@client/components/Fade";
-import TileMap from "@client/components/TileMap";
+import TileMap, { ChangingMap } from "@client/components/TileMap";
 import loadTileMap from "./loadTileMap";
 import Drawable from "@client/components/Drawable";
 import Movement from "@client/components/Movement";
@@ -197,6 +197,7 @@ export default class TileMapChanger extends System {
         loadable.loading = false;
         tileMapEntity.addComponent(Fade, { alpha: 0 });
         tileMapEntity.removeComponent(AnimatedTilesInitiated);
+        playerEntity.removeComponent(ChangingMap);
       }
     });
   }

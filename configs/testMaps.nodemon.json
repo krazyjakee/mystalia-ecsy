@@ -1,4 +1,4 @@
 {
   "watch": ["assets/maps", "assets/tilesets", "scripts"],
-  "exec": "npm run testMaps"
+  "exec": "npm run test:maps"
 }

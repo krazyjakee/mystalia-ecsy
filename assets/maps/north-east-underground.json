@@ -5715,11 +5715,6 @@
  "orientation":"orthogonal",
  "properties":[
         {
-         "name":"biome",
-         "type":"string",
-         "value":""
-        }, 
-        {
          "name":"light",
          "type":"int",
          "value":4
@@ -5730,7 +5725,7 @@
          "value":"north-east-underground"
         }],
  "renderorder":"right-down",
- "tiledversion":"2020.05.07",
+ "tiledversion":"2020.05.29",
  "tileheight":32,
  "tilesets":[
         {

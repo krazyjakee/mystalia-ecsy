@@ -87,7 +87,6 @@ export default class CommandsSystem extends System {
             tileMapEntity.addComponent(Unloadable, {
               dataPath: mapAssetPath(fileName),
             });
-            localPlayerEntity.removeComponent(ChangingMap);
           } else {
             localPlayerEntity.removeComponent(ChangingMap);
           }
