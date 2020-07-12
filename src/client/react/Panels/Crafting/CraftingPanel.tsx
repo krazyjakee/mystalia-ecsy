@@ -115,6 +115,7 @@ export default ({ forceShow = false, propsInventoryState }: Props) => {
                               key={index}
                               index={index}
                               itemSpec={itemSpec}
+                              craftableSpec={item}
                             />
                           );
                         })}

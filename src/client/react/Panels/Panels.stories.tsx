@@ -137,6 +137,11 @@ export const CraftingPanel = () => {
       position: 1,
       quantity: 1,
     },
+    c: {
+      itemId: 1,
+      position: 2,
+      quantity: 1,
+    },
   });
   return (
     <CraftingPanelComponent forceShow={true} propsInventoryState={items} />
