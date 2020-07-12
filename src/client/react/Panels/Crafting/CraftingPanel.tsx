@@ -16,6 +16,8 @@ import { CraftableSpec } from "types/craftable";
 import mergeQuantities from "./mergeQuantities";
 import CraftItem from "./CraftItem";
 import { ItemSpec } from "types/TileMap/ItemTiles";
+import { canCraft } from "utilities/inventory/crafting";
+import InventoryItem from "../Inventory/InventoryItem";
 
 const craftingSpecs = require("utilities/data/craftables.json") as CraftableSpec[];
 const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
@@ -39,6 +41,10 @@ const useStyles = createUseStyles({
   },
 });
 
+export type AvailableCraftable = {
+  canCraft: boolean;
+} & CraftableSpec;
+
 type Props = {
   forceShow?: boolean;
   propsInventoryState?: MapSchema<InventoryState>;
@@ -53,25 +59,21 @@ export default ({ forceShow = false, propsInventoryState }: Props) => {
     setiState(inventoryState || propsInventoryState);
   });
 
-  const inventoryItems = inventoryStateToArray(iState);
-  const mergedInventoryState = mergeQuantities(inventoryItems);
+  let availableCraftItems: AvailableCraftable[] = [];
 
-  const availableCraftItems = craftingSpecs.filter((craftable) => {
-    const hasRequiredItem = craftable.requiredItems.length
-      ? mergedInventoryState.filter((item) =>
-          craftable.requiredItems.includes(item.itemId)
-        ).length > 0
-      : true;
-    const hasIngredients =
-      craftable.ingredients.filter((ingredient) =>
-        mergedInventoryState.find(
-          (item) =>
-            item.itemId === ingredient.itemId &&
-            item.quantity >= ingredient.quantity
-        )
-      ).length === craftable.ingredients.length;
-    return hasRequiredItem && hasIngredients;
-  });
+  if (iState) {
+    availableCraftItems = craftingSpecs
+      .map((c) => ({
+        ...c,
+        canCraft: canCraft(iState, c),
+      }))
+      .sort((a) => {
+        if (a.canCraft) {
+          return 1;
+        }
+        return 0;
+      });
+  }
 
   const slotRows = 6;
   const emptySlots = new Array(slotRows * 5).fill(0);

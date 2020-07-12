@@ -12,7 +12,11 @@ import { ShopSpec } from "types/shops";
 import PlayerState from "@server/components/player";
 import { movementWalkOff } from "@server/utilities/commandHandlers/map";
 import ItemState from "@server/components/item";
+import { performCraft } from "@server/utilities/commandHandlers/craft";
+import { CraftableSpec } from "types/craftable";
+
 const shops = require("utilities/data/shop.json") as ShopSpec[];
+const craftables = require("utilities/data/craftables.json") as CraftableSpec[];
 
 export class MovementReportCommand extends Command<
   MapState,
@@ -104,9 +108,11 @@ export class CraftCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:craft:request"> }
 > {
   execute({ sessionId, data }) {
-    const player = this.state.players[sessionId];
-    const craftableId = data.craftableId;
-    // TODO: Check required item and ingredients are in player inventory, if so, remove ingredients and give item.
+    const player = this.state.players[sessionId] as PlayerState;
+    const craftable = craftables.find((c) => c.id === data.craftableId);
+    if (craftable && player.inventory) {
+      performCraft(player.inventory, craftable);
+    }
   }
 }
 

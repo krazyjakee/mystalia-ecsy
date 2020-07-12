@@ -1,13 +1,13 @@
-import React, { CSSProperties, useEffect, useState, ReactNode } from "react";
+import React, { CSSProperties } from "react";
 import { tileIdToVector } from "utilities/tileMap";
 import Sprite from "@client/react/Utilities/Sprite";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { createUseStyles } from "react-jss";
 import ReactTooltip from "react-tooltip";
 import { CraftableSpec } from "types/craftable";
-import ReactDOM from "react-dom";
 import { whiteText } from "@client/react/palette";
 import gameState from "@client/gameState";
+import { AvailableCraftable } from "./CraftingPanel";
 
 const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
 
@@ -19,7 +19,6 @@ const useStyles = createUseStyles({
     margin: "0 6px 6px 6px",
     padding: 12,
     boxSizing: "border-box",
-    cursor: "pointer",
   },
   toolTipIngredient: {
     position: "relative",
@@ -34,6 +33,11 @@ const useStyles = createUseStyles({
     position: "absolute",
     bottom: 0,
     right: 0,
+    ...whiteText,
+  },
+  toolTipItemName: {
+    marginBottom: 10,
+    textAlign: "center",
     ...whiteText,
   },
   toolTipName: {
@@ -53,11 +57,15 @@ const useStyles = createUseStyles({
     backgroundColor: "rgba(255,255,255,0.1)",
     border: "1px solid white",
   },
+  cannotCraft: {
+    opacity: 0.5,
+    filter: "grayscale(100%)",
+  },
 });
 
 type Props = {
   index: number;
-  craftableSpec: CraftableSpec;
+  craftableSpec: AvailableCraftable;
   itemSpec?: ItemSpec;
 };
 
@@ -71,6 +79,7 @@ export default ({ index, itemSpec, craftableSpec }: Props) => {
   const rootStyles: CSSProperties = {
     left: slotOffset.x * 60,
     top: slotOffset.y * 54,
+    cursor: craftableSpec.canCraft ? "pointer" : "default",
   };
 
   const ingredients = craftableSpec?.ingredients.map((spec) => {
@@ -114,19 +123,23 @@ export default ({ index, itemSpec, craftableSpec }: Props) => {
       style={rootStyles}
       data-for={id}
       data-tip={""}
-      onClick={() =>
-        gameState.send("map", "localPlayer:craft:request", {
-          craftableId: craftableSpec.id,
-        })
-      }
+      onClick={() => {
+        if (craftableSpec.canCraft) {
+          gameState.send("map", "localPlayer:craft:request", {
+            craftableId: craftableSpec.id,
+          });
+        }
+      }}
     >
       <ReactTooltip id={id} place="top" effect="solid">
         <div>
+          <div className={classes.toolTipItemName}>{itemSpec.name}</div>
           {requiredItems}
           {ingredients}
         </div>
       </ReactTooltip>
       <Sprite
+        className={craftableSpec.canCraft ? "" : classes.cannotCraft}
         spriteId={itemSpec.spriteId}
         spritesheet={itemSpec.spritesheet}
         spriteSize={16}
