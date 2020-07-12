@@ -7,6 +7,7 @@ import ReactTooltip from "react-tooltip";
 import { CraftableSpec } from "types/craftable";
 import ReactDOM from "react-dom";
 import { whiteText } from "@client/react/palette";
+import gameState from "@client/gameState";
 
 const itemSpecs = require("utilities/data/items.json") as ItemSpec[];
 
@@ -113,6 +114,11 @@ export default ({ index, itemSpec, craftableSpec }: Props) => {
       style={rootStyles}
       data-for={id}
       data-tip={""}
+      onClick={() =>
+        gameState.send("map", "localPlayer:craft:request", {
+          craftableId: craftableSpec.id,
+        })
+      }
     >
       <ReactTooltip id={id} place="top" effect="solid">
         <div>

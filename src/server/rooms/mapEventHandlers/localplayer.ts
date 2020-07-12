@@ -11,7 +11,6 @@ import { performTrade } from "@server/utilities/commandHandlers/shop";
 import { ShopSpec } from "types/shops";
 import PlayerState from "@server/components/player";
 import { movementWalkOff } from "@server/utilities/commandHandlers/map";
-import { getTilesByType } from "utilities/tileMap";
 import ItemState from "@server/components/item";
 const shops = require("utilities/data/shop.json") as ShopSpec[];
 
@@ -97,6 +96,17 @@ export class InventoryEquipCommand extends Command<
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
     equipItem(player.inventory, data.position);
+  }
+}
+
+export class CraftCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:craft:request"> }
+> {
+  execute({ sessionId, data }) {
+    const player = this.state.players[sessionId];
+    const craftableId = data.craftableId;
+    // TODO: Check required item and ingredients are in player inventory, if so, remove ingredients and give item.
   }
 }
 
