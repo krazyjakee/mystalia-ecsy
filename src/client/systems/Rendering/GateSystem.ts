@@ -18,9 +18,6 @@ export default class GateSystem extends System {
     remotePlayers: {
       components: [RemotePlayer],
     },
-    enemies: {
-      components: [Enemy],
-    },
     gates: {
       components: [Gate],
     },
@@ -33,11 +30,7 @@ export default class GateSystem extends System {
       const gateDrawable = gateEntity.getComponent(Drawable);
 
       this.queries.localPlayer.results
-        .concat(
-          this.queries.remotePlayers.results.concat(
-            this.queries.enemies.results
-          )
-        )
+        .concat(this.queries.remotePlayers.results)
         .forEach((entity) => {
           if (!characterAdjacent) {
             const position = entity.getComponent(Position);
