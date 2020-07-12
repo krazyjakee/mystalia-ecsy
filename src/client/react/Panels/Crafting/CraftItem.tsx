@@ -4,7 +4,6 @@ import Sprite from "@client/react/Utilities/Sprite";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { createUseStyles } from "react-jss";
 import ReactTooltip from "react-tooltip";
-import { CraftableSpec } from "types/craftable";
 import { whiteText } from "@client/react/palette";
 import gameState from "@client/gameState";
 import { AvailableCraftable } from "./CraftingPanel";
