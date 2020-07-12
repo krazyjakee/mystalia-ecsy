@@ -6,7 +6,7 @@ import { triggerGlobalKeypress } from "utilities/input";
 import client from "@client/colyseus";
 
 type Props = {
-  forceEnable?: boolean;
+  forceShow?: boolean;
   logout: Function;
 };
 
@@ -28,7 +28,7 @@ export default (props: Props) => {
   return (
     <Hotkey
       keys={["Escape"]}
-      show={props.forceEnable}
+      show={props.forceShow}
       onShow={() => (window.disableMovement = true)}
       onHide={() => (window.disableMovement = false)}
     >

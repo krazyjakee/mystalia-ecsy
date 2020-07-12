@@ -11,9 +11,12 @@ import { performTrade } from "@server/utilities/commandHandlers/shop";
 import { ShopSpec } from "types/shops";
 import PlayerState from "@server/components/player";
 import { movementWalkOff } from "@server/utilities/commandHandlers/map";
-import { getTilesByType } from "utilities/tileMap";
 import ItemState from "@server/components/item";
+import { performCraft } from "@server/utilities/commandHandlers/craft";
+import { CraftableSpec } from "types/craftable";
+
 const shops = require("utilities/data/shop.json") as ShopSpec[];
+const craftables = require("utilities/data/craftables.json") as CraftableSpec[];
 
 export class MovementReportCommand extends Command<
   MapState,
@@ -97,6 +100,19 @@ export class InventoryEquipCommand extends Command<
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
     equipItem(player.inventory, data.position);
+  }
+}
+
+export class CraftCommand extends Command<
+  MapState,
+  { sessionId: string; data: RoomMessage<"localPlayer:craft:request"> }
+> {
+  execute({ sessionId, data }) {
+    const player = this.state.players[sessionId] as PlayerState;
+    const craftable = craftables.find((c) => c.id === data.craftableId);
+    if (craftable && player.inventory) {
+      performCraft(player.inventory, craftable);
+    }
   }
 }
 

@@ -81,6 +81,9 @@ export interface GameStateEvents {
   };
   "localPlayer:battle:targetEnemy": EnemyReference;
   "localPlayer:battle:unTarget": undefined;
+  "localPlayer:craft:request": {
+    craftableId: number;
+  };
   "enemy:battle:targetPlayer": {
     username: string;
   };

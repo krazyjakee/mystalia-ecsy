@@ -47,7 +47,7 @@ const useStyles = createUseStyles({
 });
 
 type Props = {
-  forceEnable?: boolean;
+  forceShow?: boolean;
   propsLootState?: LootItemState[];
 };
 
@@ -56,7 +56,7 @@ const EmptySlot = (props: { index: number }) => {
   return <div className={classes.emptySlot} />;
 };
 
-export default ({ forceEnable = false, propsLootState = [] }: Props) => {
+export default ({ forceShow = false, propsLootState = [] }: Props) => {
   const classes = useStyles();
   const [tileId, setTileId] = useState<number | undefined>(
     propsLootState ? 1 : undefined
@@ -93,7 +93,7 @@ export default ({ forceEnable = false, propsLootState = [] }: Props) => {
     };
   }, [tileId, lootItems]);
 
-  if (!forceEnable) {
+  if (!forceShow) {
     if (!isPresent(tileId) || !lootItems.length) {
       window.disableMovement = false;
       return null;

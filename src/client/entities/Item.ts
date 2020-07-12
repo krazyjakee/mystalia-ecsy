@@ -1,11 +1,12 @@
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import { getWorld } from "../ecsy";
-import Item from "@client/components/Item";
 import Drawable from "@client/components/Drawable";
 import { Loadable, SimpleLoadable } from "@client/components/Loadable";
 import { itemAssetPath } from "../utilities/assets";
+import ItemState from "@server/components/item";
+import Item from "@client/components/Item";
 
-export default function CreateItem(item: Item, itemSpec: ItemSpec) {
+export default function CreateItem(item: ItemState, itemSpec: ItemSpec) {
   const { itemId, tileId, quantity } = item;
   return getWorld()
     .createEntity()

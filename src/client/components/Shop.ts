@@ -1,7 +1,8 @@
 import { Component } from "ecsy";
+import { ObjectTile } from "types/TileMap/ObjectTileStore";
 
 type ShopTiles = {
-  [key: number]: number;
+  [key: number]: ObjectTile<"shop">;
 };
 
 export default class Shop extends Component {

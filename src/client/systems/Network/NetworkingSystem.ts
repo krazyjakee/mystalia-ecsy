@@ -127,7 +127,7 @@ export default class NetworkingSystem extends System {
             enemySpec,
           });
 
-          enemy.onChange = function(changes) {
+          enemy.onChange = function (changes) {
             changes.forEach((change) => {
               if (change.field === "currentTile") {
                 const movement = newEnemy.getComponent(Movement);
@@ -178,7 +178,7 @@ export default class NetworkingSystem extends System {
           if (myKey !== key) {
             const newRemotePlayer = CreateRemotePlayer({ state: player, key });
 
-            player.onChange = function(changes) {
+            player.onChange = function (changes) {
               changes.forEach((change) => {
                 if (change.field === "targetTile") {
                   const movement = newRemotePlayer.getComponent(Movement);
@@ -216,7 +216,7 @@ export default class NetworkingSystem extends System {
               "localPlayer:inventory:response",
               player.inventory
             );
-            player.onChange = function(changes) {
+            player.onChange = function (changes) {
               changes.forEach((change) => {
                 if (change.field === "inventory") {
                   gameState.trigger(
@@ -284,7 +284,7 @@ export default class NetworkingSystem extends System {
         };
 
         networkRoom.room.state.loot.onAdd = (loot) => {
-          loot.onChange = function(changes) {
+          loot.onChange = function (changes) {
             const updates = changes
               .filter((change) => change.field === "items")
               .map((change) => ({
@@ -320,8 +320,12 @@ export default class NetworkingSystem extends System {
 
           loot.onRemove = () => {
             networkRoomEntity.addComponent(UpdateLoot, {
-              tileId: loot.tileId,
-              items: [],
+              updates: [
+                {
+                  tileId: loot.tileId,
+                  items: [],
+                },
+              ],
             });
 
             gameState.trigger("localPlayer:loot:update", {
