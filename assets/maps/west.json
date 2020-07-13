@@ -221,8 +221,19 @@
                  "height":64,
                  "id":12,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"map",
+                         "type":"string",
+                         "value":"first-church-0"
+                        }, 
+                        {
+                         "name":"tile",
+                         "type":"int",
+                         "value":350
+                        }],
                  "rotation":0,
-                 "type":"",
+                 "type":"door",
                  "visible":true,
                  "width":64,
                  "x":3520,
@@ -240,7 +251,7 @@
                  "y":544
                 }, 
                 {
-                 "height":128,
+                 "height":224,
                  "id":16,
                  "name":"",
                  "rotation":0,
@@ -248,7 +259,7 @@
                  "visible":true,
                  "width":192,
                  "x":3456,
-                 "y":384
+                 "y":320
                 }, 
                 {
                  "height":32,
