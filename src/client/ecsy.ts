@@ -50,7 +50,13 @@ import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
 import AnimatedTile, {
   AnimatedTilesInitiated,
 } from "./components/AnimatedTile";
-import Audio from "./components/Audio";
+import Audio, {
+  Music,
+  SoundEffect,
+  NextMusic,
+  AudioFadeOut,
+  AudioFadeIn,
+} from "./components/Audio";
 import CharacterHighlight, {
   AddCharacterHighlight,
   RemoveCharacterHighlight,
@@ -139,6 +145,12 @@ export default (user: User) => {
     .registerComponent(MouseInput)
     .registerComponent(AwaitingPosition)
     .registerComponent(Gray)
+    .registerComponent(Music)
+    .registerComponent(SoundEffect)
+    .registerComponent(NextMusic)
+    .registerComponent(AudioFadeOut)
+    .registerComponent(AudioFadeIn)
+    .registerComponent(Audio)
     .registerComponent(Disable)
     .registerComponent(Focused)
     .registerComponent(BattleTarget)
