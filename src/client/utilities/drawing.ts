@@ -26,6 +26,9 @@ export const drawImage = (
     flipVertical,
   } = drawable;
 
+  if (image === null) return;
+  if (!isDrawable(image)) throw "Image is not a drawable";
+
   if (image) {
     const flipped = Boolean(flipDiagonal || flipVertical || flipVertical);
     const targetContext = customContext ? customContext : context2d;
@@ -44,7 +47,7 @@ export const drawImage = (
         width,
         height
       );
-    } else if (isDrawable(image)) {
+    } else {
       targetContext.drawImage(
         image,
         sourceX,

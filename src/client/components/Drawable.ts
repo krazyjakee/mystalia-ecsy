@@ -3,7 +3,7 @@ import { Vector } from "types/TMJ";
 
 export default class Drawable extends Component<Drawable> {
   static schema = {
-    image: { type: Types.JSON },
+    image: { type: Types.Ref },
     data: { type: Types.JSON },
     sourceX: { default: 0, type: Types.Number },
     sourceY: { default: 0, type: Types.Number },

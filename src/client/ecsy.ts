@@ -63,7 +63,7 @@ import CharacterHighlight, {
 } from "./components/CharacterHighlight";
 import Drawable from "./components/Drawable";
 import Effect from "./components/Effect";
-import Enemy from "./components/Enemy";
+import Enemy, { LookAtPlayer } from "./components/Enemy";
 import EnvironmentBrightness from "./components/EnvironmentBrightness";
 import Fade from "./components/Fade";
 import Gate from "./components/Gate";
@@ -74,16 +74,16 @@ import LocalPlayer, {
   RoleCheckPending,
   CommandsPending,
 } from "./components/LocalPlayer";
-import Loot from "./components/Loot";
+import Loot, { OpenLootAtDestination } from "./components/Loot";
 import Movement from "./components/Movement";
 import NetworkRoom from "./components/NetworkRoom";
 import NewMovementTarget from "./components/NewMovementTarget";
 import Position from "./components/Position";
 import RemotePlayer from "./components/RemotePlayer";
-import Shop from "./components/Shop";
+import Shop, { OpenShopAtDestination } from "./components/Shop";
 import SpriteSheetAnimation from "./components/SpriteSheetAnimation";
 import TextBurst from "./components/TextBurst";
-import TileMap from "./components/TileMap";
+import TileMap, { ChangingMap } from "./components/TileMap";
 import Weather from "./components/Weather";
 import {
   Remove,
@@ -120,6 +120,7 @@ export default (user: User) => {
     .registerComponent(Fade)
     .registerComponent(Gate)
     .registerComponent(Inventory)
+    .registerComponent(LookAtPlayer)
     .registerComponent(Item)
     .registerComponent(Loadable)
     .registerComponent(Unloadable)
@@ -133,10 +134,13 @@ export default (user: User) => {
     .registerComponent(NewMovementTarget)
     .registerComponent(Position)
     .registerComponent(RemotePlayer)
+    .registerComponent(OpenShopAtDestination)
+    .registerComponent(OpenLootAtDestination)
     .registerComponent(Shop)
     .registerComponent(SpriteSheetAnimation)
     .registerComponent(TextBurst)
     .registerComponent(TileMap)
+    .registerComponent(ChangingMap)
     .registerComponent(Weather)
     .registerComponent(Remove)
     .registerComponent(Move)

@@ -14,7 +14,7 @@ export default class Shop extends Component<Shop> {
 
 export class OpenShopAtDestination extends Component<OpenShopAtDestination> {
   static schema = {
-    shopTiles: { type: Types.Number },
+    shopId: { type: Types.Number },
   };
   shopId?: number;
 }

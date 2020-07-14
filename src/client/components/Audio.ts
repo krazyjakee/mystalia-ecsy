@@ -3,7 +3,7 @@ import { Component, TagComponent, Types } from "ecsy";
 export default class Audio extends Component<Audio> {
   static schema = {
     audioPath: { type: Types.String },
-    audio: { type: Types.JSON },
+    audio: { type: Types.Ref },
   };
   audioPath?: string;
   audio?: HTMLAudioElement;
