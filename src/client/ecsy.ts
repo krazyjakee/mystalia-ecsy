@@ -47,9 +47,14 @@ import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
 import MusicSystem from "./systems/Audio/MusicSystem";
 import SoundScapeSystem from "./systems/Audio/SoundScapeSystem";
 import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
-import AnimatedTile from "./components/AnimatedTile";
+import AnimatedTile, {
+  AnimatedTilesInitiated,
+} from "./components/AnimatedTile";
 import Audio from "./components/Audio";
-import CharacterHighlight from "./components/CharacterHighlight";
+import CharacterHighlight, {
+  AddCharacterHighlight,
+  RemoveCharacterHighlight,
+} from "./components/CharacterHighlight";
 import Drawable from "./components/Drawable";
 import Effect from "./components/Effect";
 import Enemy from "./components/Enemy";
@@ -97,8 +102,11 @@ export const getWorld = () => world;
 export default (user: User) => {
   world
     .registerComponent(AnimatedTile)
+    .registerComponent(AnimatedTilesInitiated)
     .registerComponent(Audio)
     .registerComponent(CharacterHighlight)
+    .registerComponent(AddCharacterHighlight)
+    .registerComponent(RemoveCharacterHighlight)
     .registerComponent(Drawable)
     .registerComponent(Effect)
     .registerComponent(Enemy)

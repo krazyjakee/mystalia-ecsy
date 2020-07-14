@@ -1,9 +1,20 @@
-import { Component } from "ecsy";
+import { Component, Types } from "ecsy";
 import { Vector } from "types/TMJ";
 
 export default class SpriteSheetAnimation extends Component<
   SpriteSheetAnimation
 > {
+  static schema = {
+    step: { default: 0, type: Types.Number },
+    steps: { default: [], type: Types.Array },
+    restingStep: { default: 0, type: Types.Number },
+    speed: { default: 6, type: Types.Number },
+    playing: { default: false, type: Types.Boolean },
+    timeSinceLastAnimation: { default: 0, type: Types.Number },
+    increment: { default: true, type: Types.Boolean },
+    loopAround: { default: false, type: Types.Boolean },
+  };
+
   step: number = 0;
   steps: Vector[] = [];
   restingStep: number = 0;

@@ -4,7 +4,8 @@ import Drawable from "@client/components/Drawable";
 import Fade from "@client/components/Fade";
 import { Vector } from "types/TMJ";
 import addOffset from "./Vector/addOffset";
-import { radianToDegree, degreeToRadian } from "utilities/math";
+import { degreeToRadian } from "utilities/math";
+import { isPresent, isDrawable } from "utilities/guards";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -43,7 +44,7 @@ export const drawImage = (
         width,
         height
       );
-    } else {
+    } else if (isDrawable(image)) {
       targetContext.drawImage(
         image,
         sourceX,
