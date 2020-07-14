@@ -1,6 +1,6 @@
 import { Component } from "ecsy";
 
-export class Loadable extends Component {
+export class Loadable extends Component<Loadable> {
   audioPath?: string;
   imagePath?: string;
   dataPath?: string;
@@ -14,7 +14,7 @@ export class Loadable extends Component {
   }
 }
 
-export class Unloadable extends Component {
+export class Unloadable extends Component<Unloadable> {
   audioPath?: string;
   imagePath?: string;
   dataPath?: string;
@@ -25,4 +25,4 @@ export class Unloadable extends Component {
   }
 }
 
-export class SimpleLoadable extends Component {}
+export class SimpleLoadable extends Component<SimpleLoadable> {}

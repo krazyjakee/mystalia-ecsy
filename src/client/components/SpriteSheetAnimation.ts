@@ -1,7 +1,9 @@
 import { Component } from "ecsy";
 import { Vector } from "types/TMJ";
 
-export default class SpriteSheetAnimation extends Component {
+export default class SpriteSheetAnimation extends Component<
+  SpriteSheetAnimation
+> {
   step: number = 0;
   steps: Vector[] = [];
   restingStep: number = 0;

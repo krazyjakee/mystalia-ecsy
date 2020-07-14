@@ -1,7 +1,7 @@
 import { Component } from "ecsy";
 import { Direction } from "types/Grid";
 
-export default class Movement extends Component {
+export default class Movement extends Component<Movement> {
   direction?: Direction;
   targetTile?: number;
   currentTile: number = 0;

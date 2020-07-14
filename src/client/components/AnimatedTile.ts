@@ -1,10 +1,10 @@
 import { Component, TagComponent } from "ecsy";
 import {
   AnimatedTileStore,
-  AnimatedTileDrawable
+  AnimatedTileDrawable,
 } from "types/TileMap/AnimatedTiles";
 
-export default class AnimatedTile extends Component {
+export default class AnimatedTile extends Component<AnimatedTile> {
   drawables: Array<AnimatedTileDrawable[]> = [[], []]; // Below and above object layer
   tiles: AnimatedTileStore = {};
 

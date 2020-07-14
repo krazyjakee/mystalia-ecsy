@@ -1,9 +1,8 @@
 import { Component, TagComponent } from "ecsy";
 import EnemyState from "@server/components/enemy";
 import { EnemySpec } from "types/enemies";
-import { Direction } from "types/Grid";
 
-export default class Enemy extends Component {
+export default class Enemy extends Component<Enemy> {
   key?: string;
   state?: EnemyState;
   spec?: EnemySpec;

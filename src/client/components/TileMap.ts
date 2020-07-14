@@ -5,7 +5,7 @@ import { TileSetStore } from "types/TileMap/TileSetStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { Direction } from "types/Grid";
 
-export default class TileMap extends Component {
+export default class TileMap extends Component<TileMap> {
   properties: TileMapProperties = {};
   tiles: DrawableProperties[] = [];
   tileSetStore: TileSetStore = {};
@@ -31,7 +31,7 @@ export default class TileMap extends Component {
   }
 }
 
-export class ChangeMap extends Component {
+export class ChangeMap extends Component<ChangeMap> {
   direction?: Direction;
 }
 

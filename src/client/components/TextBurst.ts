@@ -1,6 +1,6 @@
 import { Component } from "ecsy";
 
-export default class TextBurst extends Component {
+export default class TextBurst extends Component<TextBurst> {
   text?: string | number;
   colorHex = "#FFFFFF";
   opacityPercentage = 100;
