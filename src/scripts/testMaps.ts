@@ -27,6 +27,9 @@ while ((file = dir.readSync()) !== null) {
         `"${filename}" does not have a name map property. All maps must have a name.`
       );
     }
+    if (properties.biome === "") {
+      errors.push(`"${filename}" has a biome property but it is empty.`);
+    }
     roomFileNames.push(filename);
     objectTileStores[filename] = new ObjectTileStore(json);
     mapJsons[filename] = json;
