@@ -1,10 +1,15 @@
-import { Component, TagComponent } from "ecsy";
+import { Component, TagComponent, Types } from "ecsy";
 import {
   AnimatedTileStore,
-  AnimatedTileDrawable
+  AnimatedTileDrawable,
 } from "types/TileMap/AnimatedTiles";
 
-export default class AnimatedTile extends Component {
+export default class AnimatedTile extends Component<AnimatedTile> {
+  static schema = {
+    drawables: { default: [[], []], type: Types.Array },
+    tiles: { default: {}, type: Types.JSON },
+  };
+
   drawables: Array<AnimatedTileDrawable[]> = [[], []]; // Below and above object layer
   tiles: AnimatedTileStore = {};
 

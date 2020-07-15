@@ -54,7 +54,9 @@ export default class MovementSystem extends System {
                 nextTile,
                 columns
               );
-              entity.addComponent(SendData);
+              if (!entity.hasComponent(SendData)) {
+                entity.addComponent(SendData);
+              }
             }
           }
         }

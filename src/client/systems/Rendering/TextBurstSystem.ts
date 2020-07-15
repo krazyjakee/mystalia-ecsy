@@ -51,8 +51,16 @@ export default class TextBurstSystem extends System {
       context2d.lineWidth = 1;
 
       const textPosition = addOffset(offset, textBurst);
-      context2d.strokeText(textBurst.text, textPosition.x, textPosition.y);
-      context2d.fillText(textBurst.text, textPosition.x, textPosition.y);
+      context2d.strokeText(
+        textBurst.text.toString(),
+        textPosition.x,
+        textPosition.y
+      );
+      context2d.fillText(
+        textBurst.text.toString(),
+        textPosition.x,
+        textPosition.y
+      );
       context2d.restore();
 
       if (textBurst.opacityPercentage <= 0) {

@@ -1,13 +1,20 @@
-import { Component, TagComponent } from "ecsy";
+import { Component, TagComponent, Types } from "ecsy";
 
-export default class Audio extends Component {
+export default class Audio extends Component<Audio> {
+  static schema = {
+    audioPath: { type: Types.String },
+    audio: { type: Types.Ref },
+  };
   audioPath?: string;
   audio?: HTMLAudioElement;
 }
 export class AudioFadeIn extends TagComponent {}
 export class AudioFadeOut extends TagComponent {}
 
-export class NextMusic extends Component {
+export class NextMusic extends Component<NextMusic> {
+  static schema = {
+    audioPath: { type: Types.String },
+  };
   audioPath?: string;
 }
 

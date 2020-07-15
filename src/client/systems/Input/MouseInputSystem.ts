@@ -22,7 +22,6 @@ import Movement from "@client/components/Movement";
 import Enemy from "@client/components/Enemy";
 import { areColliding } from "utilities/math";
 import { isPresent } from "utilities/guards";
-import tileInDirection from "@client/utilities/TileMap/tileInDirection";
 import getNextTileData from "@client/utilities/TileMap/getNextTileData";
 import gameState from "@client/gameState";
 import { OpenLootAtDestination } from "@client/components/Loot";
@@ -201,7 +200,9 @@ export default class MouseInputSystem extends System {
           if (["gate", "loot"].includes(tileObject.type)) {
             if (tileObject.type === "shop") {
               const { shopId } = tileObject.value;
-              playerEntity.addComponent(OpenShopAtDestination, { shopId });
+              if (isPresent(shopId)) {
+                playerEntity.addComponent(OpenShopAtDestination, { shopId });
+              }
             } else if (tileObject.type === "loot") {
               playerEntity.addComponent(OpenLootAtDestination, {
                 tileId: clickedTile,

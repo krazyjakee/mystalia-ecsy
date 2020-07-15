@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MapSchema } from "@colyseus/schema";
 import { useDrop, DndProvider } from "react-dnd";
-import Backend from "react-dnd-html5-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Row, Col, Grid } from "react-flexbox-grid";
 import { BasePanel } from "../BasePanel";
 import Hotkey from "../../Utilities/Hotkey";
@@ -113,7 +113,7 @@ export default ({ forceShow = false, propsInventoryState }: Props) => {
                 <Grid fluid>
                   <Row>
                     <Col className={classes.slotContainer}>
-                      <DndProvider backend={Backend}>
+                      <DndProvider backend={HTML5Backend}>
                         <div>
                           {emptySlots.map((_, index) => (
                             <EmptySlot key={index} index={index} />

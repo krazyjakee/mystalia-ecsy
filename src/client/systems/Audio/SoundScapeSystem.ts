@@ -56,26 +56,31 @@ export default class SoundScapeSystem extends System {
 
         if (brightness < 40 && !this.night) {
           this.night = true;
-          audioEntity.addComponent(NextMusic, {
-            audioPath: musicAssetPath(`soundscapes/${biome}Night`),
-          });
+          if (!audioEntity.hasComponent(NextMusic)) {
+            audioEntity.addComponent(NextMusic, {
+              audioPath: musicAssetPath(`soundscapes/${biome}Night`),
+            });
+          }
         } else if (brightness >= 40 && this.night) {
           this.night = false;
-          if (tileMap.properties.music) {
+          if (
+            tileMap.properties.music &&
+            !audioEntity.hasComponent(NextMusic)
+          ) {
             audioEntity.addComponent(NextMusic, {
               audioPath: musicAssetPath(tileMap.properties.music),
             });
-          } else {
+          } else if (!audioEntity.hasComponent(AudioFadeOut)) {
             audioEntity.addComponent(AudioFadeOut);
           }
         }
       } else if (this.night != null) {
         this.night = null;
-        if (tileMap.properties.music) {
+        if (tileMap.properties.music && !audioEntity.hasComponent(NextMusic)) {
           audioEntity.addComponent(NextMusic, {
             audioPath: musicAssetPath(tileMap.properties.music),
           });
-        } else {
+        } else if (!audioEntity.hasComponent(AudioFadeOut)) {
           audioEntity.addComponent(AudioFadeOut);
         }
       }

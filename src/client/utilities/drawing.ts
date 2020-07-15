@@ -4,7 +4,8 @@ import Drawable from "@client/components/Drawable";
 import Fade from "@client/components/Fade";
 import { Vector } from "types/TMJ";
 import addOffset from "./Vector/addOffset";
-import { radianToDegree, degreeToRadian } from "utilities/math";
+import { degreeToRadian } from "utilities/math";
+import { isPresent, isDrawable } from "utilities/guards";
 
 export const drawImage = (
   drawable: DrawableProperties,
@@ -24,6 +25,9 @@ export const drawImage = (
     flipDiagonal,
     flipVertical,
   } = drawable;
+
+  if (image === null) return;
+  if (!isDrawable(image)) throw "Image is not a drawable";
 
   if (image) {
     const flipped = Boolean(flipDiagonal || flipVertical || flipVertical);
