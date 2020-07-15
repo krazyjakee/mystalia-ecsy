@@ -161,6 +161,14 @@
         {
          "firstgid":2377,
          "source":"..\/tilesets\/indoorfloor2.json"
+        }, 
+        {
+         "firstgid":2441,
+         "source":"..\/tilesets\/magecity v1.json"
+        }, 
+        {
+         "firstgid":2801,
+         "source":"..\/tilesets\/indoorset.json"
         }],
  "tilewidth":32,
  "type":"map",
