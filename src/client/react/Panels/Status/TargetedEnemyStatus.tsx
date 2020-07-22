@@ -32,23 +32,24 @@ export const TargetedEnemyStatus = () => {
     "reactstatus"
   );
 
-  const [enemyChangeReference] = useEnemyChangeEvent(enemyReference?.key);
+  // TODO: This hook shouldnt be used. enemyReference should be updated by the enemy change event in useEffect
+  const [enemyChangeReference] = useEnemyChangeEvent(
+    enemyReference?.key,
+    "targetedEnemy"
+  );
 
   useEffect(() => {
-    if (
-      enemyReference &&
-      enemyReference.enemySpec &&
-      enemyReference.enemyState
-    ) {
+    const reference = enemyReference || enemyChangeReference;
+    if (reference && reference.enemySpec && reference.enemyState) {
       setTargetData({
         hp:
           100 -
           percentageCalculator(
-            enemyReference.enemySpec.hp,
-            enemyReference.enemyState.damage
+            reference.enemySpec.hp,
+            reference.enemyState.damage
           ),
         mp: 100,
-        spec: enemyReference.enemySpec,
+        spec: reference.enemySpec,
       });
     } else {
       setTargetData(undefined);

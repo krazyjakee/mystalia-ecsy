@@ -22,7 +22,9 @@ export const useGameEvent = <T extends RoomMessageType>(
   return [data, setData];
 };
 
+// TODO: Delete this
 export const useEnemyChangeEvent = (
+  enemyStateKey?: string,
   key?: string
 ): [
   GameStateEvents["enemy:change"] | undefined,
@@ -32,15 +34,16 @@ export const useEnemyChangeEvent = (
 ] => {
   const [data, setData] = useState<GameStateEvents["enemy:change"]>();
   useEffect(() => {
-    gameState.subscribe(
-      "enemy:change",
-      (data) => {
-        if (data.key === key) {
-          setData(data);
-        }
-      },
-      key
-    );
-  }, [key]);
+    const doSetData = (data) => {
+      if (data.key === enemyStateKey) {
+        setData(data);
+      }
+    };
+
+    gameState.subscribe("enemy:change", doSetData, key);
+    return () => {
+      gameState.unsubscribe("enemy:change", doSetData, key);
+    };
+  }, [enemyStateKey]);
   return [data, setData];
 };

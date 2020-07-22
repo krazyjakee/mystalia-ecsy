@@ -103,7 +103,6 @@ export const Status = ({
   return (
     <div
       {...props}
-      id="enemyStateComponent"
       className={classnames(
         className,
         classes.root,
