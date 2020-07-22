@@ -60,7 +60,7 @@ export default class LootSpawner {
     } else {
       const spec = this.getSpec(lootId);
       if (spec) {
-        const time = spec.daysToRespawn * (config.dayLengthInMinutes * 1000); // TODO: Set back to 60000 when testing is done
+        const time = spec.daysToRespawn * (config.time.dayLengthInMinutes * 1000); // TODO: Set back to 60000 when testing is done
         this.lootExpirations[uid] = new Date().getTime() + time;
       }
     }

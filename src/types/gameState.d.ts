@@ -23,11 +23,27 @@ export interface GameStateEvents {
     fileName?: string;
     tileId?: number;
   };
+  "admin:timeSpec:update": {
+    dayLengthMins: number | undefined;
+  };
+  "admin:timePhase:update": {
+    dayLengthPerc: number | undefined;
+    transitionPerc: number | undefined;
+  };
+  "admin:forceTime:update": {
+    hours: number | undefined;
+    minutes: number | undefined;
+    active: boolean;
+  };
+  "admin:globalLightSpec:update": {
+    radius: number | undefined;
+    intensity: number | undefined;
+  };
   "admin:itemSpec:update": {
     specs: ItemSpec[];
   };
   "admin:itemSpec:updated": {
-    result: Boolean;
+    result: boolean;
   };
   "localPlayer:change": {
     key: string;
