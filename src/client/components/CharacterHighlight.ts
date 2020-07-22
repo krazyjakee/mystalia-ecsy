@@ -17,8 +17,4 @@ export class AddCharacterHighlight extends Component<AddCharacterHighlight> {
   type?: CharacterHighlightType;
 }
 
-export class RemoveCharacterHighlight extends Component<
-  RemoveCharacterHighlight
-> {
-  type?: CharacterHighlightType;
-}
+export class RemoveCharacterHighlight extends AddCharacterHighlight {}
