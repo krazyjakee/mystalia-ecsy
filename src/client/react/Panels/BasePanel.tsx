@@ -73,6 +73,7 @@ const useStyles = createUseStyles({
     zIndex: 1,
     height: 27,
     padding: "8px 39px",
+    pointerEvents: "none",
     backgroundImage: guiAssetPath("panel/panel-label-bg.png"),
     backgroundRepeat: "repeat-x",
     ...whiteText,
