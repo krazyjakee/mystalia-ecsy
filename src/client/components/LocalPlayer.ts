@@ -3,7 +3,7 @@ import User from "types/User";
 
 export default class LocalPlayer extends Component<LocalPlayer> {
   static schema = {
-    audioPath: { type: Types.JSON },
+    user: { type: Types.JSON },
   };
   user?: User;
 }
