@@ -68,6 +68,7 @@
     "id": 3,
     "name": "Inn Keeper",
     "spritesheet": "npcs/ark/service-worker-1",
+    "portrait": "singularity",
     "spriteSize": {
       "width": 24,
       "height": 32
@@ -88,6 +89,7 @@
     "id": 4,
     "name": "Stable Hand",
     "spritesheet": "npcs/ark/service-worker-2",
+    "portrait": "singularity",
     "spriteSize": {
       "width": 24,
       "height": 32
@@ -302,7 +304,7 @@
     },
     "speed": 2,
     "maxDistance": 6,
-    "hp": 120,
+    "hp": 100,
     "abilities": [
       0
     ],
@@ -333,5 +335,174 @@
         "campAtNight": true
       }
     }
+  },
+  {
+    "id": 13,
+    "name": "Sunfish",
+    "spritesheet": "wildlife/sun-fish",
+    "portrait": "sunfish",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 2,
+        "chance": 4
+      }
+    },
+    "speed": 4,
+    "maxDistance": 11,
+    "hp": 50,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 27,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 5
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "BlueFish",
+    "spritesheet": "wildlife/big-fish",
+    "portrait": "big-sea-fish",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 5,
+        "chance": 2
+      }
+    },
+    "speed": 3,
+    "maxDistance": 15,
+    "hp": 40,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 27,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 3
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Adult Bison",
+    "spritesheet": "wildlife/bison",
+    "portrait": "bison",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 8,
+        "chance": 2
+      }
+    },
+    "speed": 3,
+    "maxDistance": 8,
+    "hp": 220,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 31,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 5
+      },
+      {
+        "itemId": 7,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 7
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Beaver",
+    "spritesheet": "wildlife/swimming-beaver",
+    "portrait": "swimming-beaver",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 3,
+        "chance": 2
+      }
+    },
+    "speed": 5,
+    "maxDistance": 9,
+    "hp": 80,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 19,
+        "quantity": [
+          1,
+          3
+        ],
+        "chance": 2
+      },
+      {
+        "itemId": 32,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 6
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Juvenile Beaver",
+    "spritesheet": "wildlife/walking-beaver",
+    "portrait": "walking-beaver",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 1,
+        "chance": 2
+      }
+    },
+    "speed": 3,
+    "maxDistance": 5,
+    "hp": 60,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 19,
+        "quantity": [
+          1,
+          2
+        ],
+        "chance": 2
+      },
+      {
+        "itemId": 32,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 10
+      }
+    ]
   }
 ]
