@@ -10,6 +10,7 @@ import aStar from "utilities/movement/aStar";
 import { makeHash } from "./hash";
 import memoize from "./memoize";
 import { objectForEach } from "./loops";
+import { TileSetStore } from "types/TileMap/TileSetStore";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -81,8 +82,10 @@ export class ObjectTileStore {
   uid: string = "";
   blockList: number[] = [];
 
-  constructor(mapData?: TMJ) {
-    if (!mapData) return;
+  constructor(mapData?: TMJ, tileSetStore?: TileSetStore) {
+    if (!mapData || !tileSetStore) return;
+
+    // TODO: Use the tilesets data to get per-tile objects and update the blocklist and object tile store
 
     const { width, height, layers } = mapData;
     this.columns = width;

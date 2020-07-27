@@ -45,6 +45,7 @@ interface AnimatedTile {
 interface SpecialTiles {
   id: number;
   animation?: AnimatedTile[];
+  objectgroup?: Omit<Layer, "data">;
 }
 
 export interface TileSet {
