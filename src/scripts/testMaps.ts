@@ -31,7 +31,7 @@ while ((file = dir.readSync()) !== null) {
       errors.push(`"${filename}" has a biome property but it is empty.`);
     }
     roomFileNames.push(filename);
-    objectTileStores[filename] = new ObjectTileStore(json);
+    objectTileStores[filename] = new ObjectTileStore(json, {});
     mapJsons[filename] = json;
   }
 }

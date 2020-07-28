@@ -85,8 +85,6 @@ export class ObjectTileStore {
   constructor(mapData?: TMJ, tileSetStore?: TileSetStore) {
     if (!mapData || !tileSetStore) return;
 
-    // TODO: Use the tilesets data to get per-tile objects and update the blocklist and object tile store
-
     const { width, height, layers } = mapData;
     this.columns = width;
     this.rows = height;

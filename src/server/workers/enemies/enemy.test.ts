@@ -52,7 +52,7 @@ const createMapRoom = () => {
   const data = maps["test"];
   room.mapData = data;
   room.setState(new MapState());
-  room.objectTileStore = new ObjectTileStore(data);
+  room.objectTileStore = new ObjectTileStore(data, {});
   return room;
 };
 

@@ -46,6 +46,8 @@ export default class MapRoom extends Room<MapState> {
 
     const maps = readMapFiles();
     this.mapData = maps[this.roomName];
+
+    // TODO: Add tileset data
     this.objectTileStore = new ObjectTileStore(this.mapData);
 
     this.itemSpawner = new ItemSpawner(this);

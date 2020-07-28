@@ -5,7 +5,7 @@ import aStar from "utilities/movement/aStar";
 const createObjectTileStore = () => {
   const maps = readMapFiles();
   const data = maps["test"];
-  const ots = new ObjectTileStore(data);
+  const ots = new ObjectTileStore(data, {});
   return ots;
 };
 

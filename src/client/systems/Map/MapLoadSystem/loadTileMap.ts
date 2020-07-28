@@ -48,6 +48,7 @@ export default async (
     if (tileSetImage) {
       tileMap.tileSetStore[externalTileSet.source] = {
         ...tileset,
+        gid: externalTileSet.firstgid,
         image: tileSetImage,
       };
     }
