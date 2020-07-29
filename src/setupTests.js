@@ -7,6 +7,7 @@ first.properties.push({ name: "fileName", type: "string", value: "first" });
 south.properties.push({ name: "fileName", type: "string", value: "south" });
 
 jest.mock("@server/utilities/mapFiles", () => ({
+  readTileSets: () => ({}),
   readMapFiles: () => ({ test, first, south }),
   getWorldMapItems: () => [
     { fileName: "test", x: -32, y: -320, width: 352, height: 320 },

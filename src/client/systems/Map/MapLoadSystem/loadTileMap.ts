@@ -1,6 +1,6 @@
 import Drawable from "@client/components/Drawable";
 import TileMap from "@client/components/TileMap";
-import { TMJ, Layer } from "types/TMJ";
+import { TMJ, Layer, TileSet } from "types/TMJ";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { TileMapProperties } from "types/TileMap/standard";
 import { loadImage, loadData } from "../../../utilities/assets";
@@ -21,9 +21,6 @@ export default async (
   drawable.width = data.width * 32;
   drawable.height = data.height * 32;
 
-  // Create an object store from the object tiles
-  tileMap.objectTileStore = new ObjectTileStore(data);
-
   // Set the map properties
   const properties: TileMapProperties = {};
   data.properties.forEach(
@@ -42,7 +39,7 @@ export default async (
     const dataPath = externalTileSet.source.slice(
       externalTileSet.source.indexOf("tilesets/") + 9
     );
-    const tileset = await loadData(`/assets/tilesets/${dataPath}`);
+    const tileset = (await loadData(`/assets/tilesets/${dataPath}`)) as TileSet;
     const tileSetImage = await loadImage(
       `/assets/tilesets/${dataPath.slice(0, dataPath.lastIndexOf("/") + 1)}${
         tileset.image
@@ -51,8 +48,12 @@ export default async (
     if (tileSetImage) {
       tileMap.tileSetStore[externalTileSet.source] = {
         ...tileset,
+        gid: externalTileSet.firstgid,
         image: tileSetImage,
       };
     }
   }
+
+  // Create an object store from the object tiles
+  tileMap.objectTileStore = new ObjectTileStore(data, tileMap.tileSetStore);
 };

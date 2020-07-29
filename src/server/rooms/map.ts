@@ -7,7 +7,7 @@ import { savePlayerState, saveStateToDb } from "@server/utilities/dbState";
 import { RoomMessageType, PresenceMessage, RoomMessage } from "types/gameState";
 import ItemSpawner from "@server/workers/itemSpawner";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
-import { readMapFiles } from "@server/utilities/mapFiles";
+import { readMapFiles, readTileSets } from "@server/utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import EnemySpawner from "@server/workers/enemySpawner";
 import WeatherSpawner from "@server/workers/weatherSpawner";
@@ -19,6 +19,8 @@ import {
 import Battle from "@server/workers/battle";
 import WorldEnemySpawner from "@server/workers/worldEnemySpawner";
 import LootSpawner from "@server/workers/lootSpawner";
+
+const tileSetStore = readTileSets();
 
 export default class MapRoom extends Room<MapState> {
   dispatcher = new Dispatcher(this);
@@ -46,7 +48,9 @@ export default class MapRoom extends Room<MapState> {
 
     const maps = readMapFiles();
     this.mapData = maps[this.roomName];
-    this.objectTileStore = new ObjectTileStore(this.mapData);
+
+    // TODO: Add tileset data
+    this.objectTileStore = new ObjectTileStore(this.mapData, tileSetStore);
 
     this.itemSpawner = new ItemSpawner(this);
     this.lootSpawner = new LootSpawner(this);
