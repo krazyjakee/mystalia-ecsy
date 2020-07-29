@@ -259,5 +259,12 @@
     "spritesheet": "items",
     "spriteId": 16,
     "type": "other"
+  },
+  {
+    "id": 33,
+    "name": "Bag of seeds",
+    "spritesheet": "items",
+    "spriteId": 381,
+    "type": "other"
   }
 ]
