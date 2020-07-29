@@ -153,6 +153,76 @@
             "width": 3840,
             "x": 7680,
             "y": 4352
+        },
+        {
+            "fileName": "cold6.json",
+            "height": 2144,
+            "width": 3840,
+            "x": -16096,
+            "y": -39232
+        },
+        {
+            "fileName": "cold7.json",
+            "height": 2144,
+            "width": 3840,
+            "x": -16096,
+            "y": -41408
+        },
+        {
+            "fileName": "cold8.json",
+            "height": 2176,
+            "width": 3808,
+            "x": -16096,
+            "y": -43584
+        },
+        {
+            "fileName": "cold9.json",
+            "height": 2208,
+            "width": 3840,
+            "x": -8416,
+            "y": -34880
+        },
+        {
+            "fileName": "cold10.json",
+            "height": 2208,
+            "width": 3840,
+            "x": -8416,
+            "y": -41408
+        },
+        {
+            "fileName": "cold11.json",
+            "height": 2208,
+            "width": 3840,
+            "x": -8416,
+            "y": -43584
+        },
+        {
+            "fileName": "cold12.json",
+            "height": 2208,
+            "width": 3840,
+            "x": -8416,
+            "y": -39232
+        },
+        {
+            "fileName": "cold13.json",
+            "height": 2144,
+            "width": 3840,
+            "x": -8416,
+            "y": -37056
+        },
+        {
+            "fileName": "cold5.json",
+            "height": 2208,
+            "width": 3840,
+            "x": -16096,
+            "y": -37056
+        },
+        {
+            "fileName": "cold4.json",
+            "height": 2176,
+            "width": 3808,
+            "x": -16096,
+            "y": -34880
         }
     ],
     "onlyShowAdjacentMaps": false,
