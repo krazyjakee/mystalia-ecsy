@@ -1,8 +1,9 @@
+import { resolve } from "path";
 import * as fs from "fs";
-import { getMapProperties } from "./tmjTools";
 import { TMJ } from "types/TMJ";
 import { readJSONFile } from "./files";
 import memoize from "utilities/memoize";
+import { TileSetStore } from "types/TileMap/TileSetStore";
 
 type MapDataCache = { [key: string]: TMJ };
 
@@ -26,28 +27,39 @@ export type WorldMapItem = {
 };
 
 export const readMapFiles = memoize(() => {
-  const dir = fs.opendirSync("./assets/maps");
   let maps: MapDataCache = {};
 
-  let file;
-  while ((file = dir.readSync()) !== null) {
-    if (file.name.includes(".json")) {
-      const json = readJSONFile(`./assets/maps/${file.name}`);
-      const properties = getMapProperties(json);
-      const filename = file.name.replace(".json", "");
+  getFiles("./assets/maps")
+    .filter((file) => file.includes(".json"))
+    .forEach((file) => {
+      const json = readJSONFile(file);
+      const filename = file.split("/").pop().replace(".json", "");
       maps[filename] = json;
       maps[filename].properties.push({
         name: "fileName",
         type: "string",
         value: filename,
       });
-    }
-  }
-
-  dir.closeSync();
+    });
 
   return maps;
 });
+
+export const readTileSets = memoize(
+  (): TileSetStore => {
+    let tileSetStore: TileSetStore = {};
+
+    getFiles("./assets/tilesets")
+      .filter((file) => file.includes(".json"))
+      .forEach((file) => {
+        const json = readJSONFile(file);
+        const storeKey = file.replace(/(.*)\/assets\/tilesets/, "../tilesets");
+        tileSetStore[storeKey] = json;
+      });
+
+    return tileSetStore;
+  }
+);
 
 const worldMapItems: WorldMapItem[] = [];
 
@@ -74,3 +86,12 @@ export const getWorldMapItems = memoize(() => {
 
   return worldMapItems;
 });
+
+function getFiles(dir) {
+  const subdirs = fs.readdirSync(dir);
+  const files = subdirs.map((subdir) => {
+    const res = resolve(dir, subdir);
+    return fs.statSync(res).isDirectory() ? getFiles(res) : res;
+  });
+  return files.reduce((a, f) => a.concat(f), []);
+}
