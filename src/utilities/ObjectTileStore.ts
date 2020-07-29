@@ -180,7 +180,7 @@ export class ObjectTileStore {
         if (!tileSetSource?.source) return;
 
         const tileSetStoreItem = tileSetStore[tileSetSource.source];
-        if (tileSetStoreItem.tiles) {
+        if (tileSetStoreItem?.tiles) {
           tileSetStoreItem.tiles.forEach((tile) => {
             if (tileSetSource.firstgid + tile.id != tileId) return;
             if (!tile.objectgroup || !tile.objectgroup.objects) return;

@@ -87,7 +87,7 @@ export const getWorldMapItems = memoize(() => {
   return worldMapItems;
 });
 
-function getFiles(dir) {
+export function getFiles(dir) {
   const subdirs = fs.readdirSync(dir);
   const files = subdirs.map((subdir) => {
     const res = resolve(dir, subdir);

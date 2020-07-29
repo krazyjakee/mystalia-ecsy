@@ -3,20 +3,21 @@ import { readJSONFile } from "@server/utilities/files";
 import { getMapProperties } from "@server/utilities/tmjTools";
 import { ObjectTileStore } from "utilities/ObjectTileStore";
 import { TMJ } from "types/TMJ";
+import { getFiles, readTileSets } from "@server/utilities/mapFiles";
 
 const errors: string[] = [];
 const roomFileNames: string[] = [];
 const objectTileStores: { [key: string]: ObjectTileStore } = {};
 const mapJsons: { [key: string]: TMJ } = {};
 
-const dir = fs.opendirSync("./assets/maps");
+const tileSetStore = readTileSets();
 
-let file;
-while ((file = dir.readSync()) !== null) {
-  if (file.name.includes(".json")) {
-    const json = readJSONFile(`./assets/maps/${file.name}`);
+getFiles("./assets/maps")
+  .filter((file) => file.includes(".json"))
+  .forEach((file) => {
+    const json = readJSONFile(file);
+    const filename = file.split("/").pop().replace(".json", "");
     const properties = getMapProperties(json);
-    const filename = file.name.replace(".json", "");
     if (filename.includes(" ")) {
       errors.push(
         `"${filename}" has a space in the filename. Spaces in map filenames are not allowed.`
@@ -31,12 +32,9 @@ while ((file = dir.readSync()) !== null) {
       errors.push(`"${filename}" has a biome property but it is empty.`);
     }
     roomFileNames.push(filename);
-    objectTileStores[filename] = new ObjectTileStore(json, {});
+    objectTileStores[filename] = new ObjectTileStore(json, tileSetStore);
     mapJsons[filename] = json;
-  }
-}
-
-dir.closeSync();
+  });
 
 // Check doors are correctly configured
 Object.keys(objectTileStores).forEach((key) => {
