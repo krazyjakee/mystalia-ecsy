@@ -245,5 +245,26 @@
     "spritesheet": "items",
     "spriteId": 322,
     "type": "consumable"
+  },
+  {
+    "id": 31,
+    "name": "Bison Pelt",
+    "spritesheet": "items",
+    "spriteId": 76,
+    "type": "other"
+  },
+  {
+    "id": 32,
+    "name": "Beaver Pelt",
+    "spritesheet": "items",
+    "spriteId": 16,
+    "type": "other"
+  },
+  {
+    "id": 33,
+    "name": "Bag of seeds",
+    "spritesheet": "items",
+    "spriteId": 381,
+    "type": "other"
   }
 ]
