@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import * as path from "path";
 import * as fs from "fs";
 import { TMJ } from "types/TMJ";
 import { readJSONFile } from "./files";
@@ -33,7 +33,7 @@ export const readMapFiles = memoize(() => {
     .filter((file) => file.includes(".json"))
     .forEach((file) => {
       const json = readJSONFile(file);
-      const filename = file.split("/").pop().replace(".json", "");
+      const filename = path.parse(file).name;
       maps[filename] = json;
       maps[filename].properties.push({
         name: "fileName",
@@ -53,7 +53,9 @@ export const readTileSets = memoize(
       .filter((file) => file.includes(".json"))
       .forEach((file) => {
         const json = readJSONFile(file);
-        const storeKey = file.replace(/(.*)\/assets\/tilesets/, "../tilesets");
+        const storeKey = file
+          .replace(/\\/g, "/")
+          .replace(/(.*)\/assets\/tilesets/, "../tilesets");
         tileSetStore[storeKey] = json;
       });
 
@@ -90,7 +92,7 @@ export const getWorldMapItems = memoize(() => {
 export function getFiles(dir) {
   const subdirs = fs.readdirSync(dir);
   const files = subdirs.map((subdir) => {
-    const res = resolve(dir, subdir);
+    const res = path.resolve(dir, subdir);
     return fs.statSync(res).isDirectory() ? getFiles(res) : res;
   });
   return files.reduce((a, f) => a.concat(f), []);
