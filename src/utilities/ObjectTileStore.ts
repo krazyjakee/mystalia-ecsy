@@ -5,11 +5,12 @@ import {
   ObjectTileTypeString,
 } from "types/TileMap/ObjectTileStore";
 import { vectorToTileId, pixelsToTileId } from "utilities/tileMap";
-import { Attributes, Layer, Property, TMJ } from "types/TMJ";
+import { Attributes, Layer, Property, TMJ, ExternalTileSet } from "types/TMJ";
 import aStar from "utilities/movement/aStar";
 import { makeHash } from "./hash";
 import memoize from "./memoize";
 import { objectForEach } from "./loops";
+import { TileSetStore } from "types/TileMap/TileSetStore";
 
 const serializeProperties = <T extends ObjectTileTypeString>(
   properties?: Property[]
@@ -81,14 +82,15 @@ export class ObjectTileStore {
   uid: string = "";
   blockList: number[] = [];
 
-  constructor(mapData?: TMJ) {
-    if (!mapData) return;
+  constructor(mapData?: TMJ, tileSetStore?: TileSetStore) {
+    if (!mapData || !tileSetStore) return;
 
-    const { width, height, layers } = mapData;
+    const { width, height, layers, tilesets } = mapData;
     this.columns = width;
     this.rows = height;
 
-    (layers as Layer[]).forEach((layer) => this.add(layer));
+    layers.forEach((layer) => this.addLayer(layer));
+    this.addTilesets(layers, tilesets, tileSetStore);
 
     const mapProperties = serializeProperties<"mapProps">(mapData.properties);
 
@@ -150,7 +152,7 @@ export class ObjectTileStore {
     this.store[tileId] = objectTile ? objectTile.concat(data) : data;
   }
 
-  add(layer: Layer) {
+  addLayer(layer: Layer) {
     if (!layer.objects) {
       return;
     }
@@ -162,6 +164,36 @@ export class ObjectTileStore {
         (tileId, objectTile) =>
           objectTile && this.set(parseInt(tileId), objectTile)
       );
+    });
+  }
+
+  addTilesets(
+    layers: Layer[],
+    externalTileSets: ExternalTileSet[],
+    tileSetStore: TileSetStore
+  ) {
+    layers.forEach((layer) => {
+      layer.data?.forEach((tileId, index) => {
+        const tileSetSource = externalTileSets.find(
+          (tileset) => tileset.firstgid < tileId
+        );
+        if (!tileSetSource?.source) return;
+
+        const tileSetStoreItem = tileSetStore[tileSetSource.source];
+        if (tileSetStoreItem?.tiles) {
+          tileSetStoreItem.tiles.forEach((tile) => {
+            if (tileSetSource.firstgid + tile.id != tileId) return;
+            if (!tile.objectgroup || !tile.objectgroup.objects) return;
+            tile.objectgroup.objects.forEach((objectTile) => {
+              const tileData = mapObjectToTileTypes(objectTile, this.columns);
+              objectForEach(
+                tileData,
+                (_, objectTile) => objectTile && this.set(index, objectTile)
+              );
+            });
+          });
+        }
+      });
     });
   }
 

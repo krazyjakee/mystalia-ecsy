@@ -11,7 +11,7 @@ import {
 const createObjectTileStore = (mapName = "test") => {
   const maps = readMapFiles();
   const data = maps[mapName];
-  const ots = new ObjectTileStore(data);
+  const ots = new ObjectTileStore(data, {});
   return ots;
 };
 
