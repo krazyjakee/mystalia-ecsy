@@ -4,6 +4,7 @@ import * as express from "express";
 import * as path from "path";
 import * as http from "http";
 import * as cors from "cors";
+import * as compression from "compression";
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 import socialRoutes from "@colyseus/social/express";
@@ -35,6 +36,8 @@ if (!isProduction) {
       publicPath: config.output.publicPath,
     })
   );
+} else {
+  app.use(compression);
 }
 
 app.use(express.static(path.resolve(__dirname, "..", "..", "public")));
