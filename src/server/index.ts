@@ -37,7 +37,7 @@ if (!isProduction) {
     })
   );
 } else {
-  app.use(compression);
+  app.use(compression());
 }
 
 app.use(express.static(path.resolve(__dirname, "..", "..", "public")));
