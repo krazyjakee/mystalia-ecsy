@@ -23,6 +23,20 @@ export interface GameStateEvents {
     fileName?: string;
     tileId?: number;
   };
+  "admin:timeSpec:update": {
+    dayLengthMins: number;
+  };
+  "admin:timePhase:update": {
+    dayLengthPerc: number;
+    transitionPerc: number;
+  };
+  "admin:forceTime:update": {
+    forceTime: string;
+  };
+  "admin:globalLightSpec:update": {
+    radius: string;
+    intensity: string;
+  };
   "admin:itemSpec:update": {
     specs: ItemSpec[];
   };
