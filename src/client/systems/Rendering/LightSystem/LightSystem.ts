@@ -20,9 +20,6 @@ imageMask.src = "/assets/utilities/lightmask.png";
 const lightCanvas = document.createElement("canvas");
 const shadowContext = lightCanvas.getContext("2d") as CanvasRenderingContext2D;
 
-const filterCanvas = document.createElement("canvas");
-const filterContext = filterCanvas.getContext("2d") as CanvasRenderingContext2D;
-
 const toneCanvas = document.createElement("canvas");
 const toneContext = toneCanvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -41,7 +38,6 @@ export default class LightSystem extends System {
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
 
-      //console.log(tileMap)
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const brightnessComponent = tileMapEntity.getComponent(
         EnvironmentBrightness
@@ -61,20 +57,6 @@ export default class LightSystem extends System {
       shadowContext.beginPath();
       shadowContext.fillStyle = `rgba(0,0,0,${1 - 0.01 * brightness})`;
       shadowContext.fillRect(0, 0, minWidth, minHeight);
-
-      
-      //filter layer to add a map wide color filter. requires a custom map property 'filter' set to colour
-      let filterBlend = "overlay";
-
-      if (tileMap.properties.filter) {
-        filterCanvas.width = minWidth;
-        filterCanvas.height = minHeight;
-
-        filterContext.beginPath();
-        filterContext.fillStyle = hexToRgb(tileMap.properties.filter, 0.40)
-        filterBlend = "color";
-        filterContext.fillRect(0, 0, minWidth, minHeight);
-      }
 
       //tone layer to remove deep blacks caused by multiply
       toneCanvas.width = minWidth;
@@ -143,21 +125,6 @@ export default class LightSystem extends System {
         width: minWidth,
         height: minHeight,
       });
-
-      /*if (tileMap.properties.filter) {
-        context2d.globalCompositeOperation = filterBlend;
-        drawImage({
-          image: filterCanvas,
-          sourceX: 0,
-          sourceY: 0,
-          sourceWidth: minWidth,
-          sourceHeight: minHeight,
-          x: 0,
-          y: 0,
-          width: minWidth,
-          height: minHeight,
-        });
-      }*/
 
       context2d.globalCompositeOperation = "screen";
       drawImage({
