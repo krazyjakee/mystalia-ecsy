@@ -12,11 +12,19 @@ import { drawImage } from "@client/utilities/drawing";
 import { isPresent } from "utilities/guards";
 import EnvironmentBrightness from "@client/components/EnvironmentBrightness";
 
+import { hexToRgb } from "utilities/color";
+
 const imageMask = new Image();
 imageMask.src = "/assets/utilities/lightmask.png";
 
 const lightCanvas = document.createElement("canvas");
 const shadowContext = lightCanvas.getContext("2d") as CanvasRenderingContext2D;
+
+const filterCanvas = document.createElement("canvas");
+const filterContext = filterCanvas.getContext("2d") as CanvasRenderingContext2D;
+
+const toneCanvas = document.createElement("canvas");
+const toneContext = toneCanvas.getContext("2d") as CanvasRenderingContext2D;
 
 export default class LightSystem extends System {
   static queries = {
@@ -32,6 +40,8 @@ export default class LightSystem extends System {
     context2d.save();
     this.queries.loadedTileMaps.results.forEach((tileMapEntity) => {
       const tileMap = tileMapEntity.getComponent(TileMap);
+
+      //console.log(tileMap)
       const tileMapDrawable = tileMapEntity.getComponent(Drawable);
       const brightnessComponent = tileMapEntity.getComponent(
         EnvironmentBrightness
@@ -41,16 +51,39 @@ export default class LightSystem extends System {
       const minWidth = window.innerWidth;
       const minHeight = window.innerHeight;
 
-      lightCanvas.width = minWidth;
-      lightCanvas.height = minHeight;
-
       const brightness = isPresent(tileMap.properties.light)
         ? parseInt(tileMap.properties.light)
         : brightnessComponent.brightness;
 
+      lightCanvas.width = minWidth;
+      lightCanvas.height = minHeight;
+
       shadowContext.beginPath();
       shadowContext.fillStyle = `rgba(0,0,0,${1 - 0.01 * brightness})`;
       shadowContext.fillRect(0, 0, minWidth, minHeight);
+
+      
+      //filter layer to add a map wide color filter. requires a custom map property 'filter' set to colour
+      let filterBlend = "overlay";
+
+      if (tileMap.properties.filter) {
+        filterCanvas.width = minWidth;
+        filterCanvas.height = minHeight;
+
+        filterContext.beginPath();
+        filterContext.fillStyle = hexToRgb(tileMap.properties.filter, 0.40)
+        filterBlend = "color";
+        filterContext.fillRect(0, 0, minWidth, minHeight);
+      }
+
+      //tone layer to remove deep blacks caused by multiply
+      toneCanvas.width = minWidth;
+      toneCanvas.height = minHeight;
+
+      toneContext.beginPath();
+      toneContext.fillStyle = 'rgba(8,8,8,1)';
+      toneContext.fillRect(0, 0, minWidth, minHeight);
+
 
       if (brightness < 40) {
         this.queries.player.results.forEach((playerEntity: Entity) => {
@@ -60,10 +93,10 @@ export default class LightSystem extends System {
             y: value.y * 32,
           });
           drawLightSource(shadowContext, position.x + 16, position.y + 16, {
-            radius: 4,
+            radius: 5,
             pulse: false,
             intensity: 30,
-            color: "#ffffff",
+            color: "#409ee3",
           });
         });
       }
@@ -99,7 +132,6 @@ export default class LightSystem extends System {
       }
 
       context2d.globalCompositeOperation = "multiply";
-
       drawImage({
         image: lightCanvas,
         sourceX: 0,
@@ -111,6 +143,35 @@ export default class LightSystem extends System {
         width: minWidth,
         height: minHeight,
       });
+
+      /*if (tileMap.properties.filter) {
+        context2d.globalCompositeOperation = filterBlend;
+        drawImage({
+          image: filterCanvas,
+          sourceX: 0,
+          sourceY: 0,
+          sourceWidth: minWidth,
+          sourceHeight: minHeight,
+          x: 0,
+          y: 0,
+          width: minWidth,
+          height: minHeight,
+        });
+      }*/
+
+      context2d.globalCompositeOperation = "screen";
+      drawImage({
+        image: toneCanvas,
+        sourceX: 0,
+        sourceY: 0,
+        sourceWidth: minWidth,
+        sourceHeight: minHeight,
+        x: 0,
+        y: 0,
+        width: minWidth,
+        height: minHeight,
+      });
+
     });
     context2d.restore();
   }
