@@ -73,9 +73,13 @@
         {
          "name":"Weeds",
          "tile":192
+        }, 
+        {
+         "name":"Snow Water 3",
+         "tile":504
         }],
  "tilecount":660,
- "tiledversion":"2020.05.29",
+ "tiledversion":"2020.07.21",
  "tileheight":32,
  "tiles":[
         {
@@ -1396,8 +1400,245 @@
         {
          "id":488,
          "terrain":[11, -1, -1, -1]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":504
+                }, 
+                {
+                 "duration":250,
+                 "tileid":507
+                }, 
+                {
+                 "duration":250,
+                 "tileid":510
+                }],
+         "id":504
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":505
+                }, 
+                {
+                 "duration":250,
+                 "tileid":508
+                }, 
+                {
+                 "duration":250,
+                 "tileid":511
+                }],
+         "id":505,
+         "terrain":[15, 15, 15, -1]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":506
+                }, 
+                {
+                 "duration":250,
+                 "tileid":509
+                }, 
+                {
+                 "duration":250,
+                 "tileid":512
+                }],
+         "id":506,
+         "terrain":[15, 15, -1, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":538
+                }, 
+                {
+                 "duration":250,
+                 "tileid":541
+                }, 
+                {
+                 "duration":250,
+                 "tileid":544
+                }],
+         "id":538,
+         "terrain":[15, -1, 15, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":539
+                }, 
+                {
+                 "duration":250,
+                 "tileid":542
+                }, 
+                {
+                 "duration":250,
+                 "tileid":545
+                }],
+         "id":539,
+         "terrain":[-1, 15, 15, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":570
+                }, 
+                {
+                 "duration":250,
+                 "tileid":573
+                }, 
+                {
+                 "duration":250,
+                 "tileid":576
+                }],
+         "id":570,
+         "terrain":[-1, -1, -1, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":571
+                }, 
+                {
+                 "duration":250,
+                 "tileid":574
+                }, 
+                {
+                 "duration":250,
+                 "tileid":577
+                }],
+         "id":571,
+         "terrain":[-1, -1, 15, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":572
+                }, 
+                {
+                 "duration":250,
+                 "tileid":575
+                }, 
+                {
+                 "duration":250,
+                 "tileid":578
+                }],
+         "id":572,
+         "terrain":[-1, -1, 15, -1]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":603
+                }, 
+                {
+                 "duration":250,
+                 "tileid":606
+                }, 
+                {
+                 "duration":250,
+                 "tileid":609
+                }],
+         "id":603,
+         "terrain":[-1, 15, -1, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":604
+                }, 
+                {
+                 "duration":250,
+                 "tileid":607
+                }, 
+                {
+                 "duration":250,
+                 "tileid":610
+                }],
+         "id":604,
+         "terrain":[15, 15, 15, 15]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":605
+                }, 
+                {
+                 "duration":250,
+                 "tileid":608
+                }, 
+                {
+                 "duration":250,
+                 "tileid":611
+                }],
+         "id":605,
+         "terrain":[15, -1, 15, -1]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":636
+                }, 
+                {
+                 "duration":250,
+                 "tileid":639
+                }, 
+                {
+                 "duration":250,
+                 "tileid":642
+                }],
+         "id":636,
+         "terrain":[-1, 15, -1, -1]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":637
+                }, 
+                {
+                 "duration":250,
+                 "tileid":640
+                }, 
+                {
+                 "duration":250,
+                 "tileid":643
+                }],
+         "id":637,
+         "terrain":[15, 15, -1, -1]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":250,
+                 "tileid":638
+                }, 
+                {
+                 "duration":250,
+                 "tileid":641
+                }, 
+                {
+                 "duration":250,
+                 "tileid":644
+                }],
+         "id":638,
+         "terrain":[15, -1, -1, -1]
         }],
  "tilewidth":32,
  "type":"tileset",
- "version":1.2
+ "version":1.4
 }
