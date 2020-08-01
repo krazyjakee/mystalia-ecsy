@@ -15,9 +15,8 @@ const useStyles = createUseStyles({
 });
 
 export const Clock = () => {
-  const [displayTime, setDisplayTime] = useState("00:00");
+  const [displayTime, setDisplayTime] = useState("00:00 AM");
   const classes = useStyles();
-
   useEffect(() => {
     setInterval(() => {
       const dayPercentage = timeOfDayAsPercentage();
@@ -26,12 +25,10 @@ export const Clock = () => {
       const msElapsed =
         Math.round(dayLength * 24 * (dayPercentage / 100)) + dayLength * 8;
       const elapsedDate = new Date(msElapsed);
+
       setDisplayTime(
         elapsedDate
-          .toLocaleTimeString()
-          .split(":")
-          .slice(0, 2)
-          .join(":")
+          .toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
       );
     }, 100);
   }, []);
