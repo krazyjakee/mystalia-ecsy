@@ -66,14 +66,14 @@ export const drawLightSource = (
   var stop1transform = hexToHslObj(color)
       stop1transform.h = Math.max(0, stop1transform.h - 18)
       stop1transform.s = Math.max(0, stop1transform.s - 52)
-      stop1transform.l = Math.max(0, stop1transform.l/* - 13*/)
+      stop1transform.l = Math.max(0, stop1transform.l - 13)
 
   var stop1Rgb = hslObjToRgbObj(stop1transform);
 
   var stop2transform = hexToHslObj(color)
       stop2transform.h = Math.max(0, stop2transform.h - 30);
-      stop2transform.s = Math.min(25, stop2transform.s - 75);
-      stop2transform.l = Math.max(0, stop2transform.l/* / 2*/);
+      stop2transform.s = Math.min(25, stop2transform.s - 35);
+      stop2transform.l = Math.max(0, stop2transform.l / 2);
  
   var stop2Rgb = hslObjToRgbObj(stop2transform)
 
