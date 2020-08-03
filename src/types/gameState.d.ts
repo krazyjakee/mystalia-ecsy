@@ -32,6 +32,7 @@ export interface GameStateEvents {
   };
   "admin:forceTime:update": {
     forceTime: string;
+    forceMins: string;
   };
   "admin:globalLightSpec:update": {
     radius: string;
