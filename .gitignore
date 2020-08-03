@@ -5,6 +5,3 @@ public/**/*
 assets/maps/*.png
 .env
 assets/maps/project.tiled-session
-tiled editor/
-tools/
-crash/
