@@ -7,6 +7,7 @@ import gameState from "@client/gameState";
 type LightSourceOptions = {
   radius?: number;
   pulse?: boolean;
+  cone?: boolean;
   color?: string;
   intensity?: number;
 };
@@ -35,8 +36,9 @@ export const drawLightSource = (
   {
     radius = 4,
     pulse = true, //true
+    cone = false,
     color = "#ffbd54",
-    intensity = 40,
+    intensity = 50,
   }: LightSourceOptions
 ) => {
 
@@ -59,7 +61,7 @@ export const drawLightSource = (
   var stopOrigintransform = hexToHslObj(color)
       stopOrigintransform.h = Math.max(0, stopOrigintransform.h)
       stopOrigintransform.s = Math.min(100, stopOrigintransform.s * 2)
-      stopOrigintransform.l = Math.max(Math.min(100, intensity*1.7), 80)
+      stopOrigintransform.l = clamp(( intensity*1.7 ), 80, 100)
 
   var stopOriginRgb = hslObjToRgbObj(stopOrigintransform);
 
@@ -72,7 +74,7 @@ export const drawLightSource = (
 
   var stop2transform = hexToHslObj(color)
       stop2transform.h = Math.max(0, stop2transform.h - 30);
-      stop2transform.s = Math.min(25, stop2transform.s - 35);
+      stop2transform.s = clamp((stop2transform.s - 35), 0, 25);
       stop2transform.l = Math.max(0, stop2transform.l / 2);
  
   var stop2Rgb = hslObjToRgbObj(stop2transform)
@@ -81,22 +83,19 @@ export const drawLightSource = (
     return Math.min(Math.max(num, min), max)
   }
 
-  function gradientStop(baseStop: number, invert: boolean = false) {
-    if (invert) {
-      return ( Math.max((clamp(intensity*2,1,100)) *baseStop)/100, 0.8)
-    }
-    return (clamp(intensity,1,100)*baseStop) /100
+  function gradientStop(baseStop: number) {
+    return clamp((clamp(intensity,1,100)*baseStop) /100 * ((100 - (calculateBrightness()))/100),0,1)
   }
 
-  function gradientAlpha(baseStop: number, range: number) {
-    return ((baseStop - (baseStop / intensity)) * range)-(calculateBrightness()/100)
+  function gradientAlpha(baseStop: number) {
+    return clamp( ( (baseStop - (baseStop / intensity)) * ((100 - (calculateBrightness()/2))/100) ),0,1)
   }
 
-  gradient.addColorStop(0, "rgba("+stopOriginRgb.r+","+stopOriginRgb.g+","+stopOriginRgb.b+","+gradientAlpha(0.8,2) + ")"); // always maximum opacity, base light tone
-  gradient.addColorStop(gradientStop(0.35), hexToRgb(color, gradientAlpha(0.7,4) ) ); // always maximum opacity
-  gradient.addColorStop(gradientStop(0.55), "rgba("+stop1Rgb.r+","+stop1Rgb.g+","+stop1Rgb.b+"," + gradientAlpha(0.4,4) + ")");
-  gradient.addColorStop(gradientStop(0.95), "rgba("+stop2Rgb.r+","+stop2Rgb.g+","+stop2Rgb.b+"," + gradientAlpha(0.2,8) + ")");
-  gradient.addColorStop(1, "rgba(0,0,0,0)");
+  gradient.addColorStop(0, "rgba("+stopOriginRgb.r+","+stopOriginRgb.g+","+stopOriginRgb.b+","+gradientAlpha(0.8) + ")"); // always maximum opacity, base light tone
+  gradient.addColorStop(gradientStop(0.35), hexToRgb(color, gradientAlpha(0.7) ) ); // always maximum opacity
+  gradient.addColorStop(gradientStop(0.55), "rgba("+stop1Rgb.r+","+stop1Rgb.g+","+stop1Rgb.b+"," + gradientAlpha(0.6) + ")");
+  gradient.addColorStop(gradientStop(0.95), "rgba("+stop2Rgb.r+","+stop2Rgb.g+","+stop2Rgb.b+"," + gradientAlpha(0.4) + ")");
+  gradient.addColorStop(1, "rgba(8,8,8,0)");
 
 
   ctx.save();

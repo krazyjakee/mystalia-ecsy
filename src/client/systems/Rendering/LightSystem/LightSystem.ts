@@ -77,7 +77,7 @@ export default class LightSystem extends System {
           drawLightSource(shadowContext, position.x + 16, position.y + 16, {
             radius: 5,
             pulse: false,
-            intensity: 30,
+            intensity: 40,
             color: "#409ee3",
           });
         });
@@ -98,9 +98,7 @@ export default class LightSystem extends System {
               const position = addOffset(offset, tilePosition);
               let intensity = lightTileProperties.intensity;
               if (!intensity) {
-                if (brightness && brightness >= 50) {
-                  intensity = 100 - (brightness - 50) * 2;
-                }
+                intensity = 50
               }
 
               drawLightSource(shadowContext, position.x + 16, position.y + 16, {
