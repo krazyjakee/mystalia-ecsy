@@ -100,6 +100,7 @@ import {
   GenerateSpriteSheetAnimationSteps,
 } from "./components/Tags";
 import Storage from "@client/utilities/storage";
+import LanternSystem from "./systems/Rendering/LightSystem/LanternSystem";
 
 let world = new World();
 
@@ -177,6 +178,7 @@ export default (user: User) => {
     .registerSystem(WeatherSystem)
     .registerSystem(LightSystem)
     .registerSystem(FlameSystem)
+    .registerSystem(LanternSystem)
     .registerSystem(BrightnessSystem)
     .registerSystem(TileAnimationSystem)
     .registerSystem(EnemyStatusSystem)

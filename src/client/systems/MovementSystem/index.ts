@@ -54,6 +54,7 @@ export default class MovementSystem extends System {
                 nextTile,
                 columns
               );
+              movement.savedDirection = movement.direction;
               if (!entity.hasComponent(SendData)) {
                 entity.addComponent(SendData);
               }

@@ -4,6 +4,7 @@ import { Direction } from "types/Grid";
 export default class Movement extends Component<Movement> {
   static schema = {
     direction: { type: Types.String },
+    savedDirection: { type: Types.String },
     targetTile: { type: Types.Number },
     currentTile: { default: 0, type: Types.Number },
     tileQueue: { default: [], type: Types.Array },
@@ -12,6 +13,7 @@ export default class Movement extends Component<Movement> {
   };
 
   direction?: Direction;
+  savedDirection?: Direction;
   targetTile?: number;
   currentTile: number = 0;
   tileQueue: number[] = [];
@@ -20,6 +22,7 @@ export default class Movement extends Component<Movement> {
 
   reset() {
     this.direction = undefined;
+    this.savedDirection = undefined;
     this.currentTile = 0;
     this.targetTile = undefined;
     this.tileQueue = [];
