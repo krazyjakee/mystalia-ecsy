@@ -1,7 +1,9 @@
 [
   {
     "id": 0,
-    "requiredItems": [1],
+    "requiredItems": [
+      1
+    ],
     "ingredients": [
       {
         "itemId": 0,
@@ -9,5 +11,89 @@
       }
     ],
     "item": 2
+  },
+  {
+    "id": 1,
+    "requiredItems": [
+      2
+    ],
+    "ingredients": [
+      {
+        "itemId": 32,
+        "quantity": 10
+      },
+      {
+        "itemId": 34,
+        "quantity": 2
+      }
+    ],
+    "item": 35
+  },
+  {
+    "id": 2,
+    "requiredItems": [
+      4
+    ],
+    "ingredients": [
+      {
+        "itemId": 6,
+        "quantity": 1
+      },
+      {
+        "itemId": 21,
+        "quantity": 2
+      },
+      {
+        "itemId": 22,
+        "quantity": 4
+      },
+      {
+        "itemId": 23,
+        "quantity": 6
+      }
+    ],
+    "item": 36
+  },
+  {
+    "id": 3,
+    "requiredItems": [
+      2
+    ],
+    "ingredients": [
+      {
+        "itemId": 15,
+        "quantity": 3
+      },
+      {
+        "itemId": 13,
+        "quantity": 3
+      }
+    ],
+    "item": 37
+  },
+  {
+    "id": 4,
+    "requiredItems": [
+      4
+    ],
+    "ingredients": [
+      {
+        "itemId": 36,
+        "quantity": 1
+      },
+      {
+        "itemId": 20,
+        "quantity": 6
+      },
+      {
+        "itemId": 37,
+        "quantity": 2
+      },
+      {
+        "itemId": 38,
+        "quantity": 1
+      }
+    ],
+    "item": 34
   }
 ]
