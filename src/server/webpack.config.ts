@@ -4,7 +4,10 @@ import * as CopyWebpackPlugin from "copy-webpack-plugin";
 
 const config = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
-  entry: path.resolve(__dirname, "..", "client", "index.ts"),
+  entry: {
+    app: path.resolve(__dirname, "..", "client", "index.ts"),
+    css: path.resolve(__dirname, "..", "client", "css.ts"),
+  },
   module: {
     rules: [
       {
@@ -32,15 +35,14 @@ const config = {
       "@client": path.resolve(__dirname, "..", "client"),
     },
   },
-  devtool:
-    process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
+  devtool: process.env.NODE_ENV === "production" ? false : "inline-source-map",
   devServer: {
     contentBase: "./public",
     hot: true,
     port: 8081,
   },
   output: {
-    filename: "app.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "..", "..", "public"),
     publicPath: "/",
   },
@@ -56,6 +58,7 @@ const config = {
     }),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "..", "client", "index.html"),
+      inject: false,
     }),
   ],
 };
