@@ -262,9 +262,61 @@
   },
   {
     "id": 33,
-    "name": "Bag of seeds",
+    "name": "Bag of Seeds",
     "spritesheet": "items",
     "spriteId": 381,
     "type": "other"
+  },
+  {
+    "id": 34,
+    "name": "Inferior Forge Potion",
+    "spritesheet": "items",
+    "spriteId": 381,
+    "type": "other"
+  },
+  {
+    "id": 35,
+    "name": "Pauper's Shoes",
+    "spritesheet": "items",
+    "spriteId": 69,
+    "equippable": true
+  },
+  {
+    "id": 36,
+    "name": "Shiny Blue Powder",
+    "spritesheet": "items",
+    "spriteId": 293,
+    "type": "other"
+  },
+  {
+    "id": 37,
+    "name": "Tunnle Vision",
+    "spritesheet": "items",
+    "spriteId": 448,
+    "equippable": true
+  },
+  {
+    "id": 38,
+    "name": "Slavecraft Relic",
+    "spritesheet": "items",
+    "spriteId": 383,
+    "type": "other"
+  },
+  {
+    "id": 39,
+    "name": "Cracked skull",
+    "spritesheet": "items",
+    "spriteId": 365,
+    "type": "melee",
+    "tags": [
+      "strength"
+    ],
+    "equippable": true,
+    "damage": [
+      1,
+      5
+    ],
+    "effect": 0,
+    "range": 1
   }
 ]
