@@ -76,6 +76,7 @@ export default class TileMapChanger extends System {
       const weather = tileMapEntity.getMutableComponent(Weather);
 
       if (loadable.dataPath) {
+        window.disableMovement = true;
         loadable.loading = true;
         const movement = playerEntity.getMutableComponent(Movement);
         const playerPosition = playerEntity.getMutableComponent(Position);
@@ -195,6 +196,7 @@ export default class TileMapChanger extends System {
 
         // Everything is good to go!
         loadable.loading = false;
+        window.disableMovement = false;
         tileMapEntity.addComponent(Fade, { alpha: 0 });
         tileMapEntity.removeComponent(AnimatedTilesInitiated);
         playerEntity.removeComponent(ChangingMap);

@@ -83,7 +83,7 @@ import RemotePlayer from "./components/RemotePlayer";
 import Shop, { OpenShopAtDestination } from "./components/Shop";
 import SpriteSheetAnimation from "./components/SpriteSheetAnimation";
 import TextBurst from "./components/TextBurst";
-import TileMap, { ChangingMap } from "./components/TileMap";
+import TileMap, { ChangingMap, ChangeMap } from "./components/TileMap";
 import Weather from "./components/Weather";
 import {
   Remove,
@@ -141,6 +141,7 @@ export default (user: User) => {
     .registerComponent(TextBurst)
     .registerComponent(TileMap)
     .registerComponent(ChangingMap)
+    .registerComponent(ChangeMap)
     .registerComponent(Weather)
     .registerComponent(Remove)
     .registerComponent(Move)
