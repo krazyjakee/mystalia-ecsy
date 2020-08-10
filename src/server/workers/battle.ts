@@ -9,6 +9,12 @@ import { RoomMessage } from "types/gameState";
 import { randomNumberBetween } from "utilities/math";
 import { AbilitySpec } from "types/types";
 import { isPresent } from "utilities/guards";
+import { objectForEach } from "utilities/loops";
+import { randomHash } from "utilities/hash";
+import ItemState from "@server/components/item";
+import { MapSchema } from "@colyseus/schema";
+import InventoryState from "@server/components/inventory";
+import { resetPlayerState } from "@server/utilities/dbState";
 
 const enemySpecs = require("utilities/data/enemies.json") as EnemySpec[];
 const abilitySpecs = require("utilities/data/abilities") as AbilitySpec[];
@@ -123,9 +129,12 @@ export default class Battle {
           ?.map((a) => abilitySpecs.find((as) => as.id === a))
           .filter(isPresent) || [];
 
-      const playerPosition = (this.room.state.players[
+      const player = this.room.state.players[
         enemyState.targetPlayer
-      ] as PlayerState).targetTile;
+      ] as PlayerState;
+      if (!player) return;
+
+      const playerPosition = player.targetTile;
 
       if (!playerPosition) return;
 
@@ -196,7 +205,20 @@ export default class Battle {
       );
       client.send("localPlayer:battle:damageTaken", damageTakenMessage);
       if (player.damage >= 100) {
-        // TODO: Kill player
+        // Begin death script
+        if (!isPresent(player.targetTile)) return;
+        const playerTile = player.targetTile;
+
+        objectForEach(player.inventory, (_, item) => {
+          this.room.state.items[randomHash()] = new ItemState(
+            item.itemId,
+            playerTile,
+            item.quantity
+          );
+        });
+
+        resetPlayerState(player.dbId);
+        delete this.room.state.players[playerKey];
       }
     }
   }

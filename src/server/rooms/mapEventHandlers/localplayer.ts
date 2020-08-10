@@ -24,6 +24,7 @@ export class MovementReportCommand extends Command<
 > {
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId];
+    if (!player) return;
     player.targetTile = data.targetTile;
   }
 }
@@ -72,7 +73,8 @@ export class InventoryPickupCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:inventory:pickup"> }
 > {
   execute({ sessionId, data }) {
-    const player = this.state.players[sessionId];
+    const player = this.state.players[sessionId] as PlayerState;
+    if (!player) return;
     const room = this.room as MapRoom;
     if (room.itemSpawner && player.targetTile) {
       const item = room.itemSpawner.getItem(player.targetTile, data.itemId);
@@ -88,7 +90,8 @@ export class InventoryMoveCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:inventory:move"> }
 > {
   execute({ sessionId, data }) {
-    const player = this.state.players[sessionId];
+    const player = this.state.players[sessionId] as PlayerState;
+    if (!player) return;
     moveInventoryItem(data.from, data.to, player.inventory);
   }
 }
@@ -98,7 +101,8 @@ export class InventoryEquipCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:inventory:equip"> }
 > {
   execute({ sessionId, data }) {
-    const player = this.state.players[sessionId];
+    const player = this.state.players[sessionId] as PlayerState;
+    if (!player) return;
     equipItem(player.inventory, data.position);
   }
 }
@@ -109,6 +113,7 @@ export class CraftCommand extends Command<
 > {
   execute({ sessionId, data }) {
     const player = this.state.players[sessionId] as PlayerState;
+    if (!player) return;
     const craftable = craftables.find((c) => c.id === data.craftableId);
     if (craftable && player.inventory) {
       performCraft(player.inventory, craftable);
@@ -135,7 +140,9 @@ export class BattleTargetEnemyCommand extends Command<
   { sessionId: string; data: RoomMessage<"localPlayer:battle:targetEnemy"> }
 > {
   execute({ sessionId, data }) {
-    (this.state.players[sessionId] as PlayerState).targetEnemy = data.key;
+    const player = this.state.players[sessionId] as PlayerState;
+    if (!player) return;
+    player.targetEnemy = data.key;
   }
 }
 
@@ -144,7 +151,9 @@ export class BattleUnTargetCommand extends Command<
   { sessionId: string }
 > {
   execute({ sessionId }) {
-    (this.state.players[sessionId] as PlayerState).targetEnemy = undefined;
+    const player = this.state.players[sessionId] as PlayerState;
+    if (!player) return;
+    player.targetEnemy = undefined;
   }
 }
 

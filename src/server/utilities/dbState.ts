@@ -1,4 +1,4 @@
-import PlayerState from "../components/player";
+import PlayerState, { UserDBState } from "../components/player";
 import users, { IUser } from "@colyseus/social/src/models/User";
 import { isPresent } from "utilities/guards";
 import InventoryState, {
@@ -11,6 +11,7 @@ import { MapSchema, ArraySchema, Schema } from "@colyseus/schema";
 import WeatherSchema from "../db/WeatherSchema";
 import LootSchema from "@server/db/LootSchema";
 import { objectMap } from "utilities/loops";
+import { nameByRace } from "fantasy-name-generator";
 
 export const savePlayerState = async (player: PlayerState, room: string) => {
   if (player.dbId) {
@@ -52,6 +53,22 @@ export const savePlayerState = async (player: PlayerState, room: string) => {
 
       await user.updateOne({
         $set: newData,
+      });
+    }
+  }
+};
+
+export const resetPlayerState = async (dbId: string) => {
+  const user = await users.findById(dbId);
+  if (user) {
+    const customName = nameByRace("elf", { gender: "male" });
+    if (typeof customName === "string") {
+      await user.updateOne({
+        $set: {
+          displayName: customName,
+          username: customName.toLowerCase(),
+          metadata: UserDBState,
+        },
       });
     }
   }

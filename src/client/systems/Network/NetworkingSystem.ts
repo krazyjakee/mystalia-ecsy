@@ -6,6 +6,8 @@ import {
   Remove,
   Gray,
   Disable,
+  BattleTarget,
+  PlayerDeath,
 } from "@client/components/Tags";
 import NewMovementTarget from "@client/components/NewMovementTarget";
 import Movement from "@client/components/Movement";
@@ -13,7 +15,7 @@ import CreateRemotePlayer from "../../entities/RemotePlayer";
 import NetworkRoom, { RoomState } from "@client/components/NetworkRoom";
 import RemotePlayer from "@client/components/RemotePlayer";
 import TileMap from "@client/components/TileMap";
-import { Loadable } from "@client/components/Loadable";
+import { Loadable, Unloadable } from "@client/components/Loadable";
 import Position from "@client/components/Position";
 import addOffset from "../../utilities/Vector/addOffset";
 import compassToVector from "../../utilities/Compass/compassToVector";
@@ -24,7 +26,6 @@ import {
   tileIdToVector,
   vectorToTileId,
   vectorToPixels,
-  getTilesByType,
 } from "utilities/tileMap";
 import { RoomMessage } from "types/gameState";
 import Item from "@client/components/Item";
@@ -36,15 +37,11 @@ import Weather from "@client/components/Weather";
 import { ItemSpec } from "types/TileMap/ItemTiles";
 import Enemy from "@client/components/Enemy";
 import CreateEffect from "@client/entities/Effect";
-import CreateLoot from "@client/entities/Loot";
-import Drawable from "@client/components/Drawable";
-import { TMJ } from "types/TMJ";
 import { UpdateLoot } from "@client/components/Loot";
-import { objectMap } from "utilities/loops";
-import { MapSchema } from "@colyseus/schema";
-import LootItemState from "@server/components/lootItem";
 import LootState from "@server/components/loot";
 import lootItemStateToArray from "@client/react/Panels/Loot/lootItemStateToArray";
+import { mapAssetPath } from "@client/utilities/assets";
+import CreateLocalPlayer from "@client/entities/LocalPlayer";
 
 const items = require("utilities/data/items.json") as ItemSpec[];
 
@@ -245,6 +242,11 @@ export default class NetworkingSystem extends System {
                 }
               }
             );
+          } else {
+            const localPlayer = this.queries.localEntities.results[0];
+            if (!localPlayer) return;
+
+            localPlayer.addComponent(PlayerDeath);
           }
         };
 
@@ -252,7 +254,6 @@ export default class NetworkingSystem extends System {
           if (isPresent(item.itemId)) {
             const itemSpec = items.find((i) => i.id === item.itemId);
             if (itemSpec) {
-              //@ts-ignore
               const exists = this.queries.loadedItems.results.find(
                 (itemEntity: Entity) => {
                   const itemComponent = itemEntity.getComponent(Item);
