@@ -56,8 +56,8 @@ export default class PlayerState extends Schema {
 }
 
 export const UserDBState = {
-  currentTile: 2431,
-  room: "first",
+  currentTile: 3107,
+  room: "west",
   role: 0,
   inventory: [],
   xp: 0,
