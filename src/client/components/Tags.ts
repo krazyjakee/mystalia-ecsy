@@ -23,3 +23,5 @@ export class BattleTarget extends TagComponent {}
 export class PickUpAtDestination extends TagComponent {}
 
 export class GenerateSpriteSheetAnimationSteps extends TagComponent {}
+
+export class PlayerDeath extends TagComponent {}

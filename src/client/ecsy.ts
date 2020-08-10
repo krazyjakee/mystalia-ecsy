@@ -98,8 +98,10 @@ import {
   BattleTarget,
   PickUpAtDestination,
   GenerateSpriteSheetAnimationSteps,
+  PlayerDeath,
 } from "./components/Tags";
 import Storage from "@client/utilities/storage";
+import DeathSystem from "./systems/DeathSystem";
 
 let world = new World();
 
@@ -161,6 +163,7 @@ export default (user: User) => {
     .registerComponent(BattleTarget)
     .registerComponent(PickUpAtDestination)
     .registerComponent(GenerateSpriteSheetAnimationSteps)
+    .registerComponent(PlayerDeath)
     .registerSystem(KeyboardInputSystem)
     .registerSystem(MouseInputSystem)
     .registerSystem(MapEventSystem)
@@ -186,6 +189,7 @@ export default (user: User) => {
     .registerSystem(InventorySystem)
     .registerSystem(GraySystem)
     .registerSystem(FadeSystem)
+    .registerSystem(DeathSystem)
     .registerSystem(PlayerNameSystem)
     .registerSystem(BehaviourSystem)
     .registerSystem(LookAtPlayerSystem)
