@@ -11,22 +11,25 @@ import { Row, Col } from "react-flexbox-grid";
 import { Label } from "@client/react/FormControls/Label";
 import { Button } from "@client/react/FormControls/Button";
 
+import { validateInputNumber } from "@client/react/utilities/FormValidation";
+
 export default ({ show = false }) => {
 
 const localTSpec = Storage.getAdmin("timeSpec:update")
-const [dayLengthInMinutes, setDayLengthInMinutes] = useState<number>(localTSpec.dayLengthMins || config.dayLengthInMinutes);
+const [dayLengthInMinutes, setDayLengthInMinutes] = useState<number | undefined>(localTSpec.dayLengthMins || config.dayLengthInMinutes);
 
 const localTPhase = Storage.getAdmin("timePhase:update")
-const [dayLightPercentage, setDayLightPercentage] = useState<number>(localTPhase.dayLengthPerc || config.dayLightPercentage);
-const [transitionTime, setTransitionTime] = useState<number>(localTPhase.transitionPerc || config.transitionTime);
+const [dayLightPercentage, setDayLightPercentage] = useState<number | undefined>(localTPhase.dayLengthPerc || config.dayLightPercentage);
+const [transitionTime, setTransitionTime] = useState<number | undefined>(localTPhase.transitionPerc || config.transitionTime);
 
 const localTime = Storage.getAdmin("forceTime:update")
 
-const [forceTime, setForceTime] = useState<string>(localTime.forceTime || "");
-const [forceMins, setForceMins] = useState<string>(localTime.forceMins || "");
+const [forceHours, setForceHours] = useState<number | undefined>(localTime.hours || 0);
+const [forceMins, setForceMins] = useState<number | undefined>(localTime.minutes || 0);
+const [forceTimeActive, setForceTimeActive] = useState<boolean>(localTime.active || false);
 
 useEffect(() => {
-    gameState.trigger("admin:forceTime:update", {forceTime: forceTime, forceMins: forceMins});
+    gameState.trigger("admin:forceTime:update", {hours: forceHours, minutes: forceMins, active: forceTimeActive});
     gameState.trigger("admin:timeSpec:update", {dayLengthMins: dayLengthInMinutes});
     gameState.trigger("admin:timePhase:update", {dayLengthPerc: dayLightPercentage, transitionPerc: transitionTime});
   });
@@ -36,57 +39,67 @@ useEffect(() => {
   return (
     <Section>
     
-          <Label>Forced time (24hrs):</Label>
+          <Label>Time overide (24hrs):</Label>
           <Row>
 
             <Col xs={6}>
               <TextInput
                 onChange={(e) => {
-                  if (parseInt(e.currentTarget.value) > 24 || parseInt(e.currentTarget.value) < 0) {
-                      e.preventDefault()
-                      return
-                    }
-                  setForceTime(e.currentTarget.value);
-                  Storage.setAdmin("forceTime:update", {'forceTime': e.currentTarget.value, 'forceMins': forceMins})
+                    const result = validateInputNumber(e.currentTarget)
+                    setForceHours(result);
+                    Storage.setAdmin("forceTime:update", {"hours": result, "minutes": forceMins, "active": forceTimeActive})
                 }}
                 value={
-                  forceTime
+                  forceHours
                 }
                 placeholder="Hours e.g. 23"
+                type="number"
+                min="0"
+                max="24"
               />
             </Col>
           
             <Col xs={6}>
               <TextInput
                 onChange={(e) => {
-                  if (parseInt(e.currentTarget.value) > 60 || parseInt(e.currentTarget.value) < 0) {
-                      e.preventDefault()
-                      return
-                    }
-                  setForceMins(e.currentTarget.value);
-                  Storage.setAdmin("forceTime:update", {'forceTime': forceTime, 'forceMins': e.currentTarget.value})
+                    const result = validateInputNumber(e.currentTarget)
+                    setForceMins(result);
+                    Storage.setAdmin("forceTime:update", {"hours": forceHours, "minutes": result, "active": forceTimeActive})
                 }}
                 value={
                   forceMins
                 }
                 placeholder="Mins e.g. 55"
+                type="number"
+                min="0"
+                max="60"
               />
             </Col>
           </Row>
+          <CheckBox
+            checked={forceTimeActive}
+            label="Time overide enabled?"
+            onClick={(checked) => {
+               setForceTimeActive(checked);
+               Storage.setAdmin("forceTime:update", {"hours": forceHours, "minutes": forceMins, "active": checked})
+            }}
+          />
           <SubSection label="Modifiers">
             <Label>Length of Day (mins):</Label>
             <Row>
               <Col xs={12}>
                 <TextInput
                   onChange={(e) => {
-                    setDayLengthInMinutes(parseInt(e.currentTarget.value));
-                    Storage.setAdmin("timeSpec:update", {'dayLengthMins': e.currentTarget.value})
+                      const result = validateInputNumber(e.currentTarget)
+                      setDayLengthInMinutes(result);
+                      Storage.setAdmin("timeSpec:update", {"dayLengthMins": result})
                   }} 
                   value={
                     dayLengthInMinutes
                   }
                   placeholder="Day length minutes"
                   type="number"
+                  min="0"
                 />
               </Col>
             </Row>
@@ -95,38 +108,37 @@ useEffect(() => {
               <Label>Day (%):</Label>
                 <TextInput
                   onChange={(e) => {
-                    if (parseInt(e.currentTarget.value) > 100 || parseInt(e.currentTarget.value) < 1) {
-                      e.preventDefault()
-                      return
-                    }
-                    setDayLightPercentage(parseInt(e.currentTarget.value));
-                    Storage.setAdmin("timePhase:update", {'dayLengthPerc': e.currentTarget.value})
+                      const result = validateInputNumber(e.currentTarget)
+                      setDayLightPercentage(result);
+                      Storage.setAdmin("timePhase:update", {"dayLengthPerc": result})
                   }}
                   value={
                     dayLightPercentage
                   }
                   placeholder="Percentage of day that is light"
                   type="number"
+                  min="0"
+                  max="100"
                 />
               </Col>
               
               <Col xs={6}>
               <Label>Transition (%):</Label>
-                <TextInput
+              <TextInput
                   onChange={(e) => {
-                    if (parseInt(e.currentTarget.value) > 100 || parseInt(e.currentTarget.value) < 1) {
-                      e.preventDefault()
-                      return
-                    }
-                    setTransitionTime(parseInt(e.currentTarget.value));
-                    Storage.setAdmin("timePhase:update", {'transitionPerc': e.currentTarget.value})
+                      const result = validateInputNumber(e.currentTarget)
+                      setTransitionTime(result);
+                      Storage.setAdmin("timePhase:update", {"transitionTime": result})
                   }}
                   value={
                     transitionTime
                   }
-                  placeholder="Percentage of time spent transitioning"
+                  placeholder="Percentage of day that is light"
                   type="number"
+                  min="0"
+                  max="100"
                 />
+               
               </Col>
             </Row>
           </SubSection>
@@ -134,18 +146,19 @@ useEffect(() => {
           <Row>
            <Col xs={6}>
             <Button
-                value="Clear Forced Time"
+                value="Reset Time overide"
                 onClick={() => {
                   Storage.setAdmin("forceTime:update")
-                  setForceTime("");
-                  setForceMins("");
+                  setForceTimeActive(false);
+                  setForceHours(undefined);
+                  setForceMins(undefined);
                   }
                 }
               />
               </Col>
              <Col xs={6}>
             <Button
-              value="Clear Modifiers"
+              value="Reset Modifiers"
               onClick={() => {
                 Storage.setAdmin("timePhase:update");
                 Storage.setAdmin("timeSpec:update");

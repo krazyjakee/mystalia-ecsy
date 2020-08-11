@@ -3,16 +3,16 @@ import React, { useState, useEffect, useContext } from "react";
 import gameState from "@client/gameState";
 
 import { Section } from "../../Section";
-import { SubSection } from "../../SubSection";
 import { TextInput } from "@client/react/FormControls/TextInput";
-import { CheckBox } from "@client/react/FormControls/CheckBox";
 import { Row, Col } from "react-flexbox-grid";
 import { Label } from "@client/react/FormControls/Label";
 
+import { validateInputNumber } from "@client/react/utilities/FormValidation";
+
 export default ({ show = false }) => {
 
-const [globRadius, setGlobRadius] = useState<string>("");
-const [globIntensity, setGlobIntensity] = useState<string>("");
+const [globRadius, setGlobRadius] = useState<number | undefined>();
+const [globIntensity, setGlobIntensity] = useState<number | undefined>();
 
 useEffect(() => {
     gameState.trigger("admin:globalLightSpec:update", {radius: globRadius, intensity: globIntensity});
@@ -28,16 +28,16 @@ useEffect(() => {
               <Label>Radius (1-30):</Label>
                 <TextInput
                   onChange={(e) => {
-                    if (parseInt(e.currentTarget.value) > 30 || parseInt(e.currentTarget.value) < 1) {
-                      e.preventDefault()
-                      return
-                    }
-                    setGlobRadius(e.currentTarget.value);
+                    const result = validateInputNumber(e.currentTarget)
+                    setGlobRadius(result);
                   }}
                   value={
                     globRadius
                   }
                   placeholder="Global Radius"
+                  type="number"
+                  min="0"
+                  max="30"
                 />
               </Col>
               
@@ -45,16 +45,16 @@ useEffect(() => {
               <Label>{"Intensity (1-100):"}</Label>
                 <TextInput
                   onChange={(e) => {
-                    if (parseInt(e.currentTarget.value) > 100 || parseInt(e.currentTarget.value) < 1) {
-                      e.preventDefault()
-                      return
-                    }
-                    setGlobIntensity(e.currentTarget.value);
+                    const result = validateInputNumber(e.currentTarget)
+                    setGlobIntensity(result);
                   }}
                   value={
                     globIntensity
                   }
                   placeholder="Global Intensity"
+                  type="number"
+                  min="0"
+                  max="100"
                 />
               </Col>
           </Row>
