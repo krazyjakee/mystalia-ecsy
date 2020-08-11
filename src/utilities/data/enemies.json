@@ -504,5 +504,71 @@
         "chance": 10
       }
     ]
+  },
+  {
+    "id": 18,
+    "name": "Feline",
+    "spritesheet": "wildlife/feline",
+    "portrait": "walking-beaver",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 1,
+        "chance": 1
+      }
+    },
+    "speed": 5,
+    "maxDistance": 5,
+    "hp": 20,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 14,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 12
+      },
+      {
+        "itemId": 6,
+        "quantity": [
+          1,
+          2
+        ],
+        "chance": 8
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Montain Feline",
+    "spritesheet": "wildlife/montain-feline",
+    "portrait": "walking-beaver",
+    "spriteId": 0,
+    "behavior": {
+      "escape": {
+        "distance": 10,
+        "chance": 2
+      }
+    },
+    "speed": 5,
+    "maxDistance": 10,
+    "hp": 120,
+    "abilities": [
+      0
+    ],
+    "drop": [
+      {
+        "itemId": 39,
+        "quantity": [
+          1,
+          1
+        ],
+        "chance": 5
+      }
+    ]
   }
 ]
