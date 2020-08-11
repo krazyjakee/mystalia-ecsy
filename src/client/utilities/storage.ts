@@ -52,7 +52,7 @@ export default class Storage {
   }
 
   static getAdmin(key: AdminSetting) {
-    return JSON.parse(localStorage.getItem(Storage.getAdminKey(key)) || '{}');
+    return JSON.parse(localStorage.getItem(Storage.getAdminKey(key)) || "{}");
   }
 
   static triggerAdmin(key: AdminSetting) {
