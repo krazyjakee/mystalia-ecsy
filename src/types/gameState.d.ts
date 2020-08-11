@@ -24,25 +24,26 @@ export interface GameStateEvents {
     tileId?: number;
   };
   "admin:timeSpec:update": {
-    dayLengthMins: number;
+    dayLengthMins: number | undefined;
   };
   "admin:timePhase:update": {
-    dayLengthPerc: number;
-    transitionPerc: number;
+    dayLengthPerc: number | undefined;
+    transitionPerc: number | undefined;
   };
   "admin:forceTime:update": {
-    forceTime: string;
-    forceMins: string;
+    hours: number | undefined;
+    minutes: number | undefined;
+    active: boolean;
   };
   "admin:globalLightSpec:update": {
-    radius: string;
-    intensity: string;
+    radius: number | undefined;
+    intensity: number | undefined;
   };
   "admin:itemSpec:update": {
     specs: ItemSpec[];
   };
   "admin:itemSpec:updated": {
-    result: Boolean;
+    result: boolean;
   };
   "localPlayer:change": {
     key: string;
