@@ -1,6 +1,9 @@
 {
-  "dayLengthInMinutes": 20,
-  "dayLightPercentage": 66,
-  "transitionTime": 8,
+	"time": {
+		"offset": 4,
+		"dayLengthInMinutes": 20,
+		"dayLightPercentage": 66,
+		"transitionTime": 8
+	},
   "allowableOffMapDistance": 128
 }

@@ -1,5 +1,5 @@
 import config from "@client/config.json";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import gameState from "@client/gameState";
 import Storage from "@client/utilities/storage";
 
@@ -16,11 +16,11 @@ import { validateInputNumber } from "@client/react/utilities/FormValidation";
 export default ({ show = false }) => {
 
 const localTSpec = Storage.getAdmin("timeSpec:update")
-const [dayLengthInMinutes, setDayLengthInMinutes] = useState<number | undefined>(localTSpec.dayLengthMins || config.dayLengthInMinutes);
+const [dayLengthInMinutes, setDayLengthInMinutes] = useState<number | undefined>(localTSpec.dayLengthMins || config.time.dayLengthInMinutes);
 
 const localTPhase = Storage.getAdmin("timePhase:update")
-const [dayLightPercentage, setDayLightPercentage] = useState<number | undefined>(localTPhase.dayLengthPerc || config.dayLightPercentage);
-const [transitionTime, setTransitionTime] = useState<number | undefined>(localTPhase.transitionPerc || config.transitionTime);
+const [dayLightPercentage, setDayLightPercentage] = useState<number | undefined>(localTPhase.dayLengthPerc || config.time.dayLightPercentage);
+const [transitionTime, setTransitionTime] = useState<number | undefined>(localTPhase.transitionPerc || config.time.transitionTime);
 
 const localTime = Storage.getAdmin("forceTime:update")
 
@@ -162,9 +162,9 @@ useEffect(() => {
               onClick={() => {
                 Storage.setAdmin("timePhase:update");
                 Storage.setAdmin("timeSpec:update");
-                setDayLengthInMinutes(config.dayLengthInMinutes);
-                setDayLightPercentage(config.dayLightPercentage);
-                setTransitionTime(config.transitionTime);
+                setDayLengthInMinutes(config.time.dayLengthInMinutes);
+                setDayLightPercentage(config.time.dayLightPercentage);
+                setTransitionTime(config.time.transitionTime);
                 }
               }
             />

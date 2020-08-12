@@ -1,5 +1,4 @@
-import config from "@client/config.json";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import gameState from "@client/gameState";
 
 import { Section } from "../../Section";

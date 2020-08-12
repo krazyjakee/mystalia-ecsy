@@ -25,3 +25,5 @@ export const areColliding = (input1: Rect, input2: Rect) => {
 export const degreeToRadian = (degree: number) => (degree * Math.PI) / 180;
 
 export const radianToDegree = (radians: number) => radians * (180 / Math.PI);
+
+export const clampNumber = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max)

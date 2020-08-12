@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { whiteText } from "../palette";
 import { createUseStyles } from "react-jss";
 import { timeOfDayAsPercentage } from "../../utilities/time";
+import config from "../../config.json";
 
 const useStyles = createUseStyles({
   container: {
@@ -14,6 +15,8 @@ const useStyles = createUseStyles({
   }
 });
 
+const { offset } = config.time;
+
 export const Clock = () => {
   const [displayTime, setDisplayTime] = useState("00:00 AM");
   const classes = useStyles();
@@ -23,12 +26,11 @@ export const Clock = () => {
       const dayLength = 1000 * 60 * 60 * 1;
 
       const msElapsed =
-        Math.round(dayLength * 24 * (dayPercentage / 100)) + dayLength * 8;
+        Math.round(dayLength * 24 * (dayPercentage / 100)) + dayLength * offset;
       const elapsedDate = new Date(msElapsed);
 
       setDisplayTime(
-        elapsedDate
-          .toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        elapsedDate.toLocaleTimeString("en-US", {hour: "2-digit", minute:"2-digit"})
       );
     }, 100);
   }, []);

@@ -58,12 +58,12 @@ export default class LightSystem extends System {
       shadowContext.fillStyle = `rgba(0,0,0,${1 - 0.01 * brightness})`;
       shadowContext.fillRect(0, 0, minWidth, minHeight);
 
-      //tone layer to remove deep blacks caused by multiply
+      // tone layer to remove deep blacks caused by multiply
       toneCanvas.width = minWidth;
       toneCanvas.height = minHeight;
 
       toneContext.beginPath();
-      toneContext.fillStyle = 'rgba(8,8,8,1)';
+      toneContext.fillStyle = "rgba(5,5,5,1)";
       toneContext.fillRect(0, 0, minWidth, minHeight);
 
 
@@ -75,7 +75,7 @@ export default class LightSystem extends System {
             y: value.y * 32,
           });
           drawLightSource(shadowContext, position.x + 16, position.y + 16, {
-            radius: 5,
+            radius: 6,
             pulse: false,
             intensity: 40,
             color: "#409ee3",
@@ -84,7 +84,7 @@ export default class LightSystem extends System {
       }
 
       if (brightness < 60) {
-        for (let key in tileMap.objectTileStore.store) {
+        for (const key in tileMap.objectTileStore.store) {
           const tileId = parseInt(key);
           const tilePosition = tileIdToPixels(tileId, tileMap.width);
           const lightTile = tileMap.objectTileStore.getByType<"light">(
@@ -98,7 +98,7 @@ export default class LightSystem extends System {
               const position = addOffset(offset, tilePosition);
               let intensity = lightTileProperties.intensity;
               if (!intensity) {
-                intensity = 50
+                intensity = 40
               }
 
               drawLightSource(shadowContext, position.x + 16, position.y + 16, {

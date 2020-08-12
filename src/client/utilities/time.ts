@@ -1,35 +1,41 @@
 import config from "../config.json";
 import gameState from "@client/gameState";
 
-let dayLengthInMinutes = config.dayLengthInMinutes
+let { dayLengthInMinutes } = config.time
+const { offset } = config.time;
+
 let time : any = ""
 
 gameState.subscribe("admin:timeSpec:update", (value) => {
-    dayLengthInMinutes = value.dayLengthMins;
+    dayLengthInMinutes = Number(value.dayLengthMins);
 });
 
 gameState.subscribe("admin:forceTime:update", (value) => {
-	//probably a better way of handling this	
-	if (!Number.isNaN(parseInt(value.forceTime))) {
-	    time = (parseInt(value.forceTime) + 15) * 100;
+	// probably a better way of handling this	
+	if (!Number.isNaN(Number(value.hours))) {
+	    time = (Number(value.hours));
 	} 
-	if (!Number.isNaN(parseInt(value.forceMins)) && time) {
-	    time = time + (parseInt(value.forceMins)*1.6667);
-	} else if (!Number.isNaN(parseInt(value.forceMins)) && !time) {
-		time = (parseInt(value.forceMins)*1.6667);
+	if (!Number.isNaN(Number(value.minutes)) && time) {
+	    time = time + (Number(value.minutes)*1.6667/100);
+	} else if (!Number.isNaN(Number(value.minutes)) && !time) {
+		time = (Number(value.minutes)*1.6667/100);
 	}
-	if (Number.isNaN(parseInt(value.forceTime)) && Number.isNaN(parseInt(value.forceMins)) ) {
+	if ( (Number.isNaN(Number(value.hours)) && Number.isNaN(Number(value.minutes)) ) || !value.active ) {
 	    time = ""
 	}
 });
 
 export const timeOfDayAsPercentage = () => {
+	const minutesInMs = 1000 * 60 * dayLengthInMinutes;
+	const utcTime =
+	    new Date(new Date().toUTCString()).getTime() +
+	    new Date().getUTCMilliseconds();
 	if (time) {
-		return (parseInt(time)) / 24;
+		let manualTime = (100 / 24) * Number(time + (24 - (offset+1)));
+		if (manualTime > 100) {
+			manualTime = manualTime - 100
+		}
+		return manualTime;
 	}
-  const utcTime =
-    new Date(new Date().toUTCString()).getTime() +
-    new Date().getUTCMilliseconds();
-  const minutesInMs = 1000 * 60 * dayLengthInMinutes;
-  return ((utcTime / minutesInMs) % 1) * 100;
+	return ((utcTime / minutesInMs) % 1) * 100;
 };

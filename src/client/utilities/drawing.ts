@@ -189,7 +189,7 @@ export const drawableToDrawableProperties = (drawable: Drawable) => {
 };
 
 export const fadeOverlay = (fade: Fade, fadeIn: boolean = true) => {
-  context2d.fillStyle = `rgba(0,0,0,${1 - fade.alpha})`;
+  context2d.fillStyle = `rgba(5,5,5,${1 - fade.alpha})`;
   context2d.fillRect(0, 0, context2d.canvas.width, context2d.canvas.height);
   if (fadeIn) {
     fade.alpha += 0.05;
