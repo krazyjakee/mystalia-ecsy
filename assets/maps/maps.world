@@ -244,6 +244,13 @@
             "width": 3840,
             "x": -7680,
             "y": 0
+        },
+        {
+            "fileName": "south-west1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -7680,
+            "y": 2176
         }
     ],
     "onlyShowAdjacentMaps": false,

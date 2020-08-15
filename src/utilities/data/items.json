@@ -318,5 +318,12 @@
     ],
     "effect": 0,
     "range": 1
+  },
+  {
+    "id": 40,
+    "name": "Fresh Southern Sprig",
+    "spritesheet": "items",
+    "spriteId": 267,
+    "type": "other"
   }
 ]
