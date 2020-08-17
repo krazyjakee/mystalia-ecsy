@@ -272,6 +272,20 @@
             "width": 3840,
             "x": 3840,
             "y": 4352
+        },
+        {
+            "fileName": "south-inlet.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -3840,
+            "y": 6528
+        },
+        {
+            "fileName": "south-inlet1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -7680,
+            "y": 6528
         }
     ],
     "onlyShowAdjacentMaps": false,
