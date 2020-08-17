@@ -232,13 +232,6 @@
             "y": 4352
         },
         {
-            "fileName": "south-west-inlet.json",
-            "height": 2176,
-            "width": 3840,
-            "x": -3840,
-            "y": 6528
-        },
-        {
             "fileName": "west1.json",
             "height": 2176,
             "width": 3840,
@@ -251,6 +244,34 @@
             "width": 3840,
             "x": -7680,
             "y": 2176
+        },
+        {
+            "fileName": "south-valley-inlet1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -3840,
+            "y": 4352
+        },
+        {
+            "fileName": "south-valley-inlet2.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -7680,
+            "y": 4352
+        },
+        {
+            "fileName": "south-valley-end.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 0,
+            "y": 6528
+        },
+        {
+            "fileName": "south-east-valley1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": 3840,
+            "y": 4352
         }
     ],
     "onlyShowAdjacentMaps": false,
