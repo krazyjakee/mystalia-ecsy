@@ -7,6 +7,8 @@ import { TabButton } from "../../FormControls/TabButton";
 import gameState from "../../../gameState";
 import PlayerManagementForm from "./PlayerManagementForm";
 import ItemManagementForm from "./ItemManagementForm";
+import TimeManagementForm from "./TimeManagementForm";
+import LightManagementForm from "./LightManagementForm";
 
 type Props = {
   forceShow?: boolean;
@@ -48,11 +50,25 @@ export default ({ forceShow }: Props) => {
                   active={activeTab === 1}
                   onClick={() => setActiveTab(1)}
                 ></TabButton>
+                <br />
+                <TabButton
+                  value="Time Machine"
+                  active={activeTab === 2}
+                  onClick={() => setActiveTab(2)}
+                ></TabButton>
+                <br />
+                <TabButton
+                  value="Lighting Settings"
+                  active={activeTab === 3}
+                  onClick={() => setActiveTab(3)}
+                ></TabButton>
               </Section>
             </Col>
             <Col xs={true}>
               <PlayerManagementForm show={activeTab === 0} />
               <ItemManagementForm show={activeTab === 1} />
+              <TimeManagementForm show={activeTab === 2} />
+              <LightManagementForm show={activeTab === 3} />
             </Col>
           </Row>
         </Grid>

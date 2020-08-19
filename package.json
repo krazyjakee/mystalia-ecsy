@@ -78,6 +78,7 @@
     "@storybook/react": "^5.3.19",
     "@types/jest": "^26.0.3",
     "babel-loader": "^8.1.0",
+    "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^6.0.3",
     "cross-env": "^7.0.2",

@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as HTMLWebpackPlugin from "html-webpack-plugin";
 import * as CopyWebpackPlugin from "copy-webpack-plugin";
+import * as CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin";
 
 const config = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
@@ -60,6 +61,7 @@ const config = {
       template: path.resolve(__dirname, "..", "client", "index.html"),
       inject: false,
     }),
+    new CaseSensitivePathsPlugin(),
   ],
 };
 
