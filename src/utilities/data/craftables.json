@@ -62,11 +62,11 @@
     "ingredients": [
       {
         "itemId": 15,
-        "quantity": 3
+        "quantity": 2
       },
       {
         "itemId": 13,
-        "quantity": 3
+        "quantity": 1
       }
     ],
     "item": 37
@@ -87,7 +87,7 @@
       },
       {
         "itemId": 37,
-        "quantity": 2
+        "quantity": 1
       },
       {
         "itemId": 38,
