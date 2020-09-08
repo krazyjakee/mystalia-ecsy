@@ -39,7 +39,7 @@
   },
   {
     "id": 2,
-    "name": "Underground trash 1",
+    "name": "Underground Trash 1",
     "items": [
       {
         "itemId": 14,
@@ -154,7 +154,7 @@
   },
   {
     "id": 7,
-    "name": "Food Loot Nice",
+    "name": "Food Nice",
     "items": [
       {
         "itemId": 26,
@@ -185,7 +185,7 @@
   },
   {
     "id": 8,
-    "name": "Food Loot Poor",
+    "name": "Food Poor",
     "items": [
       {
         "itemId": 29,
@@ -200,7 +200,7 @@
   },
   {
     "id": 9,
-    "name": "Food Loot Ok",
+    "name": "Food SoSo",
     "items": [
       {
         "itemId": 21,
@@ -223,7 +223,7 @@
   },
   {
     "id": 10,
-    "name": "Weapon Loot Poor",
+    "name": "Weapon Poor",
     "items": [
       {
         "itemId": 7,
@@ -239,6 +239,91 @@
         "quantity": [
           1,
           1
+        ]
+      }
+    ],
+    "daysToRespawn": 2
+  },
+  {
+    "id": 11,
+    "name": "Weapon Nice",
+    "items": [
+      {
+        "itemId": 41,
+        "chance": 3,
+        "quantity": [
+          1,
+          1
+        ]
+      },
+      {
+        "itemId": 42,
+        "chance": 8,
+        "quantity": [
+          1,
+          1
+        ]
+      },
+      {
+        "itemId": 3,
+        "chance": 1,
+        "quantity": [
+          1,
+          1
+        ]
+      }
+    ],
+    "daysToRespawn": 2
+  },
+  {
+    "id": 10,
+    "name": "Weapon Poor",
+    "items": [
+      {
+        "itemId": 7,
+        "chance": 2,
+        "quantity": [
+          1,
+          1
+        ]
+      },
+      {
+        "itemId": 3,
+        "chance": 8,
+        "quantity": [
+          1,
+          1
+        ]
+      }
+    ],
+    "daysToRespawn": 2
+  },
+  {
+    "id": 11,
+    "name": "Crafting booty Nice",
+    "items": [
+      {
+        "itemId": 38,
+        "chance": 5,
+        "quantity": [
+          1,
+          3
+        ]
+      },
+      {
+        "itemId": 36,
+        "chance": 8,
+        "quantity": [
+          1,
+          2
+        ]
+      },
+      {
+        "itemId": 37,
+        "chance": 2,
+        "quantity": [
+          1,
+          2
         ]
       }
     ],
