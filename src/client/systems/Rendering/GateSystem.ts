@@ -1,14 +1,12 @@
-import { System, Not } from "ecsy";
-import TileMap from "@client/components/TileMap";
-import { Loadable } from "@client/components/Loadable";
+import { System } from "ecsy";
 import LocalPlayer from "@client/components/LocalPlayer";
 import RemotePlayer from "@client/components/RemotePlayer";
-import Enemy from "@client/components/Enemy";
 import Gate from "@client/components/Gate";
 import Position from "@client/components/Position";
 import Drawable from "@client/components/Drawable";
 import { tilesAdjacent } from "utilities/movement/surroundings";
-import CreateSoundEffect from "@client/entities/SoundEffect";
+import { sfxAssetPath } from "@client/utilities/assets";
+import { playSound } from "@client/sound";
 
 export default class GateSystem extends System {
   static queries = {
@@ -58,7 +56,7 @@ export default class GateSystem extends System {
 
       const gateComponent = gateEntity.getComponent(Gate);
       if (!gateComponent.open && characterAdjacent) {
-        CreateSoundEffect("gate");
+        playSound(sfxAssetPath("gate"));
       }
       gateComponent.open = characterAdjacent;
     });
