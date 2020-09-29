@@ -1,10 +1,8 @@
 import "better-queue-memory";
 import Queue from "better-queue";
 import MemoryStore from "better-queue-memory";
-import { Howl, Howler } from "howler";
-
-let maxMusicVolume = 0.8;
-let maxSFXVolume = 0.8;
+import { Howl } from "howler";
+import Storage from "@client/utilities/storage";
 
 const decks: Array<Howl | null> = [];
 let activeDeck = 0;
@@ -14,8 +12,8 @@ const musicQueue = new Queue(
     const otherDeck = activeDeck ? 0 : 1;
     decks[otherDeck] = deck;
     decks[otherDeck]?.play();
-    decks[otherDeck]?.fade(0, maxMusicVolume, fadeSpeed);
-    decks[activeDeck]?.fade(maxMusicVolume, 0, fadeSpeed);
+    decks[otherDeck]?.fade(0, getMusicVolume(), fadeSpeed);
+    decks[activeDeck]?.fade(getSoundVolume(), 0, fadeSpeed);
     setTimeout(() => {
       decks[activeDeck]?.stop();
       decks[activeDeck] = null;
@@ -40,18 +38,23 @@ export const playMusic = (fileName: string, fadeSpeed = 2000) => {
 };
 
 export const playSound = (fileName: string) => {
-  const sound = new Howl({
+  new Howl({
     src: [fileName],
-    volume: maxSFXVolume,
+    volume: getSoundVolume(),
     autoplay: true,
   });
 };
 
 export const setMusicVolume = (input: number) => {
-  maxMusicVolume = input;
+  Storage.set("musicVolume", input);
   decks.forEach((deck) => deck?.volume(input));
 };
 
 export const setSoundVolume = (input: number) => {
-  maxSFXVolume = input;
+  Storage.set("sfxVolume", input);
 };
+
+export const getMusicVolume = () =>
+  parseFloat(Storage.get("musicVolume") || "0.8");
+export const getSoundVolume = () =>
+  parseFloat(Storage.get("sfxVolume") || "0.8");
