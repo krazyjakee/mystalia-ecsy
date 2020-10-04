@@ -286,6 +286,41 @@
             "width": 3840,
             "x": -7680,
             "y": 6528
+        },
+        {
+            "fileName": "north-west1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -7680,
+            "y": -2176
+        },
+        {
+            "fileName": "north-inlet1.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -7680,
+            "y": -4352
+        },
+        {
+            "fileName": "west2.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -11520,
+            "y": 0
+        },
+        {
+            "fileName": "west3.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -15360,
+            "y": 0
+        },
+        {
+            "fileName": "stpuals-main-entrance.json",
+            "height": 2176,
+            "width": 3840,
+            "x": -19200,
+            "y": 0
         }
     ],
     "onlyShowAdjacentMaps": false,

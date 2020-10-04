@@ -3,6 +3,7 @@
     {
      "export":
         {
+         "format":"json",
          "target":"."
         }
     },
