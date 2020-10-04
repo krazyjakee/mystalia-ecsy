@@ -3,30 +3,32 @@ import { SubSection } from "../SubSection";
 import Slider from "@client/react/FormControls/Slider";
 import { Label } from "@client/react/FormControls/Label";
 import { Range } from "react-input-range";
-import Storage from "@client/utilities/storage";
+import {
+  getMusicVolume,
+  getSoundVolume,
+  setMusicVolume,
+  setSoundVolume,
+} from "@client/sound";
 
 type Props = {
   show: boolean;
 };
 
 export default ({ show = false }: Props) => {
-  const storedMusicVolume = Storage.get("musicVolume");
-  const storedSfxVolume = Storage.get("sfxVolume");
-
-  const [musicVolume, setMusicVolume] = useState<number | Range>(
-    storedMusicVolume ? parseInt(storedMusicVolume) : 80
+  const [musicVolume, setMusicSliderVolume] = useState<number | Range>(
+    getMusicVolume() * 100
   );
-  const [sfxVolume, setSfxVolume] = useState<number | Range>(
-    storedSfxVolume ? parseInt(storedSfxVolume) : 80
+  const [sfxVolume, setSfxSliderVolume] = useState<number | Range>(
+    getSoundVolume() * 100
   );
 
   const saveMusicVolume = (value) => {
-    Storage.set("musicVolume", value);
-    setMusicVolume(value);
+    setMusicSliderVolume(value);
+    setMusicVolume(value / 100);
   };
   const saveSfxVolume = (value) => {
-    Storage.set("sfxVolume", value);
-    setSfxVolume(value);
+    setSfxSliderVolume(value);
+    setSoundVolume(value / 100);
   };
 
   return show ? (

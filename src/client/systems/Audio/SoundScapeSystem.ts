@@ -2,25 +2,20 @@
 
 import { System, Not } from "ecsy";
 import { Loadable } from "@client/components/Loadable";
-import Audio, {
-  AudioFadeOut,
-  Music,
-  NextMusic,
-} from "@client/components/Audio";
 import EnvironmentBrightness from "@client/components/EnvironmentBrightness";
 import Weather from "@client/components/Weather";
+import { Weather as WeatherType } from "utilities/weather";
 import TileMap from "@client/components/TileMap";
 import { musicAssetPath } from "@client/utilities/assets";
+import { playMusic } from "@client/sound";
 
 export default class SoundScapeSystem extends System {
   night: null | boolean = null;
+  weatherActive: null | WeatherType = null;
 
   static queries = {
     brightness: {
       components: [EnvironmentBrightness],
-    },
-    audio: {
-      components: [Audio, Music, Not(Loadable)],
     },
     weather: {
       components: [Not(Loadable), Weather],
@@ -34,16 +29,32 @@ export default class SoundScapeSystem extends System {
     const tileMapEntity = this.queries.tileMap.results[0];
     if (!tileMapEntity) return;
 
-    const tileMap = tileMapEntity.getComponent(TileMap);
+    const weatherEntity = this.queries.weather.results[0];
+    if (!weatherEntity) return;
 
-    const audioEntity = this.queries.audio.results[0];
-    if (!audioEntity) return;
+    const tileMap = tileMapEntity.getComponent(TileMap);
 
     const brightnessEntity = this.queries.brightness.results[0];
 
     const biome = tileMap.properties.biome;
 
-    if (brightnessEntity) {
+    const weather = weatherEntity.getComponent(Weather);
+
+    const weatherWithMusic: WeatherType[] = ["lightRain"];
+    const priorityWeatherType = weatherWithMusic.find((weatherType) =>
+      weather.active.includes(weatherType)
+    );
+    if (priorityWeatherType) {
+      if (this.weatherActive !== priorityWeatherType) {
+        this.weatherActive = priorityWeatherType;
+        playMusic(musicAssetPath(`soundscapes/${biome}${priorityWeatherType}`));
+      }
+      return;
+    } else {
+      this.weatherActive = null;
+    }
+
+    if (brightnessEntity && !this.weatherActive) {
       if (biome) {
         const brightnessComponent = brightnessEntity.getComponent(
           EnvironmentBrightness
@@ -56,32 +67,17 @@ export default class SoundScapeSystem extends System {
 
         if (brightness < 40 && !this.night) {
           this.night = true;
-          if (!audioEntity.hasComponent(NextMusic)) {
-            audioEntity.addComponent(NextMusic, {
-              audioPath: musicAssetPath(`soundscapes/${biome}Night`),
-            });
-          }
+          playMusic(musicAssetPath(`soundscapes/${biome}Night`));
         } else if (brightness >= 40 && this.night) {
           this.night = false;
-          if (
-            tileMap.properties.music &&
-            !audioEntity.hasComponent(NextMusic)
-          ) {
-            audioEntity.addComponent(NextMusic, {
-              audioPath: musicAssetPath(tileMap.properties.music),
-            });
-          } else if (!audioEntity.hasComponent(AudioFadeOut)) {
-            audioEntity.addComponent(AudioFadeOut);
+          if (tileMap.properties.music) {
+            playMusic(musicAssetPath(tileMap.properties.music));
           }
         }
       } else if (this.night != null) {
         this.night = null;
-        if (tileMap.properties.music && !audioEntity.hasComponent(NextMusic)) {
-          audioEntity.addComponent(NextMusic, {
-            audioPath: musicAssetPath(tileMap.properties.music),
-          });
-        } else if (!audioEntity.hasComponent(AudioFadeOut)) {
-          audioEntity.addComponent(AudioFadeOut);
+        if (tileMap.properties.music) {
+          playMusic(musicAssetPath(tileMap.properties.music));
         }
       }
     }

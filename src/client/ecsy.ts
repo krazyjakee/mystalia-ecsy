@@ -6,7 +6,6 @@ import "./entities";
 import CreateLocalPlayer from "./entities/LocalPlayer";
 import CreateTileMap from "./entities/TileMap";
 import CreateNetworkRoom from "./entities/NetworkRoom";
-import CreateMusic from "./entities/Music";
 
 import MapChangeSystem from "./systems/Map/MapChangeSystem";
 import MapLoadSystem from "./systems/Map/MapLoadSystem";
@@ -44,19 +43,10 @@ import LookAtPlayerSystem from "./systems/MovementSystem/Behaviour/LookAtPlayerS
 import GateSystem from "./systems/Rendering/GateSystem";
 import LootSystem from "./systems/Rendering/LootSystem";
 import BrightnessSystem from "./systems/Rendering/LightSystem/BrightnessSystem";
-import MusicSystem from "./systems/Audio/MusicSystem";
 import SoundScapeSystem from "./systems/Audio/SoundScapeSystem";
-import SoundEffectSystem from "./systems/Audio/SoundEffectSystem";
 import AnimatedTile, {
   AnimatedTilesInitiated,
 } from "./components/AnimatedTile";
-import Audio, {
-  Music,
-  SoundEffect,
-  NextMusic,
-  AudioFadeOut,
-  AudioFadeIn,
-} from "./components/Audio";
 import CharacterHighlight, {
   AddCharacterHighlight,
   RemoveCharacterHighlight,
@@ -111,7 +101,6 @@ export default (user: User) => {
   world
     .registerComponent(AnimatedTile)
     .registerComponent(AnimatedTilesInitiated)
-    .registerComponent(Audio)
     .registerComponent(CharacterHighlight)
     .registerComponent(AddCharacterHighlight)
     .registerComponent(RemoveCharacterHighlight)
@@ -152,12 +141,6 @@ export default (user: User) => {
     .registerComponent(MouseInput)
     .registerComponent(AwaitingPosition)
     .registerComponent(Gray)
-    .registerComponent(Music)
-    .registerComponent(SoundEffect)
-    .registerComponent(NextMusic)
-    .registerComponent(AudioFadeOut)
-    .registerComponent(AudioFadeIn)
-    .registerComponent(Audio)
     .registerComponent(Disable)
     .registerComponent(Focused)
     .registerComponent(BattleTarget)
@@ -201,11 +184,8 @@ export default (user: User) => {
     .registerSystem(AdminNetworkSystem)
     .registerSystem(LoadingSystem)
     .registerSystem(CleanupSystem)
-    .registerSystem(MusicSystem)
-    .registerSystem(SoundScapeSystem)
-    .registerSystem(SoundEffectSystem);
+    .registerSystem(SoundScapeSystem);
 
-  CreateMusic();
   CreateNetworkRoom();
   CreateLocalPlayer(user);
   CreateTileMap(user);

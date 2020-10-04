@@ -304,7 +304,7 @@
   },
   {
     "id": 39,
-    "name": "Cracked skull",
+    "name": "Cracked Skull",
     "spritesheet": "items",
     "spriteId": 365,
     "type": "melee",
@@ -325,5 +325,46 @@
     "spritesheet": "items",
     "spriteId": 267,
     "type": "other"
+  },
+  {
+    "id": 41,
+    "name": "Butter Knife",
+    "spritesheet": "items",
+    "spriteId": 592,
+    "type": "melee",
+    "tags": [
+      "strength"
+    ],
+    "equippable": true,
+    "damage": [
+      4,
+      8
+    ],
+    "effect": 0,
+    "range": 2
+  },
+  {
+    "id": 42,
+    "name": "Bread Knife",
+    "spritesheet": "items",
+    "spriteId": 593,
+    "type": "melee",
+    "tags": [
+      "strength"
+    ],
+    "equippable": true,
+    "damage": [
+      4,
+      11
+    ],
+    "effect": 0,
+    "range": 2
+  },
+  {
+    "id": 43,
+    "name": "Southern Pigle",
+    "spritesheet": "items",
+    "spriteId": 266,
+    "type": "consumable"
   }
 ]

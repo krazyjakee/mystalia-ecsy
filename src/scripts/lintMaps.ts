@@ -1,11 +1,17 @@
 import * as fs from "fs";
-import { readJSONFile } from "@server/utilities/files";
+import { readMapFiles, readTileSets } from "@server/utilities/mapFiles";
 import { TMJ } from "types/TMJ";
 import { isPresent } from "utilities/guards";
+import { ObjectTileStore } from "utilities/ObjectTileStore";
+import { objectForEach } from "utilities/loops";
+import { pixelsToTileId } from "utilities/tileMap";
 
 const writeToFile = (json: TMJ, filename: string) => {
   fs.writeFileSync(`./assets/maps/${filename}`, JSON.stringify(json));
 };
+
+const tileSetStore = readTileSets();
+const mapFiles = readMapFiles();
 
 const roundTo32 = (input) => Math.round(input / 32) * 32;
 
@@ -31,6 +37,38 @@ const alignObjectsToGrid = (json: TMJ) => {
   return json;
 };
 
+const removeUnnecessaryBlockObjects = (json: TMJ) => {
+  const objectTileStore = new ObjectTileStore(json, tileSetStore);
+  const blockDupeTileIds: number[] = [];
+  objectForEach(objectTileStore.store, (tileId, tileObjects) => {
+    const blockObjects = tileObjects?.filter(
+      (tileObject) => tileObject.type === "block"
+    );
+    if (blockObjects && blockObjects.length > 1) {
+      blockDupeTileIds.push(parseInt(tileId));
+    }
+  });
+
+  json.layers = json.layers.map((layer) => {
+    if (layer.type !== "objectgroup") return layer;
+    if (!layer.objects) return layer;
+
+    layer.objects = layer.objects.filter((tile) => {
+      if (
+        (tile.type === "" || tile.type === "block") &&
+        blockDupeTileIds.includes(pixelsToTileId(tile, json.width))
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    return layer;
+  });
+
+  return json;
+};
+
 const fixProperties = (json: TMJ) => {
   json.properties = json.properties
     .map((property) => {
@@ -46,15 +84,10 @@ const fixProperties = (json: TMJ) => {
   return json;
 };
 
-const dir = fs.opendirSync("./assets/maps");
-let file;
-while ((file = dir.readSync()) !== null) {
-  if (file.name.includes(".json")) {
-    let json = readJSONFile(`./assets/maps/${file.name}`) as TMJ;
-    json = alignObjectsToGrid(json);
-    json = fixProperties(json);
-    writeToFile(json, file.name);
-  }
-}
-
-dir.closeSync();
+Object.keys(mapFiles).forEach((key) => {
+  let json = mapFiles[key] as TMJ;
+  // json = alignObjectsToGrid(json);
+  // json = fixProperties(json);
+  json = removeUnnecessaryBlockObjects(json);
+  writeToFile(json, `${key}.json`);
+});
